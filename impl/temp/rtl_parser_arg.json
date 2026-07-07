@@ -1,0 +1,25 @@
+{
+ "Device" : "GW2AR-18C",
+ "Files" : [
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/new-juice/src/clockdiv.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/new-juice/src/rpll/rpll_main.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
+   "Type" : "verilog"
+  }
+ ],
+ "IncludePath" : [
+
+ ],
+ "LoopLimit" : 2000,
+ "ResultFile" : "/Users/felipe/src/fpga/new-juice/new-juice/impl/temp/rtl_parser.result",
+ "Top" : "top",
+ "VerilogStd" : "sysv",
+ "VhdlStd" : "vhdl_93"
+}

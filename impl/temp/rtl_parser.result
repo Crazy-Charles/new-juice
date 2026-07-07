@@ -1,0 +1,44 @@
+[
+ {
+  "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/clockdiv.v",
+  "InstLine" : 24,
+  "InstName" : "clockdiv",
+  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/clockdiv.v",
+  "ModuleLine" : 24,
+  "ModuleName" : "clockdiv"
+ },
+ {
+  "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
+  "InstLine" : 1,
+  "InstName" : "top",
+  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
+  "ModuleLine" : 1,
+  "ModuleName" : "top",
+  "SubInsts" : [
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
+    "InstLine" : 70,
+    "InstName" : "rpll_main",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/rpll/rpll_main.v",
+    "ModuleLine" : 10,
+    "ModuleName" : "rpll_main"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
+    "InstLine" : 79,
+    "InstName" : "clk_sdram_div",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/clockdiv.v",
+    "ModuleLine" : 2,
+    "ModuleName" : "clockdiv2"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
+    "InstLine" : 85,
+    "InstName" : "clkp_sdram_div",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/clockdiv.v",
+    "ModuleLine" : 2,
+    "ModuleName" : "clockdiv2"
+   }
+  ]
+ }
+]

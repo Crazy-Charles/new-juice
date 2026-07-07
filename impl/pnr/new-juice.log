@@ -1,0 +1,28 @@
+Reading netlist file: "/Users/felipe/src/fpga/new-juice/new-juice/impl/gwsynthesis/new-juice.vg"
+Parsing netlist file "/Users/felipe/src/fpga/new-juice/new-juice/impl/gwsynthesis/new-juice.vg" completed
+Processing netlist completed
+Reading constraint file: "/Users/felipe/src/fpga/new-juice/new-juice/src/top.cst"
+Physical Constraint parsed completed
+Running placement......
+[10%] Placement Phase 0 completed
+[20%] Placement Phase 1 completed
+[30%] Placement Phase 2 completed
+[50%] Placement Phase 3 completed
+Running routing......
+[60%] Routing Phase 0 completed
+[70%] Routing Phase 1 completed
+[90%] Routing Phase 3 completed
+Running timing analysis......
+[95%] Timing analysis completed
+Placement and routing completed
+Bitstream generation in progress......
+Bitstream generation completed
+Running power analysis......
+[100%] Power analysis completed
+Generate file "/Users/felipe/src/fpga/new-juice/new-juice/impl/pnr/new-juice.power.html" completed
+Generate file "/Users/felipe/src/fpga/new-juice/new-juice/impl/pnr/new-juice.pin.html" completed
+Generate file "/Users/felipe/src/fpga/new-juice/new-juice/impl/pnr/new-juice.rpt.html" completed
+Generate file "/Users/felipe/src/fpga/new-juice/new-juice/impl/pnr/new-juice.rpt.txt" completed
+Generate file "/Users/felipe/src/fpga/new-juice/new-juice/impl/pnr/new-juice.tr.html" completed
+Mon Jul  6 00:45:58 2026
+

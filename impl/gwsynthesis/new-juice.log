@@ -1,0 +1,46 @@
+GowinSynthesis start
+Running parser ...
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/new-juice/src/clockdiv.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/new-juice/src/rpll/rpll_main.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/new-juice/src/top.v'
+Undeclared symbol 'clk', assumed default net type 'wire'("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":57)
+Undeclared symbol 'cpu_clk', assumed default net type 'wire'("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":62)
+Undeclared symbol 'clk_main', assumed default net type 'wire'("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":71)
+Undeclared symbol 'rpll_main_lock', assumed default net type 'wire'("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":72)
+Undeclared symbol 'clkp_main', assumed default net type 'wire'("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":73)
+Undeclared symbol 'clk_sdram', assumed default net type 'wire'("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":82)
+Undeclared symbol 'clkp_sdram', assumed default net type 'wire'("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":88)
+WARN  (EX3073) : Port 'clkoutd' remains unconnected for this instance("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":77)
+Compiling module 'top'("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":1)
+Compiling module 'rpll_main'("/Users/felipe/src/fpga/new-juice/new-juice/src/rpll/rpll_main.v":10)
+Compiling module 'clockdiv2'("/Users/felipe/src/fpga/new-juice/new-juice/src/clockdiv.v":2)
+NOTE  (EX0101) : Current top module is "top"
+[5%] Running netlist conversion ...
+WARN  (CV0016) : Input clkin is unused("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":2)
+WARN  (CV0016) : Input s1 is unused("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":3)
+WARN  (CV0016) : Input cpu_clkin is unused("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":10)
+WARN  (CV0016) : Input rd_n is unused("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":11)
+WARN  (CV0016) : Input wr_n is unused("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":12)
+WARN  (CV0016) : Input sltsl_n is unused("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":13)
+WARN  (CV0016) : Input mp is unused("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":22)
+Running device independent optimization ...
+[10%] Optimizing Phase 0 completed
+[15%] Optimizing Phase 1 completed
+[25%] Optimizing Phase 2 completed
+Running inference ...
+[30%] Inferring Phase 0 completed
+[40%] Inferring Phase 1 completed
+[50%] Inferring Phase 2 completed
+[55%] Inferring Phase 3 completed
+Running technical mapping ...
+[60%] Tech-Mapping Phase 0 completed
+[65%] Tech-Mapping Phase 1 completed
+[75%] Tech-Mapping Phase 2 completed
+[80%] Tech-Mapping Phase 3 completed
+[90%] Tech-Mapping Phase 4 completed
+WARN  (NL0002) : The module "clockdiv2" instantiated to "clk_sdram_div" is swept in optimizing("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":83)
+WARN  (NL0002) : The module "clockdiv2" instantiated to "clkp_sdram_div" is swept in optimizing("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":89)
+WARN  (NL0002) : The module "rpll_main" instantiated to "rpll_main" is swept in optimizing("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":77)
+[95%] Generate netlist file "/Users/felipe/src/fpga/new-juice/new-juice/impl/gwsynthesis/new-juice.vg" completed
+[100%] Generate report file "/Users/felipe/src/fpga/new-juice/new-juice/impl/gwsynthesis/new-juice_syn.rpt.html" completed
+GowinSynthesis finish
