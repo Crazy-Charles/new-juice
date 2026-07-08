@@ -11,6 +11,8 @@ Running placement......
 Running routing......
 [60%] Routing Phase 0 completed
 [70%] Routing Phase 1 completed
+[80%] Routing Phase 2 completed
+WARN  (PR1014) : Generic routing resource will be used to clock signal 'clkin_d' by the specified constraint. And then it may lead to the excessive delay or skew
 [90%] Routing Phase 3 completed
 Running timing analysis......
 [95%] Timing analysis completed
@@ -24,5 +26,5 @@ Generate file "/Users/felipe/src/fpga/new-juice/new-juice/impl/pnr/new-juice.pin
 Generate file "/Users/felipe/src/fpga/new-juice/new-juice/impl/pnr/new-juice.rpt.html" completed
 Generate file "/Users/felipe/src/fpga/new-juice/new-juice/impl/pnr/new-juice.rpt.txt" completed
 Generate file "/Users/felipe/src/fpga/new-juice/new-juice/impl/pnr/new-juice.tr.html" completed
-Mon Jul  6 00:45:58 2026
+Tue Jul  7 21:44:38 2026
 

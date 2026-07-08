@@ -2,7 +2,19 @@
  "Device" : "GW2AR-18C",
  "Files" : [
   {
+   "Path" : "/Users/felipe/src/fpga/new-juice/new-juice/src/cd_demux.v",
+   "Type" : "verilog"
+  },
+  {
    "Path" : "/Users/felipe/src/fpga/new-juice/new-juice/src/clockdiv.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/new-juice/src/input_debouncer.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/new-juice/src/mp_debouncer.v",
    "Type" : "verilog"
   },
   {
@@ -10,7 +22,19 @@
    "Type" : "verilog"
   },
   {
+   "Path" : "/Users/felipe/src/fpga/new-juice/new-juice/src/slot_expander.v",
+   "Type" : "verilog"
+  },
+  {
    "Path" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/new-juice/src/ws2812.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/new-juice/src/sdram/sdram.v",
    "Type" : "verilog"
   }
  ],

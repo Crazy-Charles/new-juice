@@ -38,6 +38,46 @@
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/clockdiv.v",
     "ModuleLine" : 2,
     "ModuleName" : "clockdiv2"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
+    "InstLine" : 124,
+    "InstName" : "ws2812_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/ws2812.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "ws2812"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
+    "InstLine" : 136,
+    "InstName" : "bus_control_debouncer",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/input_debouncer.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "input_debouncer"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
+    "InstLine" : 147,
+    "InstName" : "mp_debouncer_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/mp_debouncer.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "mp_debouncer"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
+    "InstLine" : 166,
+    "InstName" : "slot_expander_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/slot_expander.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "slot_expander"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
+    "InstLine" : 183,
+    "InstName" : "cd_demux_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/cd_demux.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "cd_demux"
    }
   ]
  }

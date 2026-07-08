@@ -1,0 +1,49 @@
+module slot_expander
+(
+    input clk,
+    input reset_n,
+    input [15:0] addr,
+    input [7:0] data_in,
+    input merq_n,
+    input rd_n,
+    input wr_n,
+    input sltsl_n,
+    output [7:0] data_out,
+    output data_out_en,
+    output [3:0] page0_subslot_en,
+    output [3:0] page1_subslot_en,
+    output [3:0] page2_subslot_en,
+    output [3:0] page3_subslot_en
+);
+
+    localparam [15:0] EXPANDED_SLOT_REG_ADDR = 16'hffff;
+
+    reg [7:0] expanded_slot_reg = 8'h00;
+
+    wire selected = !sltsl_n && !merq_n && addr == EXPANDED_SLOT_REG_ADDR;
+    wire read_selected = selected && !rd_n;
+    wire write_selected = selected && !wr_n;
+
+    wire [1:0] page0_subslot = expanded_slot_reg[1:0];
+    wire [1:0] page1_subslot = expanded_slot_reg[3:2];
+    wire [1:0] page2_subslot = expanded_slot_reg[5:4];
+    wire [1:0] page3_subslot = expanded_slot_reg[7:6];
+
+    always_ff @(posedge clk or negedge reset_n)
+    begin
+        if(!reset_n) begin
+            expanded_slot_reg <= 8'h00;
+        end else if (write_selected) begin
+            expanded_slot_reg <= data_in;
+        end
+    end
+
+    assign data_out = ~expanded_slot_reg;
+    assign data_out_en = read_selected;
+
+    assign page0_subslot_en = 4'b0001 << page0_subslot;
+    assign page1_subslot_en = 4'b0001 << page1_subslot;
+    assign page2_subslot_en = 4'b0001 << page2_subslot;
+    assign page3_subslot_en = 4'b0001 << page3_subslot;
+
+endmodule
