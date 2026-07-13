@@ -5,6 +5,7 @@ module slot_expander
     input [15:0] addr,
     input [7:0] data_in,
     input merq_n,
+    input iorq_n,
     input rd_n,
     input wr_n,
     input sltsl_n,
@@ -20,7 +21,7 @@ module slot_expander
 
     reg [7:0] expanded_slot_reg = 8'h00;
 
-    wire selected = !sltsl_n && !merq_n && addr == EXPANDED_SLOT_REG_ADDR;
+    wire selected = !sltsl_n && !merq_n /*&& iorq_n*/ && addr == EXPANDED_SLOT_REG_ADDR;
     wire read_selected = selected && !rd_n;
     wire write_selected = selected && !wr_n;
 

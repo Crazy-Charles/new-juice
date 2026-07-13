@@ -4,20 +4,21 @@
     <Version>beta</Version>
     <Device id="GW2AR-18C" package="QFN88" speed="8" partNumber="GW2AR-LV18QN88C8/I7"/>
     <FileList>
-        <File path="/Users/felipe/src/fpga/new-juice/new-juice/src/cd_demux.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/new-juice/src/clockdiv.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/new-juice/src/input_debouncer.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/new-juice/src/mp_debouncer.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/new-juice/src/rpll/rpll_main.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/new-juice/src/slot_expander.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/new-juice/src/top.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/new-juice/src/ws2812.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/cd_demux.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/clockdiv.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/input_debouncer.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/sdram/sdram.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/slot_expander.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/top.v" type="verilog"/>
     </FileList>
     <OptionList>
         <Option type="disable_insert_pad" value="0"/>
         <Option type="global_freq" value="100.000"/>
         <Option type="looplimit" value="2000"/>
-        <Option type="output_file" value="/Users/felipe/src/fpga/new-juice/new-juice/impl/gwsynthesis/new-juice.vg"/>
+        <Option type="output_file" value="/Users/felipe/src/fpga/new-juice/impl/gwsynthesis/new-juice.vg"/>
         <Option type="print_all_synthesis_warning" value="0"/>
         <Option type="ram_rw_check" value="0"/>
         <Option type="top_module" value="top"/>

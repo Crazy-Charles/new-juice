@@ -18,7 +18,7 @@ CLOCK | cpu_clk | Input |
 
 msel_n[2:0] controls the multiplexing input for these signals through mp[7:0]:
 
-/MSEL | 011 | 101 | 110
+/MSEL | 110 | 101 | 011
 --- | --- | --- | ---
 MP0 | A0 | A8 | /MERQ
 MP1 | A1 | A9 | /IORQ

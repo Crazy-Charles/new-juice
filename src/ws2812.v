@@ -20,7 +20,7 @@ parameter DATA_SEND  		= 1;
 parameter BIT_SEND_HIGH   	= 2;
 parameter BIT_SEND_LOW   	= 3;
 
-parameter INIT_DATA = 24'b0; //24'b1111; // initial pattern
+parameter INIT_DATA = 24'b111111110000000011111111; //24'b1111; // initial pattern
 
 reg [ 1:0] state       = 0; // synthesis preserve  - main state machine control
 reg [ 8:0] bit_send    = 0; // number of bits sent - increase for larger led strips/matrix

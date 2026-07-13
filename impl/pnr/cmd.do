@@ -1,9 +1,9 @@
--d /Users/felipe/src/fpga/new-juice/new-juice/impl/gwsynthesis/new-juice.vg
+-d /Users/felipe/src/fpga/new-juice/impl/gwsynthesis/new-juice.vg
 -p GW2AR-18C-QFN88-8
 -pn GW2AR-LV18QN88C8/I7
--cst /Users/felipe/src/fpga/new-juice/new-juice/src/top.cst
--cfg /Users/felipe/src/fpga/new-juice/new-juice/impl/pnr/device.cfg
--sdc /Users/felipe/src/fpga/new-juice/new-juice/src/top.sdc
+-cst /Users/felipe/src/fpga/new-juice/src/top.cst
+-cfg /Users/felipe/src/fpga/new-juice/impl/pnr/device.cfg
+-sdc /Users/felipe/src/fpga/new-juice/src/top.sdc
 -bit
 -tr
 -ph

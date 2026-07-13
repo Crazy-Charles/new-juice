@@ -1,81 +1,89 @@
 [
  {
-  "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/clockdiv.v",
+  "InstFile" : "/Users/felipe/src/fpga/new-juice/src/clockdiv.v",
+  "InstLine" : 2,
+  "InstName" : "clockdiv2",
+  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/clockdiv.v",
+  "ModuleLine" : 2,
+  "ModuleName" : "clockdiv2"
+ },
+ {
+  "InstFile" : "/Users/felipe/src/fpga/new-juice/src/clockdiv.v",
   "InstLine" : 24,
   "InstName" : "clockdiv",
-  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/clockdiv.v",
+  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/clockdiv.v",
   "ModuleLine" : 24,
   "ModuleName" : "clockdiv"
  },
  {
-  "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
+  "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
   "InstLine" : 1,
   "InstName" : "top",
-  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
+  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
   "ModuleLine" : 1,
   "ModuleName" : "top",
   "SubInsts" : [
    {
-    "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
-    "InstLine" : 70,
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 277,
+    "InstName" : "sdram_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sdram/sdram.v",
+    "ModuleLine" : 9,
+    "ModuleName" : "SDRAM"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 79,
     "InstName" : "rpll_main",
-    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/rpll/rpll_main.v",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v",
     "ModuleLine" : 10,
     "ModuleName" : "rpll_main"
    },
    {
-    "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
-    "InstLine" : 79,
-    "InstName" : "clk_sdram_div",
-    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/clockdiv.v",
-    "ModuleLine" : 2,
-    "ModuleName" : "clockdiv2"
-   },
-   {
-    "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
-    "InstLine" : 85,
-    "InstName" : "clkp_sdram_div",
-    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/clockdiv.v",
-    "ModuleLine" : 2,
-    "ModuleName" : "clockdiv2"
-   },
-   {
-    "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
-    "InstLine" : 124,
-    "InstName" : "ws2812_inst",
-    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/ws2812.v",
-    "ModuleLine" : 1,
-    "ModuleName" : "ws2812"
-   },
-   {
-    "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
-    "InstLine" : 136,
-    "InstName" : "bus_control_debouncer",
-    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/input_debouncer.v",
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 158,
+    "InstName" : "bus_data_debouncer",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/input_debouncer.v",
     "ModuleLine" : 1,
     "ModuleName" : "input_debouncer"
    },
    {
-    "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
-    "InstLine" : 147,
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 169,
+    "InstName" : "bus_control_debouncer",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/input_debouncer.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "input_debouncer"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 176,
     "InstName" : "mp_debouncer_inst",
-    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/mp_debouncer.v",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v",
     "ModuleLine" : 1,
     "ModuleName" : "mp_debouncer"
    },
    {
-    "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
-    "InstLine" : 166,
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 195,
     "InstName" : "slot_expander_inst",
-    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/slot_expander.v",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/slot_expander.v",
     "ModuleLine" : 1,
     "ModuleName" : "slot_expander"
    },
    {
-    "InstFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/top.v",
-    "InstLine" : 183,
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 213,
+    "InstName" : "sdram_mapper_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "sdram_mapper"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 264,
     "InstName" : "cd_demux_inst",
-    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/new-juice/src/cd_demux.v",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/cd_demux.v",
     "ModuleLine" : 1,
     "ModuleName" : "cd_demux"
    }

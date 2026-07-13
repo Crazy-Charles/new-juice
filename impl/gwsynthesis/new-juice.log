@@ -1,35 +1,28 @@
 GowinSynthesis start
 Running parser ...
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/new-juice/src/cd_demux.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/new-juice/src/clockdiv.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/new-juice/src/input_debouncer.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/new-juice/src/mp_debouncer.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/new-juice/src/rpll/rpll_main.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/new-juice/src/slot_expander.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/new-juice/src/top.v'
-Undeclared symbol 'clk', assumed default net type 'wire'("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":57)
-Undeclared symbol 'cpu_clk', assumed default net type 'wire'("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":62)
-Undeclared symbol 'clk_main', assumed default net type 'wire'("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":71)
-Undeclared symbol 'rpll_main_lock', assumed default net type 'wire'("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":72)
-Undeclared symbol 'clkp_main', assumed default net type 'wire'("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":73)
-Undeclared symbol 'clk_sdram', assumed default net type 'wire'("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":82)
-Undeclared symbol 'clkp_sdram', assumed default net type 'wire'("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":88)
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/new-juice/src/ws2812.v'
-WARN  (EX3073) : Port 'clkoutd' remains unconnected for this instance("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":77)
-Compiling module 'top'("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":1)
-Compiling module 'rpll_main'("/Users/felipe/src/fpga/new-juice/new-juice/src/rpll/rpll_main.v":10)
-Compiling module 'clockdiv2'("/Users/felipe/src/fpga/new-juice/new-juice/src/clockdiv.v":2)
-Compiling module 'ws2812(CLK_FRE=216000000)'("/Users/felipe/src/fpga/new-juice/new-juice/src/ws2812.v":1)
-WARN  (EX3791) : Expression size 10 truncated to fit in target size 9("/Users/felipe/src/fpga/new-juice/new-juice/src/ws2812.v":62)
-WARN  (EX3791) : Expression size 10 truncated to fit in target size 9("/Users/felipe/src/fpga/new-juice/new-juice/src/ws2812.v":95)
-WARN  (EX3791) : Expression size 10 truncated to fit in target size 9("/Users/felipe/src/fpga/new-juice/new-juice/src/ws2812.v":104)
-Compiling module 'input_debouncer(WIDTH=3)'("/Users/felipe/src/fpga/new-juice/new-juice/src/input_debouncer.v":1)
-Compiling module 'mp_debouncer'("/Users/felipe/src/fpga/new-juice/new-juice/src/mp_debouncer.v":1)
-Compiling module 'slot_expander'("/Users/felipe/src/fpga/new-juice/new-juice/src/slot_expander.v":1)
-Compiling module 'cd_demux'("/Users/felipe/src/fpga/new-juice/new-juice/src/cd_demux.v":1)
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/cd_demux.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/clockdiv.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/input_debouncer.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdram/sdram.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/slot_expander.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/top.v'
+WARN  (EX3073) : Port 'clkoutd' remains unconnected for this instance("/Users/felipe/src/fpga/new-juice/src/top.v":85)
+Compiling module 'top'("/Users/felipe/src/fpga/new-juice/src/top.v":1)
+Compiling module 'rpll_main'("/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v":10)
+Compiling module 'input_debouncer(WIDTH=3)'("/Users/felipe/src/fpga/new-juice/src/input_debouncer.v":1)
+Compiling module 'input_debouncer(WIDTH=8)'("/Users/felipe/src/fpga/new-juice/src/input_debouncer.v":1)
+Compiling module 'mp_debouncer'("/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v":1)
+Compiling module 'slot_expander'("/Users/felipe/src/fpga/new-juice/src/slot_expander.v":1)
+Compiling module 'sdram_mapper'("/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v":1)
+Compiling module 'cd_demux'("/Users/felipe/src/fpga/new-juice/src/cd_demux.v":1)
+Compiling module '**'("/Users/felipe/src/fpga/new-juice/src/sdram/sdram.v":1358)
 NOTE  (EX0101) : Current top module is "top"
 [5%] Running netlist conversion ...
-WARN  (CV0016) : Input cpu_clkin is unused("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":10)
+WARN  (CV0016) : Input s2 is unused("/Users/felipe/src/fpga/new-juice/src/top.v":5)
+WARN  (CV0016) : Input cpu_clkin is unused("/Users/felipe/src/fpga/new-juice/src/top.v":11)
 Running device independent optimization ...
 [10%] Optimizing Phase 0 completed
 [15%] Optimizing Phase 1 completed
@@ -45,8 +38,6 @@ Running technical mapping ...
 [75%] Tech-Mapping Phase 2 completed
 [80%] Tech-Mapping Phase 3 completed
 [90%] Tech-Mapping Phase 4 completed
-WARN  (NL0002) : The module "clockdiv2" instantiated to "clk_sdram_div" is swept in optimizing("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":83)
-WARN  (NL0002) : The module "clockdiv2" instantiated to "clkp_sdram_div" is swept in optimizing("/Users/felipe/src/fpga/new-juice/new-juice/src/top.v":89)
-[95%] Generate netlist file "/Users/felipe/src/fpga/new-juice/new-juice/impl/gwsynthesis/new-juice.vg" completed
-[100%] Generate report file "/Users/felipe/src/fpga/new-juice/new-juice/impl/gwsynthesis/new-juice_syn.rpt.html" completed
+[95%] Generate netlist file "/Users/felipe/src/fpga/new-juice/impl/gwsynthesis/new-juice.vg" completed
+[100%] Generate report file "/Users/felipe/src/fpga/new-juice/impl/gwsynthesis/new-juice_syn.rpt.html" completed
 GowinSynthesis finish

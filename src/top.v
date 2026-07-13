@@ -1,7 +1,8 @@
-module top(
+module top
+(
     input   clkin,
     input   s1,
-
+    input   s2,
     //output hp_ws,
     //output hp_din,
     //output hp_bck,
@@ -47,17 +48,18 @@ module top(
     inout [31:0] IO_sdram_dq,       // 32 bit bidirectional data bus
     output [10:0] O_sdram_addr,     // 11 bit multiplexed address bus
     output [1:0] O_sdram_ba,        // two banks
-    output [3:0] O_sdram_dqm       // 32/4
+    output [3:0] O_sdram_dqm,      // 32/4
 
     output led
 
 );
-
+    wire clk;
     BUFG clk_buf(
     .O(clk),    // 27Mhz buffered output clock
     .I(clkin)   // 27Mhz input clock
     );
 
+    wire cpu_clk;
     BUFG cpu_clk_buf(
     .O(cpu_clk),    // 3.58Mhz buffered output clock
     .I(cpu_clkin)   // 3.58Mhz input clock
@@ -65,27 +67,21 @@ module top(
 
     reg reset_n = 0;
     always_ff @(posedge clk) reset_n <= ~s1;
-
+    wire board_reset_n;
+    wire active_module_reset_n;
+    reg [1:0] s2_sync = 2'b00;
+    reg board_enabled = 1'b0;
+    
     // main pll
+    wire main_clk;
+    wire sdram_clk;
+    wire rpll_main_lock;
     rpll_main rpll_main(
-        .clkout(main_clk), // 216 Mhz main clock
+        .clkout(main_clk), // 108 Mhz main clock
         .lock(rpll_main_lock), 
-        .clkoutp(main_cke), // 216 Mhz rotated main clock
-        //.clkoutd(clkoutd), 
+        .clkoutp(sdram_clk), // 108 Mhz rotated SDRAM clock
         .reset(~reset_n),
         .clkin(clkin) //input clkin (27Mhz)
-    );
-
-    clockdiv2 clk_sdram_div(
-        .clk_src(main_clk), // 216 Mhz main clock
-        .reset_n(rpll_main_lock),
-        .clk_div(sdram_clk) // 108 Mhz sdram clock
-    );
-
-    clockdiv2 clkp_sdram_div(
-        .clk_src(main_cke), // 216 Mhz rotated main clock
-        .reset_n(rpll_main_lock),
-        .clk_div(sdram_cke) // 108 Mhz rotated sdram clock
     );
 
     wire [7:0] a_lo;
@@ -105,48 +101,81 @@ module top(
     wire sltsl_n;
     wire [7:0] slot_expander_data_out;
     wire slot_expander_data_out_en;
+    wire [7:0] sdram_mapper_data_out;
+    wire sdram_mapper_data_out_en;
     wire [3:0] page0_subslot_en;
     wire [3:0] page1_subslot_en;
     wire [3:0] page2_subslot_en;
     wire [3:0] page3_subslot_en;
-    wire ws2812_out;
-    wire ws2812_done;
-    wire startup_reset_n;
     wire int_n;
     wire wait_n;
+    wire [7:0] data_out;
+    wire data_out_en;
+    wire mapper_port_read;
+    wire [7:0] cd_in;
 
-    assign startup_reset_n = rpll_main_lock && reset_n;
+    wire sdrc_cmd_en;
+    wire [2:0] sdrc_cmd;
+    wire sdrc_precharge_ctrl;
+    wire sdram_power_down;
+    wire sdram_selfrefresh;
+    wire [20:0] sdrc_addr;
+    wire [3:0] sdrc_dqm;
+    wire [31:0] sdrc_data;
+    wire [7:0] sdrc_data_len;
+    wire [31:0] sdrc_data_in;
+    wire sdrc_init_done;
+    wire sdrc_cmd_ack;
+    wire mapper_sdrc_cmd_en;
+    wire [2:0] mapper_sdrc_cmd;
+    wire mapper_sdrc_precharge_ctrl;
+    wire mapper_sdram_power_down;
+    wire mapper_sdram_selfrefresh;
+    wire [20:0] mapper_sdrc_addr;
+    wire [3:0] mapper_sdrc_dqm;
+    wire [31:0] mapper_sdrc_data;
+    wire [7:0] mapper_sdrc_data_len;
 
-    ws2812
-    #(
-        .CLK_FRE(216_000_000)
-    )
-    ws2812_inst(
-        .clk(main_clk),
-        .rst_n(startup_reset_n),
-        .WS2812(ws2812_out),
-        .done(ws2812_done)
-    );
+    always_ff @(posedge main_clk or negedge board_reset_n)
+    begin
+        if (!board_reset_n) begin
+            // s2_sync <= 2'b00;
+            board_enabled <= 1'b0;
+        end else begin
+            // s2_sync <= {s2_sync[0], s2};
+            //if (s2_sync == 2'b01) begin
+                board_enabled <= 1'b1;
+            //end
+        end
+    end
 
+    assign board_reset_n = rpll_main_lock && reset_n;
+    
     input_debouncer
     #(
-        .WIDTH(3),
-        .DEBOUNCE_CYCLES(8)
+        .WIDTH(3)
     )
-    bus_control_debouncer(
+    bus_data_debouncer(
         .clk(main_clk),
-        .reset_n(rpll_main_lock),
+        .reset_n(board_reset_n),
         .in({rd_n_in, wr_n_in, sltsl_n_in}),
         .out({rd_n, wr_n, sltsl_n})
     );
 
-    mp_debouncer
+    input_debouncer
     #(
-        .DEBOUNCE_CYCLES(8)
+        .WIDTH(8)
     )
-    mp_debouncer_inst(
+    bus_control_debouncer(
         .clk(main_clk),
-        .reset_n(rpll_main_lock),
+        .reset_n(board_reset_n),
+        .in(cd),
+        .out(cd_in)
+    );
+
+    mp_debouncer mp_debouncer_inst(
+        .clk(main_clk),
+        .reset_n(board_reset_n),
         .mp(mp),
         .msel_n(msel_n),
         .a_lo(a_lo),
@@ -165,10 +194,11 @@ module top(
 
     slot_expander slot_expander_inst(
         .clk(main_clk),
-        .reset_n(rpll_main_lock),
+        .reset_n(board_enabled),
         .addr(addr),
-        .data_in(cd),
+        .data_in(cd_in),
         .merq_n(merq_n),
+        .iorq_n(iorq_n),
         .rd_n(rd_n),
         .wr_n(wr_n),
         .sltsl_n(sltsl_n),
@@ -180,20 +210,73 @@ module top(
         .page3_subslot_en(page3_subslot_en)
     );
 
+    sdram_mapper sdram_mapper_inst(
+        .clk(main_clk),
+        .reset_n(board_enabled),
+        .addr(addr),
+        .data_in(cd_in),
+        .merq_n(merq_n),
+        .iorq_n(iorq_n),
+        .rd_n(rd_n),
+        .wr_n(wr_n),
+        .rfsh_n(rfsh_n),
+        .m1_n(m1_n),
+        .page0_subslot_en(page0_subslot_en),
+        .page1_subslot_en(page1_subslot_en),
+        .page2_subslot_en(page2_subslot_en),
+        .page3_subslot_en(page3_subslot_en),
+        .data_out(sdram_mapper_data_out),
+        .data_out_en(sdram_mapper_data_out_en),
+        .wait_n(),
+        .sdrc_cmd_en(mapper_sdrc_cmd_en),
+        .sdrc_cmd(mapper_sdrc_cmd),
+        .sdrc_precharge_ctrl(mapper_sdrc_precharge_ctrl),
+        .sdram_power_down(mapper_sdram_power_down),
+        .sdram_selfrefresh(mapper_sdram_selfrefresh),
+        .sdrc_addr(mapper_sdrc_addr),
+        .sdrc_dqm(mapper_sdrc_dqm),
+        .sdrc_data(mapper_sdrc_data),
+        .sdrc_data_len(mapper_sdrc_data_len),
+        .sdrc_data_in(sdrc_data_in),
+        .sdrc_init_done(sdrc_init_done),
+        .sdrc_cmd_ack(sdrc_cmd_ack)
+    );
+
+    assign sdrc_cmd_en = board_enabled ? mapper_sdrc_cmd_en : 1'b0;
+    assign sdrc_cmd = mapper_sdrc_cmd;
+    assign sdrc_precharge_ctrl = mapper_sdrc_precharge_ctrl;
+    assign sdram_power_down = mapper_sdram_power_down;
+    assign sdram_selfrefresh = mapper_sdram_selfrefresh;
+    assign sdrc_addr = mapper_sdrc_addr;
+    assign sdrc_dqm = mapper_sdrc_dqm;
+    assign sdrc_data = mapper_sdrc_data;
+    assign sdrc_data_len = mapper_sdrc_data_len;
+
+    assign data_out = sdram_mapper_data_out_en ? sdram_mapper_data_out : slot_expander_data_out;
+    //assign data_out = slot_expander_data_out;
+
+    assign data_out_en = board_enabled && (sdram_mapper_data_out_en || slot_expander_data_out_en);
+    //assign data_out_en = board_enabled && (slot_expander_data_out_en);
+
+    assign mapper_port_read = board_enabled && !iorq_n && m1_n && !rd_n && addr[7:2] == 6'b111111;
+    //assign mapper_port_read = board_enabled && !iorq_n && m1_n && !rd_n && addr[7:0] == 8'h99;
+
     cd_demux cd_demux_inst(
-        .startup_done(ws2812_done),
-        .ws2812_out(ws2812_out),
-        .data_out(slot_expander_data_out),
-        .data_out_en(slot_expander_data_out_en),
+        .data_out(data_out),
+        .data_out_en(data_out_en),
+        .wait_in_n(board_enabled ? sdrc_init_done : 1'b0),
+        .rd_n(rd_n),
+        .sltsl_n(sltsl_n),
+        .mapper_port_read(1'b0), //mapper_port_read),
         .cd(cd),
         .busdir_n(busdir_n),
         .datadir(datadir),
         .wait_n(wait_n)
     );
 
-	SDRAM your_instance_name(
-		.O_sdram_clk(sdram_clk), //output O_sdram_clk
-		.O_sdram_cke(sdram_cke), //output O_sdram_cke
+	SDRAM sdram_inst(
+		.O_sdram_clk(O_sdram_clk), //output O_sdram_clk
+		.O_sdram_cke(O_sdram_cke), //output O_sdram_cke
 		.O_sdram_cs_n(O_sdram_cs_n), //output O_sdram_cs_n
 		.O_sdram_cas_n(O_sdram_cas_n), //output O_sdram_cas_n
 		.O_sdram_ras_n(O_sdram_ras_n), //output O_sdram_ras_n
@@ -202,21 +285,21 @@ module top(
 		.O_sdram_addr(O_sdram_addr), //output [10:0] O_sdram_addr
 		.O_sdram_ba(O_sdram_ba), //output [1:0] O_sdram_ba
 		.IO_sdram_dq(IO_sdram_dq), //inout [31:0] IO_sdram_dq
-		.I_sdrc_rst_n(I_sdrc_rst_n), //input I_sdrc_rst_n
-		.I_sdrc_clk(I_sdrc_clk), //input I_sdrc_clk
-		.I_sdram_clk(I_sdram_clk), //input I_sdram_clk
-		.I_sdrc_cmd_en(I_sdrc_cmd_en), //input I_sdrc_cmd_en
-		.I_sdrc_cmd(I_sdrc_cmd), //input [2:0] I_sdrc_cmd
-		.I_sdrc_precharge_ctrl(I_sdrc_precharge_ctrl), //input I_sdrc_precharge_ctrl
-		.I_sdram_power_down(I_sdram_power_down), //input I_sdram_power_down
-		.I_sdram_selfrefresh(I_sdram_selfrefresh), //input I_sdram_selfrefresh
-		.I_sdrc_addr(I_sdrc_addr), //input [20:0] I_sdrc_addr
-		.I_sdrc_dqm(I_sdrc_dqm), //input [3:0] I_sdrc_dqm
-		.I_sdrc_data(I_sdrc_data), //input [31:0] I_sdrc_data
-		.I_sdrc_data_len(I_sdrc_data_len), //input [7:0] I_sdrc_data_len
-		.O_sdrc_data(O_sdrc_data), //output [31:0] O_sdrc_data
-		.O_sdrc_init_done(O_sdrc_init_done), //output O_sdrc_init_done
-		.O_sdrc_cmd_ack(O_sdrc_cmd_ack) //output O_sdrc_cmd_ack
+		.I_sdrc_rst_n(board_enabled), //input I_sdrc_rst_n
+		.I_sdrc_clk(main_clk), //input I_sdrc_clk
+		.I_sdram_clk(sdram_clk), //input I_sdram_clk
+		.I_sdrc_cmd_en(sdrc_cmd_en), //input I_sdrc_cmd_en
+		.I_sdrc_cmd(sdrc_cmd), //input [2:0] I_sdrc_cmd
+		.I_sdrc_precharge_ctrl(sdrc_precharge_ctrl), //input I_sdrc_precharge_ctrl
+		.I_sdram_power_down(sdram_power_down), //input I_sdram_power_down
+		.I_sdram_selfrefresh(sdram_selfrefresh), //input I_sdram_selfrefresh
+		.I_sdrc_addr(sdrc_addr), //input [20:0] I_sdrc_addr
+		.I_sdrc_dqm(sdrc_dqm), //input [3:0] I_sdrc_dqm
+		.I_sdrc_data(sdrc_data), //input [31:0] I_sdrc_data
+		.I_sdrc_data_len(sdrc_data_len), //input [7:0] I_sdrc_data_len
+		.O_sdrc_data(sdrc_data_in), //output [31:0] O_sdrc_data
+		.O_sdrc_init_done(sdrc_init_done), //output O_sdrc_init_done
+		.O_sdrc_cmd_ack(sdrc_cmd_ack) //output O_sdrc_cmd_ack
 	);  
 
     // triggers cpu interrupt (open collector)
@@ -225,7 +308,22 @@ module top(
     assign int_out = ~int_n;
     assign wait_out = ~wait_n;
 
-    // led indicator
-    assign led = ws2812_done; //1'b0;
+    reg led_reg = 1'b0;
+    reg mapper_port_read_prev = 1'b0;
+
+    always_ff @(posedge main_clk or negedge board_reset_n)
+    begin
+        if (!board_reset_n) begin
+            led_reg <= 1'b0;
+            mapper_port_read_prev <= 1'b0;
+        end else begin
+            mapper_port_read_prev <= mapper_port_read;
+
+            if (mapper_port_read && !mapper_port_read_prev)
+                led_reg <= ~led_reg;
+        end
+    end
+
+    assign led = led_reg;
 
 endmodule
