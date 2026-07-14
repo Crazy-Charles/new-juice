@@ -10,6 +10,7 @@ module sdram_mapper
     input wr_n,
     input rfsh_n,
     input m1_n,
+    input sltsl_n,
     input [3:0] page0_subslot_en,
     input [3:0] page1_subslot_en,
     input [3:0] page2_subslot_en,
@@ -52,6 +53,7 @@ module sdram_mapper
     reg [2:0] sdrc_cmd_reg = SDRAM_CMD_READ;
     reg sdrc_cmd_en_reg = 1'b0;
     reg cpu_cycle_seen = 1'b0;
+    reg read_data_active = 1'b0;
 
     wire mapper_port_selected = !iorq_n && addr[7:2] == 6'b111111;
     wire mapper_port_read = mapper_port_selected && !rd_n;
@@ -64,11 +66,12 @@ module sdram_mapper
         (addr[15:14] == 2'd2) ? page2_subslot_en :
                                 page3_subslot_en;
 
-    wire mapper_slot_selected = selected_page_subslot[3];
+    wire mapper_slot_selected = !sltsl_n && selected_page_subslot[3];
     wire memory_cycle_selected = !merq_n && iorq_n && rfsh_n && m1_n && mapper_slot_selected && addr != EXPANDED_SLOT_REG_ADDR;
     wire memory_read_selected = memory_cycle_selected && !rd_n;
     wire memory_write_selected = memory_cycle_selected && !wr_n;
     wire memory_access_selected = memory_read_selected || memory_write_selected;
+    wire memory_read_held = memory_read_selected; //!rd_n && !sltsl_n && !merq_n;
 
     wire [7:0] selected_mapper_page =
         (addr[15:14] == 2'd0) ? mapper_page[0] :
@@ -104,8 +107,13 @@ module sdram_mapper
             sdrc_cmd_reg <= SDRAM_CMD_READ;
             sdrc_cmd_en_reg <= 1'b0;
             cpu_cycle_seen <= 1'b0;
+            read_data_active <= 1'b0;
         end else begin
             sdrc_cmd_en_reg <= 1'b0;
+
+            if (!memory_read_held) begin
+                read_data_active <= 1'b0;
+            end
 
             if (!memory_access_selected) begin
                 cpu_cycle_seen <= 1'b0;
@@ -141,6 +149,9 @@ module sdram_mapper
                                 2'd2: read_data <= sdrc_data_in[23:16];
                                 default: read_data <= sdrc_data_in[31:24];
                             endcase
+                            if (memory_read_held) begin
+                                read_data_active <= 1'b1;
+                            end
                         end
                         state <= STATE_DONE;
                     end
@@ -157,7 +168,7 @@ module sdram_mapper
     assign data_out =
         mapper_port_read ? mapper_page[mapper_port_page] :
         read_data;
-    assign data_out_en = mapper_port_read || (state == STATE_DONE && access_is_read && memory_read_selected);
+    assign data_out_en = mapper_port_read || (read_data_active && access_is_read && memory_read_held);
     assign wait_n = !memory_access_selected || (sdrc_init_done && state == STATE_DONE);
 
     assign sdrc_cmd_en = sdrc_cmd_en_reg;

@@ -10,7 +10,7 @@
     <OptionList>
         <Option type="disable_insert_pad" value="1"/>
         <Option type="include_path" value="/Applications/GowinIDE.app/Contents/Resources/Gowin_EDA/IDE/ipcore/SDRC_HS/data"/>
-        <Option type="include_path" value="/Users/felipe/src/fpga/new-juice/new-juice/src/sdram/temp/SDRC_HS"/>
+        <Option type="include_path" value="/Users/felipe/src/fpga/new-juice/src/sdram/temp/SDRC_HS"/>
         <Option type="output_file" value="sdram.vg"/>
         <Option type="output_template" value="sdram_tmp.v"/>
         <Option type="ram_balance" value="1"/>

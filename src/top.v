@@ -221,6 +221,7 @@ module top
         .wr_n(wr_n),
         .rfsh_n(rfsh_n),
         .m1_n(m1_n),
+        .sltsl_n(sltsl_n),
         .page0_subslot_en(page0_subslot_en),
         .page1_subslot_en(page1_subslot_en),
         .page2_subslot_en(page2_subslot_en),
@@ -259,15 +260,14 @@ module top
     //assign data_out_en = board_enabled && (slot_expander_data_out_en);
 
     assign mapper_port_read = board_enabled && !iorq_n && m1_n && !rd_n && addr[7:2] == 6'b111111;
-    //assign mapper_port_read = board_enabled && !iorq_n && m1_n && !rd_n && addr[7:0] == 8'h99;
-
+    
     cd_demux cd_demux_inst(
         .data_out(data_out),
         .data_out_en(data_out_en),
         .wait_in_n(board_enabled ? sdrc_init_done : 1'b0),
         .rd_n(rd_n),
         .sltsl_n(sltsl_n),
-        .mapper_port_read(1'b0), //mapper_port_read),
+        .mapper_port_read(mapper_port_read),
         .cd(cd),
         .busdir_n(busdir_n),
         .datadir(datadir),
@@ -317,9 +317,9 @@ module top
             led_reg <= 1'b0;
             mapper_port_read_prev <= 1'b0;
         end else begin
-            mapper_port_read_prev <= mapper_port_read;
+            mapper_port_read_prev <= sdrc_cmd_ack; //mapper_port_read;
 
-            if (mapper_port_read && !mapper_port_read_prev)
+            if (sdrc_cmd_ack && !mapper_port_read_prev)
                 led_reg <= ~led_reg;
         end
     end

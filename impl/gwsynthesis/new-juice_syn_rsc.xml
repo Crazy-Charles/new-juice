@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Module name="top" Register="162" Alu="15" Lut="278" T_Register="375(162)" T_Alu="15(15)" T_Lut="410(278)">
+<Module name="top" Register="162" Alu="15" Lut="278" T_Register="355(162)" T_Alu="15(15)" T_Lut="417(278)">
  <SubModule name="rpll_main"/>
- <SubModule name="bus_data_debouncer" Register="12" Lut="7" T_Register="12(12)" T_Lut="7(7)"/>
- <SubModule name="bus_control_debouncer" Register="27" Lut="12" T_Register="27(27)" T_Lut="12(12)"/>
- <SubModule name="mp_debouncer_inst" Register="86" Lut="30" T_Register="86(86)" T_Lut="30(30)"/>
- <SubModule name="slot_expander_inst" Register="8" Lut="2" T_Register="8(8)" T_Lut="2(2)"/>
- <SubModule name="sdram_mapper_inst" Register="80" Lut="79" T_Register="80(80)" T_Lut="79(79)"/>
- <SubModule name="cd_demux_inst" Lut="2" T_Lut="2(2)"/>
+ <SubModule name="bus_data_debouncer" Register="12" Lut="6" T_Register="12(12)" T_Lut="6(6)"/>
+ <SubModule name="bus_control_debouncer" Register="26" Lut="12" T_Register="26(26)" T_Lut="12(12)"/>
+ <SubModule name="mp_debouncer_inst" Register="66" Lut="34" T_Register="66(66)" T_Lut="34(34)"/>
+ <SubModule name="slot_expander_inst" Register="8" Lut="6" T_Register="8(8)" T_Lut="6(6)"/>
+ <SubModule name="sdram_mapper_inst" Register="81" Lut="76" T_Register="81(81)" T_Lut="76(76)"/>
+ <SubModule name="cd_demux_inst" Lut="5" T_Lut="5(5)"/>
 </Module>

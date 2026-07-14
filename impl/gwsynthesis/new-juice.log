@@ -18,7 +18,7 @@ Compiling module 'mp_debouncer'("/Users/felipe/src/fpga/new-juice/src/mp_debounc
 Compiling module 'slot_expander'("/Users/felipe/src/fpga/new-juice/src/slot_expander.v":1)
 Compiling module 'sdram_mapper'("/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v":1)
 Compiling module 'cd_demux'("/Users/felipe/src/fpga/new-juice/src/cd_demux.v":1)
-Compiling module '**'("/Users/felipe/src/fpga/new-juice/src/sdram/sdram.v":1358)
+Compiling module '**'("/Users/felipe/src/fpga/new-juice/src/sdram/sdram.v":1367)
 NOTE  (EX0101) : Current top module is "top"
 [5%] Running netlist conversion ...
 WARN  (CV0016) : Input s2 is unused("/Users/felipe/src/fpga/new-juice/src/top.v":5)

@@ -32,9 +32,7 @@ module mp_debouncer
 
     reg [2:0] msel_reg = 3'b111;
     reg [2:0] scan_phase = 3'd0;
-    reg [15:0] mp_sync_0 = 16'hffff;
-    reg [15:0] mp_sync_1 = 16'hffff;
-    reg [15:0] mp_sync_2 = 16'hffff;
+    reg [23:0] previous_sample = 24'hffffff;
     reg [23:0] debounced = 24'hffffff;
     reg [23:0] latched = 24'hffffff;
     reg inputs_latched_reg = 1'b0;
@@ -44,66 +42,76 @@ module mp_debouncer
         if(!reset_n) begin
             msel_reg <= 3'b111;
             scan_phase <= 3'd0;
-            mp_sync_0 <= 16'hffff;
-            mp_sync_1 <= 16'hffff;
-            mp_sync_2 <= 16'hffff;
+            previous_sample <= 24'hffffff;
             debounced <= 24'hffffff;
             latched <= 24'hffffff;
             inputs_latched_reg <= 1'b0;
         end else begin
+            inputs_latched_reg <= 1'b0;
+
             case (scan_phase)
+                // Select A[7:0], then allow one clock for the mux to settle.
                 3'd0: begin
-                    inputs_latched_reg <= 1'b0;
                     msel_reg <= 3'b110;
                     scan_phase <= 3'd1;
                 end
                 3'd1: begin
-                    mp_sync_0 <= {mp_sync_0[7:0], mp[7:0]};
                     for (int i = 0; i < 8; i++) begin
-                        case ({mp_sync_0[i+8], mp_sync_0[i]})
+                        case ({previous_sample[MP_A_LO + i], mp[i]})
                             2'b00: debounced[MP_A_LO + i] <= 1'b0;
                             2'b11: debounced[MP_A_LO + i] <= 1'b1;
                             default: debounced[MP_A_LO + i] <= debounced[MP_A_LO + i];
                         endcase
+                        previous_sample[MP_A_LO + i] <= mp[i];
                     end
+                    msel_reg <= 3'b101;
                     scan_phase <= 3'd2;
                 end
+
+                // Select and sample A[15:8].
                 3'd2: begin
-                    msel_reg <= 3'b101;
                     scan_phase <= 3'd3;
                 end
                 3'd3: begin
-                    mp_sync_1 <= {mp_sync_1[7:0], mp[7:0]};
                     for (int i = 0; i < 8; i++) begin
-                        case ({mp_sync_1[i+8], mp_sync_1[i]})
+                        case ({previous_sample[MP_A_HI + i], mp[i]})
                             2'b00: debounced[MP_A_HI + i] <= 1'b0;
                             2'b11: debounced[MP_A_HI + i] <= 1'b1;
                             default: debounced[MP_A_HI + i] <= debounced[MP_A_HI + i];
                         endcase
+                        previous_sample[MP_A_HI + i] <= mp[i];
                     end
+                    msel_reg <= 3'b011;
                     scan_phase <= 3'd4;
                 end
+
+                // Select and sample the control signals, then publish one
+                // coherent snapshot at the end of the six-clock scan.
                 3'd4: begin
-                    msel_reg <= 3'b011;
                     scan_phase <= 3'd5;
                 end
-                3'd5: begin
-                    mp_sync_2 <= {mp_sync_2[7:0], mp[7:0]};
+                default: begin
                     for (int i = 0; i < 8; i++) begin
-                        case ({mp_sync_2[i+8], mp_sync_2[i]})
-                            2'b00: debounced[MP_CTRL + i] <= 1'b0;
-                            2'b11: debounced[MP_CTRL + i] <= 1'b1;
-                            default: debounced[MP_CTRL + i] <= debounced[MP_CTRL + i];
+                        case ({previous_sample[MP_CTRL + i], mp[i]})
+                            2'b00: begin
+                                debounced[MP_CTRL + i] <= 1'b0;
+                                latched[MP_CTRL + i] <= 1'b0;
+                            end
+                            2'b11: begin
+                                debounced[MP_CTRL + i] <= 1'b1;
+                                latched[MP_CTRL + i] <= 1'b1;
+                            end
+                            default: begin
+                                debounced[MP_CTRL + i] <= debounced[MP_CTRL + i];
+                                latched[MP_CTRL + i] <= debounced[MP_CTRL + i];
+                            end
                         endcase
+                        previous_sample[MP_CTRL + i] <= mp[i];
                     end
-                    scan_phase <= 3'd6;
-                end
-                3'd6: begin
+
                     latched[MP_A_LO +: 8] <= debounced[MP_A_LO +: 8];
                     latched[MP_A_HI +: 8] <= debounced[MP_A_HI +: 8];
-                    latched[MP_CTRL +: 8] <= debounced[MP_CTRL +: 8];
-
-                    msel_reg <= 3'b111;
+                    msel_reg <= 3'b110;
                     scan_phase <= 3'd0;
                     inputs_latched_reg <= 1'b1;
                 end

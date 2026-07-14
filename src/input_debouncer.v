@@ -25,7 +25,7 @@ module input_debouncer
             sync_0 <= in;
             sync_1 <= sync_0;
 
-            if (cycle_count == 3'd6) begin
+            if (cycle_count == 3'd5) begin
                 cycle_count <= 3'd0;
                 for (int i = 0; i < WIDTH; i++) begin
                     case ({sync_1[i], sync_0[i]})
