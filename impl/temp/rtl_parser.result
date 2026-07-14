@@ -25,7 +25,7 @@
   "SubInsts" : [
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 277,
+    "InstLine" : 312,
     "InstName" : "sdram_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sdram/sdram.v",
     "ModuleLine" : 9,
@@ -41,7 +41,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 158,
+    "InstLine" : 171,
     "InstName" : "bus_data_debouncer",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/input_debouncer.v",
     "ModuleLine" : 1,
@@ -49,7 +49,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 169,
+    "InstLine" : 182,
     "InstName" : "bus_control_debouncer",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/input_debouncer.v",
     "ModuleLine" : 1,
@@ -57,7 +57,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 176,
+    "InstLine" : 189,
     "InstName" : "mp_debouncer_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v",
     "ModuleLine" : 1,
@@ -65,7 +65,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 195,
+    "InstLine" : 208,
     "InstName" : "slot_expander_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/slot_expander.v",
     "ModuleLine" : 1,
@@ -73,7 +73,15 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 213,
+    "InstLine" : 226,
+    "InstName" : "sdram_startup_test_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "sdram_startup_test"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 247,
     "InstName" : "sdram_mapper_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v",
     "ModuleLine" : 1,
@@ -81,7 +89,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 264,
+    "InstLine" : 299,
     "InstName" : "cd_demux_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/cd_demux.v",
     "ModuleLine" : 1,

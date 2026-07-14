@@ -30,6 +30,10 @@
    "Type" : "verilog"
   },
   {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v",
+   "Type" : "verilog"
+  },
+  {
    "Path" : "/Users/felipe/src/fpga/new-juice/src/slot_expander.v",
    "Type" : "verilog"
   },

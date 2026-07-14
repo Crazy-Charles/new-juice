@@ -135,6 +135,19 @@ module top
     wire [3:0] mapper_sdrc_dqm;
     wire [31:0] mapper_sdrc_data;
     wire [7:0] mapper_sdrc_data_len;
+    wire test_sdrc_cmd_en;
+    wire [2:0] test_sdrc_cmd;
+    wire test_sdrc_precharge_ctrl;
+    wire test_sdram_power_down;
+    wire test_sdram_selfrefresh;
+    wire [20:0] test_sdrc_addr;
+    wire [3:0] test_sdrc_dqm;
+    wire [31:0] test_sdrc_data;
+    wire [7:0] test_sdrc_data_len;
+    wire startup_test_passed;
+    wire startup_test_failed;
+    wire startup_test_wait_n;
+    wire startup_test_led;
 
     always_ff @(posedge main_clk or negedge board_reset_n)
     begin
@@ -210,9 +223,30 @@ module top
         .page3_subslot_en(page3_subslot_en)
     );
 
-    sdram_mapper sdram_mapper_inst(
+    sdram_startup_test sdram_startup_test_inst(
         .clk(main_clk),
         .reset_n(board_enabled),
+        .sdrc_init_done(sdrc_init_done),
+        .sdrc_cmd_ack(sdrc_cmd_ack),
+        .sdrc_data_in(sdrc_data_in),
+        .sdrc_cmd_en(test_sdrc_cmd_en),
+        .sdrc_cmd(test_sdrc_cmd),
+        .sdrc_precharge_ctrl(test_sdrc_precharge_ctrl),
+        .sdram_power_down(test_sdram_power_down),
+        .sdram_selfrefresh(test_sdram_selfrefresh),
+        .sdrc_addr(test_sdrc_addr),
+        .sdrc_dqm(test_sdrc_dqm),
+        .sdrc_data(test_sdrc_data),
+        .sdrc_data_len(test_sdrc_data_len),
+        .test_passed(startup_test_passed),
+        .test_failed(startup_test_failed),
+        .wait_n(startup_test_wait_n),
+        .led(startup_test_led)
+    );
+
+    sdram_mapper sdram_mapper_inst(
+        .clk(main_clk),
+        .reset_n(board_enabled && startup_test_passed),
         .addr(addr),
         .data_in(cd_in),
         .merq_n(merq_n),
@@ -243,15 +277,16 @@ module top
         .sdrc_cmd_ack(sdrc_cmd_ack)
     );
 
-    assign sdrc_cmd_en = board_enabled ? mapper_sdrc_cmd_en : 1'b0;
-    assign sdrc_cmd = mapper_sdrc_cmd;
-    assign sdrc_precharge_ctrl = mapper_sdrc_precharge_ctrl;
-    assign sdram_power_down = mapper_sdram_power_down;
-    assign sdram_selfrefresh = mapper_sdram_selfrefresh;
-    assign sdrc_addr = mapper_sdrc_addr;
-    assign sdrc_dqm = mapper_sdrc_dqm;
-    assign sdrc_data = mapper_sdrc_data;
-    assign sdrc_data_len = mapper_sdrc_data_len;
+    assign sdrc_cmd_en = board_enabled ?
+        (startup_test_passed ? mapper_sdrc_cmd_en : test_sdrc_cmd_en) : 1'b0;
+    assign sdrc_cmd = startup_test_passed ? mapper_sdrc_cmd : test_sdrc_cmd;
+    assign sdrc_precharge_ctrl = startup_test_passed ? mapper_sdrc_precharge_ctrl : test_sdrc_precharge_ctrl;
+    assign sdram_power_down = startup_test_passed ? mapper_sdram_power_down : test_sdram_power_down;
+    assign sdram_selfrefresh = startup_test_passed ? mapper_sdram_selfrefresh : test_sdram_selfrefresh;
+    assign sdrc_addr = startup_test_passed ? mapper_sdrc_addr : test_sdrc_addr;
+    assign sdrc_dqm = startup_test_passed ? mapper_sdrc_dqm : test_sdrc_dqm;
+    assign sdrc_data = startup_test_passed ? mapper_sdrc_data : test_sdrc_data;
+    assign sdrc_data_len = startup_test_passed ? mapper_sdrc_data_len : test_sdrc_data_len;
 
     assign data_out = sdram_mapper_data_out_en ? sdram_mapper_data_out : slot_expander_data_out;
     //assign data_out = slot_expander_data_out;
@@ -264,7 +299,7 @@ module top
     cd_demux cd_demux_inst(
         .data_out(data_out),
         .data_out_en(data_out_en),
-        .wait_in_n(board_enabled ? sdrc_init_done : 1'b0),
+        .wait_in_n(startup_test_wait_n),
         .rd_n(rd_n),
         .sltsl_n(sltsl_n),
         .mapper_port_read(mapper_port_read),
@@ -308,22 +343,6 @@ module top
     assign int_out = ~int_n;
     assign wait_out = ~wait_n;
 
-    reg led_reg = 1'b0;
-    reg mapper_port_read_prev = 1'b0;
-
-    always_ff @(posedge main_clk or negedge board_reset_n)
-    begin
-        if (!board_reset_n) begin
-            led_reg <= 1'b0;
-            mapper_port_read_prev <= 1'b0;
-        end else begin
-            mapper_port_read_prev <= sdrc_cmd_ack; //mapper_port_read;
-
-            if (sdrc_cmd_ack && !mapper_port_read_prev)
-                led_reg <= ~led_reg;
-        end
-    end
-
-    assign led = led_reg;
+    assign led = startup_test_led;
 
 endmodule
