@@ -5,7 +5,8 @@ Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/clockdiv.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/input_debouncer.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdram/sdram.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdram.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdram_command_adapter.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/slot_expander.v'
@@ -20,7 +21,9 @@ Compiling module 'slot_expander'("/Users/felipe/src/fpga/new-juice/src/slot_expa
 Compiling module 'sdram_startup_test'("/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v":1)
 Compiling module 'sdram_mapper'("/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v":1)
 Compiling module 'cd_demux'("/Users/felipe/src/fpga/new-juice/src/cd_demux.v":1)
-Compiling module '**'("/Users/felipe/src/fpga/new-juice/src/sdram/sdram.v":1383)
+Compiling module 'sdram_command_adapter'("/Users/felipe/src/fpga/new-juice/src/sdram_command_adapter.v":1)
+Compiling module 'sdram'("/Users/felipe/src/fpga/new-juice/src/sdram.v":27)
+WARN  (EX3791) : Expression size 16 truncated to fit in target size 15("/Users/felipe/src/fpga/new-juice/src/sdram.v":285)
 NOTE  (EX0101) : Current top module is "top"
 [5%] Running netlist conversion ...
 WARN  (CV0016) : Input s2 is unused("/Users/felipe/src/fpga/new-juice/src/top.v":5)

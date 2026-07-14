@@ -10,7 +10,8 @@
         <File path="src/input_debouncer.v" type="file.verilog" enable="1"/>
         <File path="src/mp_debouncer.v" type="file.verilog" enable="1"/>
         <File path="src/rpll/rpll_main.v" type="file.verilog" enable="1"/>
-        <File path="src/sdram/sdram.v" type="file.verilog" enable="1"/>
+        <File path="src/sdram.v" type="file.verilog" enable="1"/>
+        <File path="src/sdram_command_adapter.v" type="file.verilog" enable="1"/>
         <File path="src/sdram_mapper.v" type="file.verilog" enable="1"/>
         <File path="src/sdram_startup_test.v" type="file.verilog" enable="1"/>
         <File path="src/slot_expander.v" type="file.verilog" enable="1"/>

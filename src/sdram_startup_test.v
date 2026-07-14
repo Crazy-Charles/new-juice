@@ -1,6 +1,7 @@
 module sdram_startup_test
 #(
-    parameter integer CLK_FREQ_HZ = 108_000_000
+    parameter integer CLK_FREQ_HZ = 108_000_000,
+    parameter USE_ADDRESS_PATTERN = 1'b1
 )
 (
     input clk,
@@ -71,7 +72,7 @@ module sdram_startup_test
     reg [3:0] led_bit_index = 4'd15;
     reg [1:0] led_one_count = 2'd0;
 
-    wire [7:0] expected_byte = lfsr[7:0];
+    wire [7:0] expected_byte = USE_ADDRESS_PATTERN ? test_addr[7:0] : lfsr[7:0];
     wire [7:0] read_byte =
         (test_addr[1:0] == 2'd0) ? sdrc_data_in[7:0] :
         (test_addr[1:0] == 2'd1) ? sdrc_data_in[15:8] :

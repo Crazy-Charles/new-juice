@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Module name="top" Register="160" Alu="15" Lut="312" T_Register="490(160)" T_Alu="23(15)" T_Lut="695(312)">
+<Module name="top" Register="2" Lut="51" T_Register="472(2)" T_Alu="22(0)" T_Lut="517(51)">
  <SubModule name="rpll_main"/>
  <SubModule name="bus_data_debouncer" Register="12" Lut="6" T_Register="12(12)" T_Lut="6(6)"/>
  <SubModule name="bus_control_debouncer" Register="26" Lut="12" T_Register="26(26)" T_Lut="12(12)"/>
  <SubModule name="mp_debouncer_inst" Register="66" Lut="34" T_Register="66(66)" T_Lut="34(34)"/>
- <SubModule name="slot_expander_inst" Register="8" Lut="7" T_Register="8(8)" T_Lut="7(7)"/>
- <SubModule name="sdram_startup_test_inst" Register="137" Alu="8" Lut="244" T_Register="137(137)" T_Alu="8(8)" T_Lut="244(244)"/>
- <SubModule name="sdram_mapper_inst" Register="81" Lut="77" T_Register="81(81)" T_Lut="77(77)"/>
- <SubModule name="cd_demux_inst" Lut="3" T_Lut="3(3)"/>
+ <SubModule name="slot_expander_inst" Register="8" Lut="3" T_Register="8(8)" T_Lut="3(3)"/>
+ <SubModule name="sdram_startup_test_inst" Register="105" Alu="8" Lut="206" T_Register="105(105)" T_Alu="8(8)" T_Lut="206(206)"/>
+ <SubModule name="sdram_mapper_inst" Register="81" Lut="81" T_Register="81(81)" T_Lut="81(81)"/>
+ <SubModule name="cd_demux_inst" Lut="4" T_Lut="4(4)"/>
+ <SubModule name="sdram_command_adapter_inst" Register="116" Lut="48" T_Register="116(116)" T_Lut="48(48)"/>
+ <SubModule name="sdram_inst" Register="56" Alu="14" Lut="72" T_Register="56(56)" T_Alu="14(14)" T_Lut="72(72)"/>
 </Module>

@@ -22,7 +22,11 @@
    "Type" : "verilog"
   },
   {
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/sdram/sdram.v",
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/sdram.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/sdram_command_adapter.v",
    "Type" : "verilog"
   },
   {

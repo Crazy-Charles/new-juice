@@ -26,35 +26,32 @@
 
 module sdram
 #(
-    // Clock frequency, max 66.7Mhz with current set of T_xx/CAS parameters.
-    parameter         FREQ = 54_000_000,  
+    // Timing defaults for the project's 108MHz controller clock.
+    parameter         FREQ = 108_000_000,
     parameter         DATA_WIDTH = 32,
     parameter         ROW_WIDTH = 11,  // 2K rows
     parameter         COL_WIDTH = 8,   // 256 words per row (1Kbytes)
     parameter         BANK_WIDTH = 2,  // 4 banks
 
-    // Time delays for 66.7Mhz max clock (min clock cycle 15ns)
-    // The SDRAM supports max 166.7Mhz (RP/RCD/RC need changes)
-    parameter [3:0]   CAS  = 4'd2,     // 2/3 cycles, set in mode register
-    parameter [3:0]   T_WR = 4'd2,     // 2 cycles, write recovery
-    parameter [3:0]   T_MRD= 4'd2,     // 2 cycles, mode register set
-
-    parameter [3:0]   T_RP = 4'd1,     // 15ns, precharge to active
-    parameter [3:0]   T_RCD= 4'd1,     // 15ns, active to r/w
-    parameter [3:0]   T_RC = 4'd4     // 60ns, ref/active to ref/active
+    parameter [4:0]   CAS  = 5'd3,
+    parameter [4:0]   T_WR = 5'd3,
+    parameter [4:0]   T_MRD= 5'd2,
+    parameter [4:0]   T_RP = 5'd2,
+    parameter [4:0]   T_RCD= 5'd2,
+    parameter [4:0]   T_RC = 5'd7
 )
 (
     // SDRAM side interface
     inout [DATA_WIDTH-1:0]      SDRAM_DQ,
-    output reg [ROW_WIDTH-1:0]  SDRAM_A,
-    output reg [BANK_WIDTH-1:0] SDRAM_BA,
+    output [ROW_WIDTH-1:0]  SDRAM_A,
+    output [BANK_WIDTH-1:0] SDRAM_BA,
     output            SDRAM_nCS,    // not strictly necessary, always 0
-    output reg        SDRAM_nWE,
-    output reg        SDRAM_nRAS,
-    output reg        SDRAM_nCAS,
+    output            SDRAM_nWE,
+    output            SDRAM_nRAS,
+    output            SDRAM_nCAS,
     output            SDRAM_CLK,
     output            SDRAM_CKE,    // not strictly necessary, always 1
-    output reg  [3:0] SDRAM_DQM,
+    output [3:0] SDRAM_DQM,
     
     // Logic side interface
     input             clk,
@@ -126,7 +123,7 @@ localparam BURST_MODE = 1'b0;           // sequential
 localparam [10:0] MODE_REG = {4'b0, CAS[2:0], BURST_MODE, BURST_LEN};
 
 reg cfg_now;            // pulse for configuration
-reg [3:0] cycle;        // each operation (config/read/write) are max 7 cycles
+reg [4:0] cycle;
 
 //
 // SDRAM state machine
@@ -135,17 +132,24 @@ always @(posedge clk or negedge resetn) begin
 
     if (~resetn) begin
         ff_busy <= 1'b1;
+        ff_data_ready <= 1'b0;
         dq_oen <= 1'b1;         // turn off DQ output
+        dq_out <= {DATA_WIDTH{1'b0}};
+        off <= 1'b0;
         FF_SDRAM_DQM <= 4'b0;
+        FF_SDRAM_A <= {ROW_WIDTH{1'b0}};
+        FF_SDRAM_BA <= {BANK_WIDTH{1'b0}};
+        {FF_SDRAM_nRAS, FF_SDRAM_nCAS, FF_SDRAM_nWE} <= CMD_NOP;
         state <= INIT;
+        cycle <= 5'd0;
     end else
     begin
-        cycle <= cycle == 4'd15 ? 4'd15 : cycle + 4'd1;
+        cycle <= cycle == 5'd31 ? 5'd31 : cycle + 5'd1;
         // defaults
         {FF_SDRAM_nRAS, FF_SDRAM_nCAS, FF_SDRAM_nWE} <= CMD_NOP; 
         casex ({state, cycle})
             // wait 200 us on power-on
-            {INIT, 4'bxxxx} : if (cfg_now) begin
+            {INIT, 5'bxxxxx} : if (cfg_now) begin
                 state <= CONFIG;
                 cycle <= 0;
             end
@@ -154,7 +158,7 @@ always @(posedge clk or negedge resetn) begin
             //  cycle  / 0 \___/ 1 \___/ 2 \___/ ... __/ 6 \___/ ...___/10 \___/11 \___/ 12\___
             //  cmd            |PC_All |Refresh|       |Refresh|       |  MRD  |       | _next_
             //                 '-T_RP--`----  T_RC  ---'----  T_RC  ---'------T_MRD----'
-            {CONFIG, 4'd0} : begin
+            {CONFIG, 5'd0} : begin
                 // precharge all
                 {FF_SDRAM_nRAS, FF_SDRAM_nCAS, FF_SDRAM_nWE} <= CMD_PreCharge;
                 FF_SDRAM_A[10] <= 1'b1;
@@ -178,20 +182,20 @@ always @(posedge clk or negedge resetn) begin
             end
             
             // read/write/refresh
-            {IDLE, 4'bxxxx}: if (rd | wr) begin
+            {IDLE, 5'bxxxxx}: if (rd | wr) begin
                 // bank activate
                 {FF_SDRAM_nRAS, FF_SDRAM_nCAS, FF_SDRAM_nWE} <= CMD_BankActivate;
                 FF_SDRAM_BA <= addr[ROW_WIDTH+COL_WIDTH+BANK_WIDTH-1+1 : ROW_WIDTH+COL_WIDTH+1];    // bank id
                 FF_SDRAM_A <= addr[ROW_WIDTH+COL_WIDTH-1+1:COL_WIDTH+1];      // 12-bit row address
                 state <= rd ? READ : WRITE;
-                cycle <= 4'd1;
+                cycle <= 5'd1;
                 ff_busy <= 1'b1;
             end else if (refresh) begin
                 // auto-refresh
                 // no need for precharge-all b/c all our r/w are done with auto-precharge.
                 {FF_SDRAM_nRAS, FF_SDRAM_nCAS, FF_SDRAM_nWE} <= CMD_AutoRefresh;
                 state <= REFRESH;
-                cycle <= 4'd1;
+                cycle <= 5'd1;
                 ff_busy <= 1'b1;
             end
 
@@ -213,7 +217,7 @@ always @(posedge clk or negedge resetn) begin
             {READ, T_RCD+CAS}: begin
                 ff_data_ready <= 1'b1;
             end
-            {READ, T_RCD+CAS+4'd1}: begin
+            {READ, T_RCD+CAS+5'd1}: begin
                 ff_data_ready <= 1'b0;
                 ff_busy <= 0;
                 state <= IDLE;
@@ -235,7 +239,7 @@ always @(posedge clk or negedge resetn) begin
                 dq_out <= {din,din};
                 dq_oen <= 1'b0;                 // DQ output on
             end
-            {WRITE, T_RCD+4'd1}: begin
+            {WRITE, T_RCD+5'd1}: begin
                 dq_oen <= 1'b1;
             end
             {WRITE, T_RCD+T_WR+T_RP}: begin  // 2+2+1
@@ -263,12 +267,14 @@ end
 //
 reg  [14:0]   rst_cnt;
 reg rst_done, rst_done_p1, cfg_busy;
-assign enabled = rst_done;
+assign enabled = rst_done && (state != INIT) && (state != CONFIG);
 
 always @(posedge clk or negedge resetn) begin
     if (~resetn) begin
         rst_cnt  <= 15'd0;
         rst_done <= 1'b0;
+        rst_done_p1 <= 1'b0;
+        cfg_now <= 1'b0;
         cfg_busy <= 1'b1;
     end else
     begin

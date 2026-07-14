@@ -148,6 +148,17 @@ module top
     wire startup_test_failed;
     wire startup_test_wait_n;
     wire startup_test_led;
+    wire native_sdram_rd;
+    wire native_sdram_wr;
+    wire native_sdram_refresh;
+    wire [22:0] native_sdram_addr;
+    wire [15:0] native_sdram_din;
+    wire [1:0] native_sdram_wdm;
+    wire [15:0] native_sdram_dout;
+    wire [31:0] native_sdram_dout32;
+    wire native_sdram_data_ready;
+    wire native_sdram_busy;
+    wire native_sdram_enabled;
 
     always_ff @(posedge main_clk or negedge board_reset_n)
     begin
@@ -223,7 +234,12 @@ module top
         .page3_subslot_en(page3_subslot_en)
     );
 
-    sdram_startup_test sdram_startup_test_inst(
+    sdram_startup_test
+    #(
+        .CLK_FREQ_HZ(108_000_000),
+        .USE_ADDRESS_PATTERN(1'b1)
+    )
+    sdram_startup_test_inst(
         .clk(main_clk),
         .reset_n(board_enabled),
         .sdrc_init_done(sdrc_init_done),
@@ -309,33 +325,69 @@ module top
         .wait_n(wait_n)
     );
 
-	SDRAM sdram_inst(
-		.O_sdram_clk(O_sdram_clk), //output O_sdram_clk
-		.O_sdram_cke(O_sdram_cke), //output O_sdram_cke
-		.O_sdram_cs_n(O_sdram_cs_n), //output O_sdram_cs_n
-		.O_sdram_cas_n(O_sdram_cas_n), //output O_sdram_cas_n
-		.O_sdram_ras_n(O_sdram_ras_n), //output O_sdram_ras_n
-		.O_sdram_wen_n(O_sdram_wen_n), //output O_sdram_wen_n
-		.O_sdram_dqm(O_sdram_dqm), //output [3:0] O_sdram_dqm
-		.O_sdram_addr(O_sdram_addr), //output [10:0] O_sdram_addr
-		.O_sdram_ba(O_sdram_ba), //output [1:0] O_sdram_ba
-		.IO_sdram_dq(IO_sdram_dq), //inout [31:0] IO_sdram_dq
-		.I_sdrc_rst_n(board_enabled), //input I_sdrc_rst_n
-		.I_sdrc_clk(main_clk), //input I_sdrc_clk
-		.I_sdram_clk(sdram_clk), //input I_sdram_clk
-		.I_sdrc_cmd_en(sdrc_cmd_en), //input I_sdrc_cmd_en
-		.I_sdrc_cmd(sdrc_cmd), //input [2:0] I_sdrc_cmd
-		.I_sdrc_precharge_ctrl(sdrc_precharge_ctrl), //input I_sdrc_precharge_ctrl
-		.I_sdram_power_down(sdram_power_down), //input I_sdram_power_down
-		.I_sdram_selfrefresh(sdram_selfrefresh), //input I_sdram_selfrefresh
-		.I_sdrc_addr(sdrc_addr), //input [20:0] I_sdrc_addr
-		.I_sdrc_dqm(sdrc_dqm), //input [3:0] I_sdrc_dqm
-		.I_sdrc_data(sdrc_data), //input [31:0] I_sdrc_data
-		.I_sdrc_data_len(sdrc_data_len), //input [7:0] I_sdrc_data_len
-		.O_sdrc_data(sdrc_data_in), //output [31:0] O_sdrc_data
-		.O_sdrc_init_done(sdrc_init_done), //output O_sdrc_init_done
-		.O_sdrc_cmd_ack(sdrc_cmd_ack) //output O_sdrc_cmd_ack
-	);  
+    sdram_command_adapter
+    #(
+        .CLK_FREQ_HZ(108_000_000)
+    )
+    sdram_command_adapter_inst(
+        .clk(main_clk),
+        .reset_n(board_enabled),
+        .cmd_en(sdrc_cmd_en),
+        .cmd(sdrc_cmd),
+        .cmd_addr(sdrc_addr),
+        .cmd_dqm(sdrc_dqm),
+        .cmd_data(sdrc_data),
+        .read_data(sdrc_data_in),
+        .init_done(sdrc_init_done),
+        .cmd_ack(sdrc_cmd_ack),
+        .rd(native_sdram_rd),
+        .wr(native_sdram_wr),
+        .refresh(native_sdram_refresh),
+        .addr(native_sdram_addr),
+        .din(native_sdram_din),
+        .wdm(native_sdram_wdm),
+        .dout32(native_sdram_dout32),
+        .data_ready(native_sdram_data_ready),
+        .busy(native_sdram_busy),
+        .enabled(native_sdram_enabled)
+    );
+
+    sdram
+    #(
+        .FREQ(108_000_000),
+        .CAS(5'd3),
+        .T_WR(5'd3),
+        .T_MRD(5'd2),
+        .T_RP(5'd2),
+        .T_RCD(5'd2),
+        .T_RC(5'd7)
+    )
+    sdram_inst(
+        .SDRAM_DQ(IO_sdram_dq),
+        .SDRAM_A(O_sdram_addr),
+        .SDRAM_BA(O_sdram_ba),
+        .SDRAM_nCS(O_sdram_cs_n),
+        .SDRAM_nWE(O_sdram_wen_n),
+        .SDRAM_nRAS(O_sdram_ras_n),
+        .SDRAM_nCAS(O_sdram_cas_n),
+        .SDRAM_CLK(O_sdram_clk),
+        .SDRAM_CKE(O_sdram_cke),
+        .SDRAM_DQM(O_sdram_dqm),
+        .clk(main_clk),
+        .clk_sdram(sdram_clk),
+        .resetn(board_enabled),
+        .rd(native_sdram_rd),
+        .wr(native_sdram_wr),
+        .refresh(native_sdram_refresh),
+        .addr(native_sdram_addr),
+        .din(native_sdram_din),
+        .wdm(native_sdram_wdm),
+        .dout(native_sdram_dout),
+        .dout32(native_sdram_dout32),
+        .data_ready(native_sdram_data_ready),
+        .busy(native_sdram_busy),
+        .enabled(native_sdram_enabled)
+    );
 
     // triggers cpu interrupt (open collector)
     assign int_n = 1'b1;
