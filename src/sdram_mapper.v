@@ -67,11 +67,11 @@ module sdram_mapper
                                 page3_subslot_en;
 
     wire mapper_slot_selected = !sltsl_n && selected_page_subslot[3];
-    wire memory_cycle_selected = !merq_n && iorq_n && rfsh_n && m1_n && mapper_slot_selected && addr != EXPANDED_SLOT_REG_ADDR;
+    wire memory_cycle_selected = !merq_n && iorq_n && rfsh_n && mapper_slot_selected && addr != EXPANDED_SLOT_REG_ADDR;
     wire memory_read_selected = memory_cycle_selected && !rd_n;
     wire memory_write_selected = memory_cycle_selected && !wr_n;
     wire memory_access_selected = memory_read_selected || memory_write_selected;
-    wire memory_read_held = memory_read_selected; //!rd_n && !sltsl_n && !merq_n;
+    wire memory_read_held = memory_read_selected;
 
     wire [7:0] selected_mapper_page =
         (addr[15:14] == 2'd0) ? mapper_page[0] :
@@ -93,10 +93,10 @@ module sdram_mapper
     always_ff @(posedge clk or negedge reset_n)
     begin
         if(!reset_n) begin
-            mapper_page[0] <= 8'h00;
-            mapper_page[1] <= 8'h01;
-            mapper_page[2] <= 8'h02;
-            mapper_page[3] <= 8'h03;
+            mapper_page[0] <= 8'h03;
+            mapper_page[1] <= 8'h02;
+            mapper_page[2] <= 8'h01;
+            mapper_page[3] <= 8'h00;
             state <= STATE_IDLE;
             access_is_read <= 1'b0;
             access_byte_lane <= 2'b00;

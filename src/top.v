@@ -325,13 +325,10 @@ module top
         .wait_n(wait_n)
     );
 
-    sdram_command_adapter
-    #(
-        .CLK_FREQ_HZ(108_000_000)
-    )
-    sdram_command_adapter_inst(
+    sdram_command_adapter sdram_command_adapter_inst(
         .clk(main_clk),
         .reset_n(board_enabled),
+        .rfsh_n(rfsh_n),
         .cmd_en(sdrc_cmd_en),
         .cmd(sdrc_cmd),
         .cmd_addr(sdrc_addr),

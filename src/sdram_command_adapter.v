@@ -1,10 +1,8 @@
 module sdram_command_adapter
-#(
-    parameter integer CLK_FREQ_HZ = 108_000_000
-)
 (
     input clk,
     input reset_n,
+    input rfsh_n,
 
     input cmd_en,
     input [2:0] cmd,
@@ -29,8 +27,6 @@ module sdram_command_adapter
 
     localparam [2:0] CMD_READ = 3'b101;
     localparam [2:0] CMD_WRITE = 3'b100;
-    localparam integer REFRESH_CYCLES = CLK_FREQ_HZ / 100_000;
-
     reg rd_reg = 1'b0;
     reg wr_reg = 1'b0;
     reg refresh_reg = 1'b0;
@@ -44,8 +40,8 @@ module sdram_command_adapter
     reg command_saw_busy = 1'b0;
     reg refresh_pending = 1'b0;
     reg refresh_saw_busy = 1'b0;
-    reg refresh_due = 1'b0;
-    reg [10:0] refresh_count = 11'd0;
+    reg refresh_request = 1'b0;
+    reg refresh_seen = 1'b0;
     reg request_queued = 1'b0;
     reg [2:0] request_cmd = CMD_READ;
     reg [20:0] request_addr = 21'd0;
@@ -79,8 +75,8 @@ module sdram_command_adapter
             command_saw_busy <= 1'b0;
             refresh_pending <= 1'b0;
             refresh_saw_busy <= 1'b0;
-            refresh_due <= 1'b0;
-            refresh_count <= 11'd0;
+            refresh_request <= 1'b0;
+            refresh_seen <= 1'b0;
             request_queued <= 1'b0;
             request_cmd <= CMD_READ;
             request_addr <= 21'd0;
@@ -100,16 +96,11 @@ module sdram_command_adapter
                 request_lane <= lane;
             end
 
-            if (!enabled) begin
-                refresh_count <= 11'd0;
-                refresh_due <= 1'b0;
-            end else if (!refresh_due) begin
-                if (refresh_count == REFRESH_CYCLES - 1) begin
-                    refresh_count <= 11'd0;
-                    refresh_due <= 1'b1;
-                end else begin
-                    refresh_count <= refresh_count + 1'b1;
-                end
+            if (rfsh_n) begin
+                refresh_seen <= 1'b0;
+            end else if (!refresh_seen) begin
+                refresh_request <= 1'b1;
+                refresh_seen <= 1'b1;
             end
 
             if (command_pending) begin
@@ -132,6 +123,11 @@ module sdram_command_adapter
                     refresh_pending <= 1'b0;
                     refresh_saw_busy <= 1'b0;
                 end
+            end else if (refresh_request && enabled && !busy) begin
+                refresh_reg <= 1'b1;
+                refresh_pending <= 1'b1;
+                refresh_saw_busy <= 1'b0;
+                refresh_request <= 1'b0;
             end else if (request_queued && !busy) begin
                 // The legacy address is a 32-bit word address. The new
                 // controller takes a 16-bit-halfword address; lane[1]
@@ -145,12 +141,6 @@ module sdram_command_adapter
                 rd_reg <= (request_cmd == CMD_READ);
                 wr_reg <= (request_cmd == CMD_WRITE);
                 request_queued <= 1'b0;
-            end else if (refresh_due && !busy) begin
-                refresh_reg <= 1'b1;
-                refresh_pending <= 1'b1;
-                refresh_saw_busy <= 1'b0;
-                refresh_due <= 1'b0;
-                refresh_count <= 11'd0;
             end
         end
     end
