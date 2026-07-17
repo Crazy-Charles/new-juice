@@ -1,32 +1,55 @@
-# WonderTANG MSX-Interface
+# New Juice
 
-# Direct MSX-BUS Pins:
+FPGA design for the WonderTANG MSX interface, targeting the Gowin
+GW2AR-LV18QN88C8/I7 device. The current design implements the MSX bus
+interface, a slot expander, and an SDRAM-backed memory mapper.
 
-MSX BUS | PIN | MODE | NOTE
----| --- | --- | ---
-D7-D0 | cd[7:0] | InOut  | **datadir** pin controls the flow: 0 : output, 1: input
-/INT | int_n | Ouput | Triggers interrupt. Open collector.
-/BUSDIR | busdir_n | Output | controls the data bus direction: 0 : output , 1 input
-/WAIT | wait_n | Output | Holds CPU. Open collector.
-/RD | rd_n | Input |
-/WR | wr_n | Input | 
-/SLTSL | sltsl_n | Input |
-CLOCK | cpu_clk | Input | 
+## Hardware
 
+- Gowin GW2AR-18C FPGA (`GW2AR-LV18QN88C8/I7`)
+- 27 MHz board clock
+- 3.58 MHz MSX CPU clock
+- 32-bit SDRAM interface
 
-# Multiplexed Input Pins
+## Project layout
 
-msel_n[2:0] controls the multiplexing input for these signals through mp[7:0]:
+- `new-juice.gprj` — Gowin EDA project
+- `src/` — Verilog/SystemVerilog sources, pin constraints, and timing constraints
+- `roms/` — ROM images used by the design
+- `impl/` — Gowin implementation configuration
 
-/MSEL | 110 | 101 | 011
---- | --- | --- | ---
-MP0 | A0 | A8 | /MERQ
-MP1 | A1 | A9 | /IORQ
-MP2 | A2 | A10 | /CS1
-MP3 | A3 | A11 | /CS2
-MP4 | A4 | A12 | /RESET
-MP5 | A5 | A13 | /RFSH
-MP6 | A6 | A14 | /CS12
-MP7 | A7 | A15 | /M1
+## Building
 
+1. Open `new-juice.gprj` in Gowin EDA.
+2. Run synthesis and place-and-route.
+3. Program the generated bitstream onto the target board.
 
+The project expects Gowin EDA support for the GW2AR-18C family.
+
+## MSX bus pins
+
+| MSX bus | FPGA signal | Direction | Notes |
+| --- | --- | --- | --- |
+| D7–D0 | `cd[7:0]` | Bidirectional | `datadir` controls direction: 0 = output, 1 = input |
+| `/INT` | `int_out` | Output | Open-collector interrupt |
+| `/BUSDIR` | `busdir_n` | Output | 0 = output, 1 = input |
+| `/WAIT` | `wait_out` | Output | Open-collector CPU wait |
+| `/RD` | `rd_n_in` | Input | Read strobe |
+| `/WR` | `wr_n_in` | Input | Write strobe |
+| `/SLTSL` | `sltsl_n_in` | Input | Slot select |
+| CLOCK | `cpu_clkin` | Input | MSX CPU clock |
+
+## Multiplexed inputs
+
+`msel_n[2:0]` selects the signals presented on `mp[7:0]`.
+
+| Input | `110` | `101` | `011` |
+| --- | --- | --- | --- |
+| MP0 | A0 | A8 | `/MERQ` |
+| MP1 | A1 | A9 | `/IORQ` |
+| MP2 | A2 | A10 | `/CS1` |
+| MP3 | A3 | A11 | `/CS2` |
+| MP4 | A4 | A12 | `/RESET` |
+| MP5 | A5 | A13 | `/RFSH` |
+| MP6 | A6 | A14 | `/CS12` |
+| MP7 | A7 | A15 | `/M1` |
