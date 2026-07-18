@@ -455,6 +455,8 @@ module top
     assign int_out = ~int_n;
     assign wait_out = ~wait_n;
 
-    assign led = startup_test_led;
+    // Before the SDRAM test passes, preserve its failure-code blinker.
+    // Afterwards the LED indicates an active SD-card command.
+    assign led = startup_test_passed ? sd_busy : startup_test_led;
 
 endmodule
