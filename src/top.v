@@ -25,10 +25,10 @@ module top
     output [2:0] msel_n,
 
     // flash
-    //output mspi_cs,
-    //output mspi_sclk,
-    //inout mspi_miso,
-    //inout mspi_mosi,
+    output mspi_cs,
+    output mspi_sclk,
+    inout mspi_miso,
+    inout mspi_mosi,
  
     // MicroSD
     //output sd_sclk,
@@ -103,6 +103,11 @@ module top
     wire slot_expander_data_out_en;
     wire [7:0] sdram_mapper_data_out;
     wire sdram_mapper_data_out_en;
+    wire [7:0] flash_rom_data_out;
+    wire flash_rom_data_out_en;
+    wire flash_rom_wait_n;
+    wire flash_rom_loaded;
+    wire mapper_wait_n;
     wire [3:0] page0_subslot_en;
     wire [3:0] page1_subslot_en;
     wire [3:0] page2_subslot_en;
@@ -135,6 +140,11 @@ module top
     wire [3:0] mapper_sdrc_dqm;
     wire [31:0] mapper_sdrc_data;
     wire [7:0] mapper_sdrc_data_len;
+    wire rom_sdrc_cmd_en;
+    wire [2:0] rom_sdrc_cmd;
+    wire [20:0] rom_sdrc_addr;
+    wire [3:0] rom_sdrc_dqm;
+    wire [31:0] rom_sdrc_data;
     wire test_sdrc_cmd_en;
     wire [2:0] test_sdrc_cmd;
     wire test_sdrc_precharge_ctrl;
@@ -163,13 +173,9 @@ module top
     always_ff @(posedge main_clk or negedge board_reset_n)
     begin
         if (!board_reset_n) begin
-            // s2_sync <= 2'b00;
             board_enabled <= 1'b0;
         end else begin
-            // s2_sync <= {s2_sync[0], s2};
-            //if (s2_sync == 2'b01) begin
-                board_enabled <= 1'b1;
-            //end
+            board_enabled <= 1'b1;
         end
     end
 
@@ -262,7 +268,7 @@ module top
 
     sdram_mapper sdram_mapper_inst(
         .clk(main_clk),
-        .reset_n(board_enabled && startup_test_passed),
+        .reset_n(board_enabled && flash_rom_loaded),
         .addr(addr),
         .data_in(cd_in),
         .merq_n(merq_n),
@@ -278,7 +284,7 @@ module top
         .page3_subslot_en(page3_subslot_en),
         .data_out(sdram_mapper_data_out),
         .data_out_en(sdram_mapper_data_out_en),
-        .wait_n(),
+        .wait_n(mapper_wait_n),
         .sdrc_cmd_en(mapper_sdrc_cmd_en),
         .sdrc_cmd(mapper_sdrc_cmd),
         .sdrc_precharge_ctrl(mapper_sdrc_precharge_ctrl),
@@ -293,29 +299,59 @@ module top
         .sdrc_cmd_ack(sdrc_cmd_ack)
     );
 
+    flash_roms flash_roms_inst(
+        .clk(main_clk),
+        .reset_n(board_enabled),
+        .load_enable(startup_test_passed),
+        .addr(addr),
+        .data_in(cd_in),
+        .merq_n(merq_n),
+        .iorq_n(iorq_n),
+        .rd_n(rd_n),
+        .wr_n(wr_n),
+        .rfsh_n(rfsh_n),
+        .sltsl_n(sltsl_n),
+        .page1_subslot_en(page1_subslot_en),
+        .data_out(flash_rom_data_out),
+        .data_out_en(flash_rom_data_out_en),
+        .wait_n(flash_rom_wait_n),
+        .loaded(flash_rom_loaded),
+        .mspi_cs(mspi_cs),
+        .mspi_sclk(mspi_sclk),
+        .mspi_miso(mspi_miso),
+        .mspi_mosi(mspi_mosi),
+        .sdrc_cmd_en(rom_sdrc_cmd_en),
+        .sdrc_cmd(rom_sdrc_cmd),
+        .sdrc_addr(rom_sdrc_addr),
+        .sdrc_dqm(rom_sdrc_dqm),
+        .sdrc_data(rom_sdrc_data),
+        .sdrc_data_in(sdrc_data_in),
+        .sdrc_cmd_ack(sdrc_cmd_ack)
+    );
+
     assign sdrc_cmd_en = board_enabled ?
-        (startup_test_passed ? mapper_sdrc_cmd_en : test_sdrc_cmd_en) : 1'b0;
-    assign sdrc_cmd = startup_test_passed ? mapper_sdrc_cmd : test_sdrc_cmd;
+        (startup_test_passed ? (rom_sdrc_cmd_en || mapper_sdrc_cmd_en) : test_sdrc_cmd_en) : 1'b0;
+    assign sdrc_cmd = startup_test_passed ? (rom_sdrc_cmd_en ? rom_sdrc_cmd : mapper_sdrc_cmd) : test_sdrc_cmd;
     assign sdrc_precharge_ctrl = startup_test_passed ? mapper_sdrc_precharge_ctrl : test_sdrc_precharge_ctrl;
     assign sdram_power_down = startup_test_passed ? mapper_sdram_power_down : test_sdram_power_down;
     assign sdram_selfrefresh = startup_test_passed ? mapper_sdram_selfrefresh : test_sdram_selfrefresh;
-    assign sdrc_addr = startup_test_passed ? mapper_sdrc_addr : test_sdrc_addr;
-    assign sdrc_dqm = startup_test_passed ? mapper_sdrc_dqm : test_sdrc_dqm;
-    assign sdrc_data = startup_test_passed ? mapper_sdrc_data : test_sdrc_data;
+    assign sdrc_addr = startup_test_passed ? (rom_sdrc_cmd_en ? rom_sdrc_addr : mapper_sdrc_addr) : test_sdrc_addr;
+    assign sdrc_dqm = startup_test_passed ? (rom_sdrc_cmd_en ? rom_sdrc_dqm : mapper_sdrc_dqm) : test_sdrc_dqm;
+    assign sdrc_data = startup_test_passed ? (rom_sdrc_cmd_en ? rom_sdrc_data : mapper_sdrc_data) : test_sdrc_data;
     assign sdrc_data_len = startup_test_passed ? mapper_sdrc_data_len : test_sdrc_data_len;
 
-    assign data_out = sdram_mapper_data_out_en ? sdram_mapper_data_out : slot_expander_data_out;
-    //assign data_out = slot_expander_data_out;
+    assign data_out = flash_rom_data_out_en ? flash_rom_data_out :
+                      sdram_mapper_data_out_en ? sdram_mapper_data_out : slot_expander_data_out;
 
-    assign data_out_en = board_enabled && (sdram_mapper_data_out_en || slot_expander_data_out_en);
-    //assign data_out_en = board_enabled && (slot_expander_data_out_en);
+    assign data_out_en = board_enabled &&
+        (flash_rom_data_out_en || sdram_mapper_data_out_en || slot_expander_data_out_en);
 
     assign mapper_port_read = board_enabled && !iorq_n && m1_n && !rd_n && addr[7:2] == 6'b111111;
     
     cd_demux cd_demux_inst(
         .data_out(data_out),
         .data_out_en(data_out_en),
-        .wait_in_n(startup_test_wait_n),
+        .wait_in_n(startup_test_wait_n && flash_rom_wait_n && mapper_wait_n),
         .rd_n(rd_n),
         .sltsl_n(sltsl_n),
         .mapper_port_read(mapper_port_read),

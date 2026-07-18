@@ -33,7 +33,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 182,
+    "InstLine" : 188,
     "InstName" : "bus_data_debouncer",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/input_debouncer.v",
     "ModuleLine" : 1,
@@ -41,7 +41,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 193,
+    "InstLine" : 199,
     "InstName" : "bus_control_debouncer",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/input_debouncer.v",
     "ModuleLine" : 1,
@@ -49,7 +49,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 200,
+    "InstLine" : 206,
     "InstName" : "mp_debouncer_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v",
     "ModuleLine" : 1,
@@ -57,7 +57,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 219,
+    "InstLine" : 225,
     "InstName" : "slot_expander_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/slot_expander.v",
     "ModuleLine" : 1,
@@ -65,7 +65,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 242,
+    "InstLine" : 248,
     "InstName" : "sdram_startup_test_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v",
     "ModuleLine" : 1,
@@ -73,7 +73,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 263,
+    "InstLine" : 269,
     "InstName" : "sdram_mapper_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v",
     "ModuleLine" : 1,
@@ -81,7 +81,25 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 315,
+    "InstLine" : 302,
+    "InstName" : "flash_roms_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/flash_roms.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "flash_roms",
+    "SubInsts" : [
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/flash_roms.v",
+      "InstLine" : 97,
+      "InstName" : "flash_reader_inst",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v",
+      "ModuleLine" : 1,
+      "ModuleName" : "spi_flash_reader"
+     }
+    ]
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 351,
     "InstName" : "cd_demux_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/cd_demux.v",
     "ModuleLine" : 1,
@@ -89,7 +107,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 328,
+    "InstLine" : 364,
     "InstName" : "sdram_command_adapter_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sdram_command_adapter.v",
     "ModuleLine" : 1,
@@ -97,7 +115,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 362,
+    "InstLine" : 398,
     "InstName" : "sdram_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sdram.v",
     "ModuleLine" : 27,

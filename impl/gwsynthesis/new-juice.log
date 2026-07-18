@@ -2,6 +2,8 @@ GowinSynthesis start
 Running parser ...
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/cd_demux.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/clockdiv.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/flash_roms.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/input_debouncer.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v'
@@ -20,6 +22,8 @@ Compiling module 'mp_debouncer'("/Users/felipe/src/fpga/new-juice/src/mp_debounc
 Compiling module 'slot_expander'("/Users/felipe/src/fpga/new-juice/src/slot_expander.v":1)
 Compiling module 'sdram_startup_test'("/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v":1)
 Compiling module 'sdram_mapper'("/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v":1)
+Compiling module 'flash_roms'("/Users/felipe/src/fpga/new-juice/src/flash_roms.v":1)
+Compiling module 'spi_flash_reader'("/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v":1)
 Compiling module 'cd_demux'("/Users/felipe/src/fpga/new-juice/src/cd_demux.v":1)
 Compiling module 'sdram_command_adapter'("/Users/felipe/src/fpga/new-juice/src/sdram_command_adapter.v":1)
 Compiling module 'sdram'("/Users/felipe/src/fpga/new-juice/src/sdram.v":27)
