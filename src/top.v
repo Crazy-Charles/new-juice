@@ -3,11 +3,6 @@ module top
     input   clkin,
     input   s1,
     input   s2,
-    //output hp_ws,
-    //output hp_din,
-    //output hp_bck,
-    //output pa_en,
-
     input cpu_clkin,
     input rd_n_in,
     input wr_n_in,
@@ -31,12 +26,12 @@ module top
     inout mspi_mosi,
  
     // MicroSD
-    //output sd_sclk,
-    //inout  sd_cmd,      // MOSI
-    //inout  sd_dat0,     // MISO
-    //output sd_dat1,     // 1
-    //output sd_dat2,     // 1
-    //output sd_dat3,     // 1
+    output sd_sclk,
+    inout sd_cmd,
+    inout sd_dat0,
+    output sd_dat1,
+    output sd_dat2,
+    output sd_dat3,
    
     // SDRAM
     output O_sdram_clk,
@@ -108,6 +103,10 @@ module top
     wire flash_rom_wait_n;
     wire flash_rom_loaded;
     wire mapper_wait_n;
+    wire [7:0] sd_data_out;
+    wire sd_data_out_en;
+    wire sd_overlay_enabled;
+    wire sd_busy;
     wire [3:0] page0_subslot_en;
     wire [3:0] page1_subslot_en;
     wire [3:0] page2_subslot_en;
@@ -299,6 +298,31 @@ module top
         .sdrc_cmd_ack(sdrc_cmd_ack)
     );
 
+    sd_registers sd_registers_inst(
+        .clk(main_clk),
+        .reset_n(board_enabled && flash_rom_loaded),
+        .cpu_clk(cpu_clk),
+        .addr(addr),
+        .data_in(cd_in),
+        .merq_n(merq_n),
+        .iorq_n(iorq_n),
+        .m1_n(m1_n),
+        .rd_n(rd_n),
+        .wr_n(wr_n),
+        .sltsl_n(sltsl_n),
+        .subslot0_selected(page1_subslot_en[0]),
+        .data_out(sd_data_out),
+        .data_out_en(sd_data_out_en),
+        .overlay_enabled(sd_overlay_enabled),
+        .busy(sd_busy),
+        .sd_sclk(sd_sclk),
+        .sd_cmd(sd_cmd),
+        .sd_dat0(sd_dat0),
+        .sd_dat1(sd_dat1),
+        .sd_dat2(sd_dat2),
+        .sd_dat3(sd_dat3)
+    );
+
     flash_roms flash_roms_inst(
         .clk(main_clk),
         .reset_n(board_enabled),
@@ -312,6 +336,7 @@ module top
         .rfsh_n(rfsh_n),
         .sltsl_n(sltsl_n),
         .page1_subslot_en(page1_subslot_en),
+        .dos2_overlay_enabled(sd_overlay_enabled),
         .data_out(flash_rom_data_out),
         .data_out_en(flash_rom_data_out_en),
         .wait_n(flash_rom_wait_n),
@@ -340,11 +365,13 @@ module top
     assign sdrc_data = startup_test_passed ? (rom_sdrc_cmd_en ? rom_sdrc_data : mapper_sdrc_data) : test_sdrc_data;
     assign sdrc_data_len = startup_test_passed ? mapper_sdrc_data_len : test_sdrc_data_len;
 
-    assign data_out = flash_rom_data_out_en ? flash_rom_data_out :
+    assign data_out = sd_data_out_en ? sd_data_out :
+                      flash_rom_data_out_en ? flash_rom_data_out :
                       sdram_mapper_data_out_en ? sdram_mapper_data_out : slot_expander_data_out;
 
     assign data_out_en = board_enabled &&
-        (flash_rom_data_out_en || sdram_mapper_data_out_en || slot_expander_data_out_en);
+        (sd_data_out_en || flash_rom_data_out_en ||
+         sdram_mapper_data_out_en || slot_expander_data_out_en);
 
     assign mapper_port_read = board_enabled && !iorq_n && m1_n && !rd_n && addr[7:2] == 6'b111111;
     

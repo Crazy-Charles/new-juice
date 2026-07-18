@@ -4,6 +4,11 @@ Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/cd_demux.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/clockdiv.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/flash_roms.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/dpram.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/crc16.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdcmd_ctrl.sv'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sd_reader.sv'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sd_registers.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/input_debouncer.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v'
@@ -13,7 +18,7 @@ Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/slot_expander.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/top.v'
-WARN  (EX3073) : Port 'clkoutd' remains unconnected for this instance("/Users/felipe/src/fpga/new-juice/src/top.v":85)
+WARN  (EX3073) : Port 'clkoutd' remains unconnected for this instance("/Users/felipe/src/fpga/new-juice/src/top.v":80)
 Compiling module 'top'("/Users/felipe/src/fpga/new-juice/src/top.v":1)
 Compiling module 'rpll_main'("/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v":10)
 Compiling module 'input_debouncer(WIDTH=3)'("/Users/felipe/src/fpga/new-juice/src/input_debouncer.v":1)
@@ -22,6 +27,14 @@ Compiling module 'mp_debouncer'("/Users/felipe/src/fpga/new-juice/src/mp_debounc
 Compiling module 'slot_expander'("/Users/felipe/src/fpga/new-juice/src/slot_expander.v":1)
 Compiling module 'sdram_startup_test'("/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v":1)
 Compiling module 'sdram_mapper'("/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v":1)
+Compiling module 'sd_registers'("/Users/felipe/src/fpga/new-juice/src/sd_registers.v":1)
+Compiling module 'dpram(widthad_a=9)'("/Users/felipe/src/fpga/new-juice/src/dpram.v":1)
+Extracting RAM for identifier 'mem_r'("/Users/felipe/src/fpga/new-juice/src/dpram.v":23)
+Compiling module 'sd_reader(CLK_DIV=3'd4)'("/Users/felipe/src/fpga/new-juice/src/sd_reader.sv":11)
+WARN  (EX3791) : Expression size 5 truncated to fit in target size 4("/Users/felipe/src/fpga/new-juice/src/sd_reader.sv":125)
+Compiling module 'sdcmd_ctrl'("/Users/felipe/src/fpga/new-juice/src/sdcmd_ctrl.sv":10)
+WARN  (EX3771) : Module instantiation should have an instance name("/Users/felipe/src/fpga/new-juice/src/sd_reader.sv":304)
+Compiling module 'sd_crc_16'("/Users/felipe/src/fpga/new-juice/src/crc16.v":5)
 Compiling module 'flash_roms'("/Users/felipe/src/fpga/new-juice/src/flash_roms.v":1)
 Compiling module 'spi_flash_reader'("/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v":1)
 Compiling module 'cd_demux'("/Users/felipe/src/fpga/new-juice/src/cd_demux.v":1)
@@ -31,7 +44,6 @@ WARN  (EX3791) : Expression size 16 truncated to fit in target size 15("/Users/f
 NOTE  (EX0101) : Current top module is "top"
 [5%] Running netlist conversion ...
 WARN  (CV0016) : Input s2 is unused("/Users/felipe/src/fpga/new-juice/src/top.v":5)
-WARN  (CV0016) : Input cpu_clkin is unused("/Users/felipe/src/fpga/new-juice/src/top.v":11)
 Running device independent optimization ...
 [10%] Optimizing Phase 0 completed
 [15%] Optimizing Phase 1 completed

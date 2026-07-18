@@ -9,6 +9,11 @@
         <File path="src/clockdiv.v" type="file.verilog" enable="1"/>
         <File path="src/spi_flash_reader.v" type="file.verilog" enable="1"/>
         <File path="src/flash_roms.v" type="file.verilog" enable="1"/>
+        <File path="src/dpram.v" type="file.verilog" enable="1"/>
+        <File path="src/crc16.v" type="file.verilog" enable="1"/>
+        <File path="src/sdcmd_ctrl.sv" type="file.verilog" enable="1"/>
+        <File path="src/sd_reader.sv" type="file.verilog" enable="1"/>
+        <File path="src/sd_registers.v" type="file.verilog" enable="1"/>
         <File path="src/input_debouncer.v" type="file.verilog" enable="1"/>
         <File path="src/mp_debouncer.v" type="file.verilog" enable="1"/>
         <File path="src/rpll/rpll_main.v" type="file.verilog" enable="1"/>

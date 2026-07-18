@@ -34,6 +34,31 @@ The DOS2 ROM is divided into eight 16 KiB banks. Writing the bank number to
 `0x6000` selects the bank visible at `0x4000–0x7FFF`; only bits 2:0 are used.
 The FM-PAC image is a fixed 16 KiB ROM.
 
+## SD-card interface
+
+The onboard microSD card is exposed through the DOS2 ROM in expanded subslot
+0. Writing `1` to `0x7E00` overlays the SD transfer RAM and registers onto the
+ROM; writing `0` restores normal ROM reads.
+
+| Address | Access | Description |
+| --- | --- | --- |
+| `0x7C00–0x7DFF` | Read/write | 512-byte sector transfer RAM |
+| `0x7E00` | Write | Enable or disable the SD overlay |
+| `0x7E01` | Write | Command: `0x80` initialize, `1` read, `2` write |
+| `0x7E02` | Read | Status: bit 7 busy, bit 1 timeout, bit 0 CRC error |
+| `0x7E03–0x7E06` | Write | 32-bit sector address, least-significant byte first |
+| `0x7E07–0x7E09` | Read | CSD device size |
+| `0x7E0A` | Read | CSD size multiplier |
+| `0x7E0B` | Read | CSD read block length |
+| `0x7E0C` | Read | Card type: unknown, SDv1, SDv2, or SDHCv2 |
+| `0x7E0D` | Read | Manufacturer ID |
+| `0x7E0E–0x7E0F` | Read | OEM ID |
+| `0x7E10–0x7E14` | Read | Product name |
+| `0x7E15–0x7E18` | Read | Product serial number |
+
+The status values are `0x00` for success/idle, `0x80` while busy, `0x01` for
+a CRC error, and `0x02` for a timeout. Error bits can be combined with busy.
+
 ## Building
 
 1. Open `new-juice.gprj` in Gowin EDA.

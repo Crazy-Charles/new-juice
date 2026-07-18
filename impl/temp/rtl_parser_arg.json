@@ -18,6 +18,26 @@
    "Type" : "verilog"
   },
   {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/dpram.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/crc16.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/sdcmd_ctrl.sv",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/sd_reader.sv",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/sd_registers.v",
+   "Type" : "verilog"
+  },
+  {
    "Path" : "/Users/felipe/src/fpga/new-juice/src/input_debouncer.v",
    "Type" : "verilog"
   },

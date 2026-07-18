@@ -13,6 +13,7 @@ module flash_roms
     input rfsh_n,
     input sltsl_n,
     input [3:0] page1_subslot_en,
+    input dos2_overlay_enabled,
 
     output [7:0] data_out,
     output data_out_en,
@@ -72,7 +73,11 @@ module flash_roms
                           addr[15:14] == 2'b01;
     wire dos2_selected = page1_selected && page1_subslot_en[0];
     wire fmpac_selected = page1_selected && page1_subslot_en[1];
-    wire rom_read_selected = !rd_n && (dos2_selected || fmpac_selected);
+    wire dos2_overlay_selected = dos2_overlay_enabled && dos2_selected &&
+                                 addr >= 16'h7c00 && addr <= 16'h7eff;
+    wire rom_read_selected = !rd_n &&
+                             ((dos2_selected && !dos2_overlay_selected) ||
+                              fmpac_selected);
     wire dos2_bank_write = !wr_n && dos2_selected && addr == 16'h6000;
     wire [17:0] dos2_offset = {dos2_bank, addr[13:0]};
     wire [17:0] fmpac_offset = 18'h20000 + {4'd0, addr[13:0]};
