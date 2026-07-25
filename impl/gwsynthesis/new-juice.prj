@@ -18,15 +18,6 @@
         <File path="/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_a.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_timinggen.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_lfo.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_pg.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_eg.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_op.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_dac.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/sd_reader.sv" type="verilog"/>
@@ -41,6 +32,25 @@
         <File path="/Users/felipe/src/fpga/new-juice/src/super_megaram.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/top.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/vm2413.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/controller.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/envelopegenerator.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/envelopememory.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/feedbackmemory.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/operator.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/outputgenerator.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/outputmemory.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/phasegenerator.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/phasememory.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/registermemory.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/temporalmixer.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/voicememory.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/voicerom.vhd" type="vhdl"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd" type="vhdl"/>
     </FileList>
     <OptionList>
         <Option type="disable_insert_pad" value="0"/>

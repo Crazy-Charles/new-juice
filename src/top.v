@@ -99,7 +99,7 @@ module top
     localparam AUDIO_WS_IDLE_HIGH = 1'b0;
     localparam AUDIO_DIN_ENABLED = 1'b1;
     localparam AUDIO_PA_ENABLED = 1'b1;
-    localparam INCLUDE_OPLL = 1'b0;
+    localparam INCLUDE_OPLL = 1'b1;
 
     generate
         if (AUDIO_LOGIC_ENABLED) begin : audio_logic_enabled
@@ -300,7 +300,6 @@ module top
     wire [11:0] psg_channel_c_unused;
     wire [13:0] psg_mix_unsigned_unused;
     wire opll_write_selected;
-    wire opll_phiM_clock_enable_n;
 
     always_ff @(posedge main_clk or negedge board_reset_n)
     begin
@@ -362,53 +361,31 @@ module top
         .pcm14s_o(psg_pcm)
     );
 
-    // MSX-Music/YM2413 ports 7C (address) and 7D (data). Both are write-only;
-    // none of the IKAOPLL readback signals are connected to the cartridge bus.
+    // MSX-Music/YM2413 ports 7C (address) and 7D (data). Both are write-only.
     assign opll_write_selected = board_enabled && !iorq_n && m1_n && !wr_n &&
                                  addr[7:1] == 7'h3E;
 
-    // During board reset the enable is held active so IKAOPLL's synchronous
-    // internal reset chain can observe i_IC_n low.
-    assign opll_phiM_clock_enable_n =
-        board_reset_n ? ~cpu_clock_rise_enable : 1'b0;
-
     generate
         if (INCLUDE_OPLL) begin : opll_enabled_impl
-            wire signed [15:0] opll_audio_raw;
+            wire [13:0] opll_audio_raw;
 
-            IKAOPLL #(
-                .FULLY_SYNCHRONOUS(1),
-                .FAST_RESET(1),
-                .ALTPATCH_CONFIG_MODE(0),
-                .USE_PIPELINED_MULTIPLIER(1)
-            ) opll_inst (
-                .i_XIN_EMUCLK(main_clk),
-                .o_XOUT(),
-                .i_phiM_PCEN_n(opll_phiM_clock_enable_n),
-                .i_IC_n(board_reset_n),
-                .i_ALTPATCH_EN(1'b0),
-                .i_CS_n(~opll_write_selected),
-                .i_WR_n(wr_n),
-                .i_A0(addr[0]),
-                .i_D(cd_in),
-                .o_D(),
-                .o_D_OE(),
-                .o_DAC_EN_MO(),
-                .o_DAC_EN_RO(),
-                .o_IMP_NOFLUC_SIGN(),
-                .o_IMP_NOFLUC_MAG(),
-                .o_IMP_FLUC_SIGNED_MO(),
-                .o_IMP_FLUC_SIGNED_RO(),
-                .i_ACC_SIGNED_MOVOL(5'sd10),
-                .i_ACC_SIGNED_ROVOL(5'sd15),
-                .o_ACC_SIGNED_STRB(),
-                .o_ACC_SIGNED(opll_audio_raw)
+            // Run VM2413 on its native MSX clock so its internal paths are
+            // timed at the rate for which the core was designed.
+            opll opll_inst (
+                .xin(cpu_clk),
+                .xout(),
+                .xena(1'b1),
+                .d(cd_in),
+                .a(addr[0]),
+                .cs_n(~opll_write_selected),
+                .we_n(wr_n),
+                .ic_n(active_module_reset_n),
+                .mixout(opll_audio_raw)
             );
 
-            // IKAOPLL's accumulator is signed two's-complement. Match the
-            // reference integration's arithmetic divide by two.
-            assign opll_audio_sample = {opll_audio_raw[15],
-                                        opll_audio_raw[15:1]};
+            // VM2413 mixout is signed, zero-centered 14-bit PCM.
+            assign opll_audio_sample =
+                {{2{opll_audio_raw[13]}}, opll_audio_raw};
         end else begin : opll_disabled_impl
             assign opll_audio_sample = 16'sd0;
         end
@@ -588,7 +565,10 @@ module top
     sd_registers sd_registers_inst(
         .clk(main_clk),
         .sd_clk(clk),
-        .reset_n(active_module_reset_n),
+        // Start SD initialization as soon as the FPGA clocks are ready. Do
+        // not hold the card controller in reset while waiting for the MSX
+        // CPU reset or BIOS flash loading to complete.
+        .reset_n(board_enabled),
         .cpu_clk(cpu_clk),
         .addr(addr),
         .data_in(cd_in),

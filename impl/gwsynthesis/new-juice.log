@@ -14,15 +14,6 @@ Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modul
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_a.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_timinggen.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_lfo.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_pg.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_eg.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_op.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_dac.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sd_reader.sv'
@@ -39,15 +30,115 @@ Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/top.v'
 Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd'
 Analyzing entity 'ym2149_audio'("/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd":155)
 Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd":176)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/vm2413.vhd'
+Analyzing package 'vm2413'("/Users/felipe/src/fpga/new-juice/src/VM2413/vm2413.vhd":36)
+Analyzing package body 'vm2413'("/Users/felipe/src/fpga/new-juice/src/VM2413/vm2413.vhd":152)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd'
+Analyzing entity 'attack_table_mul'("/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd":42)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd":50)
+Analyzing entity 'attacktable'("/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd":64)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd":73)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/controller.vhd'
+Analyzing entity 'controller'("/Users/felipe/src/fpga/new-juice/src/VM2413/controller.vhd":70)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/controller.vhd":106)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/envelopegenerator.vhd'
+Analyzing entity 'envelopegenerator'("/Users/felipe/src/fpga/new-juice/src/VM2413/envelopegenerator.vhd":42)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/envelopegenerator.vhd":65)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/envelopememory.vhd'
+Analyzing entity 'envelopememory'("/Users/felipe/src/fpga/new-juice/src/VM2413/envelopememory.vhd":36)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/envelopememory.vhd":48)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/feedbackmemory.vhd'
+Analyzing entity 'feedbackmemory'("/Users/felipe/src/fpga/new-juice/src/VM2413/feedbackmemory.vhd":41)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/feedbackmemory.vhd":52)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd'
+Analyzing entity 'linear_table_mul'("/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd":41)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd":49)
+Analyzing entity 'lineartable'("/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd":63)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd":72)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/operator.vhd'
+Analyzing entity 'operator'("/Users/felipe/src/fpga/new-juice/src/VM2413/operator.vhd":41)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/operator.vhd":65)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/outputgenerator.vhd'
+Analyzing entity 'outputgenerator'("/Users/felipe/src/fpga/new-juice/src/VM2413/outputgenerator.vhd":36)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/outputgenerator.vhd":55)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/outputmemory.vhd'
+Analyzing entity 'outputmemory'("/Users/felipe/src/fpga/new-juice/src/VM2413/outputmemory.vhd":36)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/outputmemory.vhd":48)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/phasegenerator.vhd'
+Analyzing entity 'phasegenerator'("/Users/felipe/src/fpga/new-juice/src/VM2413/phasegenerator.vhd":41)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/phasegenerator.vhd":61)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/phasememory.vhd'
+Analyzing entity 'phasememory'("/Users/felipe/src/fpga/new-juice/src/VM2413/phasememory.vhd":36)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/phasememory.vhd":47)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/registermemory.vhd'
+Analyzing entity 'registermemory'("/Users/felipe/src/fpga/new-juice/src/VM2413/registermemory.vhd":40)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/registermemory.vhd":51)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd'
+Analyzing entity 'interpolate_mul'("/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd":41)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd":49)
+Analyzing entity 'sinetable'("/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd":63)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd":73)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd'
+Analyzing entity 'slotcounter'("/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd":40)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd":54)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/temporalmixer.vhd'
+Analyzing entity 'temporalmixer'("/Users/felipe/src/fpga/new-juice/src/VM2413/temporalmixer.vhd":37)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/temporalmixer.vhd":55)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/voicememory.vhd'
+Analyzing entity 'voicememory'("/Users/felipe/src/fpga/new-juice/src/VM2413/voicememory.vhd":36)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/voicememory.vhd":50)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/voicerom.vhd'
+Analyzing entity 'voicerom'("/Users/felipe/src/fpga/new-juice/src/VM2413/voicerom.vhd":38)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/voicerom.vhd":47)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd'
+Analyzing entity 'opll'("/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd":41)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd":55)
 WARN  (EX3073) : Port 'clkoutd' remains unconnected for this instance("/Users/felipe/src/fpga/new-juice/src/top.v":171)
 Compiling module 'top'("/Users/felipe/src/fpga/new-juice/src/top.v":1)
 Compiling module 'clockdiv'("/Users/felipe/src/fpga/new-juice/src/clockdiv.v":33)
 Compiling module 'audio_drive'("/Users/felipe/src/fpga/new-juice/src/audio_drive.v":1)
 Compiling module 'rpll_main'("/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v":10)
-Switching to VHDL mode to elaborate design unit 'ym2149_audio'("/Users/felipe/src/fpga/new-juice/src/top.v":363)
+Switching to VHDL mode to elaborate design unit 'ym2149_audio'("/Users/felipe/src/fpga/new-juice/src/top.v":362)
 Processing 'ym2149_audio(rtl)'("/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd":155)
 Extracting RAM for identifier 'dacrom_ar'("/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd":361)
-Returning to Verilog mode to proceed with elaboration("/Users/felipe/src/fpga/new-juice/src/top.v":363)
+Returning to Verilog mode to proceed with elaboration("/Users/felipe/src/fpga/new-juice/src/top.v":362)
+Switching to VHDL mode to elaborate design unit 'opll'("/Users/felipe/src/fpga/new-juice/src/top.v":384)
+Processing 'opll(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd":41)
+Processing 'SlotCounter(delay=0)(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd":40)
+Processing 'SlotCounter(delay=2)(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd":40)
+Processing 'SlotCounter(delay=5)(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd":40)
+Processing 'SlotCounter(delay=8)(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd":40)
+Processing 'controller(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/controller.vhd":70)
+Processing 'RegisterMemory(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/registermemory.vhd":40)
+Extracting RAM for identifier 'regs_array'("/Users/felipe/src/fpga/new-juice/src/VM2413/registermemory.vhd":54)
+Processing 'VoiceMemory(RTL)'("/Users/felipe/src/fpga/new-juice/src/VM2413/voicememory.vhd":36)
+Extracting RAM for identifier 'voices'("/Users/felipe/src/fpga/new-juice/src/VM2413/voicememory.vhd":55)
+Processing 'VoiceRom(RTL)'("/Users/felipe/src/fpga/new-juice/src/VM2413/voicerom.vhd":38)
+WARN  (EX4545) : Array bounds of function return type do not match array bounds of function return value("/Users/felipe/src/fpga/new-juice/src/VM2413/vm2413.vhd":171)
+WARN  (EX4160) : Latch inferred for net 'tll[7]'("/Users/felipe/src/fpga/new-juice/src/VM2413/controller.vhd":511)
+Processing 'envelopegenerator(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/envelopegenerator.vhd":42)
+Processing 'AttackTable(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd":64)
+Processing 'attack_table_mul(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd":42)
+Processing 'EnvelopeMemory(RTL)'("/Users/felipe/src/fpga/new-juice/src/VM2413/envelopememory.vhd":36)
+Extracting RAM for identifier 'egdata_set'("/Users/felipe/src/fpga/new-juice/src/VM2413/envelopememory.vhd":51)
+WARN  (EX4545) : Array bounds of function return type do not match array bounds of function return value("/Users/felipe/src/fpga/new-juice/src/VM2413/vm2413.vhd":206)
+Processing 'PhaseGenerator(RTL)'("/Users/felipe/src/fpga/new-juice/src/VM2413/phasegenerator.vhd":41)
+WARN  (EX4160) : Latch inferred for net 'dphase[17]'("/Users/felipe/src/fpga/new-juice/src/VM2413/phasegenerator.vhd":172)
+Processing 'PhaseMemory(RTL)'("/Users/felipe/src/fpga/new-juice/src/VM2413/phasememory.vhd":36)
+Extracting RAM for identifier 'phase_array'("/Users/felipe/src/fpga/new-juice/src/VM2413/phasememory.vhd":50)
+Processing 'Operator(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/operator.vhd":41)
+Processing 'SineTable(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd":63)
+Processing 'interpolate_mul(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd":41)
+Processing 'OutputGenerator(RTL)'("/Users/felipe/src/fpga/new-juice/src/VM2413/outputgenerator.vhd":36)
+Processing 'FeedbackMemory(RTL)'("/Users/felipe/src/fpga/new-juice/src/VM2413/feedbackmemory.vhd":41)
+Extracting RAM for identifier 'data_array'("/Users/felipe/src/fpga/new-juice/src/VM2413/feedbackmemory.vhd":55)
+WARN  (EX4545) : Array bounds of function return type do not match array bounds of function return value("/Users/felipe/src/fpga/new-juice/src/VM2413/vm2413.vhd":186)
+Processing 'OutputMemory(RTL)'("/Users/felipe/src/fpga/new-juice/src/VM2413/outputmemory.vhd":36)
+Extracting RAM for identifier 'data_array'("/Users/felipe/src/fpga/new-juice/src/VM2413/outputmemory.vhd":51)
+Processing 'LinearTable(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd":63)
+Processing 'linear_table_mul(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd":41)
+Processing 'TemporalMixer(RTL)'("/Users/felipe/src/fpga/new-juice/src/VM2413/temporalmixer.vhd":37)
+Returning to Verilog mode to proceed with elaboration("/Users/felipe/src/fpga/new-juice/src/top.v":384)
 Compiling module 'input_debouncer(WIDTH=3)'("/Users/felipe/src/fpga/new-juice/src/input_debouncer.v":1)
 Compiling module 'input_debouncer(WIDTH=8)'("/Users/felipe/src/fpga/new-juice/src/input_debouncer.v":1)
 Compiling module 'mp_debouncer'("/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v":1)

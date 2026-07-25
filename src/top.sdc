@@ -1,5 +1,7 @@
 // 27Mhz main clk
 create_clock -name clkin -period 37.037 -waveform {0 18.518} [get_ports {clkin}] -add
+// Native MSX CPU/VM2413 clock, nominally 3.579545 MHz
+create_clock -name cpu_clk -period 279.365 -waveform {0 139.682} [get_ports {cpu_clkin}] -add
 
 // 216Mhz main clks
 create_generated_clock -name main_clk -source [get_ports {clkin}] -master_clock clkin -divide_by 1 -multiply_by 4 -add [get_nets {main_clk}]
@@ -8,3 +10,4 @@ create_generated_clock -name main_clk -source [get_ports {clkin}] -master_clock 
 // All 27 MHz <-> 108 MHz transfers use explicit synchronizers or bundled-data
 // mailboxes. Do not time them as single-cycle synchronous paths.
 set_clock_groups -asynchronous -group [get_clocks {clkin}] -group [get_clocks {main_clk}]
+set_clock_groups -asynchronous -group [get_clocks {cpu_clk}] -group [get_clocks {clkin main_clk}]
