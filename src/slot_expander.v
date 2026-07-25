@@ -42,9 +42,23 @@ module slot_expander
     assign data_out = ~expanded_slot_reg;
     assign data_out_en = read_selected;
 
-    assign page0_subslot_en = 4'b0001 << page0_subslot;
-    assign page1_subslot_en = 4'b0001 << page1_subslot;
-    assign page2_subslot_en = 4'b0001 << page2_subslot;
-    assign page3_subslot_en = 4'b0001 << page3_subslot;
+    // Direct equality decoders avoid implementing each one-hot output as a
+    // variable barrel shift. This is on the critical CPU-to-SDRAM path.
+    assign page0_subslot_en = {
+        page0_subslot == 2'd3, page0_subslot == 2'd2,
+        page0_subslot == 2'd1, page0_subslot == 2'd0
+    };
+    assign page1_subslot_en = {
+        page1_subslot == 2'd3, page1_subslot == 2'd2,
+        page1_subslot == 2'd1, page1_subslot == 2'd0
+    };
+    assign page2_subslot_en = {
+        page2_subslot == 2'd3, page2_subslot == 2'd2,
+        page2_subslot == 2'd1, page2_subslot == 2'd0
+    };
+    assign page3_subslot_en = {
+        page3_subslot == 2'd3, page3_subslot == 2'd2,
+        page3_subslot == 2'd1, page3_subslot == 2'd0
+    };
 
 endmodule

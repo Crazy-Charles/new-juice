@@ -6,8 +6,8 @@ module super_megaram
 )
 (
     input clk,
+    input cpu_clk,
     input reset_n,
-    input cpu_clock_enable,
 
     input [15:0] addr,
     input [7:0] data_in,
@@ -88,8 +88,9 @@ module super_megaram
                     operation_mode == MODE_K5;
     wire scc_window = addr[15:11] == 5'b10011;
     wire scc_enabled = scc_mode && bank[2] == 8'h3f;
-    wire scc_access_selected = INCLUDE_SCC && memory_cycle && scc_enabled &&
-                               scc_window && (!rd_n || !wr_n);
+    wire scc_window_active = INCLUDE_SCC && scc_enabled && scc_window;
+    wire scc_access_selected = memory_cycle && scc_window_active &&
+                               (!rd_n || !wr_n);
 
     always @(*)
     begin
@@ -166,13 +167,15 @@ module super_megaram
         end
     end
 
-    wire memory_read_selected = memory_cycle && !rd_n &&
-                                !scc_access_selected;
-    wire memory_write_selected = memory_cycle && !wr_n && !rom_mode &&
-                                 !scc_access_selected;
+    // SCC accesses and ROM-mode mapper writes are mutually exclusive with
+    // SDRAM accesses. Decode that directly so neither the IKASCC select nor
+    // the mapper-write network sits in the SDRAM command/address path.
+    wire memory_read_selected =
+        memory_cycle && !rd_n && !scc_window_active;
+    wire memory_write_selected =
+        memory_cycle && !wr_n && !rom_mode && !scc_window_active;
     wire memory_access_selected =
-        (memory_read_selected || memory_write_selected) &&
-        !bank_write_selected;
+        memory_read_selected || memory_write_selected;
 
     wire [7:0] selected_8k_bank =
         (addr[15:13] == 3'b010) ? bank[0] :
@@ -310,11 +313,11 @@ module super_megaram
             wire signed [10:0] ikascc_sound;
 
             IKASCC #(
-                .IMPL_TYPE(0),
+                .IMPL_TYPE(1),
                 .RAM_BLOCK(1)
             ) ikascc_inst (
-                .i_EMUCLK(clk),
-                .i_MCLK_PCEN_n(~cpu_clock_enable),
+                .i_EMUCLK(cpu_clk),
+                .i_MCLK_PCEN_n(1'b0),
                 .i_RST_n(reset_n),
                 .i_CS_n(~ikascc_bus_selected),
                 .i_RD_n(rd_n),

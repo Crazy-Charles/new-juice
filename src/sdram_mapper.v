@@ -60,14 +60,14 @@ module sdram_mapper
     wire mapper_port_write = mapper_port_selected && !wr_n;
     wire [1:0] mapper_port_page = addr[1:0];
 
-    wire [3:0] selected_page_subslot =
-        (addr[15:14] == 2'd0) ? page0_subslot_en :
-        (addr[15:14] == 2'd1) ? page1_subslot_en :
-        (addr[15:14] == 2'd2) ? page2_subslot_en :
-                                page3_subslot_en;
-
-    wire mapper_slot_selected = !sltsl_n && selected_page_subslot[3];
-    wire memory_cycle_selected = !merq_n && iorq_n && rfsh_n && mapper_slot_selected && addr != EXPANDED_SLOT_REG_ADDR;
+    wire mapper_subslot_selected =
+        (addr[15:14] == 2'd0 && page0_subslot_en[3]) ||
+        (addr[15:14] == 2'd1 && page1_subslot_en[3]) ||
+        (addr[15:14] == 2'd2 && page2_subslot_en[3]) ||
+        (addr[15:14] == 2'd3 && page3_subslot_en[3]);
+    wire memory_cycle_selected =
+        !merq_n && iorq_n && rfsh_n && !sltsl_n &&
+        mapper_subslot_selected && addr != EXPANDED_SLOT_REG_ADDR;
     wire memory_read_selected = memory_cycle_selected && !rd_n;
     wire memory_write_selected = memory_cycle_selected && !wr_n;
     wire memory_access_selected = memory_read_selected || memory_write_selected;

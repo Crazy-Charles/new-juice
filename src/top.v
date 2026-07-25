@@ -532,11 +532,11 @@ module top
     );
 
     super_megaram #(
-        .INCLUDE_SCC(1'b0)
+        .INCLUDE_SCC(1'b1)
     ) super_megaram_inst(
         .clk(main_clk),
+        .cpu_clk(cpu_clk),
         .reset_n(active_module_reset_n),
-        .cpu_clock_enable(cpu_clock_rise_enable),
         .addr(addr),
         .data_in(cd_in),
         .merq_n(merq_n),
