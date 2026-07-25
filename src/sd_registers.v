@@ -1,6 +1,7 @@
 module sd_registers
 (
     input clk,
+    input sd_clk,
     input reset_n,
     input cpu_clk,
     input [15:0] addr,
@@ -93,7 +94,7 @@ module sd_registers
         .address_a(addr[8:0]),
         .data_a(data_in),
         .q_a(ram_data_out),
-        .clock_b(clk),
+        .clock_b(sd_clk),
         .wren_b(sd_read_start && sd_data_enable),
         .rden_b(sd_write_start && sd_data_enable),
         .address_b(sd_data_addr),
@@ -102,11 +103,11 @@ module sd_registers
     );
 
     sd_reader #(
-        .CLK_DIV(3'd4),
+        .CLK_DIV(3'd2),
         .SIMULATE(0)
     ) sd_card_controller (
         .rstn(reset_n),
-        .clk(clk),
+        .clk(sd_clk),
         .sdclk(sd_sclk),
         .sdcmd(sd_cmd),
         .sddat0(sd_dat0),

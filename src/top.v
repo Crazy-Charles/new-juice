@@ -382,10 +382,12 @@ module top
         .o_ACC_SIGNED(opll_audio_sample)
     );
 
-    // pcm14s_o is signed two's-complement despite its VHDL unsigned type.
+    // pcm14s_o deliberately recenters disabled channels around a negative DC
+    // level, which is inappropriate for this digital output path. The unsigned
+    // mix has true zero at silence and avoids the constant boot-time noise.
+    assign psg_audio_sample = {2'b00, psg_mix_unsigned_unused};
     // Scale the 11-bit SCC output into the same useful range, then saturate
     // the three-source mix instead of allowing peaks to wrap around.
-    assign psg_audio_sample = {{2{psg_pcm[13]}}, psg_pcm};
     assign scc_audio_sample = {scc_sound, 5'b00000};
     assign audio_mix_wide =
         {{2{psg_audio_sample[15]}}, psg_audio_sample} +
@@ -551,6 +553,7 @@ module top
 
     sd_registers sd_registers_inst(
         .clk(main_clk),
+        .sd_clk(clk),
         .reset_n(active_module_reset_n),
         .cpu_clk(cpu_clk),
         .addr(addr),

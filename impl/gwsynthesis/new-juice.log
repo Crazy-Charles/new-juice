@@ -95,7 +95,7 @@ Compiling module 'IKASCC_player_control_s(RAMCTRL_ASYNC=1,ADDR_RAM_BASE=8'h60,AD
 Compiling module 'sd_registers'("/Users/felipe/src/fpga/new-juice/src/sd_registers.v":1)
 Compiling module 'dpram(widthad_a=9)'("/Users/felipe/src/fpga/new-juice/src/dpram.v":1)
 Extracting RAM for identifier 'mem_r'("/Users/felipe/src/fpga/new-juice/src/dpram.v":23)
-Compiling module 'sd_reader(CLK_DIV=3'd4)'("/Users/felipe/src/fpga/new-juice/src/sd_reader.sv":11)
+Compiling module 'sd_reader'("/Users/felipe/src/fpga/new-juice/src/sd_reader.sv":11)
 WARN  (EX3791) : Expression size 5 truncated to fit in target size 4("/Users/felipe/src/fpga/new-juice/src/sd_reader.sv":125)
 Compiling module 'sdcmd_ctrl'("/Users/felipe/src/fpga/new-juice/src/sdcmd_ctrl.sv":10)
 WARN  (EX3771) : Module instantiation should have an instance name("/Users/felipe/src/fpga/new-juice/src/sd_reader.sv":304)
