@@ -1,4 +1,9 @@
 module super_megaram
+#(
+    // Keep the mapper fully operational while allowing IKASCC to be compiled
+    // out for timing/isolation testing.
+    parameter INCLUDE_SCC = 1'b0
+)
 (
     input clk,
     input reset_n,
@@ -83,8 +88,8 @@ module super_megaram
                     operation_mode == MODE_K5;
     wire scc_window = addr[15:11] == 5'b10011;
     wire scc_enabled = scc_mode && bank[2] == 8'h3f;
-    wire scc_access_selected = memory_cycle && scc_enabled && scc_window &&
-                               (!rd_n || !wr_n);
+    wire scc_access_selected = INCLUDE_SCC && memory_cycle && scc_enabled &&
+                               scc_window && (!rd_n || !wr_n);
 
     always @(*)
     begin
@@ -298,41 +303,56 @@ module super_megaram
         end
     end
 
-    wire [7:0] ikascc_data_out;
-    wire ikascc_data_out_en;
-    wire signed [10:0] ikascc_sound;
+    generate
+        if (INCLUDE_SCC) begin : scc_enabled_impl
+            wire [7:0] ikascc_data_out;
+            wire ikascc_data_out_en;
+            wire signed [10:0] ikascc_sound;
 
-    IKASCC #(
-        .IMPL_TYPE(0),
-        .RAM_BLOCK(1)
-    ) ikascc_inst (
-        .i_EMUCLK(clk),
-        .i_MCLK_PCEN_n(~cpu_clock_enable),
-        .i_RST_n(reset_n),
-        .i_CS_n(~ikascc_bus_selected),
-        .i_RD_n(rd_n),
-        .i_WR_n(wr_n),
-        .i_ABLO(ikascc_bus_selected ? addr[7:0] :
-                                     ikascc_addr_latched[7:0]),
-        .i_ABHI(ikascc_bus_selected ?
-                    (bank_write_selected ? ikascc_mapper_addr : addr[15:11]) :
-                    ikascc_addr_latched[15:11]),
-        .i_DB(ikascc_bus_selected ? data_in : ikascc_data_latched),
-        .o_DB(ikascc_data_out),
-        .o_DB_OE(ikascc_data_out_en),
-        .o_ROMCS_n(),
-        .o_ROMADDR(),
-        .o_SOUND(ikascc_sound),
-        .o_TEST()
-    );
+            IKASCC #(
+                .IMPL_TYPE(0),
+                .RAM_BLOCK(1)
+            ) ikascc_inst (
+                .i_EMUCLK(clk),
+                .i_MCLK_PCEN_n(~cpu_clock_enable),
+                .i_RST_n(reset_n),
+                .i_CS_n(~ikascc_bus_selected),
+                .i_RD_n(rd_n),
+                .i_WR_n(wr_n),
+                .i_ABLO(ikascc_bus_selected ? addr[7:0] :
+                                             ikascc_addr_latched[7:0]),
+                .i_ABHI(ikascc_bus_selected ?
+                            (bank_write_selected ?
+                                ikascc_mapper_addr : addr[15:11]) :
+                            ikascc_addr_latched[15:11]),
+                .i_DB(ikascc_bus_selected ?
+                          data_in : ikascc_data_latched),
+                .o_DB(ikascc_data_out),
+                .o_DB_OE(ikascc_data_out_en),
+                .o_ROMCS_n(),
+                .o_ROMADDR(),
+                .o_SOUND(ikascc_sound),
+                .o_TEST()
+            );
 
-    assign data_out = ikascc_data_out_en ? ikascc_data_out : read_data;
-    assign data_out_en =
-        (scc_access_selected && ikascc_data_out_en) ||
-        (read_data_active && access_is_read && memory_read_selected);
+            assign data_out =
+                ikascc_data_out_en ? ikascc_data_out : read_data;
+            assign data_out_en =
+                (scc_access_selected && ikascc_data_out_en) ||
+                (read_data_active && access_is_read &&
+                 memory_read_selected);
+            assign scc_sound = scc_mode ? ikascc_sound : 11'sd0;
+        end else begin : scc_disabled_impl
+            assign data_out = read_data;
+            assign data_out_en =
+                read_data_active && access_is_read &&
+                memory_read_selected;
+            assign scc_sound = 11'sd0;
+        end
+    endgenerate
+
     assign wait_n = !memory_access_selected ||
                     (sdrc_init_done && state == STATE_DONE);
-    assign scc_sound = scc_mode ? ikascc_sound : 11'sd0;
 
     assign sdrc_cmd_en = sdrc_cmd_en_reg;
     assign sdrc_cmd = sdrc_cmd_reg;

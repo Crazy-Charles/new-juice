@@ -7,7 +7,6 @@ Running placement......
 [10%] Placement Phase 0 completed
 [20%] Placement Phase 1 completed
 [30%] Placement Phase 2 completed
-WARN  (TA1117) : Can't calculate clocks' relationship between: "main_clk" and "audio_bclk_raw"
 [50%] Placement Phase 3 completed
 Running routing......
 [60%] Routing Phase 0 completed
@@ -27,5 +26,5 @@ Generate file "/Users/felipe/src/fpga/new-juice/impl/pnr/new-juice.pin.html" com
 Generate file "/Users/felipe/src/fpga/new-juice/impl/pnr/new-juice.rpt.html" completed
 Generate file "/Users/felipe/src/fpga/new-juice/impl/pnr/new-juice.rpt.txt" completed
 Generate file "/Users/felipe/src/fpga/new-juice/impl/pnr/new-juice.tr.html" completed
-Sat Jul 25 15:03:06 2026
+Sat Jul 25 15:41:36 2026
 

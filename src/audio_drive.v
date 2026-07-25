@@ -1,6 +1,8 @@
 module audio_drive
 (
-    input        clk_1p536m,
+    input        clk,
+    input        bit_enable,
+    input        bit_clock,
     input        rst_n,
     input [15:0] idata,
     output       req,
@@ -16,55 +18,58 @@ module audio_drive
     reg hp_ws_reg;
     reg hp_din_reg;
 
-    assign HP_BCK = clk_1p536m;
+    // bit_clock is an output waveform only. All serializer state remains in
+    // the 27 MHz clk domain and advances on bit_enable.
+    assign HP_BCK = bit_clock;
     assign HP_WS = hp_ws_reg;
     assign HP_DIN = hp_din_reg;
     assign req = req_reg;
 
-    // Match WonderTANG's proven I2S implementation: the serializer is
-    // clocked directly by the globally buffered audio bit clock.
-    always_ff @(posedge clk_1p536m or negedge rst_n)
+    always_ff @(posedge clk or negedge rst_n)
     begin
         if (!rst_n)
             bit_count <= 5'd0;
-        else
+        else if (bit_enable)
             bit_count <= bit_count + 1'b1;
     end
 
-    always_ff @(posedge clk_1p536m or negedge rst_n)
+    always_ff @(posedge clk or negedge rst_n)
     begin
         if (!rst_n)
             req_reg <= 1'b0;
-        else
+        else if (bit_enable)
             req_reg <= bit_count == 5'd0 || bit_count == 5'd16;
     end
 
-    always_ff @(posedge clk_1p536m or negedge rst_n)
+    always_ff @(posedge clk or negedge rst_n)
     begin
         if (!rst_n) begin
             req_delayed <= 1'b0;
             shift_reg <= 16'd0;
-        end else begin
+        end else if (bit_enable) begin
             req_delayed <= req_reg;
-            shift_reg <= req_delayed ? idata : shift_reg << 1;
+            if (req_delayed)
+                shift_reg <= idata;
+            else
+                shift_reg <= shift_reg << 1;
         end
     end
 
-    always_ff @(posedge clk_1p536m or negedge rst_n)
+    always_ff @(posedge clk or negedge rst_n)
     begin
         if (!rst_n)
             hp_din_reg <= 1'b0;
-        else
+        else if (bit_enable)
             hp_din_reg <= shift_reg[15];
     end
 
-    always_ff @(posedge clk_1p536m or negedge rst_n)
+    always_ff @(posedge clk or negedge rst_n)
     begin
         if (!rst_n)
             hp_ws_reg <= 1'b0;
-        else if (bit_count == 5'd3)
+        else if (bit_enable && bit_count == 5'd3)
             hp_ws_reg <= 1'b0;
-        else if (bit_count == 5'd19)
+        else if (bit_enable && bit_count == 5'd19)
             hp_ws_reg <= 1'b1;
     end
 

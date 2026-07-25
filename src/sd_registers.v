@@ -72,6 +72,7 @@ module sd_registers
     wire [7:0] sd_data_in;
     wire sd_data_enable;
     wire sd_done;
+    wire sd_busy;
     wire [3:0] sd_card_status;
     wire [1:0] sd_card_type;
     wire [21:0] sd_c_size;
@@ -83,6 +84,119 @@ module sd_registers
     wire [31:0] sd_psn;
     wire sd_crc_error;
     wire sd_timeout_error;
+    wire [134:0] sd_status_async = {
+        sd_done,
+        sd_busy,
+        sd_card_status,
+        sd_card_type,
+        sd_c_size,
+        sd_c_size_mult,
+        sd_read_bl_len,
+        sd_mid,
+        sd_oid,
+        sd_pnm,
+        sd_psn,
+        sd_crc_error,
+        sd_timeout_error
+    };
+    (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
+    reg [134:0] sd_status_meta = 135'd0;
+    reg [134:0] sd_status_sync = 135'd0;
+
+    wire sd_done_cpu;
+    wire sd_busy_cpu;
+    wire [3:0] sd_card_status_cpu;
+    wire [1:0] sd_card_type_cpu;
+    wire [21:0] sd_c_size_cpu;
+    wire [2:0] sd_c_size_mult_cpu;
+    wire [3:0] sd_read_bl_len_cpu;
+    wire [7:0] sd_mid_cpu;
+    wire [15:0] sd_oid_cpu;
+    wire [39:0] sd_pnm_cpu;
+    wire [31:0] sd_psn_cpu;
+    wire sd_crc_error_cpu;
+    wire sd_timeout_error_cpu;
+
+    assign {
+        sd_done_cpu,
+        sd_busy_cpu,
+        sd_card_status_cpu,
+        sd_card_type_cpu,
+        sd_c_size_cpu,
+        sd_c_size_mult_cpu,
+        sd_read_bl_len_cpu,
+        sd_mid_cpu,
+        sd_oid_cpu,
+        sd_pnm_cpu,
+        sd_psn_cpu,
+        sd_crc_error_cpu,
+        sd_timeout_error_cpu
+    } = sd_status_sync;
+
+    (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
+    reg [1:0] sd_read_start_sync = 2'b00;
+    (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
+    reg [1:0] sd_write_start_sync = 2'b00;
+    (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
+    reg [1:0] sd_init_start_sync = 2'b00;
+    reg sd_read_start_sync_d = 1'b0;
+    reg sd_write_start_sync_d = 1'b0;
+    reg sd_init_start_sync_d = 1'b0;
+    reg sd_read_pending = 1'b0;
+    reg sd_write_pending = 1'b0;
+    reg sd_init_pending = 1'b0;
+    reg [31:0] sd_sector_meta = 32'd0;
+    reg [31:0] sd_sector_sync = 32'd0;
+    wire sd_read_start_pulse =
+        sd_read_start_sync[1] && !sd_read_start_sync_d;
+    wire sd_write_start_pulse =
+        sd_write_start_sync[1] && !sd_write_start_sync_d;
+    wire sd_init_start_pulse =
+        sd_init_start_sync[1] && !sd_init_start_sync_d;
+
+    always_ff @(posedge sd_clk or negedge reset_n)
+    begin
+        if (!reset_n) begin
+            sd_read_start_sync <= 2'b00;
+            sd_write_start_sync <= 2'b00;
+            sd_init_start_sync <= 2'b00;
+            sd_read_start_sync_d <= 1'b0;
+            sd_write_start_sync_d <= 1'b0;
+            sd_init_start_sync_d <= 1'b0;
+            sd_read_pending <= 1'b0;
+            sd_write_pending <= 1'b0;
+            sd_init_pending <= 1'b0;
+            sd_sector_meta <= 32'd0;
+            sd_sector_sync <= 32'd0;
+        end else begin
+            sd_read_start_sync <=
+                {sd_read_start_sync[0], sd_read_start};
+            sd_write_start_sync <=
+                {sd_write_start_sync[0], sd_write_start};
+            sd_init_start_sync <=
+                {sd_init_start_sync[0], sd_init_start};
+            sd_read_start_sync_d <= sd_read_start_sync[1];
+            sd_write_start_sync_d <= sd_write_start_sync[1];
+            sd_init_start_sync_d <= sd_init_start_sync[1];
+            sd_sector_meta <= sd_sector;
+            sd_sector_sync <= sd_sector_meta;
+
+            if (sd_read_start_pulse)
+                sd_read_pending <= 1'b1;
+            else if (sd_read_pending && sd_card_status == 4'd13)
+                sd_read_pending <= 1'b0;
+
+            if (sd_write_start_pulse)
+                sd_write_pending <= 1'b1;
+            else if (sd_write_pending && sd_card_status == 4'd15)
+                sd_write_pending <= 1'b0;
+
+            if (sd_init_start_pulse)
+                sd_init_pending <= 1'b1;
+            else if (sd_init_pending && sd_card_status != 4'd2)
+                sd_init_pending <= 1'b0;
+        end
+    end
 
     dpram #(
         .widthad_a(9),
@@ -95,8 +209,8 @@ module sd_registers
         .data_a(data_in),
         .q_a(ram_data_out),
         .clock_b(sd_clk),
-        .wren_b(sd_read_start && sd_data_enable),
-        .rden_b(sd_write_start && sd_data_enable),
+        .wren_b(sd_read_start_sync[1] && sd_data_enable),
+        .rden_b(sd_write_start_sync[1] && sd_data_enable),
         .address_b(sd_data_addr),
         .data_b(sd_data_out),
         .q_b(sd_data_in)
@@ -113,14 +227,14 @@ module sd_registers
         .sddat0(sd_dat0),
         .card_stat(sd_card_status),
         .card_type(sd_card_type),
-        .rstart(sd_read_start),
-        .rsector(sd_sector),
-        .rbusy(busy),
+        .rstart(sd_read_pending),
+        .rsector(sd_sector_sync),
+        .rbusy(sd_busy),
         .rdone(sd_done),
         .outen(sd_data_enable),
         .outaddr(sd_data_addr),
         .outbyte(sd_data_out),
-        .wstart(sd_write_start),
+        .wstart(sd_write_pending),
         .inbyte(sd_data_in),
         .c_size(sd_c_size),
         .c_size_mult(sd_c_size_mult),
@@ -131,7 +245,7 @@ module sd_registers
         .psn(sd_psn),
         .crc_error(sd_crc_error),
         .timeout_error(sd_timeout_error),
-        .init(sd_init_start)
+        .init(sd_init_pending)
     );
 
     // DAT1-DAT3 must remain high so the card starts in native SD mode.
@@ -150,8 +264,12 @@ module sd_registers
             register_data <= 8'hff;
             cpu_clk_sync <= 2'b00;
             write_cycle_seen <= 1'b0;
+            sd_status_meta <= 135'd0;
+            sd_status_sync <= 135'd0;
         end else begin
             cpu_clk_sync <= {cpu_clk_sync[0], cpu_clk};
+            sd_status_meta <= sd_status_async;
+            sd_status_sync <= sd_status_meta;
 
             if (!cpu_clk_high || wr_n || !memory_cycle)
                 write_cycle_seen <= 1'b0;
@@ -161,9 +279,10 @@ module sd_registers
             if (enable_write)
                 sd_enabled <= data_in[0];
 
-            if (sd_done) begin
+            if (sd_done_cpu) begin
                 sd_read_start <= 1'b0;
                 sd_write_start <= 1'b0;
+                sd_init_start <= 1'b0;
             end
 
             if (register_selected && cpu_write_strobe) begin
@@ -184,25 +303,25 @@ module sd_registers
             if (register_selected && !rd_n) begin
                 case (addr)
                     SDC_ENABLE:       register_data <= {7'b0, sd_enabled};
-                    SDC_STATUS:       register_data <= {busy, 5'b0, sd_timeout_error, sd_crc_error};
-                    SDC_C_SIZE + 0:   register_data <= sd_c_size[7:0];
-                    SDC_C_SIZE + 1:   register_data <= sd_c_size[15:8];
-                    SDC_C_SIZE + 2:   register_data <= {2'b0, sd_c_size[21:16]};
-                    SDC_C_SIZE_MULT:  register_data <= {5'b0, sd_c_size_mult};
-                    SDC_RD_BL_LEN:    register_data <= {4'b0, sd_read_bl_len};
-                    SDC_CTYPE:        register_data <= {6'b0, sd_card_type};
-                    SDC_MID:          register_data <= sd_mid;
-                    SDC_OID + 0:      register_data <= sd_oid[7:0];
-                    SDC_OID + 1:      register_data <= sd_oid[15:8];
-                    SDC_PNM + 0:      register_data <= sd_pnm[7:0];
-                    SDC_PNM + 1:      register_data <= sd_pnm[15:8];
-                    SDC_PNM + 2:      register_data <= sd_pnm[23:16];
-                    SDC_PNM + 3:      register_data <= sd_pnm[31:24];
-                    SDC_PNM + 4:      register_data <= sd_pnm[39:32];
-                    SDC_PSN + 0:      register_data <= sd_psn[7:0];
-                    SDC_PSN + 1:      register_data <= sd_psn[15:8];
-                    SDC_PSN + 2:      register_data <= sd_psn[23:16];
-                    SDC_PSN + 3:      register_data <= sd_psn[31:24];
+                    SDC_STATUS:       register_data <= {sd_busy_cpu, 5'b0, sd_timeout_error_cpu, sd_crc_error_cpu};
+                    SDC_C_SIZE + 0:   register_data <= sd_c_size_cpu[7:0];
+                    SDC_C_SIZE + 1:   register_data <= sd_c_size_cpu[15:8];
+                    SDC_C_SIZE + 2:   register_data <= {2'b0, sd_c_size_cpu[21:16]};
+                    SDC_C_SIZE_MULT:  register_data <= {5'b0, sd_c_size_mult_cpu};
+                    SDC_RD_BL_LEN:    register_data <= {4'b0, sd_read_bl_len_cpu};
+                    SDC_CTYPE:        register_data <= {6'b0, sd_card_type_cpu};
+                    SDC_MID:          register_data <= sd_mid_cpu;
+                    SDC_OID + 0:      register_data <= sd_oid_cpu[7:0];
+                    SDC_OID + 1:      register_data <= sd_oid_cpu[15:8];
+                    SDC_PNM + 0:      register_data <= sd_pnm_cpu[7:0];
+                    SDC_PNM + 1:      register_data <= sd_pnm_cpu[15:8];
+                    SDC_PNM + 2:      register_data <= sd_pnm_cpu[23:16];
+                    SDC_PNM + 3:      register_data <= sd_pnm_cpu[31:24];
+                    SDC_PNM + 4:      register_data <= sd_pnm_cpu[39:32];
+                    SDC_PSN + 0:      register_data <= sd_psn_cpu[7:0];
+                    SDC_PSN + 1:      register_data <= sd_psn_cpu[15:8];
+                    SDC_PSN + 2:      register_data <= sd_psn_cpu[23:16];
+                    SDC_PSN + 3:      register_data <= sd_psn_cpu[31:24];
                     default:          register_data <= 8'hff;
                 endcase
             end
@@ -212,5 +331,6 @@ module sd_registers
     assign data_out = ram_selected ? ram_data_out : register_data;
     assign data_out_en = (ram_selected || register_selected) && !rd_n;
     assign overlay_enabled = sd_enabled;
+    assign busy = sd_busy_cpu;
 
 endmodule

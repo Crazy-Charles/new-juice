@@ -73,7 +73,6 @@ module top
     reg board_enabled = 1'b0;
 
     wire audio_bclk_raw;
-    wire audio_bclk;
     wire audio_bclk_rise;
     wire audio_req;
     wire audio_hp_bck;
@@ -86,6 +85,10 @@ module top
     wire signed [15:0] scc_audio_sample;
     wire signed [17:0] audio_mix_wide;
     wire [15:0] mixed_audio_sample;
+    reg [15:0] audio_sample_hold = 16'd0;
+    (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
+    reg [1:0] audio_req_sync = 2'b00;
+    reg audio_req_sync_d = 1'b0;
 
     // Diagnostic switches. Keep the audio logic running while its physical
     // pins remain static to distinguish an RTL problem from reconfiguration
@@ -96,6 +99,7 @@ module top
     localparam AUDIO_WS_IDLE_HIGH = 1'b0;
     localparam AUDIO_DIN_ENABLED = 1'b1;
     localparam AUDIO_PA_ENABLED = 1'b1;
+    localparam INCLUDE_OPLL = 1'b0;
 
     generate
         if (AUDIO_LOGIC_ENABLED) begin : audio_logic_enabled
@@ -109,15 +113,12 @@ module top
                 .clk_rise(audio_bclk_rise)
             );
 
-            BUFG audio_bclk_buf (
-                .I(audio_bclk_raw),
-                .O(audio_bclk)
-            );
-
             audio_drive audio_drive_inst (
-                .clk_1p536m(audio_bclk),
+                .clk(clk),
+                .bit_enable(audio_bclk_rise),
+                .bit_clock(audio_bclk_raw),
                 .rst_n(board_reset_n),
-                .idata(mixed_audio_sample),
+                .idata(audio_sample_hold),
                 .req(audio_req),
                 .HP_BCK(audio_hp_bck),
                 .HP_WS(audio_hp_ws),
@@ -125,7 +126,6 @@ module top
             );
         end else begin : audio_logic_disabled
             assign audio_bclk_raw = 1'b0;
-            assign audio_bclk = 1'b0;
             assign audio_bclk_rise = 1'b0;
             assign audio_req = 1'b0;
             assign audio_hp_bck = 1'b0;
@@ -169,6 +169,25 @@ module top
         .reset(~reset_n),
         .clkin(clkin) //input clkin (27Mhz)
     );
+
+    // audio_req is asserted for one audio bit-clock cycle before audio_drive
+    // loads idata. Synchronize that request into the 108 MHz domain and take
+    // one coherent snapshot of the mix. The holding register then remains
+    // stable for far longer than the audio-domain setup/hold requirement.
+    always_ff @(posedge main_clk or negedge board_reset_n)
+    begin
+        if (!board_reset_n) begin
+            audio_req_sync <= 2'b00;
+            audio_req_sync_d <= 1'b0;
+            audio_sample_hold <= 16'd0;
+        end else begin
+            audio_req_sync <= {audio_req_sync[0], audio_req};
+            audio_req_sync_d <= audio_req_sync[1];
+
+            if (audio_req_sync[1] && !audio_req_sync_d)
+                audio_sample_hold <= mixed_audio_sample;
+        end
+    end
 
     wire [7:0] a_lo;
     wire [7:0] a_hi;
@@ -353,34 +372,47 @@ module top
     assign opll_phiM_clock_enable_n =
         board_reset_n ? ~cpu_clock_rise_enable : 1'b0;
 
-    IKAOPLL #(
-        .FULLY_SYNCHRONOUS(1),
-        .FAST_RESET(1),
-        .ALTPATCH_CONFIG_MODE(0),
-        .USE_PIPELINED_MULTIPLIER(1)
-    ) opll_inst (
-        .i_XIN_EMUCLK(main_clk),
-        .o_XOUT(),
-        .i_phiM_PCEN_n(opll_phiM_clock_enable_n),
-        .i_IC_n(board_reset_n),
-        .i_ALTPATCH_EN(1'b0),
-        .i_CS_n(~opll_write_selected),
-        .i_WR_n(wr_n),
-        .i_A0(addr[0]),
-        .i_D(cd_in),
-        .o_D(),
-        .o_D_OE(),
-        .o_DAC_EN_MO(),
-        .o_DAC_EN_RO(),
-        .o_IMP_NOFLUC_SIGN(),
-        .o_IMP_NOFLUC_MAG(),
-        .o_IMP_FLUC_SIGNED_MO(),
-        .o_IMP_FLUC_SIGNED_RO(),
-        .i_ACC_SIGNED_MOVOL(5'sd10),
-        .i_ACC_SIGNED_ROVOL(5'sd15),
-        .o_ACC_SIGNED_STRB(),
-        .o_ACC_SIGNED(opll_audio_sample)
-    );
+    generate
+        if (INCLUDE_OPLL) begin : opll_enabled_impl
+            wire signed [15:0] opll_audio_raw;
+
+            IKAOPLL #(
+                .FULLY_SYNCHRONOUS(1),
+                .FAST_RESET(1),
+                .ALTPATCH_CONFIG_MODE(0),
+                .USE_PIPELINED_MULTIPLIER(1)
+            ) opll_inst (
+                .i_XIN_EMUCLK(main_clk),
+                .o_XOUT(),
+                .i_phiM_PCEN_n(opll_phiM_clock_enable_n),
+                .i_IC_n(board_reset_n),
+                .i_ALTPATCH_EN(1'b0),
+                .i_CS_n(~opll_write_selected),
+                .i_WR_n(wr_n),
+                .i_A0(addr[0]),
+                .i_D(cd_in),
+                .o_D(),
+                .o_D_OE(),
+                .o_DAC_EN_MO(),
+                .o_DAC_EN_RO(),
+                .o_IMP_NOFLUC_SIGN(),
+                .o_IMP_NOFLUC_MAG(),
+                .o_IMP_FLUC_SIGNED_MO(),
+                .o_IMP_FLUC_SIGNED_RO(),
+                .i_ACC_SIGNED_MOVOL(5'sd10),
+                .i_ACC_SIGNED_ROVOL(5'sd15),
+                .o_ACC_SIGNED_STRB(),
+                .o_ACC_SIGNED(opll_audio_raw)
+            );
+
+            // IKAOPLL's accumulator is signed two's-complement. Match the
+            // reference integration's arithmetic divide by two.
+            assign opll_audio_sample = {opll_audio_raw[15],
+                                        opll_audio_raw[15:1]};
+        end else begin : opll_disabled_impl
+            assign opll_audio_sample = 16'sd0;
+        end
+    endgenerate
 
     // pcm14s_o deliberately recenters disabled channels around a negative DC
     // level, which is inappropriate for this digital output path. The unsigned
@@ -522,7 +554,9 @@ module top
         .sdrc_cmd_ack(sdrc_cmd_ack)
     );
 
-    super_megaram super_megaram_inst(
+    super_megaram #(
+        .INCLUDE_SCC(1'b0)
+    ) super_megaram_inst(
         .clk(main_clk),
         .reset_n(active_module_reset_n),
         .cpu_clock_enable(cpu_clock_rise_enable),

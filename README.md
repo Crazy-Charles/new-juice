@@ -74,9 +74,27 @@ a CRC error, and `0x02` for a timeout. Error bits can be combined with busy.
 
 ## Building
 
-1. Open `new-juice.gprj` in Gowin EDA.
-2. Run synthesis and place-and-route.
-3. Program the generated bitstream onto the target board.
+Run the complete Gowin synthesis, place-and-route, and bitstream flow from the
+repository root:
+
+```sh
+make
+```
+
+The resulting bitstream is written to `impl/prn/new-juice.fs`. Use
+`make rebuild` to force a complete rebuild.
+
+On macOS the Makefile defaults to the Gowin installation at
+`/Applications/GowinIDE.app/Contents/Resources/Gowin_EDA/IDE`. Override the
+installation or executable path when needed:
+
+```sh
+make GOWIN_IDE=/path/to/Gowin/IDE
+make GW_SH=/path/to/gw_sh
+```
+
+The project can still be built through the GUI by opening `new-juice.gprj` and
+running synthesis and place-and-route.
 
 The project expects Gowin EDA support for the GW2AR-18C family.
 
