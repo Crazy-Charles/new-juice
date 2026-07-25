@@ -166,5 +166,13 @@
     "ModuleName" : "sdram"
    }
   ]
+ },
+ {
+  "InstFile" : "/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v",
+  "InstLine" : 10,
+  "InstName" : "rpll_video",
+  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v",
+  "ModuleLine" : 10,
+  "ModuleName" : "rpll_video"
  }
 ]

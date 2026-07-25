@@ -22,6 +22,7 @@
         <File path="/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/slot_expander.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/top.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v" type="verilog"/>
     </FileList>
     <OptionList>
         <Option type="disable_insert_pad" value="0"/>

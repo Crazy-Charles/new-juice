@@ -72,6 +72,10 @@
   {
    "Path" : "/Users/felipe/src/fpga/new-juice/src/top.v",
    "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v",
+   "Type" : "verilog"
   }
  ],
  "IncludePath" : [

@@ -18,6 +18,7 @@ Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/slot_expander.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/top.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v'
 WARN  (EX3073) : Port 'clkoutd' remains unconnected for this instance("/Users/felipe/src/fpga/new-juice/src/top.v":80)
 Compiling module 'top'("/Users/felipe/src/fpga/new-juice/src/top.v":1)
 Compiling module 'rpll_main'("/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v":10)
