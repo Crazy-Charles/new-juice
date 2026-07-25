@@ -7,6 +7,12 @@ Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/crc16.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/dpram.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/flash_roms.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/input_debouncer.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_vrc_s.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_vrc_a.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_a.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_timinggen.v'
@@ -28,19 +34,20 @@ Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/slot_expander.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/super_megaram.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/top.v'
 Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd'
 Analyzing entity 'ym2149_audio'("/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd":155)
 Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd":176)
-WARN  (EX3073) : Port 'clkoutd' remains unconnected for this instance("/Users/felipe/src/fpga/new-juice/src/top.v":169)
+WARN  (EX3073) : Port 'clkoutd' remains unconnected for this instance("/Users/felipe/src/fpga/new-juice/src/top.v":171)
 Compiling module 'top'("/Users/felipe/src/fpga/new-juice/src/top.v":1)
 Compiling module 'clockdiv'("/Users/felipe/src/fpga/new-juice/src/clockdiv.v":33)
 Compiling module 'audio_drive'("/Users/felipe/src/fpga/new-juice/src/audio_drive.v":1)
 Compiling module 'rpll_main'("/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v":10)
-Switching to VHDL mode to elaborate design unit 'ym2149_audio'("/Users/felipe/src/fpga/new-juice/src/top.v":334)
+Switching to VHDL mode to elaborate design unit 'ym2149_audio'("/Users/felipe/src/fpga/new-juice/src/top.v":344)
 Processing 'ym2149_audio(rtl)'("/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd":155)
 Extracting RAM for identifier 'dacrom_ar'("/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd":361)
-Returning to Verilog mode to proceed with elaboration("/Users/felipe/src/fpga/new-juice/src/top.v":334)
+Returning to Verilog mode to proceed with elaboration("/Users/felipe/src/fpga/new-juice/src/top.v":344)
 Compiling module 'IKAOPLL(FAST_RESET=1,USE_PIPELINED_MULTIPLIER=1)'("/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL.v":1)
 Compiling module 'IKAOPLL_timinggen(FAST_RESET=1)'("/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_timinggen.v":1)
 Compiling module 'IKAOPLL_reg'("/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v":1)
@@ -72,6 +79,19 @@ Compiling module 'mp_debouncer'("/Users/felipe/src/fpga/new-juice/src/mp_debounc
 Compiling module 'slot_expander'("/Users/felipe/src/fpga/new-juice/src/slot_expander.v":1)
 Compiling module 'sdram_startup_test'("/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v":1)
 Compiling module 'sdram_mapper'("/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v":1)
+Compiling module 'super_megaram'("/Users/felipe/src/fpga/new-juice/src/super_megaram.v":1)
+Compiling module 'IKASCC'("/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC.v":1)
+Compiling module 'IKASCC_vrc_s(RAMCTRL_ASYNC=1)'("/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_vrc_s.v":1)
+Compiling module 'IKASCC_player_s(FAST_CLOCK=1,RAMCTRL_ASYNC=1)'("/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v":1)
+Compiling module 'IKASCC_player_memory_s'("/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v":670)
+Extracting RAM for identifier 'wavetable_ram'("/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v":694)
+Compiling module 'IKASCC_player_control_s(RAMCTRL_ASYNC=1,ADDR_FREQ_BASE=8'h80,ADDR_VOL=8'h8A,ADDR_MUTE=8'h8F)'("/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v":372)
+Compiling module 'IKASCC_primitive_dncntr'("/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v":1)
+Compiling module 'IKASCC_primitive_dncntr(W=5)'("/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v":1)
+Compiling module 'IKASCC_player_control_s(RAMCTRL_ASYNC=1,ADDR_RAM_BASE=8'h20,ADDR_FREQ_BASE=8'h82,ADDR_VOL=8'h8B,ADDR_MUTE=8'h8F,BIT_MUTE=1)'("/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v":372)
+Compiling module 'IKASCC_player_control_s(RAMCTRL_ASYNC=1,ADDR_RAM_BASE=8'h40,ADDR_FREQ_BASE=8'h84,ADDR_VOL=8'h8C,ADDR_MUTE=8'h8F,BIT_MUTE=2)'("/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v":372)
+Compiling module 'IKASCC_player_control_s(RAMCTRL_ASYNC=1,ADDR_RAM_BASE=8'h60,ADDR_FREQ_BASE=8'h86,ADDR_VOL=8'h8D,ADDR_MUTE=8'h8F,BIT_MUTE=3)'("/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v":372)
+Compiling module 'IKASCC_player_control_s(RAMCTRL_ASYNC=1,ADDR_RAM_BASE=8'h60,ADDR_FREQ_BASE=8'h88,ADDR_VOL=8'h8E,ADDR_MUTE=8'h8F,BIT_MUTE=4)'("/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v":372)
 Compiling module 'sd_registers'("/Users/felipe/src/fpga/new-juice/src/sd_registers.v":1)
 Compiling module 'dpram(widthad_a=9)'("/Users/felipe/src/fpga/new-juice/src/dpram.v":1)
 Extracting RAM for identifier 'mem_r'("/Users/felipe/src/fpga/new-juice/src/dpram.v":23)

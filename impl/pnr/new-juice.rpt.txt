@@ -12,27 +12,27 @@
   <Part Number>: GW2AR-LV18QN88C8/I7
   <Device>: GW2AR-18
   <Device Version>: C
-  <Created Time>:Sat Jul 25 01:23:15 2026
+  <Created Time>:Sat Jul 25 11:03:06 2026
 
 
 2. PnR Details
 
   Running placement:
-    Placement Phase 0: CPU time = 0h 0m 0.153s, Elapsed time = 0h 0m 0.152s
-    Placement Phase 1: CPU time = 0h 0m 0.076s, Elapsed time = 0h 0m 0.074s
-    Placement Phase 2: CPU time = 0h 0m 0.341s, Elapsed time = 0h 0m 0.339s
-    Placement Phase 3: CPU time = 0h 0m 0.543s, Elapsed time = 0h 0m 0.539s
-    Total Placement: CPU time = 0h 0m 1s, Elapsed time = 0h 0m 1s
+    Placement Phase 0: CPU time = 0h 0m 0.2s, Elapsed time = 0h 0m 0.198s
+    Placement Phase 1: CPU time = 0h 0m 0.082s, Elapsed time = 0h 0m 0.08s
+    Placement Phase 2: CPU time = 0h 0m 0.442s, Elapsed time = 0h 0m 0.441s
+    Placement Phase 3: CPU time = 0h 0m 1s, Elapsed time = 0h 0m 1s
+    Total Placement: CPU time = 0h 0m 2s, Elapsed time = 0h 0m 2s
  Running routing:
     Routing Phase 0: CPU time = 0h 0m 0.001s, Elapsed time = 0h 0m 0.001s
-    Routing Phase 1: CPU time = 0h 0m 0.053s, Elapsed time = 0h 0m 0.053s
-    Routing Phase 2: CPU time = 0h 0m 1s, Elapsed time = 0h 0m 1s
+    Routing Phase 1: CPU time = 0h 0m 0.059s, Elapsed time = 0h 0m 0.059s
+    Routing Phase 2: CPU time = 0h 0m 2s, Elapsed time = 0h 0m 2s
     Routing Phase 3: CPU time = 0h 0m 0s, Elapsed time = 0h 0m 0s
-    Total Routing: CPU time = 0h 0m 2s, Elapsed time = 0h 0m 1s
+    Total Routing: CPU time = 0h 0m 2s, Elapsed time = 0h 0m 2s
  Generate output files:
-    CPU time = 0h 0m 0.589s, Elapsed time = 0h 0m 0.586s
+    CPU time = 0h 0m 0.597s, Elapsed time = 0h 0m 0.593s
 
- Total Time and Memory Usage: CPU time = 0h 0m 3s, Elapsed time = 0h 0m 3s, Peak memory usage = 989MB
+ Total Time and Memory Usage: CPU time = 0h 0m 4s, Elapsed time = 0h 0m 4s, Peak memory usage = 989MB
 
 
 3. Resource Usage Summary
@@ -40,15 +40,15 @@
   --------------------------------------------------------------------------------
   Resources                   | Usage                               | Utilization
   --------------------------------------------------------------------------------
-  Logic                       | 3542/20736                          |  18%
-    --LUT,ALU,ROM16           | 3332(2947 LUT, 385 ALU, 0 ROM16)    | -
-    --SSRAM(RAM16)            | 35                                  | -
-  Register                    | 2283/15915                          |  15%
+  Logic                       | 4447/20736                          |  22%
+    --LUT,ALU,ROM16           | 4141(3664 LUT, 477 ALU, 0 ROM16)    | -
+    --SSRAM(RAM16)            | 51                                  | -
+  Register                    | 2838/15915                          |  18%
     --Logic Register as Latch | 0/15552                             |  0%
-    --Logic Register as FF    | 2215/15552                          |  15%
+    --Logic Register as FF    | 2770/15552                          |  18%
     --I/O Register as Latch   | 0/363                               |  0%
     --I/O Register as FF      | 68/363                              |  19%
-  CLS                         | 2586/10368                          |  25%
+  CLS                         | 3269/10368                          |  32%
   I/O Port                    | 45/66                               |  69%
   I/O Buf                     | 44                                  | -
     --Input Buf               | 15                                  | -
@@ -97,18 +97,18 @@
   -------------------------------------------
   Signal         | Global Clock   | Location
   -------------------------------------------
-  clkin_d        | PRIMARY        |  TL BL
-  audio_bclk_raw | PRIMARY        |  TL BR BL
+  clkin_d        | PRIMARY        |  TR BR BL
+  audio_bclk_raw | PRIMARY        |  TR BR
   main_clk       | PRIMARY        |  TR TL BR BL
   O_sdram_clk_d  | PRIMARY        |  TR
   n31_7          | LW             |  -
   board_enabled  | LW             |  -
   psg_clock_enable| LW             |  -
-  n140_7         | LW             |  -
+  n39_7          | LW             |  -
   opll_inst/n86_4| LW             |  -
   opll_inst/m_nc_sel_z_6| LW             |  -
   opll_inst/n672_5| LW             |  -
-  sd_registers_inst/sd_card_controller/n5587_4| LW             |  -
+  super_megaram_inst/ikascc_inst/IKASCC_SYNC_MODE.u_player_main/n25_7| LW             |  -
   ===========================================
 
 

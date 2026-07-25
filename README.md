@@ -5,9 +5,9 @@ GW2AR-LV18QN88C8/I7 device. The current design implements the MSX bus
 interface, a slot expander, and an SDRAM-backed memory mapper.
 
 At startup, the design also copies two ROM images from the onboard SPI flash
-into SDRAM immediately above the 4 MiB memory-mapper region. The MSX `/WAIT`
-line remains asserted until SDRAM initialization, its startup test, and the ROM
-copy have completed.
+into SDRAM above the 2 MiB Super-MegaRAM region. The MSX `/WAIT` line remains
+asserted until SDRAM initialization, its startup test, and the ROM copy have
+completed.
 
 ## Hardware
 
@@ -27,12 +27,25 @@ copy have completed.
 
 | ROM | SPI flash | SDRAM cache | Expanded subslot | MSX address |
 | --- | --- | --- | --- | --- |
-| MSX-DOS2 ASCII MegaROM | `0x100000–0x11FFFF` | `0x400000–0x41FFFF` | 0 | `0x4000–0x7FFF` |
-| FM-PAC | `0x120000–0x123FFF` | `0x420000–0x423FFF` | 1 | `0x4000–0x7FFF` |
+| MSX-DOS2 ASCII MegaROM | `0x100000–0x11FFFF` | `0x600000–0x61FFFF` | 0 | `0x4000–0x7FFF` |
+| FM-PAC | `0x120000–0x123FFF` | `0x620000–0x623FFF` | 1 | `0x4000–0x7FFF` |
 
 The DOS2 ROM is divided into eight 16 KiB banks. Writing the bank number to
 `0x6000` selects the bank visible at `0x4000–0x7FFF`; only bits 2:0 are used.
 The FM-PAC image is a fixed 16 KiB ROM.
+
+## Super-MegaRAM
+
+Expanded subslot 2 contains a 2 MiB Super-MegaRAM at SDRAM
+`0x400000–0x5FFFFF`. Its MSX aperture is `0x4000–0xBFFF`. It powers up in
+MegaRAM DDX with SCC mode and supports DDX with or without SCC, ASCII8,
+ASCII16, Konami K4, and Konami K5 with SCC.
+The K4 implementation includes the MegaRAM-compatible selectable
+`0x4000–0x5FFF` segment.
+
+Reading I/O port `0x8E` selects writable RAM mode and writing it selects
+write-protected paging/ROM mode. Port `0x8F` selects mapper type `0`, `1`, `4`,
+`5`, `8`, or `16`. Neither port drives the data bus during a read.
 
 ## SD-card interface
 

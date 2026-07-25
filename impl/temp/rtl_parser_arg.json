@@ -30,6 +30,30 @@
    "Type" : "verilog"
   },
   {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_vrc_s.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_vrc_a.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_a.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC.v",
+   "Type" : "verilog"
+  },
+  {
    "Path" : "/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v",
    "Type" : "verilog"
   },
@@ -111,6 +135,10 @@
   },
   {
    "Path" : "/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/super_megaram.v",
    "Type" : "verilog"
   },
   {

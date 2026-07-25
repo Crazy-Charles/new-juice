@@ -11,6 +11,12 @@
         <File path="/Users/felipe/src/fpga/new-juice/src/dpram.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/flash_roms.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/input_debouncer.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_vrc_s.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_vrc_a.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_a.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_timinggen.v" type="verilog"/>
@@ -32,6 +38,7 @@
         <File path="/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/slot_expander.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/super_megaram.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/top.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd" type="vhdl"/>
     </FileList>

@@ -82,7 +82,9 @@ module top
     wire [13:0] psg_pcm;
     wire signed [15:0] psg_audio_sample;
     wire signed [15:0] opll_audio_sample;
-    wire signed [16:0] audio_mix_wide;
+    wire signed [10:0] scc_sound;
+    wire signed [15:0] scc_audio_sample;
+    wire signed [17:0] audio_mix_wide;
     wire [15:0] mixed_audio_sample;
 
     // Diagnostic switches. Keep the audio logic running while its physical
@@ -192,6 +194,9 @@ module top
     wire flash_rom_wait_n;
     wire flash_rom_loaded;
     wire mapper_wait_n;
+    wire [7:0] smr_data_out;
+    wire smr_data_out_en;
+    wire smr_wait_n;
     wire [7:0] sd_data_out;
     wire sd_data_out_en;
     wire sd_overlay_enabled;
@@ -228,6 +233,11 @@ module top
     wire [3:0] mapper_sdrc_dqm;
     wire [31:0] mapper_sdrc_data;
     wire [7:0] mapper_sdrc_data_len;
+    wire smr_sdrc_cmd_en;
+    wire [2:0] smr_sdrc_cmd;
+    wire [20:0] smr_sdrc_addr;
+    wire [3:0] smr_sdrc_dqm;
+    wire [31:0] smr_sdrc_data;
     wire rom_sdrc_cmd_en;
     wire [2:0] rom_sdrc_cmd;
     wire [20:0] rom_sdrc_addr;
@@ -373,15 +383,19 @@ module top
     );
 
     // pcm14s_o is signed two's-complement despite its VHDL unsigned type.
-    // Saturation prevents PSG + OPLL peaks from wrapping around.
+    // Scale the 11-bit SCC output into the same useful range, then saturate
+    // the three-source mix instead of allowing peaks to wrap around.
     assign psg_audio_sample = {{2{psg_pcm[13]}}, psg_pcm};
+    assign scc_audio_sample = {scc_sound, 5'b00000};
     assign audio_mix_wide =
-        {psg_audio_sample[15], psg_audio_sample} +
-        {opll_audio_sample[15], opll_audio_sample};
+        {{2{psg_audio_sample[15]}}, psg_audio_sample} +
+        {{2{opll_audio_sample[15]}}, opll_audio_sample} +
+        {{2{scc_audio_sample[15]}}, scc_audio_sample};
     assign mixed_audio_sample =
-        audio_mix_wide[16:15] == 2'b01 ? 16'h7FFF :
-        audio_mix_wide[16:15] == 2'b10 ? 16'h8000 :
-        audio_mix_wide[15:0];
+        audio_mix_wide[17:15] == 3'b000 ||
+        audio_mix_wide[17:15] == 3'b111 ? audio_mix_wide[15:0] :
+        audio_mix_wide[17] ? 16'h8000 :
+                             16'h7FFF;
     
     input_debouncer
     #(
@@ -424,9 +438,14 @@ module top
         .inputs_latched(inputs_latched)
     );
 
+    // Keep all CPU-bus-visible state at deterministic defaults until both the
+    // internal memories are ready and the MSX has released its reset signal.
+    assign active_module_reset_n =
+        board_enabled && flash_rom_loaded && reset_in_n;
+
     slot_expander slot_expander_inst(
         .clk(main_clk),
-        .reset_n(board_enabled),
+        .reset_n(active_module_reset_n),
         .addr(addr),
         .data_in(cd_in),
         .merq_n(merq_n),
@@ -470,7 +489,7 @@ module top
 
     sdram_mapper sdram_mapper_inst(
         .clk(main_clk),
-        .reset_n(board_enabled && flash_rom_loaded),
+        .reset_n(active_module_reset_n),
         .addr(addr),
         .data_in(cd_in),
         .merq_n(merq_n),
@@ -501,9 +520,38 @@ module top
         .sdrc_cmd_ack(sdrc_cmd_ack)
     );
 
+    super_megaram super_megaram_inst(
+        .clk(main_clk),
+        .reset_n(active_module_reset_n),
+        .cpu_clock_enable(cpu_clock_rise_enable),
+        .addr(addr),
+        .data_in(cd_in),
+        .merq_n(merq_n),
+        .iorq_n(iorq_n),
+        .rd_n(rd_n),
+        .wr_n(wr_n),
+        .rfsh_n(rfsh_n),
+        .m1_n(m1_n),
+        .sltsl_n(sltsl_n),
+        .page1_subslot_en(page1_subslot_en),
+        .page2_subslot_en(page2_subslot_en),
+        .data_out(smr_data_out),
+        .data_out_en(smr_data_out_en),
+        .wait_n(smr_wait_n),
+        .scc_sound(scc_sound),
+        .sdrc_cmd_en(smr_sdrc_cmd_en),
+        .sdrc_cmd(smr_sdrc_cmd),
+        .sdrc_addr(smr_sdrc_addr),
+        .sdrc_dqm(smr_sdrc_dqm),
+        .sdrc_data(smr_sdrc_data),
+        .sdrc_data_in(sdrc_data_in),
+        .sdrc_init_done(sdrc_init_done),
+        .sdrc_cmd_ack(sdrc_cmd_ack)
+    );
+
     sd_registers sd_registers_inst(
         .clk(main_clk),
-        .reset_n(board_enabled && flash_rom_loaded),
+        .reset_n(active_module_reset_n),
         .cpu_clk(cpu_clk),
         .addr(addr),
         .data_in(cd_in),
@@ -558,30 +606,48 @@ module top
     );
 
     assign sdrc_cmd_en = board_enabled ?
-        (startup_test_passed ? (rom_sdrc_cmd_en || mapper_sdrc_cmd_en) : test_sdrc_cmd_en) : 1'b0;
-    assign sdrc_cmd = startup_test_passed ? (rom_sdrc_cmd_en ? rom_sdrc_cmd : mapper_sdrc_cmd) : test_sdrc_cmd;
+        (startup_test_passed ?
+            (rom_sdrc_cmd_en || smr_sdrc_cmd_en || mapper_sdrc_cmd_en) :
+            test_sdrc_cmd_en) : 1'b0;
+    assign sdrc_cmd = startup_test_passed ?
+        (rom_sdrc_cmd_en ? rom_sdrc_cmd :
+         smr_sdrc_cmd_en ? smr_sdrc_cmd : mapper_sdrc_cmd) :
+        test_sdrc_cmd;
     assign sdrc_precharge_ctrl = startup_test_passed ? mapper_sdrc_precharge_ctrl : test_sdrc_precharge_ctrl;
     assign sdram_power_down = startup_test_passed ? mapper_sdram_power_down : test_sdram_power_down;
     assign sdram_selfrefresh = startup_test_passed ? mapper_sdram_selfrefresh : test_sdram_selfrefresh;
-    assign sdrc_addr = startup_test_passed ? (rom_sdrc_cmd_en ? rom_sdrc_addr : mapper_sdrc_addr) : test_sdrc_addr;
-    assign sdrc_dqm = startup_test_passed ? (rom_sdrc_cmd_en ? rom_sdrc_dqm : mapper_sdrc_dqm) : test_sdrc_dqm;
-    assign sdrc_data = startup_test_passed ? (rom_sdrc_cmd_en ? rom_sdrc_data : mapper_sdrc_data) : test_sdrc_data;
+    assign sdrc_addr = startup_test_passed ?
+        (rom_sdrc_cmd_en ? rom_sdrc_addr :
+         smr_sdrc_cmd_en ? smr_sdrc_addr : mapper_sdrc_addr) :
+        test_sdrc_addr;
+    assign sdrc_dqm = startup_test_passed ?
+        (rom_sdrc_cmd_en ? rom_sdrc_dqm :
+         smr_sdrc_cmd_en ? smr_sdrc_dqm : mapper_sdrc_dqm) :
+        test_sdrc_dqm;
+    assign sdrc_data = startup_test_passed ?
+        (rom_sdrc_cmd_en ? rom_sdrc_data :
+         smr_sdrc_cmd_en ? smr_sdrc_data : mapper_sdrc_data) :
+        test_sdrc_data;
     assign sdrc_data_len = startup_test_passed ? mapper_sdrc_data_len : test_sdrc_data_len;
 
     assign data_out = sd_data_out_en ? sd_data_out :
                       flash_rom_data_out_en ? flash_rom_data_out :
+                      smr_data_out_en ? smr_data_out :
                       sdram_mapper_data_out_en ? sdram_mapper_data_out : slot_expander_data_out;
 
-    assign data_out_en = board_enabled &&
+    assign data_out_en = active_module_reset_n &&
         (sd_data_out_en || flash_rom_data_out_en ||
-         sdram_mapper_data_out_en || slot_expander_data_out_en);
+         smr_data_out_en || sdram_mapper_data_out_en ||
+         slot_expander_data_out_en);
 
-    assign mapper_port_read = board_enabled && !iorq_n && m1_n && !rd_n && addr[7:2] == 6'b111111;
+    assign mapper_port_read = active_module_reset_n &&
+        !iorq_n && m1_n && !rd_n && addr[7:2] == 6'b111111;
     
     cd_demux cd_demux_inst(
         .data_out(data_out),
         .data_out_en(data_out_en),
-        .wait_in_n(startup_test_wait_n && flash_rom_wait_n && mapper_wait_n),
+        .wait_in_n(startup_test_wait_n && flash_rom_wait_n &&
+                   smr_wait_n && mapper_wait_n),
         .rd_n(rd_n),
         .sltsl_n(sltsl_n),
         .mapper_port_read(mapper_port_read),

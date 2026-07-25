@@ -38,7 +38,7 @@ module flash_roms
     localparam [2:0] SDRAM_CMD_WRITE = 3'b100;
     localparam [23:0] FLASH_BASE = 24'h100000;
     localparam [17:0] ROM_BYTE_COUNT = 18'h24000;
-    localparam [22:0] SDRAM_ROM_BASE = 23'h400000;
+    localparam [22:0] SDRAM_ROM_BASE = 23'h600000;
 
     localparam [3:0] STATE_WAIT_ENABLE = 4'd0;
     localparam [3:0] STATE_START_FLASH = 4'd1;
@@ -50,9 +50,12 @@ module flash_roms
     localparam [3:0] STATE_ROM_ACK = 4'd7;
     localparam [3:0] STATE_ROM_DONE = 4'd8;
     localparam [3:0] STATE_WAIT_FLASH_RELEASE = 4'd9;
+    localparam [3:0] STATE_CLEAR_SMR_CMD = 4'd10;
+    localparam [3:0] STATE_CLEAR_SMR_ACK = 4'd11;
 
     reg [3:0] state = STATE_WAIT_ENABLE;
     reg [17:0] load_offset = 18'd0;
+    reg [1:0] clear_smr_index = 2'd0;
     reg [2:0] dos2_bank = 3'd0;
     reg [7:0] read_data_reg = 8'hff;
     reg [1:0] read_lane_reg = 2'd0;
@@ -84,6 +87,14 @@ module flash_roms
     wire [17:0] selected_rom_offset = dos2_selected ? dos2_offset : fmpac_offset;
     wire [22:0] selected_sdram_byte_addr = SDRAM_ROM_BASE + selected_rom_offset;
     wire [22:0] load_sdram_byte_addr = SDRAM_ROM_BASE + load_offset;
+    // SMR reset maps banks 0/1 at 4000h and banks 2/3 at 8000h. Clear the
+    // two possible "AB" cartridge signatures before releasing the CPU so
+    // uninitialized SDRAM cannot be mistaken for an extension ROM.
+    wire [22:0] clear_smr_byte_addr =
+        (clear_smr_index == 2'd0) ? 23'h400000 :
+        (clear_smr_index == 2'd1) ? 23'h400001 :
+        (clear_smr_index == 2'd2) ? 23'h404000 :
+                                    23'h404001;
     wire load_complete = state == STATE_READY || state == STATE_ROM_CMD ||
                          state == STATE_ROM_ACK || state == STATE_ROM_DONE;
 
@@ -120,6 +131,7 @@ module flash_roms
         if (!reset_n) begin
             state <= STATE_WAIT_ENABLE;
             load_offset <= 18'd0;
+            clear_smr_index <= 2'd0;
             dos2_bank <= 3'd0;
             read_data_reg <= 8'hff;
             read_lane_reg <= 2'd0;
@@ -170,7 +182,8 @@ module flash_roms
                         flash_byte_ready <= 1'b1;
                         if (load_offset == ROM_BYTE_COUNT - 1'b1) begin
                             flash_stop <= 1'b1;
-                            state <= STATE_READY;
+                            clear_smr_index <= 2'd0;
+                            state <= STATE_CLEAR_SMR_CMD;
                         end else begin
                             load_offset <= load_offset + 1'b1;
                             // byte_ready and byte_valid cross between two
@@ -185,6 +198,24 @@ module flash_roms
                 STATE_WAIT_FLASH_RELEASE: begin
                     if (!flash_byte_valid)
                         state <= STATE_WAIT_FLASH_BYTE;
+                end
+                STATE_CLEAR_SMR_CMD: begin
+                    sdrc_cmd_reg <= SDRAM_CMD_WRITE;
+                    sdrc_addr_reg <= clear_smr_byte_addr[22:2];
+                    sdrc_dqm_reg <= byte_dqm(clear_smr_byte_addr[1:0]);
+                    sdrc_data_reg <= 32'd0;
+                    sdrc_cmd_en_reg <= 1'b1;
+                    state <= STATE_CLEAR_SMR_ACK;
+                end
+                STATE_CLEAR_SMR_ACK: begin
+                    if (sdrc_cmd_ack) begin
+                        if (clear_smr_index == 2'd3)
+                            state <= STATE_READY;
+                        else begin
+                            clear_smr_index <= clear_smr_index + 1'b1;
+                            state <= STATE_CLEAR_SMR_CMD;
+                        end
+                    end
                 end
                 STATE_READY: begin
                     if (rom_read_selected && !cpu_cycle_seen) begin
