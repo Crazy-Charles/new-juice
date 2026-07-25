@@ -7,6 +7,7 @@ Running placement......
 [10%] Placement Phase 0 completed
 [20%] Placement Phase 1 completed
 [30%] Placement Phase 2 completed
+WARN  (TA1132) :  'audio_bclk_raw' was determined to be a clock but was not created.
 [50%] Placement Phase 3 completed
 Running routing......
 [60%] Routing Phase 0 completed
@@ -26,5 +27,5 @@ Generate file "/Users/felipe/src/fpga/new-juice/impl/pnr/new-juice.pin.html" com
 Generate file "/Users/felipe/src/fpga/new-juice/impl/pnr/new-juice.rpt.html" completed
 Generate file "/Users/felipe/src/fpga/new-juice/impl/pnr/new-juice.rpt.txt" completed
 Generate file "/Users/felipe/src/fpga/new-juice/impl/pnr/new-juice.tr.html" completed
-Fri Jul 24 20:36:47 2026
+Fri Jul 24 22:09:16 2026
 

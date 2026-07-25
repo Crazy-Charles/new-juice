@@ -2,25 +2,28 @@ GowinSynthesis start
 Running parser ...
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/cd_demux.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/clockdiv.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/flash_roms.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/dpram.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/audio_drive.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/crc16.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdcmd_ctrl.sv'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sd_reader.sv'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sd_registers.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/dpram.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/flash_roms.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/input_debouncer.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sd_reader.sv'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sd_registers.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdcmd_ctrl.sv'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdram.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdram_command_adapter.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/slot_expander.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/top.v'
-Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v'
-WARN  (EX3073) : Port 'clkoutd' remains unconnected for this instance("/Users/felipe/src/fpga/new-juice/src/top.v":80)
+WARN  (EX3073) : Port 'clkoutd' remains unconnected for this instance("/Users/felipe/src/fpga/new-juice/src/top.v":165)
 Compiling module 'top'("/Users/felipe/src/fpga/new-juice/src/top.v":1)
+Compiling module 'clockdiv'("/Users/felipe/src/fpga/new-juice/src/clockdiv.v":33)
+Compiling module 'audio_drive'("/Users/felipe/src/fpga/new-juice/src/audio_drive.v":1)
 Compiling module 'rpll_main'("/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v":10)
 Compiling module 'input_debouncer(WIDTH=3)'("/Users/felipe/src/fpga/new-juice/src/input_debouncer.v":1)
 Compiling module 'input_debouncer(WIDTH=8)'("/Users/felipe/src/fpga/new-juice/src/input_debouncer.v":1)

@@ -10,15 +10,7 @@
    "Type" : "verilog"
   },
   {
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v",
-   "Type" : "verilog"
-  },
-  {
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/flash_roms.v",
-   "Type" : "verilog"
-  },
-  {
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/dpram.v",
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/audio_drive.v",
    "Type" : "verilog"
   },
   {
@@ -26,15 +18,11 @@
    "Type" : "verilog"
   },
   {
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/sdcmd_ctrl.sv",
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/dpram.v",
    "Type" : "verilog"
   },
   {
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/sd_reader.sv",
-   "Type" : "verilog"
-  },
-  {
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/sd_registers.v",
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/flash_roms.v",
    "Type" : "verilog"
   },
   {
@@ -47,6 +35,22 @@
   },
   {
    "Path" : "/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/sd_reader.sv",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/sd_registers.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/sdcmd_ctrl.sv",
    "Type" : "verilog"
   },
   {
@@ -70,11 +74,11 @@
    "Type" : "verilog"
   },
   {
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v",
    "Type" : "verilog"
   },
   {
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v",
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/top.v",
    "Type" : "verilog"
   }
  ],

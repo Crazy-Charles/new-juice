@@ -6,23 +6,24 @@
     <FileList>
         <File path="/Users/felipe/src/fpga/new-juice/src/cd_demux.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/clockdiv.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/src/flash_roms.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/src/dpram.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/audio_drive.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/crc16.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/src/sdcmd_ctrl.sv" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/src/sd_reader.sv" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/src/sd_registers.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/dpram.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/flash_roms.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/input_debouncer.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/sd_reader.sv" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/sd_registers.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/sdcmd_ctrl.sv" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/sdram.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/sdram_command_adapter.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/slot_expander.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/top.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v" type="verilog"/>
     </FileList>
     <OptionList>
         <Option type="disable_insert_pad" value="0"/>

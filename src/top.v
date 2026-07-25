@@ -3,6 +3,12 @@ module top
     input   clkin,
     input   s1,
     input   s2,
+
+    output hp_ws,
+    output hp_din,
+    output hp_bck,
+    output pa_en,
+
     input cpu_clkin,
     input rd_n_in,
     input wr_n_in,
@@ -66,6 +72,85 @@ module top
     wire active_module_reset_n;
     reg [1:0] s2_sync = 2'b00;
     reg board_enabled = 1'b0;
+
+    wire audio_bclk_raw;
+    wire audio_bclk;
+    wire audio_bclk_rise;
+    wire audio_req;
+    wire audio_hp_bck;
+    wire audio_hp_ws;
+    wire audio_hp_din;
+
+    // Diagnostic switches. Keep the audio logic running while its physical
+    // pins remain static to distinguish an RTL problem from reconfiguration
+    // behavior on the dual-purpose SSPI pins.
+    localparam AUDIO_LOGIC_ENABLED = 1'b1;
+    localparam AUDIO_BCK_ENABLED = 1'b1;
+    localparam AUDIO_WS_ENABLED = 1'b1;
+    localparam AUDIO_WS_IDLE_HIGH = 1'b0;
+    localparam AUDIO_DIN_ENABLED = 1'b1;
+    localparam AUDIO_PA_ENABLED = 1'b1;
+
+    generate
+        if (AUDIO_LOGIC_ENABLED) begin : audio_logic_enabled
+            clockdiv #(
+                .CLK_HZ(27_000_000),
+                .OUT_HZ(705_600)
+            ) audio_clock_divider (
+                .clk_src(clk),
+                .reset_n(board_reset_n),
+                .clk_div(audio_bclk_raw),
+                .clk_rise(audio_bclk_rise)
+            );
+
+            BUFG audio_bclk_buf (
+                .I(audio_bclk_raw),
+                .O(audio_bclk)
+            );
+
+            audio_drive audio_drive_inst (
+                .clk_1p536m(audio_bclk),
+                .rst_n(board_reset_n),
+                .idata(16'd0),
+                .req(audio_req),
+                .HP_BCK(audio_hp_bck),
+                .HP_WS(audio_hp_ws),
+                .HP_DIN(audio_hp_din)
+            );
+        end else begin : audio_logic_disabled
+            assign audio_bclk_raw = 1'b0;
+            assign audio_bclk = 1'b0;
+            assign audio_bclk_rise = 1'b0;
+            assign audio_req = 1'b0;
+            assign audio_hp_bck = 1'b0;
+            assign audio_hp_ws = 1'b0;
+            assign audio_hp_din = 1'b0;
+        end
+
+        if (AUDIO_BCK_ENABLED) begin : audio_bck_enabled
+            assign hp_bck = audio_hp_bck;
+        end else begin : audio_bck_disabled
+            assign hp_bck = 1'b0;
+        end
+
+        if (AUDIO_WS_ENABLED) begin : audio_ws_enabled
+            assign hp_ws = audio_hp_ws;
+        end else begin : audio_ws_disabled
+            assign hp_ws = AUDIO_WS_IDLE_HIGH;
+        end
+
+        if (AUDIO_DIN_ENABLED) begin : audio_din_enabled
+            assign hp_din = audio_hp_din;
+        end else begin : audio_din_disabled
+            assign hp_din = 1'b0;
+        end
+
+        if (AUDIO_PA_ENABLED) begin : audio_pa_enabled
+            assign pa_en = 1'b1;
+        end else begin : audio_pa_disabled
+            assign pa_en = 1'b0;
+        end
+    endgenerate
     
     // main pll
     wire main_clk;

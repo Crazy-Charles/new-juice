@@ -1,67 +1,71 @@
-//audio驱动
-module audio_drive(
-    input        clk_1p536m,//bit时钟，每个采样点占32个clk_1p536m(左右声道各16)
-    input        rst_n     ,//低电平有效异步复位信号
-    //用户数据接口
-    input [15:0] idata     ,
-    output       req       ,//数据请求信号，可接外部FIFO的读请求(为避免空读，尽量和!fifo_empty相与后作为fifo_rd)
-    //audio接口
-    output       HP_BCK   ,//同clk_1p536m
-    output       HP_WS    ,//左右声道切换信号，低电平对应左声道
-    output       HP_DIN    //dac串行数据输入信号
+module audio_drive
+(
+    input        clk_1p536m,
+    input        rst_n,
+    input [15:0] idata,
+    output       req,
+    output       HP_BCK,
+    output       HP_WS,
+    output       HP_DIN
 );
-reg [4:0] b_cnt;
-reg       req_r,req_r1;//req_r1延迟req_r一个时钟
-reg [15:0] idata_r;//暂存idata,用于移位并转串时的中间变量
-reg HP_WS_r,HP_DIN_r;
-assign HP_BCK = clk_1p536m;
-assign HP_WS  = HP_WS_r   ;
-assign HP_DIN = HP_DIN_r  ;
-assign req    = req_r     ;
-//b_cnt
-always@(posedge clk_1p536m or negedge rst_n)
-begin
-if(!rst_n)
-    b_cnt    <= 5'd0;
-else
-    b_cnt <= b_cnt+1'b1;
-end
-//req_r
-always@(posedge clk_1p536m or negedge rst_n)
-begin
-if(!rst_n)
-    req_r <= 1'b0;
-else
-    req_r <= (b_cnt == 5'd0) || (b_cnt == 5'd16);//每16个时钟读入一个数据
-end
-//idata_r
-always@(posedge clk_1p536m or negedge rst_n)
-begin
-if(!rst_n)
+
+    reg [4:0] bit_count;
+    reg req_reg;
+    reg req_delayed;
+    reg [15:0] shift_reg;
+    reg hp_ws_reg;
+    reg hp_din_reg;
+
+    assign HP_BCK = clk_1p536m;
+    assign HP_WS = hp_ws_reg;
+    assign HP_DIN = hp_din_reg;
+    assign req = req_reg;
+
+    // Match WonderTANG's proven I2S implementation: the serializer is
+    // clocked directly by the globally buffered audio bit clock.
+    always_ff @(posedge clk_1p536m or negedge rst_n)
     begin
-    req_r1  <= 1'b0;
-    idata_r <= 16'd0;
+        if (!rst_n)
+            bit_count <= 5'd0;
+        else
+            bit_count <= bit_count + 1'b1;
     end
-else
+
+    always_ff @(posedge clk_1p536m or negedge rst_n)
     begin
-    req_r1  <= req_r;
-    idata_r <= req_r1?idata:idata_r<<1;
+        if (!rst_n)
+            req_reg <= 1'b0;
+        else
+            req_reg <= bit_count == 5'd0 || bit_count == 5'd16;
     end
-end
-//HP_DIN_r
-always@(posedge clk_1p536m or negedge rst_n)
-begin
-if(!rst_n)
-    HP_DIN_r <= 1'b0;
-else
-    HP_DIN_r <= idata_r[15];
-end
-//HP_WS_r
-always@(posedge clk_1p536m or negedge rst_n)
-begin
-if(!rst_n)
-    HP_WS_r <= 1'b0;
-else
-    HP_WS_r <= (b_cnt == 5'd3)?1'b0: ((b_cnt == 5'd19)?1'b1:HP_WS_r);//对齐数据
-end
+
+    always_ff @(posedge clk_1p536m or negedge rst_n)
+    begin
+        if (!rst_n) begin
+            req_delayed <= 1'b0;
+            shift_reg <= 16'd0;
+        end else begin
+            req_delayed <= req_reg;
+            shift_reg <= req_delayed ? idata : shift_reg << 1;
+        end
+    end
+
+    always_ff @(posedge clk_1p536m or negedge rst_n)
+    begin
+        if (!rst_n)
+            hp_din_reg <= 1'b0;
+        else
+            hp_din_reg <= shift_reg[15];
+    end
+
+    always_ff @(posedge clk_1p536m or negedge rst_n)
+    begin
+        if (!rst_n)
+            hp_ws_reg <= 1'b0;
+        else if (bit_count == 5'd3)
+            hp_ws_reg <= 1'b0;
+        else if (bit_count == 5'd19)
+            hp_ws_reg <= 1'b1;
+    end
+
 endmodule
