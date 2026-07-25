@@ -7,16 +7,12 @@ Running placement......
 [10%] Placement Phase 0 completed
 [20%] Placement Phase 1 completed
 [30%] Placement Phase 2 completed
-WARN  (TA1117) : Can't calculate clocks' relationship between: "clkin" and "cpu_clkin"
-WARN  (TA1117) : Can't calculate clocks' relationship between: "cpu_clkin" and "audio_bclk_raw"
-WARN  (TA1117) : Can't calculate clocks' relationship between: "main_clk" and "cpu_clkin"
-WARN  (TA1117) : Can't calculate clocks' relationship between: "cpu_clkin" and "main_clk"
+WARN  (TA1117) : Can't calculate clocks' relationship between: "main_clk" and "audio_bclk_raw"
 [50%] Placement Phase 3 completed
 Running routing......
 [60%] Routing Phase 0 completed
 [70%] Routing Phase 1 completed
 [80%] Routing Phase 2 completed
-WARN  (PR1014) : Generic routing resource will be used to clock signal 'cpu_clkin_d' by the specified constraint. And then it may lead to the excessive delay or skew
 WARN  (PR1014) : Generic routing resource will be used to clock signal 'clkin_d' by the specified constraint. And then it may lead to the excessive delay or skew
 [90%] Routing Phase 3 completed
 Running timing analysis......
@@ -31,5 +27,5 @@ Generate file "/Users/felipe/src/fpga/new-juice/impl/pnr/new-juice.pin.html" com
 Generate file "/Users/felipe/src/fpga/new-juice/impl/pnr/new-juice.rpt.html" completed
 Generate file "/Users/felipe/src/fpga/new-juice/impl/pnr/new-juice.rpt.txt" completed
 Generate file "/Users/felipe/src/fpga/new-juice/impl/pnr/new-juice.tr.html" completed
-Sat Jul 25 01:02:55 2026
+Sat Jul 25 01:23:15 2026
 

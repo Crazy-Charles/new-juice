@@ -34,6 +34,42 @@
    "Type" : "verilog"
   },
   {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_timinggen.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_lfo.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_pg.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_eg.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_op.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_dac.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL.v",
+   "Type" : "verilog"
+  },
+  {
    "Path" : "/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v",
    "Type" : "verilog"
   },

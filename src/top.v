@@ -60,11 +60,10 @@ module top
     .I(clkin)   // 27Mhz input clock
     );
 
-    wire cpu_clk;
-    BUFG cpu_clk_buf(
-    .O(cpu_clk),    // 3.58Mhz buffered output clock
-    .I(cpu_clkin)   // 3.58Mhz input clock
-    );
+    // The external MSX CPU clock is sampled in the 108 MHz domain. It is not
+    // used directly as an FPGA clock, avoiding a large asynchronous global
+    // clock tree and its associated skew.
+    wire cpu_clk = cpu_clkin;
 
     reg reset_n = 0;
     always_ff @(posedge clk) reset_n <= ~s1;
@@ -81,6 +80,9 @@ module top
     wire audio_hp_ws;
     wire audio_hp_din;
     wire [13:0] psg_pcm;
+    wire signed [15:0] psg_audio_sample;
+    wire signed [15:0] opll_audio_sample;
+    wire signed [16:0] audio_mix_wide;
     wire [15:0] mixed_audio_sample;
 
     // Diagnostic switches. Keep the audio logic running while its physical
@@ -255,8 +257,10 @@ module top
     wire native_sdram_data_ready;
     wire native_sdram_busy;
     wire native_sdram_enabled;
+    reg [2:0] psg_cpu_clk_sync = 3'b000;
     reg psg_clock_phase = 1'b0;
-    wire psg_clock_enable;
+    reg psg_clock_enable = 1'b0;
+    reg cpu_clock_rise_enable = 1'b0;
     wire psg_address_write;
     wire psg_data_write;
     wire psg_bdir;
@@ -266,6 +270,8 @@ module top
     wire [11:0] psg_channel_b_unused;
     wire [11:0] psg_channel_c_unused;
     wire [13:0] psg_mix_unsigned_unused;
+    wire opll_write_selected;
+    wire opll_phiM_clock_enable_n;
 
     always_ff @(posedge main_clk or negedge board_reset_n)
     begin
@@ -278,19 +284,29 @@ module top
 
     assign board_reset_n = rpll_main_lock && reset_n;
 
-    // The external CPU clock is already routed through a BUFG. The PSG core
-    // runs on that clock and receives a one-cycle enable every other tick,
-    // producing the required 1.789 MHz PSG clock-enable without creating
-    // another clock domain.
-    always_ff @(posedge cpu_clk or negedge board_reset_n)
+    // Synchronize the external 3.58 MHz CPU clock into the 108 MHz domain.
+    // Every second detected rising edge produces one main_clk-wide enable,
+    // giving the PSG its required ~1.789 MHz operating rate.
+    always_ff @(posedge main_clk or negedge board_reset_n)
     begin
-        if (!board_reset_n)
+        if (!board_reset_n) begin
+            psg_cpu_clk_sync <= 3'b000;
             psg_clock_phase <= 1'b0;
-        else
-            psg_clock_phase <= ~psg_clock_phase;
-    end
+            psg_clock_enable <= 1'b0;
+            cpu_clock_rise_enable <= 1'b0;
+        end else begin
+            psg_cpu_clk_sync <= {psg_cpu_clk_sync[1:0], cpu_clk};
+            psg_clock_enable <= 1'b0;
+            cpu_clock_rise_enable <= 1'b0;
 
-    assign psg_clock_enable = psg_clock_phase;
+            if (psg_cpu_clk_sync[1] && !psg_cpu_clk_sync[2]) begin
+                cpu_clock_rise_enable <= 1'b1;
+                psg_clock_phase <= ~psg_clock_phase;
+                if (psg_clock_phase)
+                    psg_clock_enable <= 1'b1;
+            end
+        end
+    end
 
     // MSX PSG I/O ports. This is deliberately a write-only slave: port A2
     // reads are not decoded and the PSG output data is never put on cd.
@@ -302,7 +318,7 @@ module top
     assign psg_bc = psg_address_write;
 
     ym2149_audio psg_inst (
-        .clk_i(cpu_clk),
+        .clk_i(main_clk),
         .en_clk_psg_i(psg_clock_enable),
         .sel_n_i(1'b1),
         .reset_n_i(board_reset_n),
@@ -317,9 +333,55 @@ module top
         .pcm14s_o(psg_pcm)
     );
 
+    // MSX-Music/YM2413 ports 7C (address) and 7D (data). Both are write-only;
+    // none of the IKAOPLL readback signals are connected to the cartridge bus.
+    assign opll_write_selected = board_enabled && !iorq_n && m1_n && !wr_n &&
+                                 addr[7:1] == 7'h3E;
+
+    // During board reset the enable is held active so IKAOPLL's synchronous
+    // internal reset chain can observe i_IC_n low.
+    assign opll_phiM_clock_enable_n =
+        board_reset_n ? ~cpu_clock_rise_enable : 1'b0;
+
+    IKAOPLL #(
+        .FULLY_SYNCHRONOUS(1),
+        .FAST_RESET(1),
+        .ALTPATCH_CONFIG_MODE(0),
+        .USE_PIPELINED_MULTIPLIER(1)
+    ) opll_inst (
+        .i_XIN_EMUCLK(main_clk),
+        .o_XOUT(),
+        .i_phiM_PCEN_n(opll_phiM_clock_enable_n),
+        .i_IC_n(board_reset_n),
+        .i_ALTPATCH_EN(1'b0),
+        .i_CS_n(~opll_write_selected),
+        .i_WR_n(wr_n),
+        .i_A0(addr[0]),
+        .i_D(cd_in),
+        .o_D(),
+        .o_D_OE(),
+        .o_DAC_EN_MO(),
+        .o_DAC_EN_RO(),
+        .o_IMP_NOFLUC_SIGN(),
+        .o_IMP_NOFLUC_MAG(),
+        .o_IMP_FLUC_SIGNED_MO(),
+        .o_IMP_FLUC_SIGNED_RO(),
+        .i_ACC_SIGNED_MOVOL(5'sd10),
+        .i_ACC_SIGNED_ROVOL(5'sd15),
+        .o_ACC_SIGNED_STRB(),
+        .o_ACC_SIGNED(opll_audio_sample)
+    );
+
     // pcm14s_o is signed two's-complement despite its VHDL unsigned type.
-    // Sign-extension preserves its zero point and full dynamic range.
-    assign mixed_audio_sample = {{2{psg_pcm[13]}}, psg_pcm};
+    // Saturation prevents PSG + OPLL peaks from wrapping around.
+    assign psg_audio_sample = {{2{psg_pcm[13]}}, psg_pcm};
+    assign audio_mix_wide =
+        {psg_audio_sample[15], psg_audio_sample} +
+        {opll_audio_sample[15], opll_audio_sample};
+    assign mixed_audio_sample =
+        audio_mix_wide[16:15] == 2'b01 ? 16'h7FFF :
+        audio_mix_wide[16:15] == 2'b10 ? 16'h8000 :
+        audio_mix_wide[15:0];
     
     input_debouncer
     #(

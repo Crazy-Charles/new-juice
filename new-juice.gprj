@@ -14,6 +14,15 @@
         <File path="src/input_debouncer.v" type="file.verilog" enable="1"/>
         <File path="src/mp_debouncer.v" type="file.verilog" enable="1"/>
         <File path="src/YM2149/ym2149_audio.vhd" type="file.vhdl" enable="1"/>
+        <File path="src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v" type="file.verilog" enable="1"/>
+        <File path="src/IKAOPLL/IKAOPLL_modules/IKAOPLL_timinggen.v" type="file.verilog" enable="1"/>
+        <File path="src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v" type="file.verilog" enable="1"/>
+        <File path="src/IKAOPLL/IKAOPLL_modules/IKAOPLL_lfo.v" type="file.verilog" enable="1"/>
+        <File path="src/IKAOPLL/IKAOPLL_modules/IKAOPLL_pg.v" type="file.verilog" enable="1"/>
+        <File path="src/IKAOPLL/IKAOPLL_modules/IKAOPLL_eg.v" type="file.verilog" enable="1"/>
+        <File path="src/IKAOPLL/IKAOPLL_modules/IKAOPLL_op.v" type="file.verilog" enable="1"/>
+        <File path="src/IKAOPLL/IKAOPLL_modules/IKAOPLL_dac.v" type="file.verilog" enable="1"/>
+        <File path="src/IKAOPLL/IKAOPLL.v" type="file.verilog" enable="1"/>
         <File path="src/rpll/rpll_main.v" type="file.verilog" enable="1"/>
         <File path="src/rpll/rpll_video.v" type="file.verilog" enable="1"/>
         <File path="src/sd_reader.sv" type="file.verilog" enable="1"/>

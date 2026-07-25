@@ -12,6 +12,15 @@
         <File path="/Users/felipe/src/fpga/new-juice/src/flash_roms.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/input_debouncer.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_timinggen.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_lfo.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_pg.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_eg.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_op.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_dac.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/sd_reader.sv" type="verilog"/>
