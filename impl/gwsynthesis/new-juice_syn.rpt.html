@@ -75,6 +75,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 /Users/felipe/src/fpga/new-juice/src/slot_expander.v<br>
 /Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v<br>
 /Users/felipe/src/fpga/new-juice/src/top.v<br>
+/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd<br>
 </td>
 </tr>
 <tr>
@@ -99,7 +100,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 </tr>
 <tr>
 <td class="label">Created Time</td>
-<td>Fri Jul 24 22:09:15 2026
+<td>Sat Jul 25 01:02:53 2026
 </td>
 </tr>
 <tr>
@@ -115,11 +116,11 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 </tr>
 <tr>
 <td class="label">Synthesis Process</td>
-<td>Running parser:<br/>&nbsp;&nbsp;&nbsp;&nbsp;CPU time = 0h 0m 0.075s, Elapsed time = 0h 0m 0.075s, Peak memory usage = 45.141MB<br/>Running netlist conversion:<br/>&nbsp;&nbsp;&nbsp;&nbsp;CPU time = 0h 0m 0s, Elapsed time = 0h 0m 0s, Peak memory usage = 0MB<br/>Running device independent optimization:<br/>&nbsp;&nbsp;&nbsp;&nbsp;Optimizing Phase 0: CPU time = 0h 0m 0.055s, Elapsed time = 0h 0m 0.055s, Peak memory usage = 46.547MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Optimizing Phase 1: CPU time = 0h 0m 0.014s, Elapsed time = 0h 0m 0.014s, Peak memory usage = 46.719MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Optimizing Phase 2: CPU time = 0h 0m 0.06s, Elapsed time = 0h 0m 0.061s, Peak memory usage = 46.859MB<br/>Running inference:<br/>&nbsp;&nbsp;&nbsp;&nbsp;Inferring Phase 0: CPU time = 0h 0m 0.009s, Elapsed time = 0h 0m 0.009s, Peak memory usage = 47.359MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Inferring Phase 1: CPU time = 0h 0m 0.001s, Elapsed time = 0h 0m 0.001s, Peak memory usage = 47.531MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Inferring Phase 2: CPU time = 0h 0m 0.001s, Elapsed time = 0h 0m 0.001s, Peak memory usage = 47.656MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Inferring Phase 3: CPU time = 0h 0m 0.001s, Elapsed time = 0h 0m 0.001s, Peak memory usage = 47.703MB<br/>Running technical mapping:<br/>&nbsp;&nbsp;&nbsp;&nbsp;Tech-Mapping Phase 0: CPU time = 0h 0m 0.038s, Elapsed time = 0h 0m 0.038s, Peak memory usage = 47.750MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Tech-Mapping Phase 1: CPU time = 0h 0m 0.013s, Elapsed time = 0h 0m 0.013s, Peak memory usage = 47.750MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Tech-Mapping Phase 2: CPU time = 0h 0m 0.012s, Elapsed time = 0h 0m 0.012s, Peak memory usage = 47.750MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Tech-Mapping Phase 3: CPU time = 0h 0m 3s, Elapsed time = 0h 0m 3s, Peak memory usage = 97.969MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Tech-Mapping Phase 4: CPU time = 0h 0m 0.091s, Elapsed time = 0h 0m 0.091s, Peak memory usage = 98.672MB<br/>Generate output files:<br/>&nbsp;&nbsp;&nbsp;&nbsp;CPU time = 0h 0m 0.034s, Elapsed time = 0h 0m 0.034s, Peak memory usage = 116.188MB<br/></td>
+<td>Running parser:<br/>&nbsp;&nbsp;&nbsp;&nbsp;CPU time = 0h 0m 0.107s, Elapsed time = 0h 0m 0.107s, Peak memory usage = 56.859MB<br/>Running netlist conversion:<br/>&nbsp;&nbsp;&nbsp;&nbsp;CPU time = 0h 0m 0s, Elapsed time = 0h 0m 0s, Peak memory usage = 0MB<br/>Running device independent optimization:<br/>&nbsp;&nbsp;&nbsp;&nbsp;Optimizing Phase 0: CPU time = 0h 0m 0.039s, Elapsed time = 0h 0m 0.039s, Peak memory usage = 57.766MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Optimizing Phase 1: CPU time = 0h 0m 0.014s, Elapsed time = 0h 0m 0.014s, Peak memory usage = 57.875MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Optimizing Phase 2: CPU time = 0h 0m 0.064s, Elapsed time = 0h 0m 0.064s, Peak memory usage = 58.078MB<br/>Running inference:<br/>&nbsp;&nbsp;&nbsp;&nbsp;Inferring Phase 0: CPU time = 0h 0m 0.014s, Elapsed time = 0h 0m 0.014s, Peak memory usage = 58.578MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Inferring Phase 1: CPU time = 0h 0m 0.001s, Elapsed time = 0h 0m 0.001s, Peak memory usage = 58.750MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Inferring Phase 2: CPU time = 0h 0m 0.002s, Elapsed time = 0h 0m 0.002s, Peak memory usage = 58.875MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Inferring Phase 3: CPU time = 0h 0m 0.002s, Elapsed time = 0h 0m 0.002s, Peak memory usage = 58.922MB<br/>Running technical mapping:<br/>&nbsp;&nbsp;&nbsp;&nbsp;Tech-Mapping Phase 0: CPU time = 0h 0m 0.054s, Elapsed time = 0h 0m 0.054s, Peak memory usage = 58.984MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Tech-Mapping Phase 1: CPU time = 0h 0m 0.015s, Elapsed time = 0h 0m 0.015s, Peak memory usage = 58.984MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Tech-Mapping Phase 2: CPU time = 0h 0m 0.015s, Elapsed time = 0h 0m 0.015s, Peak memory usage = 58.984MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Tech-Mapping Phase 3: CPU time = 0h 0m 4s, Elapsed time = 0h 0m 4s, Peak memory usage = 109.406MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Tech-Mapping Phase 4: CPU time = 0h 0m 0.101s, Elapsed time = 0h 0m 0.101s, Peak memory usage = 109.922MB<br/>Generate output files:<br/>&nbsp;&nbsp;&nbsp;&nbsp;CPU time = 0h 0m 0.041s, Elapsed time = 0h 0m 0.041s, Peak memory usage = 129.875MB<br/></td>
 </tr>
 <tr>
 <td class="label">Total Time and Memory Usage</td>
-<td>CPU time = 0h 0m 3s, Elapsed time = 0h 0m 3s, Peak memory usage = 116.188MB</td>
+<td>CPU time = 0h 0m 4s, Elapsed time = 0h 0m 4s, Peak memory usage = 129.875MB</td>
 </tr>
 </table>
 <h1><a name="resource">Resource</a></h1>
@@ -159,63 +160,71 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 </tr>
 <tr>
 <td class="label"><b>Register </b></td>
-<td>1189</td>
+<td>1470</td>
 </tr>
 <tr>
 <td class="label">&nbsp&nbsp&nbsp&nbspDFF</td>
-<td>1</td>
+<td>11</td>
 </tr>
 <tr>
 <td class="label">&nbsp&nbsp&nbsp&nbspDFFE</td>
-<td>81</td>
+<td>133</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspDFFS</td>
+<td>3</td>
 </tr>
 <tr>
 <td class="label">&nbsp&nbsp&nbsp&nbspDFFSE</td>
-<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspDFFR</td>
+<td>8</td>
 </tr>
 <tr>
 <td class="label">&nbsp&nbsp&nbsp&nbspDFFRE</td>
-<td>1</td>
+<td>186</td>
 </tr>
 <tr>
 <td class="label">&nbsp&nbsp&nbsp&nbspDFFP</td>
-<td>64</td>
+<td>60</td>
 </tr>
 <tr>
 <td class="label">&nbsp&nbsp&nbsp&nbspDFFPE</td>
-<td>122</td>
+<td>126</td>
 </tr>
 <tr>
 <td class="label">&nbsp&nbsp&nbsp&nbspDFFC</td>
-<td>151</td>
+<td>173</td>
 </tr>
 <tr>
 <td class="label">&nbsp&nbsp&nbsp&nbspDFFCE</td>
-<td>768</td>
+<td>766</td>
 </tr>
 <tr>
 <td class="label"><b>LUT </b></td>
-<td>1528</td>
+<td>1889</td>
 </tr>
 <tr>
 <td class="label">&nbsp&nbsp&nbsp&nbspLUT2</td>
-<td>169</td>
+<td>185</td>
 </tr>
 <tr>
 <td class="label">&nbsp&nbsp&nbsp&nbspLUT3</td>
-<td>520</td>
+<td>652</td>
 </tr>
 <tr>
 <td class="label">&nbsp&nbsp&nbsp&nbspLUT4</td>
-<td>839</td>
+<td>1052</td>
 </tr>
 <tr>
 <td class="label"><b>ALU </b></td>
-<td>64</td>
+<td>149</td>
 </tr>
 <tr>
 <td class="label">&nbsp&nbsp&nbsp&nbspALU</td>
-<td>64</td>
+<td>149</td>
 </tr>
 <tr>
 <td class="label"><b>SSRAM </b></td>
@@ -227,11 +236,11 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 </tr>
 <tr>
 <td class="label"><b>INV </b></td>
-<td>14</td>
+<td>16</td>
 </tr>
 <tr>
 <td class="label">&nbsp&nbsp&nbsp&nbspINV</td>
-<td>14</td>
+<td>16</td>
 </tr>
 <tr>
 <td class="label"><b>BSRAM </b></td>
@@ -259,13 +268,13 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 </tr>
 <tr>
 <td class="label">Logic</td>
-<td>1618(1542 LUT, 64 ALU, 2 RAM16) / 20736</td>
-<td>8%</td>
+<td>2066(1905 LUT, 149 ALU, 2 RAM16) / 20736</td>
+<td>10%</td>
 </tr>
 <tr>
 <td class="label">Register</td>
-<td>1189 / 15915</td>
-<td>8%</td>
+<td>1470 / 15915</td>
+<td>10%</td>
 </tr>
 <tr>
 <td class="label">&nbsp&nbsp--Register as Latch</td>
@@ -274,8 +283,8 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 </tr>
 <tr>
 <td class="label">&nbsp&nbsp--Register as FF</td>
-<td>1189 / 15915</td>
-<td>8%</td>
+<td>1470 / 15915</td>
+<td>10%</td>
 </tr>
 <tr>
 <td class="label">BSRAM</td>
@@ -312,6 +321,18 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 </tr>
 <tr>
 <td>2</td>
+<td>cpu_clk_buf/I</td>
+<td>Base</td>
+<td>10.000</td>
+<td>100.000</td>
+<td>0.000</td>
+<td>5.000</td>
+<td> </td>
+<td> </td>
+<td>cpu_clk_buf/I </td>
+</tr>
+<tr>
+<td>3</td>
 <td>clk_buf/I</td>
 <td>Base</td>
 <td>10.000</td>
@@ -323,7 +344,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <td>clk_buf/I </td>
 </tr>
 <tr>
-<td>3</td>
+<td>4</td>
 <td>audio_logic_enabled.audio_bclk_buf/I</td>
 <td>Base</td>
 <td>10.000</td>
@@ -335,7 +356,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <td>audio_logic_enabled.audio_bclk_buf/I </td>
 </tr>
 <tr>
-<td>4</td>
+<td>5</td>
 <td>rpll_main/rpll_inst/CLKOUT.default_gen_clk</td>
 <td>Generated</td>
 <td>9.259</td>
@@ -347,7 +368,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <td>rpll_main/rpll_inst/CLKOUT </td>
 </tr>
 <tr>
-<td>5</td>
+<td>6</td>
 <td>rpll_main/rpll_inst/CLKOUTP.default_gen_clk</td>
 <td>Generated</td>
 <td>9.259</td>
@@ -359,7 +380,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <td>rpll_main/rpll_inst/CLKOUTP </td>
 </tr>
 <tr>
-<td>6</td>
+<td>7</td>
 <td>rpll_main/rpll_inst/CLKOUTD.default_gen_clk</td>
 <td>Generated</td>
 <td>18.519</td>
@@ -371,7 +392,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <td>rpll_main/rpll_inst/CLKOUTD </td>
 </tr>
 <tr>
-<td>7</td>
+<td>8</td>
 <td>rpll_main/rpll_inst/CLKOUTD3.default_gen_clk</td>
 <td>Generated</td>
 <td>27.778</td>
@@ -395,6 +416,14 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 </tr>
 <tr>
 <td>1</td>
+<td>cpu_clk_buf/I</td>
+<td>100.000(MHz)</td>
+<td>125.881(MHz)</td>
+<td>8</td>
+<td>TOP</td>
+</tr>
+<tr>
+<td>2</td>
 <td>clk_buf/I</td>
 <td>100.000(MHz)</td>
 <td>357.270(MHz)</td>
@@ -402,7 +431,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <td>TOP</td>
 </tr>
 <tr>
-<td>2</td>
+<td>3</td>
 <td>audio_logic_enabled.audio_bclk_buf/I</td>
 <td>100.000(MHz)</td>
 <td>357.270(MHz)</td>
@@ -410,11 +439,11 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <td>TOP</td>
 </tr>
 <tr>
-<td>3</td>
+<td>4</td>
 <td>rpll_main/rpll_inst/CLKOUT.default_gen_clk</td>
 <td>108.000(MHz)</td>
-<td>144.613(MHz)</td>
-<td>7</td>
+<td>123.107(MHz)</td>
+<td>9</td>
 <td>TOP</td>
 </tr>
 </table>
@@ -424,23 +453,23 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <table class="summary_table">
 <tr>
 <td class="label">Slack</td>
-<td>2.344</td>
+<td>-2.281</td>
 </tr>
 <tr>
 <td class="label">Data Arrival Time</td>
-<td>7.740</td>
+<td>133.253</td>
 </tr>
 <tr>
 <td class="label">Data Required Time</td>
-<td>10.084</td>
+<td>130.972</td>
 </tr>
 <tr>
 <td class="label">From</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_1_s0</td>
+<td>mp_debouncer_inst/latched_3_s0</td>
 </tr>
 <tr>
 <td class="label">To</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_13_s0</td>
+<td>psg_inst/busctl_r_0_s0</td>
 </tr>
 <tr>
 <td class="label">Launch Clk</td>
@@ -448,7 +477,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 </tr>
 <tr>
 <td class="label">Latch Clk</td>
-<td>rpll_main/rpll_inst/CLKOUT.default_gen_clk[R]</td>
+<td>cpu_clk_buf/I[R]</td>
 </tr>
 </table>
 <b>Data Arrival Path:</b>
@@ -462,7 +491,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <th>NODE</th>
 </tr>
 <tr>
-<td>0.000</td>
+<td>129.630</td>
 <td>0.000</td>
 <td> </td>
 <td> </td>
@@ -470,7 +499,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <td>rpll_main/rpll_inst/CLKOUT.default_gen_clk</td>
 </tr>
 <tr>
-<td>0.500</td>
+<td>130.129</td>
 <td>0.500</td>
 <td>tCL</td>
 <td>RR</td>
@@ -478,124 +507,60 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <td>rpll_main/rpll_inst/CLKOUT</td>
 </tr>
 <tr>
-<td>0.860</td>
+<td>130.489</td>
 <td>0.360</td>
 <td>tNET</td>
 <td>RR</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_1_s0/CLK</td>
+<td>mp_debouncer_inst/latched_3_s0/CLK</td>
 </tr>
 <tr>
-<td>1.092</td>
+<td>130.721</td>
 <td>0.232</td>
 <td>tC2Q</td>
 <td>RF</td>
-<td>8</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_1_s0/Q</td>
+<td>20</td>
+<td>mp_debouncer_inst/latched_3_s0/Q</td>
 </tr>
 <tr>
-<td>1.566</td>
+<td>131.195</td>
 <td>0.474</td>
 <td>tNET</td>
 <td>FF</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n251_s2/I1</td>
+<td>n42_s5/I1</td>
 </tr>
 <tr>
-<td>2.121</td>
-<td>0.555</td>
-<td>tINS</td>
-<td>FF</td>
-<td>3</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n251_s2/F</td>
-</tr>
-<tr>
-<td>2.595</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n250_s2/I1</td>
-</tr>
-<tr>
-<td>3.150</td>
-<td>0.555</td>
-<td>tINS</td>
-<td>FF</td>
-<td>3</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n250_s2/F</td>
-</tr>
-<tr>
-<td>3.624</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n247_s3/I1</td>
-</tr>
-<tr>
-<td>4.179</td>
-<td>0.555</td>
-<td>tINS</td>
-<td>FF</td>
-<td>4</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n247_s3/F</td>
-</tr>
-<tr>
-<td>4.653</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n244_s3/I1</td>
-</tr>
-<tr>
-<td>5.208</td>
+<td>131.750</td>
 <td>0.555</td>
 <td>tINS</td>
 <td>FF</td>
 <td>5</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n244_s3/F</td>
+<td>n42_s5/F</td>
 </tr>
 <tr>
-<td>5.682</td>
+<td>132.224</td>
 <td>0.474</td>
 <td>tNET</td>
 <td>FF</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n243_s2/I1</td>
+<td>n42_s2/I1</td>
 </tr>
 <tr>
-<td>6.237</td>
-<td>0.555</td>
-<td>tINS</td>
-<td>FF</td>
-<td>3</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n243_s2/F</td>
-</tr>
-<tr>
-<td>6.711</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n242_s1/I1</td>
-</tr>
-<tr>
-<td>7.266</td>
+<td>132.779</td>
 <td>0.555</td>
 <td>tINS</td>
 <td>FF</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n242_s1/F</td>
+<td>n42_s2/F</td>
 </tr>
 <tr>
-<td>7.740</td>
+<td>133.253</td>
 <td>0.474</td>
 <td>tNET</td>
 <td>FF</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_13_s0/D</td>
+<td>psg_inst/busctl_r_0_s0/D</td>
 </tr>
 </table>
 <b>Data Required Path:</b>
@@ -609,56 +574,72 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <th>NODE</th>
 </tr>
 <tr>
-<td>9.259</td>
+<td>130.000</td>
 <td>0.000</td>
 <td> </td>
 <td> </td>
 <td> </td>
-<td>rpll_main/rpll_inst/CLKOUT.default_gen_clk</td>
+<td>cpu_clk_buf/I</td>
 </tr>
 <tr>
-<td>9.759</td>
-<td>0.500</td>
+<td>130.000</td>
+<td>0.000</td>
 <td>tCL</td>
 <td>RR</td>
-<td>1180</td>
-<td>rpll_main/rpll_inst/CLKOUT</td>
+<td>1</td>
+<td>cpu_clk_buf/I</td>
 </tr>
 <tr>
-<td>10.119</td>
+<td>130.682</td>
+<td>0.683</td>
+<td>tINS</td>
+<td>RR</td>
+<td>263</td>
+<td>cpu_clk_buf/O</td>
+</tr>
+<tr>
+<td>131.042</td>
 <td>0.360</td>
 <td>tNET</td>
 <td>RR</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_13_s0/CLK</td>
+<td>psg_inst/busctl_r_0_s0/CLK</td>
 </tr>
 <tr>
-<td>10.084</td>
+<td>131.007</td>
+<td>-0.035</td>
+<td>tUnc</td>
+<td> </td>
+<td> </td>
+<td>psg_inst/busctl_r_0_s0</td>
+</tr>
+<tr>
+<td>130.972</td>
 <td>-0.035</td>
 <td>tSu</td>
 <td> </td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_13_s0</td>
+<td>psg_inst/busctl_r_0_s0</td>
 </tr>
 </table>
 <b>Path Statistics:</b>
 <table class="summary_table">
 <tr>
 <td class="label">Clock Skew:</td>
-<td>0.000</td>
+<td>0.183</td>
 </tr>
 <tr>
 <td class="label">Setup Relationship:</td>
-<td>9.259</td>
+<td>0.370</td>
 </tr>
 <tr>
 <td class="label">Logic Level:</td>
-<td>7</td>
+<td>3</td>
 </tr>
 <tr>
 <td class="label">Arrival Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.360, 100.000%</td></tr>
 <tr>
-<td class="label">Arrival Data Path Delay:</td><td> cell: 3.330, 48.401%; route: 3.318, 48.227%; tC2Q: 0.232, 3.372%</td></tr>
+<td class="label">Arrival Data Path Delay:</td><td> cell: 1.110, 40.159%; route: 1.422, 51.447%; tC2Q: 0.232, 8.394%</td></tr>
 <tr>
 <td class="label">Required Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.360, 100.000%</td></tr>
 </table>
@@ -668,23 +649,23 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <table class="summary_table">
 <tr>
 <td class="label">Slack</td>
-<td>2.344</td>
+<td>-2.281</td>
 </tr>
 <tr>
 <td class="label">Data Arrival Time</td>
-<td>7.740</td>
+<td>133.253</td>
 </tr>
 <tr>
 <td class="label">Data Required Time</td>
-<td>10.084</td>
+<td>130.972</td>
 </tr>
 <tr>
 <td class="label">From</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_1_s0</td>
+<td>bus_data_debouncer/latched_1_s3</td>
 </tr>
 <tr>
 <td class="label">To</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_14_s0</td>
+<td>psg_inst/busctl_r_1_s0</td>
 </tr>
 <tr>
 <td class="label">Launch Clk</td>
@@ -692,7 +673,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 </tr>
 <tr>
 <td class="label">Latch Clk</td>
-<td>rpll_main/rpll_inst/CLKOUT.default_gen_clk[R]</td>
+<td>cpu_clk_buf/I[R]</td>
 </tr>
 </table>
 <b>Data Arrival Path:</b>
@@ -706,7 +687,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <th>NODE</th>
 </tr>
 <tr>
-<td>0.000</td>
+<td>129.630</td>
 <td>0.000</td>
 <td> </td>
 <td> </td>
@@ -714,7 +695,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <td>rpll_main/rpll_inst/CLKOUT.default_gen_clk</td>
 </tr>
 <tr>
-<td>0.500</td>
+<td>130.129</td>
 <td>0.500</td>
 <td>tCL</td>
 <td>RR</td>
@@ -722,124 +703,60 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <td>rpll_main/rpll_inst/CLKOUT</td>
 </tr>
 <tr>
-<td>0.860</td>
+<td>130.489</td>
 <td>0.360</td>
 <td>tNET</td>
 <td>RR</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_1_s0/CLK</td>
+<td>bus_data_debouncer/latched_1_s3/CLK</td>
 </tr>
 <tr>
-<td>1.092</td>
+<td>130.721</td>
 <td>0.232</td>
 <td>tC2Q</td>
 <td>RF</td>
-<td>8</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_1_s0/Q</td>
+<td>10</td>
+<td>bus_data_debouncer/latched_1_s3/Q</td>
 </tr>
 <tr>
-<td>1.566</td>
+<td>131.195</td>
 <td>0.474</td>
 <td>tNET</td>
 <td>FF</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n251_s2/I1</td>
+<td>psg_inst/busctl_r_0_s2/I1</td>
 </tr>
 <tr>
-<td>2.121</td>
+<td>131.750</td>
 <td>0.555</td>
 <td>tINS</td>
 <td>FF</td>
-<td>3</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n251_s2/F</td>
+<td>2</td>
+<td>psg_inst/busctl_r_0_s2/F</td>
 </tr>
 <tr>
-<td>2.595</td>
+<td>132.224</td>
 <td>0.474</td>
 <td>tNET</td>
 <td>FF</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n250_s2/I1</td>
+<td>psg_bdir_s0/I1</td>
 </tr>
 <tr>
-<td>3.150</td>
-<td>0.555</td>
-<td>tINS</td>
-<td>FF</td>
-<td>3</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n250_s2/F</td>
-</tr>
-<tr>
-<td>3.624</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n247_s3/I1</td>
-</tr>
-<tr>
-<td>4.179</td>
-<td>0.555</td>
-<td>tINS</td>
-<td>FF</td>
-<td>4</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n247_s3/F</td>
-</tr>
-<tr>
-<td>4.653</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n244_s3/I1</td>
-</tr>
-<tr>
-<td>5.208</td>
-<td>0.555</td>
-<td>tINS</td>
-<td>FF</td>
-<td>5</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n244_s3/F</td>
-</tr>
-<tr>
-<td>5.682</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n243_s2/I1</td>
-</tr>
-<tr>
-<td>6.237</td>
-<td>0.555</td>
-<td>tINS</td>
-<td>FF</td>
-<td>3</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n243_s2/F</td>
-</tr>
-<tr>
-<td>6.711</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n241_s1/I1</td>
-</tr>
-<tr>
-<td>7.266</td>
+<td>132.779</td>
 <td>0.555</td>
 <td>tINS</td>
 <td>FF</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n241_s1/F</td>
+<td>psg_bdir_s0/F</td>
 </tr>
 <tr>
-<td>7.740</td>
+<td>133.253</td>
 <td>0.474</td>
 <td>tNET</td>
 <td>FF</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_14_s0/D</td>
+<td>psg_inst/busctl_r_1_s0/D</td>
 </tr>
 </table>
 <b>Data Required Path:</b>
@@ -853,56 +770,72 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <th>NODE</th>
 </tr>
 <tr>
-<td>9.259</td>
+<td>130.000</td>
 <td>0.000</td>
 <td> </td>
 <td> </td>
 <td> </td>
-<td>rpll_main/rpll_inst/CLKOUT.default_gen_clk</td>
+<td>cpu_clk_buf/I</td>
 </tr>
 <tr>
-<td>9.759</td>
-<td>0.500</td>
+<td>130.000</td>
+<td>0.000</td>
 <td>tCL</td>
 <td>RR</td>
-<td>1180</td>
-<td>rpll_main/rpll_inst/CLKOUT</td>
+<td>1</td>
+<td>cpu_clk_buf/I</td>
 </tr>
 <tr>
-<td>10.119</td>
+<td>130.682</td>
+<td>0.683</td>
+<td>tINS</td>
+<td>RR</td>
+<td>263</td>
+<td>cpu_clk_buf/O</td>
+</tr>
+<tr>
+<td>131.042</td>
 <td>0.360</td>
 <td>tNET</td>
 <td>RR</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_14_s0/CLK</td>
+<td>psg_inst/busctl_r_1_s0/CLK</td>
 </tr>
 <tr>
-<td>10.084</td>
+<td>131.007</td>
+<td>-0.035</td>
+<td>tUnc</td>
+<td> </td>
+<td> </td>
+<td>psg_inst/busctl_r_1_s0</td>
+</tr>
+<tr>
+<td>130.972</td>
 <td>-0.035</td>
 <td>tSu</td>
 <td> </td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_14_s0</td>
+<td>psg_inst/busctl_r_1_s0</td>
 </tr>
 </table>
 <b>Path Statistics:</b>
 <table class="summary_table">
 <tr>
 <td class="label">Clock Skew:</td>
-<td>0.000</td>
+<td>0.183</td>
 </tr>
 <tr>
 <td class="label">Setup Relationship:</td>
-<td>9.259</td>
+<td>0.370</td>
 </tr>
 <tr>
 <td class="label">Logic Level:</td>
-<td>7</td>
+<td>3</td>
 </tr>
 <tr>
 <td class="label">Arrival Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.360, 100.000%</td></tr>
 <tr>
-<td class="label">Arrival Data Path Delay:</td><td> cell: 3.330, 48.401%; route: 3.318, 48.227%; tC2Q: 0.232, 3.372%</td></tr>
+<td class="label">Arrival Data Path Delay:</td><td> cell: 1.110, 40.159%; route: 1.422, 51.447%; tC2Q: 0.232, 8.394%</td></tr>
 <tr>
 <td class="label">Required Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.360, 100.000%</td></tr>
 </table>
@@ -912,23 +845,23 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <table class="summary_table">
 <tr>
 <td class="label">Slack</td>
-<td>2.359</td>
+<td>-1.153</td>
 </tr>
 <tr>
 <td class="label">Data Arrival Time</td>
-<td>7.725</td>
+<td>132.125</td>
 </tr>
 <tr>
 <td class="label">Data Required Time</td>
-<td>10.084</td>
+<td>130.972</td>
 </tr>
 <tr>
 <td class="label">From</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/req_cmd_3_s0</td>
+<td>bus_data_debouncer/latched_1_s3</td>
 </tr>
 <tr>
 <td class="label">To</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/req_crc_3_s1</td>
+<td>psg_inst/busctl_r_0_s0</td>
 </tr>
 <tr>
 <td class="label">Launch Clk</td>
@@ -936,7 +869,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 </tr>
 <tr>
 <td class="label">Latch Clk</td>
-<td>rpll_main/rpll_inst/CLKOUT.default_gen_clk[R]</td>
+<td>cpu_clk_buf/I[R]</td>
 </tr>
 </table>
 <b>Data Arrival Path:</b>
@@ -950,7 +883,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <th>NODE</th>
 </tr>
 <tr>
-<td>0.000</td>
+<td>129.630</td>
 <td>0.000</td>
 <td> </td>
 <td> </td>
@@ -958,7 +891,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <td>rpll_main/rpll_inst/CLKOUT.default_gen_clk</td>
 </tr>
 <tr>
-<td>0.500</td>
+<td>130.129</td>
 <td>0.500</td>
 <td>tCL</td>
 <td>RR</td>
@@ -966,140 +899,44 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <td>rpll_main/rpll_inst/CLKOUT</td>
 </tr>
 <tr>
-<td>0.860</td>
+<td>130.489</td>
 <td>0.360</td>
 <td>tNET</td>
 <td>RR</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/req_cmd_3_s0/CLK</td>
+<td>bus_data_debouncer/latched_1_s3/CLK</td>
 </tr>
 <tr>
-<td>1.092</td>
+<td>130.721</td>
 <td>0.232</td>
 <td>tC2Q</td>
 <td>RF</td>
+<td>10</td>
+<td>bus_data_debouncer/latched_1_s3/Q</td>
+</tr>
+<tr>
+<td>131.195</td>
+<td>0.474</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>psg_inst/busctl_r_0_s2/I1</td>
+</tr>
+<tr>
+<td>131.765</td>
+<td>0.570</td>
+<td>tINS</td>
+<td>FR</td>
 <td>2</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/req_cmd_3_s0/Q</td>
+<td>psg_inst/busctl_r_0_s2/F</td>
 </tr>
 <tr>
-<td>1.566</td>
-<td>0.474</td>
+<td>132.125</td>
+<td>0.360</td>
 <td>tNET</td>
-<td>FF</td>
+<td>RR</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n385_s156/I1</td>
-</tr>
-<tr>
-<td>2.121</td>
-<td>0.555</td>
-<td>tINS</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n385_s156/F</td>
-</tr>
-<tr>
-<td>2.595</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n385_s102/I1</td>
-</tr>
-<tr>
-<td>2.698</td>
-<td>0.103</td>
-<td>tINS</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n385_s102/O</td>
-</tr>
-<tr>
-<td>3.172</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n385_s159/I0</td>
-</tr>
-<tr>
-<td>3.689</td>
-<td>0.517</td>
-<td>tINS</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n385_s159/F</td>
-</tr>
-<tr>
-<td>4.163</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n385_s115/I0</td>
-</tr>
-<tr>
-<td>4.266</td>
-<td>0.103</td>
-<td>tINS</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n385_s115/O</td>
-</tr>
-<tr>
-<td>4.740</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n437_s3/I1</td>
-</tr>
-<tr>
-<td>5.295</td>
-<td>0.555</td>
-<td>tINS</td>
-<td>FF</td>
-<td>2</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n437_s3/F</td>
-</tr>
-<tr>
-<td>5.769</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n1339_s3/I2</td>
-</tr>
-<tr>
-<td>6.222</td>
-<td>0.453</td>
-<td>tINS</td>
-<td>FF</td>
-<td>2</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n1339_s3/F</td>
-</tr>
-<tr>
-<td>6.696</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n1336_s1/I1</td>
-</tr>
-<tr>
-<td>7.251</td>
-<td>0.555</td>
-<td>tINS</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n1336_s1/F</td>
-</tr>
-<tr>
-<td>7.725</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/req_crc_3_s1/D</td>
+<td>psg_inst/busctl_r_0_s0/RESET</td>
 </tr>
 </table>
 <b>Data Required Path:</b>
@@ -1113,56 +950,72 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <th>NODE</th>
 </tr>
 <tr>
-<td>9.259</td>
+<td>130.000</td>
 <td>0.000</td>
 <td> </td>
 <td> </td>
 <td> </td>
-<td>rpll_main/rpll_inst/CLKOUT.default_gen_clk</td>
+<td>cpu_clk_buf/I</td>
 </tr>
 <tr>
-<td>9.759</td>
-<td>0.500</td>
+<td>130.000</td>
+<td>0.000</td>
 <td>tCL</td>
 <td>RR</td>
-<td>1180</td>
-<td>rpll_main/rpll_inst/CLKOUT</td>
+<td>1</td>
+<td>cpu_clk_buf/I</td>
 </tr>
 <tr>
-<td>10.119</td>
+<td>130.682</td>
+<td>0.683</td>
+<td>tINS</td>
+<td>RR</td>
+<td>263</td>
+<td>cpu_clk_buf/O</td>
+</tr>
+<tr>
+<td>131.042</td>
 <td>0.360</td>
 <td>tNET</td>
 <td>RR</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/req_crc_3_s1/CLK</td>
+<td>psg_inst/busctl_r_0_s0/CLK</td>
 </tr>
 <tr>
-<td>10.084</td>
+<td>131.007</td>
+<td>-0.035</td>
+<td>tUnc</td>
+<td> </td>
+<td> </td>
+<td>psg_inst/busctl_r_0_s0</td>
+</tr>
+<tr>
+<td>130.972</td>
 <td>-0.035</td>
 <td>tSu</td>
 <td> </td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/req_crc_3_s1</td>
+<td>psg_inst/busctl_r_0_s0</td>
 </tr>
 </table>
 <b>Path Statistics:</b>
 <table class="summary_table">
 <tr>
 <td class="label">Clock Skew:</td>
-<td>0.000</td>
+<td>0.183</td>
 </tr>
 <tr>
 <td class="label">Setup Relationship:</td>
-<td>9.259</td>
+<td>0.370</td>
 </tr>
 <tr>
 <td class="label">Logic Level:</td>
-<td>6</td>
+<td>2</td>
 </tr>
 <tr>
 <td class="label">Arrival Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.360, 100.000%</td></tr>
 <tr>
-<td class="label">Arrival Data Path Delay:</td><td> cell: 2.841, 41.384%; route: 3.792, 55.237%; tC2Q: 0.232, 3.379%</td></tr>
+<td class="label">Arrival Data Path Delay:</td><td> cell: 0.570, 34.841%; route: 0.834, 50.978%; tC2Q: 0.232, 14.181%</td></tr>
 <tr>
 <td class="label">Required Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.360, 100.000%</td></tr>
 </table>
@@ -1172,23 +1025,23 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <table class="summary_table">
 <tr>
 <td class="label">Slack</td>
-<td>2.382</td>
+<td>-0.223</td>
 </tr>
 <tr>
 <td class="label">Data Arrival Time</td>
-<td>7.702</td>
+<td>131.195</td>
 </tr>
 <tr>
 <td class="label">Data Required Time</td>
-<td>10.084</td>
+<td>130.972</td>
 </tr>
 <tr>
 <td class="label">From</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_1_s0</td>
+<td>bus_control_debouncer/latched_0_s3</td>
 </tr>
 <tr>
 <td class="label">To</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_15_s0</td>
+<td>psg_inst/data_i_r_0_s0</td>
 </tr>
 <tr>
 <td class="label">Launch Clk</td>
@@ -1196,7 +1049,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 </tr>
 <tr>
 <td class="label">Latch Clk</td>
-<td>rpll_main/rpll_inst/CLKOUT.default_gen_clk[R]</td>
+<td>cpu_clk_buf/I[R]</td>
 </tr>
 </table>
 <b>Data Arrival Path:</b>
@@ -1210,7 +1063,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <th>NODE</th>
 </tr>
 <tr>
-<td>0.000</td>
+<td>129.630</td>
 <td>0.000</td>
 <td> </td>
 <td> </td>
@@ -1218,7 +1071,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <td>rpll_main/rpll_inst/CLKOUT.default_gen_clk</td>
 </tr>
 <tr>
-<td>0.500</td>
+<td>130.129</td>
 <td>0.500</td>
 <td>tCL</td>
 <td>RR</td>
@@ -1226,124 +1079,28 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <td>rpll_main/rpll_inst/CLKOUT</td>
 </tr>
 <tr>
-<td>0.860</td>
+<td>130.489</td>
 <td>0.360</td>
 <td>tNET</td>
 <td>RR</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_1_s0/CLK</td>
+<td>bus_control_debouncer/latched_0_s3/CLK</td>
 </tr>
 <tr>
-<td>1.092</td>
+<td>130.721</td>
 <td>0.232</td>
 <td>tC2Q</td>
 <td>RF</td>
-<td>8</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_1_s0/Q</td>
+<td>16</td>
+<td>bus_control_debouncer/latched_0_s3/Q</td>
 </tr>
 <tr>
-<td>1.566</td>
+<td>131.195</td>
 <td>0.474</td>
 <td>tNET</td>
 <td>FF</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n251_s2/I1</td>
-</tr>
-<tr>
-<td>2.121</td>
-<td>0.555</td>
-<td>tINS</td>
-<td>FF</td>
-<td>3</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n251_s2/F</td>
-</tr>
-<tr>
-<td>2.595</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n250_s2/I1</td>
-</tr>
-<tr>
-<td>3.150</td>
-<td>0.555</td>
-<td>tINS</td>
-<td>FF</td>
-<td>3</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n250_s2/F</td>
-</tr>
-<tr>
-<td>3.624</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n247_s3/I1</td>
-</tr>
-<tr>
-<td>4.179</td>
-<td>0.555</td>
-<td>tINS</td>
-<td>FF</td>
-<td>4</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n247_s3/F</td>
-</tr>
-<tr>
-<td>4.653</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n244_s3/I1</td>
-</tr>
-<tr>
-<td>5.208</td>
-<td>0.555</td>
-<td>tINS</td>
-<td>FF</td>
-<td>5</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n244_s3/F</td>
-</tr>
-<tr>
-<td>5.682</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n243_s2/I1</td>
-</tr>
-<tr>
-<td>6.237</td>
-<td>0.555</td>
-<td>tINS</td>
-<td>FF</td>
-<td>3</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n243_s2/F</td>
-</tr>
-<tr>
-<td>6.711</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n240_s1/I0</td>
-</tr>
-<tr>
-<td>7.228</td>
-<td>0.517</td>
-<td>tINS</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/n240_s1/F</td>
-</tr>
-<tr>
-<td>7.702</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_15_s0/D</td>
+<td>psg_inst/data_i_r_0_s0/D</td>
 </tr>
 </table>
 <b>Data Required Path:</b>
@@ -1357,56 +1114,72 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <th>NODE</th>
 </tr>
 <tr>
-<td>9.259</td>
+<td>130.000</td>
 <td>0.000</td>
 <td> </td>
 <td> </td>
 <td> </td>
-<td>rpll_main/rpll_inst/CLKOUT.default_gen_clk</td>
+<td>cpu_clk_buf/I</td>
 </tr>
 <tr>
-<td>9.759</td>
-<td>0.500</td>
+<td>130.000</td>
+<td>0.000</td>
 <td>tCL</td>
 <td>RR</td>
-<td>1180</td>
-<td>rpll_main/rpll_inst/CLKOUT</td>
+<td>1</td>
+<td>cpu_clk_buf/I</td>
 </tr>
 <tr>
-<td>10.119</td>
+<td>130.682</td>
+<td>0.683</td>
+<td>tINS</td>
+<td>RR</td>
+<td>263</td>
+<td>cpu_clk_buf/O</td>
+</tr>
+<tr>
+<td>131.042</td>
 <td>0.360</td>
 <td>tNET</td>
 <td>RR</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_15_s0/CLK</td>
+<td>psg_inst/data_i_r_0_s0/CLK</td>
 </tr>
 <tr>
-<td>10.084</td>
+<td>131.007</td>
+<td>-0.035</td>
+<td>tUnc</td>
+<td> </td>
+<td> </td>
+<td>psg_inst/data_i_r_0_s0</td>
+</tr>
+<tr>
+<td>130.972</td>
 <td>-0.035</td>
 <td>tSu</td>
 <td> </td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/u_sdcmd_ctrl/clkcnt_15_s0</td>
+<td>psg_inst/data_i_r_0_s0</td>
 </tr>
 </table>
 <b>Path Statistics:</b>
 <table class="summary_table">
 <tr>
 <td class="label">Clock Skew:</td>
-<td>0.000</td>
+<td>0.183</td>
 </tr>
 <tr>
 <td class="label">Setup Relationship:</td>
-<td>9.259</td>
+<td>0.370</td>
 </tr>
 <tr>
 <td class="label">Logic Level:</td>
-<td>7</td>
+<td>1</td>
 </tr>
 <tr>
 <td class="label">Arrival Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.360, 100.000%</td></tr>
 <tr>
-<td class="label">Arrival Data Path Delay:</td><td> cell: 3.292, 48.115%; route: 3.318, 48.494%; tC2Q: 0.232, 3.391%</td></tr>
+<td class="label">Arrival Data Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.474, 67.139%; tC2Q: 0.232, 32.861%</td></tr>
 <tr>
 <td class="label">Required Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.360, 100.000%</td></tr>
 </table>
@@ -1416,23 +1189,23 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <table class="summary_table">
 <tr>
 <td class="label">Slack</td>
-<td>2.389</td>
+<td>-0.223</td>
 </tr>
 <tr>
 <td class="label">Data Arrival Time</td>
-<td>7.695</td>
+<td>131.195</td>
 </tr>
 <tr>
 <td class="label">Data Required Time</td>
-<td>10.084</td>
+<td>130.972</td>
 </tr>
 <tr>
 <td class="label">From</td>
-<td>sd_registers_inst/sector_ram/mem_r_mem_r_0_0_s</td>
+<td>bus_control_debouncer/latched_1_s3</td>
 </tr>
 <tr>
 <td class="label">To</td>
-<td>sd_registers_inst/sd_card_controller/sddat0out_s0</td>
+<td>psg_inst/data_i_r_1_s0</td>
 </tr>
 <tr>
 <td class="label">Launch Clk</td>
@@ -1440,7 +1213,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 </tr>
 <tr>
 <td class="label">Latch Clk</td>
-<td>rpll_main/rpll_inst/CLKOUT.default_gen_clk[R]</td>
+<td>cpu_clk_buf/I[R]</td>
 </tr>
 </table>
 <b>Data Arrival Path:</b>
@@ -1454,7 +1227,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <th>NODE</th>
 </tr>
 <tr>
-<td>0.000</td>
+<td>129.630</td>
 <td>0.000</td>
 <td> </td>
 <td> </td>
@@ -1462,7 +1235,7 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <td>rpll_main/rpll_inst/CLKOUT.default_gen_clk</td>
 </tr>
 <tr>
-<td>0.500</td>
+<td>130.129</td>
 <td>0.500</td>
 <td>tCL</td>
 <td>RR</td>
@@ -1470,108 +1243,28 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <td>rpll_main/rpll_inst/CLKOUT</td>
 </tr>
 <tr>
-<td>0.860</td>
+<td>130.489</td>
 <td>0.360</td>
 <td>tNET</td>
 <td>RR</td>
-<td>8</td>
-<td>sd_registers_inst/sector_ram/mem_r_mem_r_0_0_s/CLKB</td>
+<td>1</td>
+<td>bus_control_debouncer/latched_1_s3/CLK</td>
 </tr>
 <tr>
-<td>3.120</td>
-<td>2.260</td>
+<td>130.721</td>
+<td>0.232</td>
 <td>tC2Q</td>
 <td>RF</td>
-<td>1</td>
-<td>sd_registers_inst/sector_ram/mem_r_mem_r_0_0_s/DOB[0]</td>
+<td>15</td>
+<td>bus_control_debouncer/latched_1_s3/Q</td>
 </tr>
 <tr>
-<td>3.594</td>
+<td>131.195</td>
 <td>0.474</td>
 <td>tNET</td>
 <td>FF</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/n2874_s17/I1</td>
-</tr>
-<tr>
-<td>4.149</td>
-<td>0.555</td>
-<td>tINS</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/n2874_s17/F</td>
-</tr>
-<tr>
-<td>4.623</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/n2874_s15/I1</td>
-</tr>
-<tr>
-<td>4.726</td>
-<td>0.103</td>
-<td>tINS</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/n2874_s15/O</td>
-</tr>
-<tr>
-<td>5.200</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/n2874_s13/I1</td>
-</tr>
-<tr>
-<td>5.303</td>
-<td>0.103</td>
-<td>tINS</td>
-<td>FF</td>
-<td>2</td>
-<td>sd_registers_inst/sd_card_controller/n2874_s13/O</td>
-</tr>
-<tr>
-<td>5.777</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/n3373_s22/I2</td>
-</tr>
-<tr>
-<td>6.230</td>
-<td>0.453</td>
-<td>tINS</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/n3373_s22/F</td>
-</tr>
-<tr>
-<td>6.704</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/n3373_s21/I0</td>
-</tr>
-<tr>
-<td>7.221</td>
-<td>0.517</td>
-<td>tINS</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/n3373_s21/F</td>
-</tr>
-<tr>
-<td>7.695</td>
-<td>0.474</td>
-<td>tNET</td>
-<td>FF</td>
-<td>1</td>
-<td>sd_registers_inst/sd_card_controller/sddat0out_s0/D</td>
+<td>psg_inst/data_i_r_1_s0/D</td>
 </tr>
 </table>
 <b>Data Required Path:</b>
@@ -1585,56 +1278,72 @@ table.detail_table td.label { min-width: 100px; width: 8%;}
 <th>NODE</th>
 </tr>
 <tr>
-<td>9.259</td>
+<td>130.000</td>
 <td>0.000</td>
 <td> </td>
 <td> </td>
 <td> </td>
-<td>rpll_main/rpll_inst/CLKOUT.default_gen_clk</td>
+<td>cpu_clk_buf/I</td>
 </tr>
 <tr>
-<td>9.759</td>
-<td>0.500</td>
+<td>130.000</td>
+<td>0.000</td>
 <td>tCL</td>
 <td>RR</td>
-<td>1180</td>
-<td>rpll_main/rpll_inst/CLKOUT</td>
+<td>1</td>
+<td>cpu_clk_buf/I</td>
 </tr>
 <tr>
-<td>10.119</td>
+<td>130.682</td>
+<td>0.683</td>
+<td>tINS</td>
+<td>RR</td>
+<td>263</td>
+<td>cpu_clk_buf/O</td>
+</tr>
+<tr>
+<td>131.042</td>
 <td>0.360</td>
 <td>tNET</td>
 <td>RR</td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/sddat0out_s0/CLK</td>
+<td>psg_inst/data_i_r_1_s0/CLK</td>
 </tr>
 <tr>
-<td>10.084</td>
+<td>131.007</td>
+<td>-0.035</td>
+<td>tUnc</td>
+<td> </td>
+<td> </td>
+<td>psg_inst/data_i_r_1_s0</td>
+</tr>
+<tr>
+<td>130.972</td>
 <td>-0.035</td>
 <td>tSu</td>
 <td> </td>
 <td>1</td>
-<td>sd_registers_inst/sd_card_controller/sddat0out_s0</td>
+<td>psg_inst/data_i_r_1_s0</td>
 </tr>
 </table>
 <b>Path Statistics:</b>
 <table class="summary_table">
 <tr>
 <td class="label">Clock Skew:</td>
-<td>0.000</td>
+<td>0.183</td>
 </tr>
 <tr>
 <td class="label">Setup Relationship:</td>
-<td>9.259</td>
+<td>0.370</td>
 </tr>
 <tr>
 <td class="label">Logic Level:</td>
-<td>4</td>
+<td>1</td>
 </tr>
 <tr>
 <td class="label">Arrival Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.360, 100.000%</td></tr>
 <tr>
-<td class="label">Arrival Data Path Delay:</td><td> cell: 1.731, 25.326%; route: 2.844, 41.609%; tC2Q: 2.260, 33.065%</td></tr>
+<td class="label">Arrival Data Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.474, 67.139%; tC2Q: 0.232, 32.861%</td></tr>
 <tr>
 <td class="label">Required Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.360, 100.000%</td></tr>
 </table>

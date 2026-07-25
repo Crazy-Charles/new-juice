@@ -20,11 +20,18 @@ Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/slot_expander.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/top.v'
-WARN  (EX3073) : Port 'clkoutd' remains unconnected for this instance("/Users/felipe/src/fpga/new-juice/src/top.v":165)
+Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd'
+Analyzing entity 'ym2149_audio'("/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd":155)
+Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd":176)
+WARN  (EX3073) : Port 'clkoutd' remains unconnected for this instance("/Users/felipe/src/fpga/new-juice/src/top.v":167)
 Compiling module 'top'("/Users/felipe/src/fpga/new-juice/src/top.v":1)
 Compiling module 'clockdiv'("/Users/felipe/src/fpga/new-juice/src/clockdiv.v":33)
 Compiling module 'audio_drive'("/Users/felipe/src/fpga/new-juice/src/audio_drive.v":1)
 Compiling module 'rpll_main'("/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v":10)
+Switching to VHDL mode to elaborate design unit 'ym2149_audio'("/Users/felipe/src/fpga/new-juice/src/top.v":318)
+Processing 'ym2149_audio(rtl)'("/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd":155)
+Extracting RAM for identifier 'dacrom_ar'("/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd":361)
+Returning to Verilog mode to proceed with elaboration("/Users/felipe/src/fpga/new-juice/src/top.v":318)
 Compiling module 'input_debouncer(WIDTH=3)'("/Users/felipe/src/fpga/new-juice/src/input_debouncer.v":1)
 Compiling module 'input_debouncer(WIDTH=8)'("/Users/felipe/src/fpga/new-juice/src/input_debouncer.v":1)
 Compiling module 'mp_debouncer'("/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v":1)

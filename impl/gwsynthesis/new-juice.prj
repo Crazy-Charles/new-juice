@@ -24,6 +24,7 @@
         <File path="/Users/felipe/src/fpga/new-juice/src/slot_expander.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/top.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd" type="vhdl"/>
     </FileList>
     <OptionList>
         <Option type="disable_insert_pad" value="0"/>

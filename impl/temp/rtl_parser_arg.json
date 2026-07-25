@@ -80,6 +80,11 @@
   {
    "Path" : "/Users/felipe/src/fpga/new-juice/src/top.v",
    "Type" : "verilog"
+  },
+  {
+   "Library" : "work",
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd",
+   "Type" : "vhdl"
   }
  ],
  "IncludePath" : [

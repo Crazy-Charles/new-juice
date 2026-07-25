@@ -80,6 +80,8 @@ module top
     wire audio_hp_bck;
     wire audio_hp_ws;
     wire audio_hp_din;
+    wire [13:0] psg_pcm;
+    wire [15:0] mixed_audio_sample;
 
     // Diagnostic switches. Keep the audio logic running while its physical
     // pins remain static to distinguish an RTL problem from reconfiguration
@@ -111,7 +113,7 @@ module top
             audio_drive audio_drive_inst (
                 .clk_1p536m(audio_bclk),
                 .rst_n(board_reset_n),
-                .idata(16'd0),
+                .idata(mixed_audio_sample),
                 .req(audio_req),
                 .HP_BCK(audio_hp_bck),
                 .HP_WS(audio_hp_ws),
@@ -253,6 +255,17 @@ module top
     wire native_sdram_data_ready;
     wire native_sdram_busy;
     wire native_sdram_enabled;
+    reg psg_clock_phase = 1'b0;
+    wire psg_clock_enable;
+    wire psg_address_write;
+    wire psg_data_write;
+    wire psg_bdir;
+    wire psg_bc;
+    wire [7:0] psg_data_out_unused;
+    wire [11:0] psg_channel_a_unused;
+    wire [11:0] psg_channel_b_unused;
+    wire [11:0] psg_channel_c_unused;
+    wire [13:0] psg_mix_unsigned_unused;
 
     always_ff @(posedge main_clk or negedge board_reset_n)
     begin
@@ -264,6 +277,49 @@ module top
     end
 
     assign board_reset_n = rpll_main_lock && reset_n;
+
+    // The external CPU clock is already routed through a BUFG. The PSG core
+    // runs on that clock and receives a one-cycle enable every other tick,
+    // producing the required 1.789 MHz PSG clock-enable without creating
+    // another clock domain.
+    always_ff @(posedge cpu_clk or negedge board_reset_n)
+    begin
+        if (!board_reset_n)
+            psg_clock_phase <= 1'b0;
+        else
+            psg_clock_phase <= ~psg_clock_phase;
+    end
+
+    assign psg_clock_enable = psg_clock_phase;
+
+    // MSX PSG I/O ports. This is deliberately a write-only slave: port A2
+    // reads are not decoded and the PSG output data is never put on cd.
+    assign psg_address_write = board_enabled && !iorq_n && m1_n && !wr_n &&
+                               addr[7:0] == 8'hA0;
+    assign psg_data_write = board_enabled && !iorq_n && m1_n && !wr_n &&
+                            addr[7:0] == 8'hA1;
+    assign psg_bdir = psg_address_write || psg_data_write;
+    assign psg_bc = psg_address_write;
+
+    ym2149_audio psg_inst (
+        .clk_i(cpu_clk),
+        .en_clk_psg_i(psg_clock_enable),
+        .sel_n_i(1'b1),
+        .reset_n_i(board_reset_n),
+        .bc_i(psg_bc),
+        .bdir_i(psg_bdir),
+        .data_i(cd_in),
+        .data_r_o(psg_data_out_unused),
+        .ch_a_o(psg_channel_a_unused),
+        .ch_b_o(psg_channel_b_unused),
+        .ch_c_o(psg_channel_c_unused),
+        .mix_audio_o(psg_mix_unsigned_unused),
+        .pcm14s_o(psg_pcm)
+    );
+
+    // pcm14s_o is signed two's-complement despite its VHDL unsigned type.
+    // Sign-extension preserves its zero point and full dynamic range.
+    assign mixed_audio_sample = {{2{psg_pcm[13]}}, psg_pcm};
     
     input_debouncer
     #(

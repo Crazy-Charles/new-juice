@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Module name="top" Register="2" Lut="103" T_Register="1189(2)" T_Alu="64(0)" T_Lut="1542(103)" T_Bsram="1(0)" T_Ssram="2(0)">
+<Module name="top" Register="3" Lut="105" T_Register="1470(3)" T_Alu="149(0)" T_Lut="1905(105)" T_Bsram="1(0)" T_Ssram="2(0)">
  <SubModule name="audio_logic_enabled.audio_clock_divider" Register="6" Lut="8" T_Register="6(6)" T_Lut="8(8)"/>
- <SubModule name="audio_logic_enabled.audio_drive_inst" Register="6" Alu="4" Lut="3" T_Register="6(6)" T_Alu="4(4)" T_Lut="3(3)"/>
+ <SubModule name="audio_logic_enabled.audio_drive_inst" Register="25" Alu="4" Lut="20" T_Register="25(25)" T_Alu="4(4)" T_Lut="20(20)"/>
  <SubModule name="rpll_main"/>
+ <SubModule name="psg_inst" Register="261" Alu="85" Lut="341" T_Register="261(261)" T_Alu="85(85)" T_Lut="341(341)"/>
  <SubModule name="bus_data_debouncer" Register="12" Lut="6" T_Register="12(12)" T_Lut="6(6)"/>
  <SubModule name="bus_control_debouncer" Register="26" Lut="12" T_Register="26(26)" T_Lut="12(12)"/>
  <SubModule name="mp_debouncer_inst" Register="66" Lut="34" T_Register="66(66)" T_Lut="34(34)"/>
- <SubModule name="slot_expander_inst" Register="8" Lut="3" T_Register="8(8)" T_Lut="3(3)"/>
- <SubModule name="sdram_startup_test_inst" Register="105" Alu="8" Lut="208" T_Register="105(105)" T_Alu="8(8)" T_Lut="208(208)"/>
- <SubModule name="sdram_mapper_inst" Register="81" Lut="83" T_Register="81(81)" T_Lut="83(83)"/>
- <SubModule name="sd_registers_inst" Register="47" Lut="157" T_Register="585(47)" T_Alu="21(0)" T_Lut="813(157)" T_Bsram="1(0)" T_Ssram="2(0)">
-  <SubModule name="sector_ram" Lut="4" Bsram="1" T_Lut="4(4)" T_Bsram="1(1)"/>
-  <SubModule name="sd_card_controller" Register="295" Lut="449" T_Register="538(295)" T_Alu="21(0)" T_Lut="652(449)" T_Ssram="2(0)">
-   <SubModule name="u_sdcmd_ctrl" Register="227" Alu="21" Lut="200" Ssram="2" T_Register="227(227)" T_Alu="21(21)" T_Lut="200(200)" T_Ssram="2(2)"/>
+ <SubModule name="slot_expander_inst" Register="8" Lut="6" T_Register="8(8)" T_Lut="6(6)"/>
+ <SubModule name="sdram_startup_test_inst" Register="105" Alu="8" Lut="210" T_Register="105(105)" T_Alu="8(8)" T_Lut="210(210)"/>
+ <SubModule name="sdram_mapper_inst" Register="81" Lut="78" T_Register="81(81)" T_Lut="78(78)"/>
+ <SubModule name="sd_registers_inst" Register="47" Lut="147" T_Register="585(47)" T_Alu="21(0)" T_Lut="806(147)" T_Bsram="1(0)" T_Ssram="2(0)">
+  <SubModule name="sector_ram" Lut="2" Bsram="1" T_Lut="2(2)" T_Bsram="1(1)"/>
+  <SubModule name="sd_card_controller" Register="295" Lut="457" T_Register="538(295)" T_Alu="21(0)" T_Lut="657(457)" T_Ssram="2(0)">
+   <SubModule name="u_sdcmd_ctrl" Register="227" Alu="21" Lut="197" Ssram="2" T_Register="227(227)" T_Alu="21(21)" T_Lut="197(197)" T_Ssram="2(2)"/>
    <SubModule name="i2442" Register="16" Lut="3" T_Register="16(16)" T_Lut="3(3)"/>
   </SubModule>
  </SubModule>
- <SubModule name="flash_roms_inst" Register="70" Alu="17" Lut="78" T_Register="127(70)" T_Alu="17(17)" T_Lut="164(78)">
-  <SubModule name="flash_reader_inst" Register="57" Lut="86" T_Register="57(57)" T_Lut="86(86)"/>
+ <SubModule name="flash_roms_inst" Register="70" Alu="17" Lut="82" T_Register="127(70)" T_Alu="17(17)" T_Lut="167(82)">
+  <SubModule name="flash_reader_inst" Register="57" Lut="85" T_Register="57(57)" T_Lut="85(85)"/>
  </SubModule>
- <SubModule name="cd_demux_inst" Lut="4" T_Lut="4(4)"/>
- <SubModule name="sdram_command_adapter_inst" Register="108" Lut="31" T_Register="108(108)" T_Lut="31(31)"/>
- <SubModule name="sdram_inst" Register="57" Alu="14" Lut="70" T_Register="57(57)" T_Alu="14(14)" T_Lut="70(70)"/>
+ <SubModule name="cd_demux_inst" Lut="6" T_Lut="6(6)"/>
+ <SubModule name="sdram_command_adapter_inst" Register="108" Lut="32" T_Register="108(108)" T_Lut="32(32)"/>
+ <SubModule name="sdram_inst" Register="57" Alu="14" Lut="74" T_Register="57(57)" T_Alu="14(14)" T_Lut="74(74)"/>
 </Module>
