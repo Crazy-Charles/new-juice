@@ -124,6 +124,10 @@ Linux, also install the loader's udev rules (or add an equivalent rule for the
 Tang Nano 20K USB/JTAG device), then reconnect the board so it is accessible to
 your user without `sudo`.
 
+## Windows Users
+
+Well, at this point in time and you still using this bloatware-AI-minion-copiloted piece of something? Time to look at the mirror and reflect about your life. I don't have a working Windows machine and I cannot help you. (And I remember it sucked hard with all usb conflicts and ports stopping accessing the unit)
+
 ## Build and program
 
 From the repository root, connect a powered Tang Nano 20K by USB and run:
@@ -138,6 +142,9 @@ make rebuild
 # Program the generated bitstream (impl/prn/new-juice.fs)
 make program
 
+# Flash the existing bitstream only (does not rebuild)
+make reprogram
+
 # Program the two ROM images into SPI flash
 make roms
 ```
@@ -151,6 +158,11 @@ make GOWIN_IDE="$HOME/Gowin/IDE" \
      OPENFPGALOADER="$HOME/bin/openFPGALoader" \
      PROGRAMMER_BOARD=tangnano20k program
 ```
+
+Use `make reprogram` when the Tang Nano 20K should only be flashed with the
+already-built `impl/prn/new-juice.fs`. Unlike `make program`, it does not add
+the bitstream as a build dependency or invoke synthesis; run `make` or
+`make rebuild` first when the bitstream needs to be regenerated.
 
 `make roms` writes DOS2 at SPI-flash offset `0x100000` and FM-PAC at
 `0x120000`; do not interrupt power while either operation is in progress.

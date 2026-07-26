@@ -22,7 +22,7 @@ PROGRAMMER_BOARD ?= tangnano20k
 PROGRAMMER_FLAGS ?= -f
 ROM_PROGRAMMER_FLAGS ?= -f --external-flash
 
-DOS2_ROM := $(ROOT)/roms/Nextor-2.1.1.WonderTANG-HC95.ROM.bin
+DOS2_ROM := $(ROOT)/roms/Nextor-2.1.1.WonderTANG.ROM.bin
 DOS2_ROM_OFFSET ?= 1048576
 FM_ROM := $(ROOT)/roms/16k_fm_opl.bin
 FM_ROM_OFFSET ?= 1179648
@@ -31,7 +31,7 @@ PROJECT_INPUTS := $(PROJECT) $(shell find $(ROOT)/src $(ROOT)/roms -type f)
 
 .DEFAULT_GOAL := all
 
-.PHONY: all build rebuild program roms check-tools check-programmer
+.PHONY: all build rebuild program reprogram roms check-tools check-programmer
 
 all: build
 
@@ -42,6 +42,16 @@ rebuild: check-tools
 
 program: check-programmer $(OUTPUT)
 	@echo "Programming $(OUTPUT) with $(OPENFPGALOADER)"
+	@"$(OPENFPGALOADER)" -b "$(PROGRAMMER_BOARD)" \
+		$(PROGRAMMER_FLAGS) "$(OUTPUT)"
+
+reprogram: check-programmer
+	@if [ ! -f "$(OUTPUT)" ]; then \
+		echo "Built bitstream not found: $(OUTPUT)"; \
+		echo "Run 'make build' first."; \
+		exit 1; \
+	fi
+	@echo "Reprogramming $(OUTPUT) with $(OPENFPGALOADER)"
 	@"$(OPENFPGALOADER)" -b "$(PROGRAMMER_BOARD)" \
 		$(PROGRAMMER_FLAGS) "$(OUTPUT)"
 
