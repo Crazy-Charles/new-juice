@@ -3,6 +3,10 @@ create_clock -name clkin -period 37.037 -waveform {0 18.518} [get_ports {clkin}]
 // Native MSX CPU/VM2413 clock, nominally 3.579545 MHz
 create_clock -name cpu_clk -period 279.365 -waveform {0 139.682} [get_ports {cpu_clkin}] -add
 
+// S1 only asynchronously restarts the power-on/PLL reset sequencer. It is
+// never sampled as functional data and has no synchronous setup requirement.
+set_false_path -from [get_ports {s1}]
+
 // 108 MHz main/SDRAM domain
 create_generated_clock -name main_clk -source [get_ports {clkin}] -master_clock clkin -divide_by 1 -multiply_by 4 -add [get_nets {main_clk}]
 // The 54 MHz clock is divided in fabric and crosses through its own BUFG.

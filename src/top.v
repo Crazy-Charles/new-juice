@@ -70,23 +70,173 @@ module top
     // clock tree and its associated skew.
     wire cpu_clk = cpu_clkin;
 
-    // Give both PLLs a real cold-start reset pulse. The previous one-cycle
-    // initialization depended on configuration timing, while holding S1
-    // manually kept reset asserted long enough for a reliable restart.
-    reg [15:0] pll_reset_count = 16'd0;
-    reg reset_n = 1'b0;
-    always_ff @(posedge clk)
+    // Do not rely on an HDL declaration initializer to start the PLL reset
+    // counter.  The explicit Gowin FF is held at INIT=0 by configuration GSR,
+    // then becomes one on the first live 27 MHz edge.  That first edge also
+    // asynchronously puts the counter and reset output into a known state.
+    wire cold_start_seen;
+    wire startup_test_passed;
+    DFF #(
+        .INIT(1'b0)
+    ) cold_start_ff (
+        .Q(cold_start_seen),
+        .D(1'b1),
+        .CLK(clk)
+    );
+
+    wire rpll_main_lock;
+    (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
+    reg [1:0] main_lock_27_sync = 2'b00;
+    reg [3:0] main_lock_stable_count = 4'd0;
+    localparam [1:0] PLL_START_RESET = 2'b00;
+    localparam [1:0] PLL_START_WAIT  = 2'b01;
+    localparam [1:0] PLL_START_RUN   = 2'b11;
+    reg [1:0] pll_start_state = PLL_START_RESET;
+    reg [15:0] pll_start_count = 16'd0;
+
+    // Generate one unconditional S1-equivalent pulse 250 ms after
+    // configuration. The pulse generator is reset only by configuration GSR,
+    // not by the reset pulse it creates, so it can run exactly once.
+    localparam [22:0] AUTO_S1_DELAY_CYCLES = 23'd6_749_999;
+    reg [22:0] auto_s1_delay_count = 23'd0;
+    reg [4:0] auto_s1_pulse_count = 5'd0;
+    reg auto_s1_done = 1'b0;
+    reg auto_s1_active = 1'b0;
+
+    always_ff @(posedge clk or negedge cold_start_seen)
     begin
-        if (s1) begin
-            pll_reset_count <= 16'd0;
-            reset_n <= 1'b0;
-        end else if (!reset_n) begin
-            if (&pll_reset_count)
-                reset_n <= 1'b1;
-            else
-                pll_reset_count <= pll_reset_count + 1'b1;
+        if (!cold_start_seen) begin
+            auto_s1_delay_count <= 23'd0;
+            auto_s1_pulse_count <= 5'd0;
+            auto_s1_done <= 1'b0;
+            auto_s1_active <= 1'b0;
+        end else if (auto_s1_active) begin
+            if (&auto_s1_pulse_count) begin
+                auto_s1_pulse_count <= 5'd0;
+                auto_s1_active <= 1'b0;
+            end else begin
+                auto_s1_pulse_count <= auto_s1_pulse_count + 1'b1;
+            end
+        end else if (!auto_s1_done) begin
+            if (auto_s1_delay_count == AUTO_S1_DELAY_CYCLES) begin
+                auto_s1_delay_count <= 23'd0;
+                auto_s1_pulse_count <= 5'd0;
+                auto_s1_done <= 1'b1;
+                auto_s1_active <= 1'b1;
+            end else begin
+                auto_s1_delay_count <= auto_s1_delay_count + 1'b1;
+            end
         end
     end
+
+    wire pll_start_control_n =
+        cold_start_seen && !s1 && !auto_s1_active;
+    wire reset_n =
+        pll_start_control_n && (pll_start_state != PLL_START_RESET);
+
+    // Hold reset for 2.4 ms, then allow 2.4 ms for a qualified lock. If lock
+    // is absent, repeat. Gray-adjacent state encodings prevent a reset glitch
+    // when moving from the wait state to the permanent running state.
+    always_ff @(posedge clk or negedge pll_start_control_n)
+    begin
+        if (!pll_start_control_n) begin
+            main_lock_27_sync <= 2'b00;
+            main_lock_stable_count <= 4'd0;
+            pll_start_state <= PLL_START_RESET;
+            pll_start_count <= 16'd0;
+        end else begin
+            main_lock_27_sync <=
+                {main_lock_27_sync[0], rpll_main_lock};
+
+            case (pll_start_state)
+                PLL_START_RESET: begin
+                    main_lock_stable_count <= 4'd0;
+                    if (&pll_start_count) begin
+                        pll_start_state <= PLL_START_WAIT;
+                        pll_start_count <= 16'd0;
+                    end else begin
+                        pll_start_count <= pll_start_count + 1'b1;
+                    end
+                end
+
+                PLL_START_WAIT: begin
+                    if (main_lock_27_sync[1]) begin
+                        if (&main_lock_stable_count) begin
+                            pll_start_state <= PLL_START_RUN;
+                            pll_start_count <= 16'd0;
+                        end else begin
+                            main_lock_stable_count <=
+                                main_lock_stable_count + 1'b1;
+                        end
+                    end else begin
+                        main_lock_stable_count <= 4'd0;
+                        if (&pll_start_count) begin
+                            pll_start_state <= PLL_START_RESET;
+                            pll_start_count <= 16'd0;
+                        end else begin
+                            pll_start_count <= pll_start_count + 1'b1;
+                        end
+                    end
+                end
+
+                PLL_START_RUN: begin
+                    pll_start_count <= 16'd0;
+                    main_lock_stable_count <= 4'd0;
+                end
+
+                default: begin
+                    pll_start_state <= PLL_START_RESET;
+                    pll_start_count <= 16'd0;
+                    main_lock_stable_count <= 4'd0;
+                end
+            endcase
+        end
+    end
+
+    // WonderTANG performs one more short main-PLL reset after SDRAM has
+    // completed its first successful startup. Keep this one-shot in the raw
+    // 27 MHz domain so its state survives while main_clk is stopped.
+    (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
+    reg [1:0] startup_passed_pll_sync = 2'b00;
+    reg second_pll_reset_done = 1'b0;
+    reg second_pll_reset_active = 1'b0;
+    reg [4:0] second_pll_reset_count = 5'd0;
+
+    always_ff @(posedge clk or negedge cold_start_seen)
+    begin
+        if (!cold_start_seen) begin
+            startup_passed_pll_sync <= 2'b00;
+            second_pll_reset_done <= 1'b0;
+            second_pll_reset_active <= 1'b0;
+            second_pll_reset_count <= 5'd0;
+        end else begin
+            startup_passed_pll_sync <=
+                {startup_passed_pll_sync[0], startup_test_passed};
+
+            if (!second_pll_reset_done &&
+                startup_passed_pll_sync[1]) begin
+                second_pll_reset_done <= 1'b1;
+                second_pll_reset_active <= 1'b1;
+                second_pll_reset_count <= 5'd0;
+            end else if (second_pll_reset_active) begin
+                if (&second_pll_reset_count) begin
+                    second_pll_reset_active <= 1'b0;
+                    second_pll_reset_count <= 5'd0;
+                end else begin
+                    second_pll_reset_count <=
+                        second_pll_reset_count + 1'b1;
+                end
+            end
+        end
+    end
+
+    wire pll_run_reset_n = reset_n && !second_pll_reset_active;
+    // Do not start the 135 MHz video PLL during either SDRAM initialization.
+    // The synchronized pass indication drops during the one-shot main-PLL
+    // restart, so video is released only after the second test succeeds.
+    wire video_pll_reset_n =
+        pll_run_reset_n && second_pll_reset_done &&
+        startup_passed_pll_sync[1];
     wire board_reset_n;
     wire active_module_reset_n;
     wire sd_module_reset_n;
@@ -106,6 +256,9 @@ module top
     reg board_reset_release = 1'b0;
     (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
     reg [1:0] sd_ready_main_sync = 2'b00;
+    reg sd_ready_fall = 1'b0;
+    reg flash_rom_loaded_fall = 1'b0;
+    reg reset_in_n_fall = 1'b0;
     reg [3:0] cpu_modules_ready_count = 4'd0;
     reg cpu_modules_ready_reg = 1'b0;
 
@@ -200,21 +353,20 @@ module top
     // main pll
     wire main_clk;
     wire sdram_clk;
-    wire rpll_main_lock;
     rpll_main rpll_main(
         .clkout(main_clk), // 108 MHz main clock
         .lock(rpll_main_lock), 
         .clkoutp(sdram_clk), // 108 MHz rotated SDRAM clock
-        .reset(~reset_n),
+        .reset(~pll_run_reset_n),
         .clkin(clkin) //input clkin (27Mhz)
     );
 
     // The PLL lock output may transition during cold configuration. Keep all
     // board logic in reset until it has remained asserted for 1024 main-clock
     // cycles. S1 immediately resets both the PLL and this qualification delay.
-    always_ff @(posedge main_clk or negedge reset_n)
+    always_ff @(posedge main_clk or negedge pll_run_reset_n)
     begin
-        if (!reset_n) begin
+        if (!pll_run_reset_n) begin
             main_lock_count <= 10'd0;
             board_reset_release <= 1'b0;
         end else if (!board_reset_release) begin
@@ -240,9 +392,7 @@ module top
         .clkout(video_clk_135_raw),
         .lock(rpll_video_lock),
         .clkoutd(),
-        // PLL reset must remain a board-level signal. Driving this hard macro
-        // from the SDRAM-test state made power-up dependent on fabric state.
-        .reset(~reset_n),
+        .reset(~video_pll_reset_n),
         .clkin(clkin)
     );
 
@@ -364,7 +514,6 @@ module top
     wire [3:0] test_sdrc_dqm;
     wire [31:0] test_sdrc_data;
     wire [7:0] test_sdrc_data_len;
-    wire startup_test_passed;
     wire startup_test_failed;
     wire startup_test_wait_n;
     wire startup_test_led;
@@ -974,17 +1123,30 @@ module top
     always_ff @(negedge main_clk or negedge board_reset_n)
     begin
         if (!board_reset_n) begin
+            sd_ready_fall <= 1'b0;
+            flash_rom_loaded_fall <= 1'b0;
+            reset_in_n_fall <= 1'b0;
             cpu_modules_ready_count <= 4'd0;
             cpu_modules_ready_reg <= 1'b0;
-        end else if (!sd_ready_main_sync[1] ||
-                     !flash_rom_loaded || !reset_in_n) begin
-            cpu_modules_ready_count <= 4'd0;
-            cpu_modules_ready_reg <= 1'b0;
-        end else if (!cpu_modules_ready_reg) begin
-            if (&cpu_modules_ready_count)
-                cpu_modules_ready_reg <= 1'b1;
-            else
-                cpu_modules_ready_count <= cpu_modules_ready_count + 1'b1;
+        end else begin
+            // Capture rising-edge-domain readiness signals before using them
+            // in the falling-edge release counter. This keeps the half-cycle
+            // crossings direct and gives the decision logic a full cycle.
+            sd_ready_fall <= sd_ready_main_sync[1];
+            flash_rom_loaded_fall <= flash_rom_loaded;
+            reset_in_n_fall <= reset_in_n;
+
+            if (!sd_ready_fall ||
+                !flash_rom_loaded_fall || !reset_in_n_fall) begin
+                cpu_modules_ready_count <= 4'd0;
+                cpu_modules_ready_reg <= 1'b0;
+            end else if (!cpu_modules_ready_reg) begin
+                if (&cpu_modules_ready_count)
+                    cpu_modules_ready_reg <= 1'b1;
+                else
+                    cpu_modules_ready_count <=
+                        cpu_modules_ready_count + 1'b1;
+            end
         end
     end
 
