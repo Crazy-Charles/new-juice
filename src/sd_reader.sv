@@ -417,7 +417,8 @@ always @ (posedge clk or negedge rstn)
                         if (!sddat0) begin      // wait for ack
                             sddat_stat = WTAIL;
                             ridx <= 0;
-                        end else ridx   <= ridx + 1;
+                        end else 
+                            ridx   <= ridx + 1;
 
                         if(ridx > 13000000)      
                              sddat_stat <= WTIMEOUT;
@@ -427,7 +428,6 @@ always @ (posedge clk or negedge rstn)
                         outen  <= 1'b1;         // bring next byte from sram
                         //outaddr<= ridx[11:3];   
                         outaddr <= outaddr + 9'd1;
-                        ridx   <= ridx + 1;
                     end
                     //ridx   <= ridx + 1;
                 end
