@@ -98,6 +98,96 @@ running synthesis and place-and-route.
 
 The project expects Gowin EDA support for the GW2AR-18C family.
 
+## Installing the toolchain (macOS and Linux)
+
+Install the Gowin EDA Education edition for the GW2AR-18 device from Gowin or
+Sipeed, and activate the license using Gowin's license manager if requested by
+the installer. The command-line executable used by this project is `gw_sh`.
+
+On macOS, the default installation is:
+
+```sh
+/Applications/GowinIDE.app/Contents/Resources/Gowin_EDA/IDE/bin/gw_sh
+```
+
+On Linux, install the vendor archive in `/opt/Gowin/IDE` (or another
+user-writable directory) and make sure its `bin/gw_sh` is executable. The
+location can be overridden with `GOWIN_IDE` or `GW_SH`:
+
+```sh
+make GOWIN_IDE=/opt/Gowin/IDE
+make GW_SH=/opt/Gowin/IDE/bin/gw_sh
+```
+
+Install `openFPGALoader` from your distribution or its upstream project. On
+Linux, also install the loader's udev rules (or add an equivalent rule for the
+Tang Nano 20K USB/JTAG device), then reconnect the board so it is accessible to
+your user without `sudo`.
+
+## Build and program
+
+From the repository root, connect a powered Tang Nano 20K by USB and run:
+
+```sh
+# Synthesis, place-and-route, and bitstream generation
+make
+
+# Remove the previous implementation outputs and build from scratch
+make rebuild
+
+# Program the generated bitstream (impl/prn/new-juice.fs)
+make program
+
+# Program the two ROM images into SPI flash
+make roms
+```
+
+The Makefile defaults to the macOS Gowin path above when running on macOS and
+`/opt/Gowin/IDE` on Linux. It also accepts `OPENFPGALOADER` and
+`PROGRAMMER_BOARD` overrides, for example:
+
+```sh
+make GOWIN_IDE="$HOME/Gowin/IDE" \
+     OPENFPGALOADER="$HOME/bin/openFPGALoader" \
+     PROGRAMMER_BOARD=tangnano20k program
+```
+
+`make roms` writes DOS2 at SPI-flash offset `0x100000` and FM-PAC at
+`0x120000`; do not interrupt power while either operation is in progress.
+The same project can be opened in the Gowin GUI by opening `new-juice.gprj`.
+
+## Tang Nano 20K hardware modifications
+
+The following modifications are optional and permanently alter the board.
+Disconnect USB and all external power, use ESD protection, and inspect the
+board under magnification before powering it again. Removing components can
+void the warranty and can damage pads or nearby traces; proceed only if you
+accept that risk.
+
+### Removing the LCD-backlight driver
+
+The small backlight-driver IC is shown in the photograph below. With the board
+unpowered, hold the IC body with fine pliers and snip/lift one lead at a time.
+Do not twist against the PCB, do not bridge adjacent pads, and remove every
+loose fragment before testing for shorts with a meter.
+
+<p><img src="images/lcd-backlight.JPG" alt="Tang Nano 20K LCD backlight driver area" width="600"></p>
+
+### Removing the onboard RGB LED
+
+The LED can be removed with hot-air/desoldering tools. If those are not
+available, protect the PCB and carefully crush the LED package, then cut and
+scrape the remaining leads away with pliers. Work slowly so the pads and the
+nearby components are not pulled from the board. Verify that no LED lead or
+metal fragment remains shorting a supply or signal before reassembly.
+
+<p><img src="images/with-rgb.JPG" alt="Tang Nano 20K board with RGB LED fitted" width="600"></p>
+<p><img src="images/without-rgb.JPG" alt="Tang Nano 20K board after RGB LED removal" width="600"></p>
+
+The documentation photos have had EXIF, GPS, and camera-identifying metadata
+removed. The explicit HTML width keeps the high-resolution photos from
+expanding to the full README width.
+
 ## MSX bus pins
 
 | MSX bus | FPGA signal | Direction | Notes |
@@ -111,17 +201,48 @@ The project expects Gowin EDA support for the GW2AR-18C family.
 | `/SLTSL` | `sltsl_n_in` | Input | Slot select |
 | CLOCK | `cpu_clkin` | Input | MSX CPU clock |
 
-## Multiplexed inputs
+## Tang Nano 20K FPGA pinout and shared pins
 
-`msel_n[2:0]` selects the signals presented on `mp[7:0]`.
+The table below is the complete pin assignment used by `src/top.cst`. Numbers
+are Gowin package pin numbers, not header pin numbers. Signals marked as
+shared are connected to the corresponding Tang Nano 20K peripheral or to the
+MSX expansion connector in this design.
 
-| Input | `110` | `101` | `011` |
-| --- | --- | --- | --- |
-| MP0 | A0 | A8 | `/MERQ` |
-| MP1 | A1 | A9 | `/IORQ` |
-| MP2 | A2 | A10 | `/CS1` |
-| MP3 | A3 | A11 | `/CS2` |
-| MP4 | A4 | A12 | `/RESET` |
-| MP5 | A5 | A13 | `/RFSH` |
-| MP6 | A6 | A14 | `/CS12` |
-| MP7 | A7 | A15 | `/M1` |
+Pins not listed are intentionally left unassigned by this FPGA design; consult
+the official schematic linked below for their board/header routing.
+
+| Function | FPGA signal | Package pin | Board connection / sharing |
+| --- | --- | ---: | --- |
+| MSX data D7..D0 | `cd[7:0]` | 49, 53, 71, 72, 79, 86, 41, 48 | Bidirectional MSX data bus |
+| MSX multiplexed MP7..MP0 | `mp[7:0]` | 31, 30, 29, 26, 25, 28, 27, 77 | Address/control bus selected by `msel_n` |
+| MP select | `msel_n[2:0]` | 19, 20, 17 | MSX bus demultiplexer select |
+| Data direction | `datadir` | 52 | MSX transceiver direction |
+| Interrupt | `int_out` | 73 | MSX `/INT`, open-collector behavior |
+| Slot select | `sltsl_n_in` | 18 | MSX `/SLTSL` input |
+| Write/read strobes | `wr_n_in`, `rd_n_in` | 16, 15 | MSX `/WR`, `/RD` inputs |
+| CPU clock | `cpu_clkin` | 76 | External MSX CPU clock |
+| Wait/bus direction | `wait_out`, `busdir_n` | 42, 74 | MSX `/WAIT` and `/BUSDIR` |
+| Board clock | `clkin` | 4 | 27 MHz oscillator |
+| User buttons | `s1`, `s2` | 88, 87 | Active-low reset/control inputs |
+| Status LED | `led` | 75 | Board status LED |
+| I2S audio | `hp_din`, `hp_bck`, `hp_ws`, `pa_en` | 54, 56, 55, 51 | MAX98357A data, bit clock, word select, enable |
+| microSD | `sd_dat3`, `sd_dat2`, `sd_dat1`, `sd_sclk`, `sd_dat0`, `sd_cmd` | 81, 80, 85, 83, 84, 82 | SDIO data, clock, and command |
+| SPI flash | `mspi_sclk`, `mspi_cs`, `mspi_mosi`, `mspi_miso` | 59, 60, 61, 62 | Onboard configuration flash |
+| HDMI TMDS data | `tmds_data_p[0]`, `[1]`, `[2]` | 35/36, 37/38, 39/40 | Differential TMDS pairs |
+| HDMI TMDS clock | `tmds_clk_p` | 33/34 | Differential TMDS clock pair |
+
+The `mp` pins are time-multiplexed. Their meanings are:
+
+| `msel_n` | MP0 | MP1 | MP2 | MP3 | MP4 | MP5 | MP6 | MP7 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `110` | A0 | A1 | A2 | A3 | A4 | A5 | A6 | A7 |
+| `101` | A8 | A9 | A10 | A11 | A12 | A13 | A14 | A15 |
+| `011` | `/MERQ` | `/IORQ` | `/CS1` | `/CS2` | `/RESET` | `/RFSH` | `/CS12` | `/M1` |
+
+Consequently, `mp[4]` is not a permanently dedicated reset input: it carries
+A4, A12, or `/RESET` according to `msel_n`. External circuitry must sample the
+bus only during the selected phase and must not drive two phases at once.
+
+For board-level connector drawings and the unmodified Tang Nano 20K schematic,
+see the [Sipeed Tang Nano 20K hardware documentation](https://wiki.sipeed.com/hardware/en/tang/tang-nano-20k/nano-20k.html)
+and the [official schematic PDF](https://dl.sipeed.com/fileList/TANG/Nano_20K/2_Schematic/Tang_Nano_20K_3850_Schematics.pdf).
