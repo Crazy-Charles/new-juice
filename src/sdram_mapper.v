@@ -1,6 +1,7 @@
 module sdram_mapper
 (
     input clk,
+    input cpu_clk_high,
     input reset_n,
     input [15:0] addr,
     input [7:0] data_in,
@@ -54,8 +55,12 @@ module sdram_mapper
     reg sdrc_cmd_en_reg = 1'b0;
     reg cpu_cycle_seen = 1'b0;
     reg read_data_active = 1'b0;
+    reg mapper_port_write_seen = 1'b0;
 
-    wire mapper_port_selected = !iorq_n && addr[7:2] == 6'b111111;
+    // M1 must be high for normal I/O cycles. Without this qualification an
+    // interrupt acknowledge cycle can corrupt or drive mapper ports FC-FF.
+    wire mapper_port_selected =
+        !iorq_n && m1_n && addr[7:2] == 6'b111111;
     wire mapper_port_read = mapper_port_selected && !rd_n;
     wire mapper_port_write = mapper_port_selected && !wr_n;
     wire [1:0] mapper_port_page = addr[1:0];
@@ -108,6 +113,7 @@ module sdram_mapper
             sdrc_cmd_en_reg <= 1'b0;
             cpu_cycle_seen <= 1'b0;
             read_data_active <= 1'b0;
+            mapper_port_write_seen <= 1'b0;
         end else begin
             sdrc_cmd_en_reg <= 1'b0;
 
@@ -119,8 +125,11 @@ module sdram_mapper
                 cpu_cycle_seen <= 1'b0;
             end
 
-            if (mapper_port_write) begin
+            if (!mapper_port_write)
+                mapper_port_write_seen <= 1'b0;
+            else if (cpu_clk_high && !mapper_port_write_seen) begin
                 mapper_page[mapper_port_page] <= data_in;
+                mapper_port_write_seen <= 1'b1;
             end
 
             case (state)

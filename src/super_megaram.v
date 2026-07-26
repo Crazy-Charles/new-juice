@@ -41,6 +41,8 @@ module super_megaram
     localparam [4:0] MODE_K4 = 5'd4;
     localparam [4:0] MODE_K5 = 5'd5;
     localparam [4:0] MODE_ASCII8 = 5'd8;
+    // Internal encoding is independent of the command byte written to 8Fh.
+    // Keep it at 16 so selecting ASCII16 does not perturb its datapath decode.
     localparam [4:0] MODE_ASCII16 = 5'd16;
 
     localparam [2:0] SDRAM_CMD_READ = 3'b101;
@@ -244,8 +246,10 @@ module super_megaram
                     8'd4: operation_mode <= MODE_K4;
                     8'd5: operation_mode <= MODE_K5;
                     8'd8: operation_mode <= MODE_ASCII8;
-                    8'd16: operation_mode <= MODE_ASCII16;
-                    default: ;
+                    8'h16: operation_mode <= MODE_ASCII16;
+                    // Invalid or transient commands recover to the power-on
+                    // mapper instead of retaining an arbitrary previous mode.
+                    default: operation_mode <= MODE_DDX_SCC;
                 endcase
             end
 

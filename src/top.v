@@ -163,9 +163,9 @@ module top
     wire sdram_clk;
     wire rpll_main_lock;
     rpll_main rpll_main(
-        .clkout(main_clk), // 108 Mhz main clock
+        .clkout(main_clk), // 108 MHz main clock
         .lock(rpll_main_lock), 
-        .clkoutp(sdram_clk), // 108 Mhz rotated SDRAM clock
+        .clkoutp(sdram_clk), // 108 MHz rotated SDRAM clock
         .reset(~reset_n),
         .clkin(clkin) //input clkin (27Mhz)
     );
@@ -500,6 +500,7 @@ module top
 
     sdram_mapper sdram_mapper_inst(
         .clk(main_clk),
+        .cpu_clk_high(psg_cpu_clk_sync[1]),
         .reset_n(active_module_reset_n),
         .addr(addr),
         .data_in(cd_in),

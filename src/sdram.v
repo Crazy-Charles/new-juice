@@ -26,7 +26,7 @@
 
 module sdram
 #(
-    // Timing defaults for the project's 108MHz controller clock.
+    // Timing defaults for the project's 108 MHz controller clock.
     parameter         FREQ = 108_000_000,
     parameter         DATA_WIDTH = 32,
     parameter         ROW_WIDTH = 11,  // 2K rows
