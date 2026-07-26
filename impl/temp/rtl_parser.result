@@ -1,316 +1,1066 @@
 [
  {
-  "InstFile" : "/Users/felipe/src/fpga/new-juice/src/clockdiv.v",
+  "InstFile" : "/Users/felipe/src/fpga/new-juice/src/sms_bus_bridge.v",
   "InstLine" : 1,
-  "InstName" : "clockdiv2",
-  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/clockdiv.v",
+  "InstName" : "sms_bus_bridge",
+  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sms_bus_bridge.v",
   "ModuleLine" : 1,
-  "ModuleName" : "clockdiv2"
+  "ModuleName" : "sms_bus_bridge"
  },
  {
-  "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL.v",
+  "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
   "InstLine" : 1,
-  "InstName" : "IKAOPLL",
-  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL.v",
+  "InstName" : "top",
+  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
   "ModuleLine" : 1,
-  "ModuleName" : "IKAOPLL",
+  "ModuleName" : "top",
   "SubInsts" : [
    {
-    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL.v",
-    "InstLine" : 133,
-    "InstName" : "u_TIMINGGEN",
-    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_timinggen.v",
-    "ModuleLine" : 1,
-    "ModuleName" : "IKAOPLL_timinggen"
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 148,
+    "InstName" : "audio_logic_enabled.audio_clock_divider",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/clockdiv.v",
+    "ModuleLine" : 33,
+    "ModuleName" : "clockdiv"
    },
    {
-    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL.v",
-    "InstLine" : 170,
-    "InstName" : "u_REG",
-    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 155,
+    "InstName" : "audio_logic_enabled.audio_drive_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/audio_drive.v",
     "ModuleLine" : 1,
-    "ModuleName" : "IKAOPLL_reg",
+    "ModuleName" : "audio_drive"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 204,
+    "InstName" : "rpll_main",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v",
+    "ModuleLine" : 10,
+    "ModuleName" : "rpll_main"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 239,
+    "InstName" : "rpll_video_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v",
+    "ModuleLine" : 10,
+    "ModuleName" : "rpll_video"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 254,
+    "InstName" : "sms_clock_divider",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/clockdiv.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "clockdiv2"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 443,
+    "InstName" : "psg_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd",
+    "ModuleLine" : 155,
+    "ModuleName" : "ym2149_audio"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 470,
+    "InstName" : "opll_enabled_impl.opll_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
+    "ModuleLine" : 41,
+    "ModuleName" : "opll",
     "SubInsts" : [
      {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "InstLine" : 71,
-      "InstName" : "u_sync_addrreg",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "ModuleLine" : 467,
-      "ModuleName" : "IKAOPLL_rw_synchronizer"
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
+      "InstLine" : 275,
+      "InstName" : "s0",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd",
+      "ModuleLine" : 40,
+      "ModuleName" : "SlotCounter"
      },
      {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "InstLine" : 75,
-      "InstName" : "u_sync_datareg",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "ModuleLine" : 467,
-      "ModuleName" : "IKAOPLL_rw_synchronizer"
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
+      "InstLine" : 287,
+      "InstName" : "s2",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd",
+      "ModuleLine" : 40,
+      "ModuleName" : "SlotCounter"
      },
      {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "InstLine" : 250,
-      "InstName" : "u_fnum_lsbs",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "ModuleLine" : 525,
-      "ModuleName" : "IKAOPLL_d9reg",
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
+      "InstLine" : 299,
+      "InstName" : "s5",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd",
+      "ModuleLine" : 40,
+      "ModuleName" : "SlotCounter"
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
+      "InstLine" : 311,
+      "InstName" : "s8",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd",
+      "ModuleLine" : 40,
+      "ModuleName" : "SlotCounter"
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
+      "InstLine" : 324,
+      "InstName" : "ct",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/controller.vhd",
+      "ModuleLine" : 70,
+      "ModuleName" : "controller",
       "SubInsts" : [
        {
-        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-        "InstLine" : 538,
-        "InstName" : "u_d9reg",
-        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v",
-        "ModuleLine" : 31,
-        "ModuleName" : "IKAOPLL_sr"
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/controller.vhd",
+        "InstLine" : 165,
+        "InstName" : "u_register_memory",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/registermemory.vhd",
+        "ModuleLine" : 40,
+        "ModuleName" : "RegisterMemory"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/controller.vhd",
+        "InstLine" : 175,
+        "InstName" : "vmem",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/voicememory.vhd",
+        "ModuleLine" : 36,
+        "ModuleName" : "VoiceMemory",
+        "SubInsts" : [
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/voicememory.vhd",
+          "InstLine" : 70,
+          "InstName" : "ROM2413",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/voicerom.vhd",
+          "ModuleLine" : 38,
+          "ModuleName" : "VoiceRom"
+         }
+        ]
        }
       ]
      },
      {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "InstLine" : 253,
-      "InstName" : "u_fnum_msb",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "ModuleLine" : 525,
-      "ModuleName" : "IKAOPLL_d9reg",
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
+      "InstLine" : 329,
+      "InstName" : "eg",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/envelopegenerator.vhd",
+      "ModuleLine" : 42,
+      "ModuleName" : "envelopegenerator",
       "SubInsts" : [
        {
-        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-        "InstLine" : 538,
-        "InstName" : "u_d9reg",
-        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v",
-        "ModuleLine" : 31,
-        "ModuleName" : "IKAOPLL_sr"
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/envelopegenerator.vhd",
+        "InstLine" : 99,
+        "InstName" : "u_attack_table",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd",
+        "ModuleLine" : 64,
+        "ModuleName" : "AttackTable",
+        "SubInsts" : [
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd",
+          "InstLine" : 141,
+          "InstName" : "u_attack_table_mul",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd",
+          "ModuleLine" : 42,
+          "ModuleName" : "attack_table_mul"
+         }
+        ]
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/envelopegenerator.vhd",
+        "InstLine" : 107,
+        "InstName" : "u_envelope_memory",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/envelopememory.vhd",
+        "ModuleLine" : 36,
+        "ModuleName" : "EnvelopeMemory"
        }
       ]
      },
      {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "InstLine" : 256,
-      "InstName" : "u_block",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "ModuleLine" : 525,
-      "ModuleName" : "IKAOPLL_d9reg",
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
+      "InstLine" : 336,
+      "InstName" : "pg",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/phasegenerator.vhd",
+      "ModuleLine" : 41,
+      "ModuleName" : "PhaseGenerator",
       "SubInsts" : [
        {
-        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-        "InstLine" : 538,
-        "InstName" : "u_d9reg",
-        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v",
-        "ModuleLine" : 31,
-        "ModuleName" : "IKAOPLL_sr"
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/phasegenerator.vhd",
+        "InstLine" : 174,
+        "InstName" : "MEM",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/phasememory.vhd",
+        "ModuleLine" : 36,
+        "ModuleName" : "PhaseMemory"
        }
       ]
      },
      {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "InstLine" : 259,
-      "InstName" : "u_kon",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "ModuleLine" : 525,
-      "ModuleName" : "IKAOPLL_d9reg",
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
+      "InstLine" : 344,
+      "InstName" : "op",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/operator.vhd",
+      "ModuleLine" : 41,
+      "ModuleName" : "Operator",
       "SubInsts" : [
        {
-        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-        "InstLine" : 538,
-        "InstName" : "u_d9reg",
-        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v",
-        "ModuleLine" : 31,
-        "ModuleName" : "IKAOPLL_sr"
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/operator.vhd",
+        "InstLine" : 94,
+        "InstName" : "u_sine_table",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd",
+        "ModuleLine" : 63,
+        "ModuleName" : "SineTable",
+        "SubInsts" : [
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd",
+          "InstLine" : 168,
+          "InstName" : "u_interpolate_mul",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd",
+          "ModuleLine" : 41,
+          "ModuleName" : "interpolate_mul"
+         }
+        ]
        }
       ]
      },
      {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "InstLine" : 262,
-      "InstName" : "u_susen",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "ModuleLine" : 525,
-      "ModuleName" : "IKAOPLL_d9reg",
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
+      "InstLine" : 351,
+      "InstName" : "og",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/outputgenerator.vhd",
+      "ModuleLine" : 36,
+      "ModuleName" : "OutputGenerator",
       "SubInsts" : [
        {
-        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-        "InstLine" : 538,
-        "InstName" : "u_d9reg",
-        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v",
-        "ModuleLine" : 31,
-        "ModuleName" : "IKAOPLL_sr"
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/outputgenerator.vhd",
+        "InstLine" : 125,
+        "InstName" : "Fmem",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/feedbackmemory.vhd",
+        "ModuleLine" : 41,
+        "ModuleName" : "FeedbackMemory"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/outputgenerator.vhd",
+        "InstLine" : 135,
+        "InstName" : "Mmem",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/outputmemory.vhd",
+        "ModuleLine" : 36,
+        "ModuleName" : "OutputMemory"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/outputgenerator.vhd",
+        "InstLine" : 146,
+        "InstName" : "Ltbl",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd",
+        "ModuleLine" : 63,
+        "ModuleName" : "LinearTable",
+        "SubInsts" : [
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd",
+          "InstLine" : 153,
+          "InstName" : "u_linear_table_mul",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd",
+          "ModuleLine" : 41,
+          "ModuleName" : "linear_table_mul"
+         }
+        ]
        }
       ]
      },
      {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "InstLine" : 265,
-      "InstName" : "u_vol",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "ModuleLine" : 525,
-      "ModuleName" : "IKAOPLL_d9reg",
-      "SubInsts" : [
-       {
-        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-        "InstLine" : 538,
-        "InstName" : "u_d9reg",
-        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v",
-        "ModuleLine" : 31,
-        "ModuleName" : "IKAOPLL_sr"
-       }
-      ]
-     },
-     {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "InstLine" : 268,
-      "InstName" : "u_inst",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "ModuleLine" : 525,
-      "ModuleName" : "IKAOPLL_d9reg",
-      "SubInsts" : [
-       {
-        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-        "InstLine" : 538,
-        "InstName" : "u_d9reg",
-        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v",
-        "ModuleLine" : 31,
-        "ModuleName" : "IKAOPLL_sr"
-       }
-      ]
-     },
-     {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "InstLine" : 301,
-      "InstName" : "u_instrom",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_reg.v",
-      "ModuleLine" : 554,
-      "ModuleName" : "IKAOPLL_instrom"
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
+      "InstLine" : 357,
+      "InstName" : "tm",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/temporalmixer.vhd",
+      "ModuleLine" : 37,
+      "ModuleName" : "TemporalMixer"
      }
     ]
    },
    {
-    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL.v",
-    "InstLine" : 233,
-    "InstName" : "u_LFO",
-    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_lfo.v",
-    "ModuleLine" : 1,
-    "ModuleName" : "IKAOPLL_lfo"
-   },
-   {
-    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL.v",
-    "InstLine" : 258,
-    "InstName" : "u_PG",
-    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_pg.v",
-    "ModuleLine" : 1,
-    "ModuleName" : "IKAOPLL_pg",
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 666,
+    "InstName" : "sms_psg_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89.v",
+    "ModuleLine" : 33,
+    "ModuleName" : "jt89",
     "SubInsts" : [
      {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_pg.v",
-      "InstLine" : 269,
-      "InstName" : "u_cyc4r_cyc18r_phase_sr",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v",
-      "ModuleLine" : 31,
-      "ModuleName" : "IKAOPLL_sr"
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89.v",
+      "InstLine" : 51,
+      "InstName" : "mix",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89_mixer.v",
+      "ModuleLine" : 22,
+      "ModuleName" : "jt89_mixer"
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89.v",
+      "InstLine" : 115,
+      "InstName" : "u_tone0",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89_tone.v",
+      "ModuleLine" : 25,
+      "ModuleName" : "jt89_tone",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89_tone.v",
+        "InstLine" : 38,
+        "InstName" : "u_vol",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89_vol.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt89_vol"
+       }
+      ]
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89.v",
+      "InstLine" : 125,
+      "InstName" : "u_tone1",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89_tone.v",
+      "ModuleLine" : 25,
+      "ModuleName" : "jt89_tone",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89_tone.v",
+        "InstLine" : 38,
+        "InstName" : "u_vol",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89_vol.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt89_vol"
+       }
+      ]
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89.v",
+      "InstLine" : 137,
+      "InstName" : "u_tone2",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89_tone.v",
+      "ModuleLine" : 25,
+      "ModuleName" : "jt89_tone",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89_tone.v",
+        "InstLine" : 38,
+        "InstName" : "u_vol",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89_vol.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt89_vol"
+       }
+      ]
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89.v",
+      "InstLine" : 147,
+      "InstName" : "u_noise",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89_noise.v",
+      "ModuleLine" : 25,
+      "ModuleName" : "jt89_noise",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89_noise.v",
+        "InstLine" : 40,
+        "InstName" : "u_vol",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89_vol.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt89_vol"
+       }
+      ]
      }
     ]
    },
    {
-    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL.v",
-    "InstLine" : 289,
-    "InstName" : "u_EG",
-    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_eg.v",
-    "ModuleLine" : 1,
-    "ModuleName" : "IKAOPLL_eg",
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 690,
+    "InstName" : "sms_vdp_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp.vhd",
+    "ModuleLine" : 6,
+    "ModuleName" : "vdp",
     "SubInsts" : [
      {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_eg.v",
-      "InstLine" : 122,
-      "InstName" : "u_cyc2r_cyc19r_envstatreg",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v",
-      "ModuleLine" : 31,
-      "ModuleName" : "IKAOPLL_sr"
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp.vhd",
+      "InstLine" : 116,
+      "InstName" : "vdp_main_inst",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_main.vhd",
+      "ModuleLine" : 6,
+      "ModuleName" : "vdp_main",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_main.vhd",
+        "InstLine" : 86,
+        "InstName" : "vdp_bg_inst",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_background.vhd",
+        "ModuleLine" : 6,
+        "ModuleName" : "vdp_background"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_main.vhd",
+        "InstLine" : 108,
+        "InstName" : "vdp_spr_inst",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_sprites.vhd",
+        "ModuleLine" : 6,
+        "ModuleName" : "vdp_sprites",
+        "SubInsts" : [
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_sprites.vhd",
+          "InstLine" : 69,
+          "InstName" : "shifters[0].shifter",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_sprite_shifter.vhd",
+          "ModuleLine" : 6,
+          "ModuleName" : "vpd_sprite_shifter"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_sprites.vhd",
+          "InstLine" : 69,
+          "InstName" : "shifters[1].shifter",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_sprite_shifter.vhd",
+          "ModuleLine" : 6,
+          "ModuleName" : "vpd_sprite_shifter"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_sprites.vhd",
+          "InstLine" : 69,
+          "InstName" : "shifters[2].shifter",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_sprite_shifter.vhd",
+          "ModuleLine" : 6,
+          "ModuleName" : "vpd_sprite_shifter"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_sprites.vhd",
+          "InstLine" : 69,
+          "InstName" : "shifters[3].shifter",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_sprite_shifter.vhd",
+          "ModuleLine" : 6,
+          "ModuleName" : "vpd_sprite_shifter"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_sprites.vhd",
+          "InstLine" : 69,
+          "InstName" : "shifters[4].shifter",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_sprite_shifter.vhd",
+          "ModuleLine" : 6,
+          "ModuleName" : "vpd_sprite_shifter"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_sprites.vhd",
+          "InstLine" : 69,
+          "InstName" : "shifters[5].shifter",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_sprite_shifter.vhd",
+          "ModuleLine" : 6,
+          "ModuleName" : "vpd_sprite_shifter"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_sprites.vhd",
+          "InstLine" : 69,
+          "InstName" : "shifters[6].shifter",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_sprite_shifter.vhd",
+          "ModuleLine" : 6,
+          "ModuleName" : "vpd_sprite_shifter"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_sprites.vhd",
+          "InstLine" : 69,
+          "InstName" : "shifters[7].shifter",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_sprite_shifter.vhd",
+          "ModuleLine" : 6,
+          "ModuleName" : "vpd_sprite_shifter"
+         }
+        ]
+       }
+      ]
      },
      {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_eg.v",
-      "InstLine" : 296,
-      "InstName" : "u_cyc3r_cyc19r_attnlvreg",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v",
-      "ModuleLine" : 31,
-      "ModuleName" : "IKAOPLL_sr"
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp.vhd",
+      "InstLine" : 160,
+      "InstName" : "vdp_vram_inst",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/dpram.v",
+      "ModuleLine" : 1,
+      "ModuleName" : "dpram"
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp.vhd",
+      "InstLine" : 183,
+      "InstName" : "vdp_cram_inst",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp_cram.vhd",
+      "ModuleLine" : 5,
+      "ModuleName" : "vdp_cram"
      }
     ]
    },
    {
-    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL.v",
-    "InstLine" : 331,
-    "InstName" : "u_OP",
-    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_op.v",
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 720,
+    "InstName" : "sms_video_timing_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/video.vhd",
+    "ModuleLine" : 6,
+    "ModuleName" : "video"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 781,
+    "InstName" : "sms_framebuffer_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/dpram.v",
     "ModuleLine" : 1,
-    "ModuleName" : "IKAOPLL_op",
+    "ModuleName" : "dpram"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 810,
+    "InstName" : "hdmi_audio_clock_divider",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/clockdiv.v",
+    "ModuleLine" : 33,
+    "ModuleName" : "clockdiv"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 855,
+    "InstName" : "hdmi_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/hdmi.sv",
+    "ModuleLine" : 4,
+    "ModuleName" : "hdmi",
     "SubInsts" : [
      {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_op.v",
-      "InstLine" : 65,
-      "InstName" : "u_cyc19c_logsinrom",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_op.v",
-      "ModuleLine" : 277,
-      "ModuleName" : "IKAOPLL_logsinrom"
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/hdmi.sv",
+      "InstLine" : 316,
+      "InstName" : "true_hdmi_output.packet_picker",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/packet_picker.sv",
+      "ModuleLine" : 4,
+      "ModuleName" : "packet_picker",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/packet_picker.sv",
+        "InstLine" : 79,
+        "InstName" : "audio_clock_regeneration_packet",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/audio_clock_regeneration_packet.sv",
+        "ModuleLine" : 5,
+        "ModuleName" : "audio_clock_regeneration_packet"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/packet_picker.sv",
+        "InstLine" : 159,
+        "InstName" : "audio_sample_packet",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/audio_sample_packet.sv",
+        "ModuleLine" : 8,
+        "ModuleName" : "audio_sample_packet"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/packet_picker.sv",
+        "InstLine" : 165,
+        "InstName" : "auxiliary_video_information_info_frame",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/auxiliary_video_information_info_frame.sv",
+        "ModuleLine" : 5,
+        "ModuleName" : "auxiliary_video_information_info_frame"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/packet_picker.sv",
+        "InstLine" : 168,
+        "InstName" : "source_product_description_info_frame",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/source_product_description_info_frame.sv",
+        "ModuleLine" : 5,
+        "ModuleName" : "source_product_description_info_frame"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/packet_picker.sv",
+        "InstLine" : 171,
+        "InstName" : "audio_info_frame",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/audio_info_frame.sv",
+        "ModuleLine" : 5,
+        "ModuleName" : "audio_info_frame"
+       }
+      ]
      },
      {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_op.v",
-      "InstLine" : 110,
-      "InstName" : "u_cyc20c_exprom",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_op.v",
-      "ModuleLine" : 325,
-      "ModuleName" : "IKAOPLL_exprom"
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/hdmi.sv",
+      "InstLine" : 318,
+      "InstName" : "true_hdmi_output.packet_assembler",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/packet_assembler.sv",
+      "ModuleLine" : 4,
+      "ModuleName" : "packet_assembler"
      },
      {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_op.v",
-      "InstLine" : 194,
-      "InstName" : "u_op_z_reg",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v",
-      "ModuleLine" : 31,
-      "ModuleName" : "IKAOPLL_sr"
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/hdmi.sv",
+      "InstLine" : 369,
+      "InstName" : "tmds_gen[0].tmds_channel",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/tmds_channel.sv",
+      "ModuleLine" : 4,
+      "ModuleName" : "tmds_channel"
      },
      {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_op.v",
-      "InstLine" : 199,
-      "InstName" : "u_op_zz_reg",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v",
-      "ModuleLine" : 31,
-      "ModuleName" : "IKAOPLL_sr"
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/hdmi.sv",
+      "InstLine" : 369,
+      "InstName" : "tmds_gen[1].tmds_channel",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/tmds_channel.sv",
+      "ModuleLine" : 4,
+      "ModuleName" : "tmds_channel"
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/hdmi.sv",
+      "InstLine" : 369,
+      "InstName" : "tmds_gen[2].tmds_channel",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/tmds_channel.sv",
+      "ModuleLine" : 4,
+      "ModuleName" : "tmds_channel"
      }
     ]
    },
    {
-    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL.v",
-    "InstLine" : 356,
-    "InstName" : "u_DAC",
-    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_dac.v",
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 876,
+    "InstName" : "hdmi_serializer_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/serializer.sv",
+    "ModuleLine" : 3,
+    "ModuleName" : "serializer"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 895,
+    "InstName" : "bus_data_debouncer",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/input_debouncer.v",
     "ModuleLine" : 1,
-    "ModuleName" : "IKAOPLL_dac",
+    "ModuleName" : "input_debouncer"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 906,
+    "InstName" : "bus_control_debouncer",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/input_debouncer.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "input_debouncer"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 913,
+    "InstName" : "mp_debouncer_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "mp_debouncer"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 1002,
+    "InstName" : "slot_expander_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/slot_expander.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "slot_expander"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 1025,
+    "InstName" : "sdram_startup_test_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "sdram_startup_test"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 1046,
+    "InstName" : "sdram_mapper_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "sdram_mapper"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 1082,
+    "InstName" : "super_megaram_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/super_megaram.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "super_megaram",
     "SubInsts" : [
      {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_dac.v",
-      "InstLine" : 80,
-      "InstName" : "u_percussion_sr",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKAOPLL/IKAOPLL_modules/IKAOPLL_primitives.v",
-      "ModuleLine" : 31,
-      "ModuleName" : "IKAOPLL_sr"
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/super_megaram.v",
+      "InstLine" : 322,
+      "InstName" : "scc_enabled_impl.ikascc_inst",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC.v",
+      "ModuleLine" : 1,
+      "ModuleName" : "IKASCC",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC.v",
+        "InstLine" : 136,
+        "InstName" : "IKASCC_SYNC_MODE.u_vrc_s_main",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_vrc_s.v",
+        "ModuleLine" : 1,
+        "ModuleName" : "IKASCC_vrc_s"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC.v",
+        "InstLine" : 161,
+        "InstName" : "IKASCC_SYNC_MODE.u_player_main",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+        "ModuleLine" : 1,
+        "ModuleName" : "IKASCC_player_s",
+        "SubInsts" : [
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+          "InstLine" : 87,
+          "InstName" : "u_mem_ch1",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+          "ModuleLine" : 670,
+          "ModuleName" : "IKASCC_player_memory_s"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+          "InstLine" : 104,
+          "InstName" : "u_ctrl_ch1",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+          "ModuleLine" : 372,
+          "ModuleName" : "IKASCC_player_control_s",
+          "SubInsts" : [
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 494,
+            "InstName" : "u_cyccntr",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 502,
+            "InstName" : "u_fraccntr_a",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 510,
+            "InstName" : "u_fraccntr_b",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 519,
+            "InstName" : "u_fraccntr_c",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 528,
+            "InstName" : "u_intcntr",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           }
+          ]
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+          "InstLine" : 139,
+          "InstName" : "u_mem_ch2",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+          "ModuleLine" : 670,
+          "ModuleName" : "IKASCC_player_memory_s"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+          "InstLine" : 156,
+          "InstName" : "u_ctrl_ch2",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+          "ModuleLine" : 372,
+          "ModuleName" : "IKASCC_player_control_s",
+          "SubInsts" : [
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 494,
+            "InstName" : "u_cyccntr",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 502,
+            "InstName" : "u_fraccntr_a",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 510,
+            "InstName" : "u_fraccntr_b",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 519,
+            "InstName" : "u_fraccntr_c",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 528,
+            "InstName" : "u_intcntr",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           }
+          ]
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+          "InstLine" : 191,
+          "InstName" : "u_mem_ch3",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+          "ModuleLine" : 670,
+          "ModuleName" : "IKASCC_player_memory_s"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+          "InstLine" : 208,
+          "InstName" : "u_ctrl_ch3",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+          "ModuleLine" : 372,
+          "ModuleName" : "IKASCC_player_control_s",
+          "SubInsts" : [
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 494,
+            "InstName" : "u_cyccntr",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 502,
+            "InstName" : "u_fraccntr_a",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 510,
+            "InstName" : "u_fraccntr_b",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 519,
+            "InstName" : "u_fraccntr_c",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 528,
+            "InstName" : "u_intcntr",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           }
+          ]
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+          "InstLine" : 281,
+          "InstName" : "u_mem_ch45",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+          "ModuleLine" : 670,
+          "ModuleName" : "IKASCC_player_memory_s"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+          "InstLine" : 298,
+          "InstName" : "u_ctrl_ch4",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+          "ModuleLine" : 372,
+          "ModuleName" : "IKASCC_player_control_s",
+          "SubInsts" : [
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 494,
+            "InstName" : "u_cyccntr",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 502,
+            "InstName" : "u_fraccntr_a",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 510,
+            "InstName" : "u_fraccntr_b",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 519,
+            "InstName" : "u_fraccntr_c",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 528,
+            "InstName" : "u_intcntr",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           }
+          ]
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+          "InstLine" : 329,
+          "InstName" : "u_ctrl_ch5",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+          "ModuleLine" : 372,
+          "ModuleName" : "IKASCC_player_control_s",
+          "SubInsts" : [
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 494,
+            "InstName" : "u_cyccntr",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 502,
+            "InstName" : "u_fraccntr_a",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 510,
+            "InstName" : "u_fraccntr_b",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 519,
+            "InstName" : "u_fraccntr_c",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_s.v",
+            "InstLine" : 528,
+            "InstName" : "u_intcntr",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_primitives.v",
+            "ModuleLine" : 1,
+            "ModuleName" : "IKASCC_primitive_dncntr"
+           }
+          ]
+         }
+        ]
+       }
+      ]
      }
     ]
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 1111,
+    "InstName" : "sd_registers_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sd_registers.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "sd_registers",
+    "SubInsts" : [
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/sd_registers.v",
+      "InstLine" : 204,
+      "InstName" : "sector_ram",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/dpram.v",
+      "ModuleLine" : 1,
+      "ModuleName" : "dpram"
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/sd_registers.v",
+      "InstLine" : 222,
+      "InstName" : "sd_card_controller",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sd_reader.sv",
+      "ModuleLine" : 11,
+      "ModuleName" : "sd_reader",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/sd_reader.sv",
+        "InstLine" : 130,
+        "InstName" : "u_sdcmd_ctrl",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sdcmd_ctrl.sv",
+        "ModuleLine" : 10,
+        "ModuleName" : "sdcmd_ctrl"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/sd_reader.sv",
+        "InstLine" : 304,
+        "InstName" : "i2442",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/crc16.v",
+        "ModuleLine" : 5,
+        "ModuleName" : "sd_crc_16"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 1139,
+    "InstName" : "flash_roms_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/flash_roms.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "flash_roms",
+    "SubInsts" : [
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/flash_roms.v",
+      "InstLine" : 113,
+      "InstName" : "flash_reader_inst",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v",
+      "ModuleLine" : 1,
+      "ModuleName" : "spi_flash_reader"
+     }
+    ]
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 1228,
+    "InstName" : "cd_demux_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/cd_demux.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "cd_demux"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 1243,
+    "InstName" : "sdram_command_adapter_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sdram_command_adapter.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "sdram_command_adapter"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 1277,
+    "InstName" : "sdram_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sdram.v",
+    "ModuleLine" : 27,
+    "ModuleName" : "sdram"
    }
   ]
- },
- {
-  "InstFile" : "/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v",
-  "InstLine" : 10,
-  "InstName" : "rpll_video",
-  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v",
-  "ModuleLine" : 10,
-  "ModuleName" : "rpll_video"
- },
- {
-  "InstFile" : "/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd",
-  "InstLine" : 155,
-  "InstName" : "ym2149_audio",
-  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd",
-  "ModuleLine" : 155,
-  "ModuleName" : "ym2149_audio"
  }
 ]

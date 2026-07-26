@@ -9,6 +9,11 @@ module top
     output hp_bck,
     output pa_en,
 
+    output tmds_clk_p,
+    output tmds_clk_n,
+    output [2:0] tmds_data_p,
+    output [2:0] tmds_data_n,
+
     input cpu_clkin,
     input rd_n_in,
     input wr_n_in,
@@ -65,12 +70,44 @@ module top
     // clock tree and its associated skew.
     wire cpu_clk = cpu_clkin;
 
-    reg reset_n = 0;
-    always_ff @(posedge clk) reset_n <= ~s1;
+    // Give both PLLs a real cold-start reset pulse. The previous one-cycle
+    // initialization depended on configuration timing, while holding S1
+    // manually kept reset asserted long enough for a reliable restart.
+    reg [15:0] pll_reset_count = 16'd0;
+    reg reset_n = 1'b0;
+    always_ff @(posedge clk)
+    begin
+        if (s1) begin
+            pll_reset_count <= 16'd0;
+            reset_n <= 1'b0;
+        end else if (!reset_n) begin
+            if (&pll_reset_count)
+                reset_n <= 1'b1;
+            else
+                pll_reset_count <= pll_reset_count + 1'b1;
+        end
+    end
     wire board_reset_n;
     wire active_module_reset_n;
-    reg [1:0] s2_sync = 2'b00;
+    wire sd_module_reset_n;
+    wire slot_expander_reset_n;
+    wire memory_mapper_reset_n;
+    wire bios_module_enabled;
+    wire psg_module_reset_n;
+    wire opll_module_reset_n;
+    wire megaram_module_reset_n;
+    wire module_sequence_done;
+    (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
+    reg [1:0] startup_passed_sd_sync = 2'b00;
+    reg [3:0] sd_stage_count = 4'd0;
+    reg sd_stage_enabled = 1'b0;
     reg board_enabled = 1'b0;
+    reg [9:0] main_lock_count = 10'd0;
+    reg board_reset_release = 1'b0;
+    (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
+    reg [1:0] sd_ready_main_sync = 2'b00;
+    reg [3:0] cpu_modules_ready_count = 4'd0;
+    reg cpu_modules_ready_reg = 1'b0;
 
     wire audio_bclk_raw;
     wire audio_bclk_rise;
@@ -83,6 +120,8 @@ module top
     wire signed [15:0] opll_audio_sample;
     wire signed [10:0] scc_sound;
     wire signed [15:0] scc_audio_sample;
+    wire signed [10:0] jt89_sound;
+    wire signed [15:0] jt89_audio_sample;
     wire signed [17:0] audio_mix_wide;
     wire [15:0] mixed_audio_sample;
     reg [15:0] audio_sample_hold = 16'd0;
@@ -170,6 +209,60 @@ module top
         .clkin(clkin) //input clkin (27Mhz)
     );
 
+    // The PLL lock output may transition during cold configuration. Keep all
+    // board logic in reset until it has remained asserted for 1024 main-clock
+    // cycles. S1 immediately resets both the PLL and this qualification delay.
+    always_ff @(posedge main_clk or negedge reset_n)
+    begin
+        if (!reset_n) begin
+            main_lock_count <= 10'd0;
+            board_reset_release <= 1'b0;
+        end else if (!board_reset_release) begin
+            if (!rpll_main_lock)
+                main_lock_count <= 10'd0;
+            else if (&main_lock_count)
+                board_reset_release <= 1'b1;
+            else
+                main_lock_count <= main_lock_count + 1'b1;
+        end
+    end
+
+    // Franky/SMS video uses a 27 MHz pixel clock and a phase-related 135 MHz
+    // serialization clock.  The SMS core itself follows WonderTANG's 54 MHz
+    // master domain, with clock enables for each emulated subsystem.
+    wire video_clk_135_raw;
+    wire video_clk_135;
+    wire rpll_video_lock;
+    wire sms_clk_54_raw;
+    wire sms_clk_54;
+
+    rpll_video rpll_video_inst (
+        .clkout(video_clk_135_raw),
+        .lock(rpll_video_lock),
+        .clkoutd(),
+        // PLL reset must remain a board-level signal. Driving this hard macro
+        // from the SDRAM-test state made power-up dependent on fabric state.
+        .reset(~reset_n),
+        .clkin(clkin)
+    );
+
+    BUFG video_clk_135_buf (
+        .O(video_clk_135),
+        .I(video_clk_135_raw)
+    );
+
+    clockdiv2 sms_clock_divider (
+        .clk_src(main_clk),
+        .reset_n(board_reset_n),
+        .clk_div(sms_clk_54_raw),
+        .clk_rise()
+    );
+
+    BUFG sms_clk_54_buf (
+        .O(sms_clk_54),
+        .I(sms_clk_54_raw)
+    );
+
     // audio_req is asserted for one audio bit-clock cycle before audio_drive
     // loads idata. Synchronize that request into the 108 MHz domain and take
     // one coherent snapshot of the mix. The holding register then remains
@@ -206,6 +299,8 @@ module top
     wire sltsl_n;
     wire [7:0] slot_expander_data_out;
     wire slot_expander_data_out_en;
+    wire [7:0] data_out;
+    wire data_out_en;
     wire [7:0] sdram_mapper_data_out;
     wire sdram_mapper_data_out_en;
     wire [7:0] flash_rom_data_out;
@@ -226,8 +321,6 @@ module top
     wire [3:0] page3_subslot_en;
     wire int_n;
     wire wait_n;
-    wire [7:0] data_out;
-    wire data_out_en;
     wire mapper_port_read;
     wire [7:0] cd_in;
 
@@ -310,7 +403,7 @@ module top
         end
     end
 
-    assign board_reset_n = rpll_main_lock && reset_n;
+    assign board_reset_n = board_reset_release;
 
     // Synchronize the external 3.58 MHz CPU clock into the 108 MHz domain.
     // Every second detected rising edge produces one main_clk-wide enable,
@@ -338,9 +431,11 @@ module top
 
     // MSX PSG I/O ports. This is deliberately a write-only slave: port A2
     // reads are not decoded and the PSG output data is never put on cd.
-    assign psg_address_write = board_enabled && !iorq_n && m1_n && !wr_n &&
+    assign psg_address_write = active_module_reset_n &&
+                               !iorq_n && m1_n && !wr_n &&
                                addr[7:0] == 8'hA0;
-    assign psg_data_write = board_enabled && !iorq_n && m1_n && !wr_n &&
+    assign psg_data_write = active_module_reset_n &&
+                            !iorq_n && m1_n && !wr_n &&
                             addr[7:0] == 8'hA1;
     assign psg_bdir = psg_address_write || psg_data_write;
     assign psg_bc = psg_address_write;
@@ -349,7 +444,7 @@ module top
         .clk_i(main_clk),
         .en_clk_psg_i(psg_clock_enable),
         .sel_n_i(1'b1),
-        .reset_n_i(board_reset_n),
+        .reset_n_i(psg_module_reset_n),
         .bc_i(psg_bc),
         .bdir_i(psg_bdir),
         .data_i(cd_in),
@@ -362,7 +457,8 @@ module top
     );
 
     // MSX-Music/YM2413 ports 7C (address) and 7D (data). Both are write-only.
-    assign opll_write_selected = board_enabled && !iorq_n && m1_n && !wr_n &&
+    assign opll_write_selected = active_module_reset_n &&
+                                 !iorq_n && m1_n && !wr_n &&
                                  addr[7:1] == 7'h3E;
 
     generate
@@ -379,7 +475,7 @@ module top
                 .a(addr[0]),
                 .cs_n(~opll_write_selected),
                 .we_n(wr_n),
-                .ic_n(active_module_reset_n),
+                .ic_n(opll_module_reset_n),
                 .mixout(opll_audio_raw)
             );
 
@@ -395,18 +491,402 @@ module top
     // level, which is inappropriate for this digital output path. The unsigned
     // mix has true zero at silence and avoids the constant boot-time noise.
     assign psg_audio_sample = {2'b00, psg_mix_unsigned_unused};
-    // Scale the 11-bit SCC output into the same useful range, then saturate
-    // the three-source mix instead of allowing peaks to wrap around.
+    // Scale the 11-bit SCC and JT89 outputs into the same useful range, then
+    // saturate the common four-source mix instead of allowing peaks to wrap.
+    // This exact sample feeds both the physical audio DAC and HDMI.
     assign scc_audio_sample = {scc_sound, 5'b00000};
+    assign jt89_audio_sample = {jt89_sound, 5'b00000};
     assign audio_mix_wide =
         {{2{psg_audio_sample[15]}}, psg_audio_sample} +
         {{2{opll_audio_sample[15]}}, opll_audio_sample} +
-        {{2{scc_audio_sample[15]}}, scc_audio_sample};
+        {{2{scc_audio_sample[15]}}, scc_audio_sample} +
+        {{2{jt89_audio_sample[15]}}, jt89_audio_sample};
     assign mixed_audio_sample =
         audio_mix_wide[17:15] == 3'b000 ||
         audio_mix_wide[17:15] == 3'b111 ? audio_mix_wide[15:0] :
         audio_mix_wide[17] ? 16'h8000 :
                              16'h7FFF;
+
+    // ---------------------------------------------------------------------
+    // Franky / Sega Master System VDP and PSG
+    // ---------------------------------------------------------------------
+    // Start the high-toggle SMS/HDMI logic after SDRAM and SD have left reset,
+    // so it is already stable before the mapper and the MSX bus are released.
+    // Its CPU port decode remains disabled until the full sequence completes.
+    wire sms_reset_request_n =
+        active_module_reset_n && rpll_video_lock;
+    (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
+    reg [1:0] sms_reset_sync = 2'b00;
+    wire sms_reset_n = sms_reset_sync[1];
+
+    // Assert immediately if either board clock is unavailable, but release
+    // reset only after two clean edges in the SMS domain.
+    always_ff @(posedge sms_clk_54 or negedge sms_reset_request_n)
+    begin
+        if (!sms_reset_request_n)
+            sms_reset_sync <= 2'b00;
+        else
+            sms_reset_sync <= {sms_reset_sync[0], 1'b1};
+    end
+
+    reg [4:0] sms_divider = 5'd0;
+    reg sms_ce_sp = 1'b0;
+    reg sms_ce_vdp = 1'b0;
+    reg sms_ce_pix = 1'b0;
+    reg sms_ce_cpu = 1'b0;
+    wire sms_ce_sp_buf;
+    wire sms_ce_vdp_buf;
+    wire sms_ce_pix_buf;
+    wire sms_ce_cpu_buf;
+
+    // 54 MHz / 30 timing wheel:
+    //   ce_sp  = 27.0 MHz, ce_vdp = 10.8 MHz,
+    //   ce_pix = 5.4 MHz, ce_cpu = 3.6 MHz.
+    always_ff @(negedge sms_clk_54 or negedge sms_reset_n)
+    begin
+        if (!sms_reset_n) begin
+            sms_divider <= 5'd0;
+            sms_ce_sp <= 1'b0;
+            sms_ce_vdp <= 1'b0;
+            sms_ce_pix <= 1'b0;
+            sms_ce_cpu <= 1'b0;
+        end else begin
+            sms_ce_sp <= sms_divider[0];
+            sms_ce_vdp <= 1'b0;
+            sms_ce_pix <= 1'b0;
+            sms_ce_cpu <= 1'b0;
+            sms_divider <= sms_divider + 1'b1;
+
+            case (sms_divider)
+                5'd4, 5'd14:
+                    sms_ce_vdp <= 1'b1;
+                5'd9: begin
+                    sms_ce_vdp <= 1'b1;
+                    sms_ce_pix <= 1'b1;
+                    sms_ce_cpu <= 1'b1;
+                end
+                5'd19: begin
+                    sms_ce_vdp <= 1'b1;
+                    sms_ce_pix <= 1'b1;
+                end
+                5'd24: begin
+                    sms_ce_vdp <= 1'b1;
+                    sms_ce_cpu <= 1'b1;
+                end
+                5'd29: begin
+                    sms_divider <= 5'd0;
+                    sms_ce_vdp <= 1'b1;
+                    sms_ce_pix <= 1'b1;
+                end
+                default: begin
+                end
+            endcase
+        end
+    end
+
+    // Match WonderTANG's Franky clocking: the four periodic clock-enable
+    // signals use dedicated global buffers before reaching the SMS cores.
+    // Keeping every consumer on the buffered copies also preserves their
+    // relative phase across the VDP, video timing, JT89 and bus bridge.
+    BUFG sms_ce_sp_bufg (
+        .O(sms_ce_sp_buf),
+        .I(sms_ce_sp)
+    );
+
+    BUFG sms_ce_vdp_bufg (
+        .O(sms_ce_vdp_buf),
+        .I(sms_ce_vdp)
+    );
+
+    BUFG sms_ce_pix_bufg (
+        .O(sms_ce_pix_buf),
+        .I(sms_ce_pix)
+    );
+
+    BUFG sms_ce_cpu_bufg (
+        .O(sms_ce_cpu_buf),
+        .I(sms_ce_cpu)
+    );
+
+    wire sms_vdp_selected =
+        active_module_reset_n && sms_reset_n &&
+        !iorq_n && m1_n && addr[7:1] == 7'b1000100;
+    wire sms_psg_selected =
+        active_module_reset_n && sms_reset_n &&
+        !iorq_n && m1_n && addr[7:1] == 7'b0100100;
+    wire sms_vdp_rd_n;
+    wire sms_vdp_wr_n;
+    wire sms_psg_wr_n;
+    wire [7:0] sms_vdp_data_out;
+    wire [7:0] sms_bridge_read_data;
+    wire sms_bridge_read_data_en;
+    wire sms_vdp_rd_request_n =
+        (!rd_n && (sms_vdp_selected || sms_psg_selected)) ? 1'b0 : 1'b1;
+    wire sms_vdp_wr_request_n =
+        (!wr_n && sms_vdp_selected) ? 1'b0 : 1'b1;
+    reg sms_vdp_rd_strobe_n = 1'b1;
+    reg sms_vdp_wr_strobe_n = 1'b1;
+    reg sms_prev_vdp_rd_n = 1'b1;
+    reg sms_prev_vdp_wr_n = 1'b1;
+
+    // WonderTANG's Franky bus interface holds each VDP request until the
+    // 54 MHz domain observes its edge, then releases it on a VDP enable.
+    always_ff @(posedge sms_clk_54 or negedge sms_reset_n)
+    begin
+        if (!sms_reset_n) begin
+            sms_vdp_rd_strobe_n <= 1'b1;
+            sms_vdp_wr_strobe_n <= 1'b1;
+            sms_prev_vdp_rd_n <= 1'b1;
+            sms_prev_vdp_wr_n <= 1'b1;
+        end else begin
+            if (sms_ce_vdp_buf) begin
+                sms_vdp_rd_strobe_n <= 1'b1;
+                sms_vdp_wr_strobe_n <= 1'b1;
+            end
+
+            if (sms_prev_vdp_rd_n != sms_vdp_rd_request_n) begin
+                sms_vdp_rd_strobe_n <= sms_vdp_rd_request_n;
+                sms_prev_vdp_rd_n <= sms_vdp_rd_request_n;
+            end
+
+            if (sms_prev_vdp_wr_n != sms_vdp_wr_request_n) begin
+                sms_vdp_wr_strobe_n <= sms_vdp_wr_request_n;
+                sms_prev_vdp_wr_n <= sms_vdp_wr_request_n;
+            end
+        end
+    end
+
+    assign sms_vdp_rd_n = sms_vdp_rd_strobe_n;
+    assign sms_vdp_wr_n = sms_vdp_wr_strobe_n;
+    assign sms_psg_wr_n =
+        (!wr_n && sms_psg_selected) ? 1'b0 : 1'b1;
+    assign sms_bridge_read_data = sms_vdp_data_out;
+    assign sms_bridge_read_data_en = sms_vdp_selected && !rd_n;
+
+    jt89 sms_psg_inst (
+        .rst(~sms_reset_n),
+        .clk(sms_clk_54),
+        .clk_en(sms_ce_cpu_buf),
+        .wr_n(sms_psg_wr_n),
+        .din(cd_in),
+        .mux(8'hFF),
+        .soundL(jt89_sound),
+        .soundR(),
+        .ready()
+    );
+
+    wire [8:0] sms_vdp_x;
+    wire [8:0] sms_vdp_y;
+    wire [11:0] sms_vdp_color;
+    wire sms_vdp_irq_n;
+    wire sms_vdp_mask_column;
+    wire sms_vdp_mode_m1;
+    wire sms_vdp_mode_m2;
+    wire sms_vdp_mode_m3;
+    wire sms_vdp_mode_m4;
+
+    vdp #(
+        .MAX_SPPL(7)
+    ) sms_vdp_inst (
+        .clk_sys(sms_clk_54),
+        .ce_vdp(sms_ce_vdp_buf),
+        .ce_pix(sms_ce_pix_buf),
+        .ce_sp(sms_ce_sp_buf),
+        .gg(1'b0),
+        .sp64(1'b0),
+        .HL(1'b0),
+        .RD_n(sms_vdp_rd_n),
+        .WR_n(sms_vdp_wr_n),
+        .IRQ_n(sms_vdp_irq_n),
+        .A(addr[7:0]),
+        .D_in(cd_in),
+        .D_out(sms_vdp_data_out),
+        .x(sms_vdp_x),
+        .y(sms_vdp_y),
+        .color(sms_vdp_color),
+        .mask_column(sms_vdp_mask_column),
+        .smode_M1(sms_vdp_mode_m1),
+        .smode_M2(sms_vdp_mode_m2),
+        .smode_M3(sms_vdp_mode_m3),
+        .smode_M4(sms_vdp_mode_m4),
+        .reset_n(sms_reset_n)
+    );
+
+    wire sms_vdp_hsync;
+    wire sms_vdp_vsync;
+    wire sms_vdp_hblank;
+    wire sms_vdp_vblank;
+
+    video sms_video_timing_inst (
+        .clk(sms_clk_54),
+        .ce_pix(sms_ce_pix_buf),
+        .pal(1'b0),
+        .gg(1'b0),
+        .border(1'b0),
+        .mask_column(sms_vdp_mask_column),
+        .smode_M1(sms_vdp_mode_m1),
+        .smode_M3(sms_vdp_mode_m3),
+        .x(sms_vdp_x),
+        .y(sms_vdp_y),
+        .hsync(sms_vdp_hsync),
+        .vsync(sms_vdp_vsync),
+        .hblank(sms_vdp_hblank),
+        .vblank(sms_vdp_vblank)
+    );
+
+    // Capture the SMS raster into a true dual-port framebuffer.  The write
+    // side remains wholly in the 54 MHz SMS domain; HDMI reads at 27 MHz.
+    reg [8:0] sms_fb_x = 9'h1FE;
+    reg [8:0] sms_fb_y = 9'd0;
+    wire [15:0] sms_fb_write_addr = {sms_fb_y[7:0], sms_fb_x[7:0]};
+    wire [5:0] sms_fb_read_data;
+
+    always_ff @(posedge sms_clk_54 or negedge sms_reset_n)
+    begin
+        if (!sms_reset_n) begin
+            sms_fb_x <= 9'h1FE;
+            sms_fb_y <= 9'd0;
+        end else if (sms_ce_pix_buf) begin
+            sms_fb_x <= sms_fb_x + 1'b1;
+            if (sms_vdp_x == 9'd0) begin
+                sms_fb_x <= 9'h1FE;
+                sms_fb_y <= sms_fb_y + 1'b1;
+            end
+            if (sms_vdp_y == 9'd0)
+                sms_fb_y <= 9'd0;
+        end
+    end
+
+    wire [9:0] hdmi_x;
+    wire [9:0] hdmi_y;
+    reg [9:0] hdmi_x_offset = 10'd0;
+    reg [9:0] hdmi_y_offset = 10'd0;
+    wire [15:0] sms_fb_read_addr =
+        {hdmi_y_offset[8:1], hdmi_x_offset[8:1]};
+
+    always_ff @(posedge clk or negedge sms_reset_n)
+    begin
+        if (!sms_reset_n) begin
+            hdmi_x_offset <= 10'd0;
+            hdmi_y_offset <= 10'd0;
+        end else begin
+            hdmi_x_offset <= hdmi_x - 10'd112;
+            hdmi_y_offset <= hdmi_y - 10'd44;
+        end
+    end
+
+    dpram #(
+        .widthad_a(16),
+        .width_a(6)
+    ) sms_framebuffer_inst (
+        .clock_a(clk),
+        .address_a(sms_fb_write_addr),
+        .wren_a(!sms_fb_x[8] && !sms_fb_y[8]),
+        .rden_a(1'b0),
+        .data_a({sms_vdp_color[11:10],
+                 sms_vdp_color[7:6],
+                 sms_vdp_color[3:2]}),
+        .q_a(),
+        .clock_b(clk),
+        .address_b(sms_fb_read_addr),
+        .wren_b(1'b0),
+        .rden_b(1'b1),
+        .data_b(6'd0),
+        .q_b(sms_fb_read_data)
+    );
+
+    wire [7:0] hdmi_red =
+        hdmi_x_offset[9] ? 8'd0 : {sms_fb_read_data[1:0], 6'd0};
+    wire [7:0] hdmi_green =
+        hdmi_x_offset[9] ? 8'd0 : {sms_fb_read_data[3:2], 6'd0};
+    wire [7:0] hdmi_blue =
+        hdmi_x_offset[9] ? 8'd0 : {sms_fb_read_data[5:4], 6'd0};
+
+    wire hdmi_audio_clk_raw;
+    wire hdmi_audio_clk;
+    clockdiv #(
+        .CLK_HZ(27_000_000),
+        .OUT_HZ(44_100)
+    ) hdmi_audio_clock_divider (
+        .clk_src(clk),
+        .reset_n(sms_reset_n),
+        .clk_div(hdmi_audio_clk_raw),
+        .clk_rise()
+    );
+
+    BUFG hdmi_audio_clk_buf (
+        .O(hdmi_audio_clk),
+        .I(hdmi_audio_clk_raw)
+    );
+
+    reg [15:0] hdmi_mix_meta = 16'd0;
+    reg [15:0] hdmi_mix_sample = 16'd0;
+    always_ff @(posedge clk or negedge sms_reset_n)
+    begin
+        if (!sms_reset_n) begin
+            hdmi_mix_meta <= 16'd0;
+            hdmi_mix_sample <= 16'd0;
+        end else begin
+            // audio_sample_hold is a coherent, slowly changing snapshot of
+            // the same four-source mix sent to audio_drive.
+            hdmi_mix_meta <= audio_sample_hold;
+            hdmi_mix_sample <= hdmi_mix_meta;
+        end
+    end
+
+    wire [15:0] hdmi_audio_samples [1:0];
+    assign hdmi_audio_samples[0] = hdmi_mix_sample;
+    assign hdmi_audio_samples[1] = hdmi_mix_sample;
+
+    wire [9:0] hdmi_tmds_internal [2:0];
+    hdmi #(
+        .VIDEO_ID_CODE(2),
+        .DVI_OUTPUT(1'b0),
+        .VIDEO_REFRESH_RATE(60.0),
+        .IT_CONTENT(1'b1),
+        .AUDIO_RATE(44_100),
+        .AUDIO_BIT_WIDTH(16),
+        .VENDOR_NAME({"Unknown", 8'd0}),
+        .PRODUCT_DESCRIPTION({"Franky SMS", 48'd0}),
+        .SOURCE_DEVICE_INFORMATION(8'h00),
+        .START_X(0),
+        .START_Y(0),
+        .NUM_CHANNELS(3)
+    ) hdmi_inst (
+        .clk_pixel_x5(video_clk_135),
+        .clk_pixel(clk),
+        .clk_audio(hdmi_audio_clk),
+        .reset(~sms_reset_n),
+        .rgb({hdmi_red, hdmi_green, hdmi_blue}),
+        .audio_sample_word(hdmi_audio_samples),
+        .cx(hdmi_x),
+        .cy(hdmi_y),
+        .frame_width(),
+        .frame_height(),
+        .screen_width(),
+        .screen_height(),
+        .tmds_internal(hdmi_tmds_internal)
+    );
+
+    wire [2:0] hdmi_tmds;
+    wire hdmi_tmds_clock_unused;
+    serializer #(
+        .NUM_CHANNELS(3),
+        .VIDEO_RATE(0)
+    ) hdmi_serializer_inst (
+        .clk_pixel(clk),
+        .clk_pixel_x5(video_clk_135),
+        .reset(~sms_reset_n),
+        .tmds_internal(hdmi_tmds_internal),
+        .tmds(hdmi_tmds),
+        .tmds_clock(hdmi_tmds_clock_unused)
+    );
+
+    ELVDS_OBUF hdmi_output_buffers [3:0] (
+        .I({clk, hdmi_tmds}),
+        .O({tmds_clk_p, tmds_data_p}),
+        .OB({tmds_clk_n, tmds_data_n})
+    );
     
     input_debouncer
     #(
@@ -449,14 +929,79 @@ module top
         .inputs_latched(inputs_latched)
     );
 
-    // Keep all CPU-bus-visible state at deterministic defaults until both the
-    // internal memories are ready and the MSX has released its reset signal.
-    assign active_module_reset_n =
-        board_enabled && flash_rom_loaded && reset_in_n;
+    // SDRAM owns the external memory bus until its startup test has passed.
+    // Synchronize that result into the SD controller's 27 MHz domain and
+    // leave a full 16 SD clocks between the SDRAM and SD reset releases.
+    // This reset also feeds SD's 108 MHz register interface, matching the
+    // original board-enabled reset's 27 MHz release behavior.
+    always_ff @(posedge clk or negedge board_enabled)
+    begin
+        if (!board_enabled) begin
+            startup_passed_sd_sync <= 2'b00;
+            sd_stage_count <= 4'd0;
+            sd_stage_enabled <= 1'b0;
+        end else begin
+            startup_passed_sd_sync <=
+                {startup_passed_sd_sync[0], startup_test_passed};
+
+            if (!startup_passed_sd_sync[1]) begin
+                sd_stage_count <= 4'd0;
+                sd_stage_enabled <= 1'b0;
+            end else if (!sd_stage_enabled) begin
+                if (sd_stage_count == 4'd15)
+                    sd_stage_enabled <= 1'b1;
+                else
+                    sd_stage_count <= sd_stage_count + 1'b1;
+            end
+        end
+    end
+
+    assign sd_module_reset_n = board_enabled && sd_stage_enabled;
+
+    // Synchronize the 27 MHz SD-stage release into the 108 MHz bus domain.
+    // Release every CPU-visible module together on a falling main-clock edge,
+    // leaving half a cycle of reset-recovery margin before their next active
+    // edge. This avoids partial mapper reset release after cold configuration.
+    always_ff @(posedge main_clk or negedge board_reset_n)
+    begin
+        if (!board_reset_n)
+            sd_ready_main_sync <= 2'b00;
+        else
+            sd_ready_main_sync <=
+                {sd_ready_main_sync[0], sd_module_reset_n};
+    end
+
+    always_ff @(negedge main_clk or negedge board_reset_n)
+    begin
+        if (!board_reset_n) begin
+            cpu_modules_ready_count <= 4'd0;
+            cpu_modules_ready_reg <= 1'b0;
+        end else if (!sd_ready_main_sync[1] ||
+                     !flash_rom_loaded || !reset_in_n) begin
+            cpu_modules_ready_count <= 4'd0;
+            cpu_modules_ready_reg <= 1'b0;
+        end else if (!cpu_modules_ready_reg) begin
+            if (&cpu_modules_ready_count)
+                cpu_modules_ready_reg <= 1'b1;
+            else
+                cpu_modules_ready_count <= cpu_modules_ready_count + 1'b1;
+        end
+    end
+
+    wire cpu_modules_ready_n = cpu_modules_ready_reg;
+
+    assign slot_expander_reset_n = cpu_modules_ready_n;
+    assign memory_mapper_reset_n = cpu_modules_ready_n;
+    assign bios_module_enabled = cpu_modules_ready_n;
+    assign psg_module_reset_n = cpu_modules_ready_n;
+    assign opll_module_reset_n = cpu_modules_ready_n;
+    assign megaram_module_reset_n = cpu_modules_ready_n;
+    assign module_sequence_done = cpu_modules_ready_n;
+    assign active_module_reset_n = cpu_modules_ready_n;
 
     slot_expander slot_expander_inst(
         .clk(main_clk),
-        .reset_n(active_module_reset_n),
+        .reset_n(slot_expander_reset_n),
         .addr(addr),
         .data_in(cd_in),
         .merq_n(merq_n),
@@ -501,7 +1046,7 @@ module top
     sdram_mapper sdram_mapper_inst(
         .clk(main_clk),
         .cpu_clk_high(psg_cpu_clk_sync[1]),
-        .reset_n(active_module_reset_n),
+        .reset_n(memory_mapper_reset_n),
         .addr(addr),
         .data_in(cd_in),
         .merq_n(merq_n),
@@ -537,7 +1082,7 @@ module top
     ) super_megaram_inst(
         .clk(main_clk),
         .cpu_clk(cpu_clk),
-        .reset_n(active_module_reset_n),
+        .reset_n(megaram_module_reset_n),
         .addr(addr),
         .data_in(cd_in),
         .merq_n(merq_n),
@@ -566,10 +1111,9 @@ module top
     sd_registers sd_registers_inst(
         .clk(main_clk),
         .sd_clk(clk),
-        // Start SD initialization as soon as the FPGA clocks are ready. Do
-        // not hold the card controller in reset while waiting for the MSX
-        // CPU reset or BIOS flash loading to complete.
-        .reset_n(board_enabled),
+        // Startup order: SDRAM test, SD controller, then the staged
+        // CPU-visible modules beginning with the slot expander.
+        .reset_n(sd_module_reset_n),
         .cpu_clk(cpu_clk),
         .addr(addr),
         .data_in(cd_in),
@@ -648,23 +1192,44 @@ module top
         test_sdrc_data;
     assign sdrc_data_len = startup_test_passed ? mapper_sdrc_data_len : test_sdrc_data_len;
 
-    assign data_out = sd_data_out_en ? sd_data_out :
-                      flash_rom_data_out_en ? flash_rom_data_out :
-                      smr_data_out_en ? smr_data_out :
-                      sdram_mapper_data_out_en ? sdram_mapper_data_out : slot_expander_data_out;
+    // All source selects are mutually exclusive. A parallel masked OR avoids
+    // the serial priority chain while preserving each device's own registered
+    // read data and WAIT handshake.
+    wire slot_drive_en =
+        active_module_reset_n && slot_expander_data_out_en;
+    wire mapper_drive_en =
+        active_module_reset_n && sdram_mapper_data_out_en;
+    wire smr_drive_en =
+        active_module_reset_n && smr_data_out_en;
+    wire bios_drive_en =
+        active_module_reset_n && bios_module_enabled &&
+        flash_rom_data_out_en;
+    wire sd_drive_en =
+        active_module_reset_n && sd_data_out_en;
+    wire sms_drive_en = sms_bridge_read_data_en;
 
-    assign data_out_en = active_module_reset_n &&
-        (sd_data_out_en || flash_rom_data_out_en ||
-         smr_data_out_en || sdram_mapper_data_out_en ||
-         slot_expander_data_out_en);
+    assign data_out =
+        ({8{slot_drive_en}} & slot_expander_data_out) |
+        ({8{mapper_drive_en}} & sdram_mapper_data_out) |
+        ({8{smr_drive_en}} & smr_data_out) |
+        ({8{bios_drive_en}} & flash_rom_data_out) |
+        ({8{sd_drive_en}} & sd_data_out) |
+        ({8{sms_drive_en}} & sms_bridge_read_data);
 
-    assign mapper_port_read = active_module_reset_n &&
-        !iorq_n && m1_n && !rd_n && addr[7:2] == 6'b111111;
+    assign data_out_en =
+        slot_drive_en || mapper_drive_en || smr_drive_en ||
+        bios_drive_en || sd_drive_en || sms_drive_en;
+
+    assign mapper_port_read =
+        (active_module_reset_n && !iorq_n && m1_n && !rd_n &&
+         addr[7:2] == 6'b111111) ||
+        (sms_vdp_selected && !rd_n);
     
     cd_demux cd_demux_inst(
         .data_out(data_out),
         .data_out_en(data_out_en),
-        .wait_in_n(startup_test_wait_n && flash_rom_wait_n &&
+        .wait_in_n(module_sequence_done &&
+                   startup_test_wait_n && flash_rom_wait_n &&
                    smr_wait_n && mapper_wait_n),
         .rd_n(rd_n),
         .sltsl_n(sltsl_n),
@@ -736,8 +1301,11 @@ module top
         .enabled(native_sdram_enabled)
     );
 
-    // triggers cpu interrupt (open collector)
-    assign int_n = 1'b1;
+    // Franky's VDP interrupt is active low; the external cartridge signal is
+    // driven active high by the board-level inverter below.
+    // Franky's VDP supplies an active-low interrupt. int_out drives the
+    // board-level inverter below, matching WonderTANG's external polarity.
+    assign int_n = sms_reset_n ? sms_vdp_irq_n : 1'b1;
 
     assign int_out = ~int_n;
     assign wait_out = ~wait_n;

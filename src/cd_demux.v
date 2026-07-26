@@ -12,11 +12,10 @@ module cd_demux
     output wait_n
 );
 
-    assign cd = data_out_en ? data_out :
-                8'bzzzzzzzz;
+    assign cd = data_out_en ? data_out : 8'bzzzzzzzz;
 
     assign busdir_n = mapper_port_read ? 1'b0 : 1'b1;
     assign datadir = ((!rd_n && !sltsl_n) || mapper_port_read) ? 1'b0 : 1'b1;
-    assign wait_n =  wait_in_n;
+    assign wait_n = wait_in_n;
 
 endmodule
