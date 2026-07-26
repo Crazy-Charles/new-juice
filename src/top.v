@@ -644,7 +644,9 @@ module top
     // saturate the common four-source mix instead of allowing peaks to wrap.
     // This exact sample feeds both the physical audio DAC and HDMI.
     assign scc_audio_sample = {scc_sound, 5'b00000};
-    assign jt89_audio_sample = {jt89_sound, 5'b00000};
+    // JT89 is intentionally attenuated by one bit relative to the other
+    // sources before entering the shared mix.
+    assign jt89_audio_sample = {{2{jt89_sound[10]}}, jt89_sound, 3'b0000};
     assign audio_mix_wide =
         {{2{psg_audio_sample[15]}}, psg_audio_sample} +
         {{2{opll_audio_sample[15]}}, opll_audio_sample} +
@@ -970,6 +972,13 @@ module top
 
     reg [15:0] hdmi_mix_meta = 16'd0;
     reg [15:0] hdmi_mix_sample = 16'd0;
+    // Apply one bit of gain only to HDMI, with saturation rather than wrap.
+    wire signed [16:0] hdmi_mix_louder_wide =
+        $signed({audio_sample_hold[15], audio_sample_hold}) <<< 1;
+    wire [15:0] hdmi_mix_louder_sample =
+        hdmi_mix_louder_wide[16:15] == 2'b00 ||
+        hdmi_mix_louder_wide[16:15] == 2'b11 ? hdmi_mix_louder_wide[15:0] :
+        hdmi_mix_louder_wide[16] ? 16'h8000 : 16'h7FFF;
     always_ff @(posedge clk or negedge sms_reset_n)
     begin
         if (!sms_reset_n) begin
@@ -978,7 +987,7 @@ module top
         end else begin
             // audio_sample_hold is a coherent, slowly changing snapshot of
             // the same four-source mix sent to audio_drive.
-            hdmi_mix_meta <= audio_sample_hold;
+            hdmi_mix_meta <= hdmi_mix_louder_sample;
             hdmi_mix_sample <= hdmi_mix_meta;
         end
     end

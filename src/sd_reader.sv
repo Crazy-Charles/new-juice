@@ -401,19 +401,24 @@ always @ (posedge clk or negedge rstn)
                         sddat0oe <= 1;
                         crc_bit <= inbyte[3'd7 - ridx[2:0]]; // crc in data bit
                         crc_ena <= 1;
+                        ridx   <= ridx + 1;
                     end else if (ridx < 512*8+16) begin
                         sddat0out <= crc_out[4'd15 - ridx[3:0]]; // send crc16
                         sddat0oe <= 1;
+                        ridx   <= ridx + 1;
                     end else if (ridx < 512*8+16+1) begin
                         sddat0out <= 1'b1;      // stop bit
                         sddat0oe <= 1;
+                        ridx   <= ridx + 1;
                     end else if (ridx < 512*8+16+1+2) begin
-                        sddat0oe <= 0;          // wait for crc status 2 cycles                   
+                        sddat0oe <= 0;          // wait for crc status 2 cycles  
+                        ridx   <= ridx + 1;                 
                     end else begin
                         if (!sddat0) begin      // wait for ack
                             sddat_stat = WTAIL;
                             ridx <= 0;
-                        end
+                        end else ridx   <= ridx + 1;
+
                         if(ridx > 13000000)      
                              sddat_stat <= WTIMEOUT;
                     end
@@ -422,12 +427,14 @@ always @ (posedge clk or negedge rstn)
                         outen  <= 1'b1;         // bring next byte from sram
                         //outaddr<= ridx[11:3];   
                         outaddr <= outaddr + 9'd1;
+                        ridx   <= ridx + 1;
                     end
-                    ridx   <= ridx + 1;
+                    //ridx   <= ridx + 1;
                 end
                 WTAIL   : begin                 // busy wait
                     if (ridx < 3) begin
                         crc_stat <= { crc_stat[1:0], sddat0 };
+                        ridx   <= ridx + 1;
                     end else begin
         
                         if (ridx == 4)
@@ -436,20 +443,25 @@ always @ (posedge clk or negedge rstn)
                         if (!sddat0) begin      // wait for ack
                             sddat_stat = WBUSY;
                             ridx <= 0;
-                        if(ridx > 13000000)      
-                             sddat_stat <= WTIMEOUT;
-                        end
+                        
+                            if(ridx > 13000000)      
+                                sddat_stat <= WTIMEOUT;
+
+                        end else
+                            ridx   <= ridx + 1;
                     end
-                    ridx   <= ridx + 1;
+                    //ridx   <= ridx + 1;
                 end
                 WBUSY   :  begin
                     if (sddat0) begin      // wait for ack
                         sddat_stat = WDONE;
                         ridx <= 0;
-                    end
+                    end else
+                        ridx   <= ridx + 1;
+
                     if(ridx > 13000000)      
                          sddat_stat <= WTIMEOUT;
-                    ridx   <= ridx + 1;
+                    //ridx   <= ridx + 1;
                 end
                 WTIMEOUT : timeout_error <= 1;
 
