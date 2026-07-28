@@ -630,7 +630,7 @@ module top
 
             // VM2413 mixout is signed, zero-centered 14-bit PCM.
             assign opll_audio_sample =
-                {{2{opll_audio_raw[13]}}, opll_audio_raw};
+                {{1{opll_audio_raw[13]}}, opll_audio_raw, 1'b0};
         end else begin : opll_disabled_impl
             assign opll_audio_sample = 16'sd0;
         end
@@ -646,7 +646,7 @@ module top
     assign scc_audio_sample = {scc_sound, 5'b00000};
     // JT89 is intentionally attenuated by one bit relative to the other
     // sources before entering the shared mix.
-    assign jt89_audio_sample = {{2{jt89_sound[10]}}, jt89_sound, 3'b0000};
+    assign jt89_audio_sample = {{3{jt89_sound[10]}}, jt89_sound, 2'b00};
     assign audio_mix_wide =
         {{2{psg_audio_sample[15]}}, psg_audio_sample} +
         {{2{opll_audio_sample[15]}}, opll_audio_sample} +
