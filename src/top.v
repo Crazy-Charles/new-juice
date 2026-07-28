@@ -643,10 +643,10 @@ module top
     // Scale the 11-bit SCC and JT89 outputs into the same useful range, then
     // saturate the common four-source mix instead of allowing peaks to wrap.
     // This exact sample feeds both the physical audio DAC and HDMI.
-    assign scc_audio_sample = {scc_sound, 5'b00000};
+    assign scc_audio_sample = {{2{scc_sound[10]}}, scc_sound, 3'b000};
     // JT89 is intentionally attenuated by one bit relative to the other
     // sources before entering the shared mix.
-    assign jt89_audio_sample = {{3{jt89_sound[10]}}, jt89_sound, 2'b00};
+    assign jt89_audio_sample = {{2{jt89_sound[10]}}, jt89_sound, 3'b00};
     assign audio_mix_wide =
         {{2{psg_audio_sample[15]}}, psg_audio_sample} +
         {{2{opll_audio_sample[15]}}, opll_audio_sample} +

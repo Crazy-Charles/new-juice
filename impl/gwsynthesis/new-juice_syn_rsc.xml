@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Module name="top" Register="168" Alu="57" Lut="439" Ssram="4" T_Register="4833(168)" T_Alu="685(57)" T_Lut="6485(439)" T_PADD18="2(0)" T_PADD9="1(0)" T_MULT9X9="2(0)" T_MULT18X18="2(0)" T_Bsram="40(0)" T_Ssram="80(4)">
+<Module name="top" Register="168" Alu="58" Lut="439" Ssram="4" T_Register="4833(168)" T_Alu="686(58)" T_Lut="6485(439)" T_PADD18="2(0)" T_PADD9="1(0)" T_MULT9X9="2(0)" T_MULT18X18="2(0)" T_Bsram="40(0)" T_Ssram="80(4)">
  <SubModule name="audio_logic_enabled.audio_clock_divider" Register="7" Lut="9" T_Register="7(7)" T_Lut="9(9)"/>
  <SubModule name="audio_logic_enabled.audio_drive_inst" Register="25" Alu="4" Lut="21" T_Register="25(25)" T_Alu="4(4)" T_Lut="21(21)"/>
  <SubModule name="rpll_main"/>
