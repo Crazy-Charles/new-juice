@@ -640,8 +640,7 @@ module top
     // level, which is inappropriate for this digital output path. The unsigned
     // mix has true zero at silence and avoids the constant boot-time noise.
     assign psg_audio_sample = {2'b00, psg_mix_unsigned_unused};
-    // Scale the 11-bit SCC and JT89 outputs into the same useful range, then
-    // saturate the common four-source mix instead of allowing peaks to wrap.
+    // Scale the 11-bit SCC and JT89 outputs into the same useful range.
     // This exact sample feeds both the physical audio DAC and HDMI.
     assign scc_audio_sample = {{2{scc_sound[10]}}, scc_sound, 3'b000};
     // JT89 is intentionally attenuated by one bit relative to the other
@@ -652,11 +651,10 @@ module top
         {{2{opll_audio_sample[15]}}, opll_audio_sample} +
         {{2{scc_audio_sample[15]}}, scc_audio_sample} +
         {{2{jt89_audio_sample[15]}}, jt89_audio_sample};
-    assign mixed_audio_sample =
-        audio_mix_wide[17:15] == 3'b000 ||
-        audio_mix_wide[17:15] == 3'b111 ? audio_mix_wide[15:0] :
-        audio_mix_wide[17] ? 16'h8000 :
-                             16'h7FFF;
+    // The current source scalings can sum to about +49k. Reduce the signed
+    // wide mix by 6 dB, giving guaranteed 16-bit headroom without hard
+    // saturation or wraparound while preserving the relative source levels.
+    assign mixed_audio_sample = $signed(audio_mix_wide) >>> 1;
 
     // ---------------------------------------------------------------------
     // Franky / Sega Master System VDP and PSG
