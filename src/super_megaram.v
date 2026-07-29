@@ -18,6 +18,7 @@ module super_megaram
     input rfsh_n,
     input m1_n,
     input sltsl_n,
+    input [3:0] page0_subslot_en,
     input [3:0] page1_subslot_en,
     input [3:0] page2_subslot_en,
 
@@ -79,9 +80,16 @@ module super_megaram
     wire port_8f_write = !iorq_n && m1_n && !wr_n &&
                          addr[7:0] == 8'h8f;
 
+    // Of the accepted port-8F mode encodings, only K4 (4) and K5 (5)
+    // have bit 2 set. Keep this decode shallow because it feeds the
+    // CPU-to-SDRAM command path.
+    wire page0_fixed_mode = operation_mode[2];
+    wire page0_smr_selected = !sltsl_n && page0_subslot_en[2] &&
+                              page0_fixed_mode;
     wire page1_smr_selected = !sltsl_n && page1_subslot_en[2];
     wire page2_smr_selected = !sltsl_n && page2_subslot_en[2];
     wire smr_slot_selected =
+        (addr[15:14] == 2'b00 && page0_smr_selected) ||
         (addr[15:14] == 2'b01 && page1_smr_selected) ||
         (addr[15:14] == 2'b10 && page2_smr_selected);
     wire memory_cycle = !merq_n && iorq_n && rfsh_n && smr_slot_selected;
@@ -102,13 +110,15 @@ module super_megaram
         if (memory_cycle && rom_mode && !wr_n) begin
             case (operation_mode)
                 MODE_DDX_SCC, MODE_DDX: begin
-                    case (addr)
-                        16'h4000: begin bank_write_selected = 1'b1; bank_write_index = 2'd0; end
-                        16'h6000: begin bank_write_selected = 1'b1; bank_write_index = 2'd1; end
-                        16'h8000: begin bank_write_selected = 1'b1; bank_write_index = 2'd2; end
-                        16'ha000: begin bank_write_selected = 1'b1; bank_write_index = 2'd3; end
-                        default: ;
-                    endcase
+                    if (addr[11:0] == 12'h000) begin
+                        case (addr[15:12])
+                            4'h4, 4'h5: begin bank_write_selected = 1'b1; bank_write_index = 2'd0; end
+                            4'h6, 4'h7: begin bank_write_selected = 1'b1; bank_write_index = 2'd1; end
+                            4'h8, 4'h9: begin bank_write_selected = 1'b1; bank_write_index = 2'd2; end
+                            4'ha, 4'hb: begin bank_write_selected = 1'b1; bank_write_index = 2'd3; end
+                            default: ;
+                        endcase
+                    end
                 end
                 MODE_ASCII8: begin
                     if (addr >= 16'h6000 && addr <= 16'h67ff) begin
@@ -179,7 +189,11 @@ module super_megaram
     wire memory_access_selected =
         memory_read_selected || memory_write_selected;
 
+    // K4 and K5 expose a fixed physical bank throughout page 0. This
+    // deliberately bypasses the programmable bank registers.
     wire [7:0] selected_8k_bank =
+        (addr[15:14] == 2'b00) ?
+            {6'b000000, operation_mode[0], 1'b0} :
         (addr[15:13] == 3'b010) ? bank[0] :
         (addr[15:13] == 3'b011) ? bank[1] :
         (addr[15:13] == 3'b100) ? bank[2] :

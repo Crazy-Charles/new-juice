@@ -323,6 +323,28 @@ void runROM_page2() __naked
 }
 void runROM_page2_end() __naked {}
 
+void runROM_Reset() __naked
+{
+    __asm
+    di
+    ld      sp,#0xCFFF
+    ld      hl,#HTIMI
+    ld      a,#0xC9
+    ld      (hl),a
+    ld      hl,#HKEYI
+    ld      (hl),a
+
+    ld      a,(EXPTBL)
+    ld      hl,#0
+    call    #ENASLT
+
+    jp      0x0000
+
+    __endasm;
+}
+
+void runROM_Reset_end() __naked {}
+
 bool found = FALSE;
 char* filename = NULL;
 int megaram_type = TYPE_MSCC;
@@ -339,6 +361,7 @@ uchar page;
 ulong romsize;
 uchar slotid;
 bool presAB = FALSE;
+bool softReset = FALSE;
 char path[256];
 char cpumode = 1; // defaults to Z80_ROM
 uint romstart;
@@ -390,7 +413,7 @@ int main(void)
     if (found)
     {
         printf("WonderTANG! Super MegaRAM SCC\n\r");
-        printf("v2.02\n\r");
+        printf("v3.00 (new-juice)\n\r");
 
         sslt = 0x80 | (2 << 2) | i;
         paramlen = *((char*)0x80);
@@ -401,7 +424,8 @@ int main(void)
                 if (*params == '/')
                 {
                     params++;
-                    if (to_upper(*params) == 'R') {
+                    if (to_upper(*params) == 'R') 
+                    {
                         params++;
                         if (*params == '0')
                             megaram_type = TYPE_MSCC;
@@ -430,6 +454,11 @@ int main(void)
                             megaram_type = TYPE_K4;
                         else
                             megaram_type = TYPE_UNK;
+                    } 
+                    else if (to_upper(*params) == 'S')
+                    {
+                        softReset = TRUE;
+                        presAB = TRUE;
                     }
                     else if (to_upper(*params) == 'A')
                     {
@@ -531,6 +560,7 @@ int main(void)
 //                "   P: PSG\n\r"
 //                "   O: OPLL\n\r"
 //                "   y: 0-9\n\r\n\r"
+                " /S: Soft reset\n\r"
                 " /Zx: Set cpu mode\n\r"
                 "   0: current\n\r"
                 "   1: Z80\n\r"
@@ -589,7 +619,7 @@ int main(void)
             do {
 
                 MEGA_PORT0 = 0; // enable paging
-                *((uchar *)0x4000) = page++;
+                *((uchar *)0x4000) = page;
                 b = MEGA_PORT0; (b); // enable ram
                 bytes_read = dos2_read(handle, (void*)0x8000, 0x2000);
                 if (presAB == FALSE && romsize == 0) 
@@ -600,6 +630,7 @@ int main(void)
                     romstart = *((uint*)0x8002);
                 MEGA_PORT0 = 0; // enable paging
                 printf("\b\b\b\b\b\b%04dKB", (uint)(romsize >> 10));
+                page++;
 
             } while (bytes_read > 0);
 
@@ -613,10 +644,11 @@ int main(void)
         return 0;
     }
     *t = ' '; // restore space
+
     MEGA_PORT1 = megaram_type;
     
     enaslt(sslt, 0x4000);
-    romstart = 0x4002;
+
     if (romstart > 0x7fff)
     {
         enaslt(sslt, 0x8000);
@@ -653,21 +685,22 @@ int main(void)
         default:
             break;
     }
-
-    if (page2 == TRUE)
-        memcpy((void*)0xC000, &runROM_page2, ((uint)&runROM_page2_end - (uint)&runROM_page2));
-    else
-        memcpy((void*)0xC000, &runROM_page1, ((uint)&runROM_page1_end - (uint)&runROM_page1));
     
     if (cpumode != 0)
         chgcpu(cpumode == 1 ? Z80_ROM : cpumode == 2 ? R800_ROM : R800_DRAM);
-    
 
-    printf("\n\rPress any key to proceed...\n\r");
-    c = getchar();
+    if (softReset == FALSE)
+    {
+        if (page2 == TRUE)
+            memcpy((void*)0xC000, &runROM_page2, ((uint)&runROM_page2_end - (uint)&runROM_page2));
+        else
+            memcpy((void*)0xC000, &runROM_page1, ((uint)&runROM_page1_end - (uint)&runROM_page1));
+                
+        jump(0xC000);
+    }
 
+    memcpy((void*)0xC000, &runROM_Reset, ((uint)&runROM_Reset_end - (uint)&runROM_Reset));
     jump(0xC000);
 
     return 1; // make sdcc happy
 }
-

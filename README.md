@@ -37,15 +37,19 @@ The FM-PAC image is a fixed 16 KiB ROM.
 ## Super-MegaRAM
 
 Expanded subslot 2 contains a 2 MiB Super-MegaRAM at SDRAM
-`0x400000–0x5FFFFF`. Its MSX aperture is `0x4000–0xBFFF`. It powers up in
-MegaRAM DDX with SCC mode and supports DDX with or without SCC, ASCII8,
-ASCII16, Konami K4, and Konami K5 with SCC.
+`0x400000–0x5FFFFF`. Its normal MSX aperture is `0x4000–0xBFFF`. K4 and K5
+also expose fixed banks 0 and 2, respectively, throughout page 0
+(`0x0000–0x3FFF`). It powers up in MegaRAM DDX with SCC mode and supports DDX
+with or without SCC, ASCII8, ASCII16, Konami K4, and Konami K5 with SCC.
 The K4 implementation includes the MegaRAM-compatible selectable
 `0x4000–0x5FFF` segment.
+DDX modes accept bank-register writes at both `0x4000/0x5000`,
+`0x6000/0x7000`, `0x8000/0x9000`, and `0xA000/0xB000` for banks 0–3.
 
 Reading I/O port `0x8E` selects writable RAM mode and writing it selects
 write-protected paging/ROM mode. Port `0x8F` selects mapper type `0`, `1`, `4`,
-`5`, `8`, or `16`. Neither port drives the data bus during a read.
+`5`, `8`, or `16`. Neither MegaRAM control port drives the data bus during a
+read.
 
 ## SD-card interface
 
