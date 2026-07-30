@@ -1261,7 +1261,6 @@ module top
         .rfsh_n(rfsh_n),
         .m1_n(m1_n),
         .sltsl_n(sltsl_n),
-        .page0_subslot_en(page0_subslot_en),
         .page1_subslot_en(page1_subslot_en),
         .page2_subslot_en(page2_subslot_en),
         .data_out(smr_data_out),
