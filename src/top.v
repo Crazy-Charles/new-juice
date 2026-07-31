@@ -542,6 +542,10 @@ module top
     wire [11:0] psg_channel_c_unused;
     wire [13:0] psg_mix_unsigned_unused;
     wire opll_write_selected;
+    // 27 MHz * 569408471 / 2^32 = 3,579,545.0017 Hz.
+    localparam [31:0] OPLL_PHASE_INCREMENT = 32'd569408471;
+    reg [31:0] opll_phase_accumulator = 32'd0;
+    reg opll_clock_enable = 1'b0;
 
     always_ff @(posedge main_clk or negedge board_reset_n)
     begin
@@ -610,16 +614,30 @@ module top
                                  !iorq_n && m1_n && !wr_n &&
                                  addr[7:1] == 7'h3E;
 
+    // Advance VM2413 at the native MSX-Music rate while keeping the whole
+    // core on the clean 27 MHz clock tree. The carry is a one-cycle enable.
+    always_ff @(posedge clk or negedge opll_module_reset_n)
+    begin
+        if (!opll_module_reset_n) begin
+            opll_phase_accumulator <= 32'd0;
+            opll_clock_enable <= 1'b0;
+        end else begin
+            {opll_clock_enable, opll_phase_accumulator} <=
+                {1'b0, opll_phase_accumulator} +
+                {1'b0, OPLL_PHASE_INCREMENT};
+        end
+    end
+
     generate
         if (INCLUDE_OPLL) begin : opll_enabled_impl
             wire [13:0] opll_audio_raw;
 
-            // Run VM2413 on its native MSX clock so its internal paths are
-            // timed at the rate for which the core was designed.
+            // xena advances the emulated chip at 3.579545 MHz. Using the
+            // existing 27 MHz global clock avoids another fabric clock.
             opll opll_inst (
-                .xin(cpu_clk),
+                .xin(clk),
                 .xout(),
-                .xena(1'b1),
+                .xena(opll_clock_enable),
                 .d(cd_in),
                 .a(addr[0]),
                 .cs_n(~opll_write_selected),
@@ -630,7 +648,7 @@ module top
 
             // VM2413 mixout is signed, zero-centered 14-bit PCM.
             assign opll_audio_sample =
-                {{1{opll_audio_raw[13]}}, opll_audio_raw, 1'b0};
+                {opll_audio_raw, 2'b0};
         end else begin : opll_disabled_impl
             assign opll_audio_sample = 16'sd0;
         end

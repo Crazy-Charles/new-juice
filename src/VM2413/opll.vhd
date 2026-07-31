@@ -260,14 +260,14 @@ begin
             opllwr  <= '0';
             opllptr <= (others =>'0');
         elsif rising_edge(xin) then
-            if( xena = '1' )then
-                if(    cs_n = '0' and we_n = '0' and a = '0' )then
-                    opllptr <= d;
-                    opllwr  <= '0';
-                elsif( cs_n = '0' and we_n = '0' and a = '1' )then
-                    oplldat <= d;
-                    opllwr  <= '1';
-                end if;
+            -- Bus writes are asynchronous to xin. Capture them on every
+            -- 27 MHz edge rather than only on the fractional chip enable.
+            if(    cs_n = '0' and we_n = '0' and a = '0' )then
+                opllptr <= d;
+                opllwr  <= '0';
+            elsif( cs_n = '0' and we_n = '0' and a = '1' )then
+                oplldat <= d;
+                opllwr  <= '1';
             end if;
         end if;
     end process;
@@ -362,4 +362,3 @@ begin
     );
 
 end rtl;
-
