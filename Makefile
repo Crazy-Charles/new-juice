@@ -28,23 +28,36 @@ FM_ROM := $(ROOT)/roms/16k_fm_opl.bin
 FM_ROM_OFFSET ?= 1179648
 SFG_ROM := $(ROOT)/roms/SFG01.ROM
 
+JT_SUBMODULE_DIRS := \
+	$(ROOT)/src/jtopl \
+	$(ROOT)/src/jt49 \
+	$(ROOT)/src/jt51
+JT_REQUIRED_FILES := \
+	$(ROOT)/src/jtopl/hdl/jt2413.v \
+	$(ROOT)/src/jt49/hdl/jt49.v \
+	$(ROOT)/src/jt51/hdl/jt51.v
+JT_HDL_INPUTS := $(foreach dir,$(JT_SUBMODULE_DIRS),\
+	$(if $(wildcard $(dir)/hdl),$(shell find $(dir)/hdl -maxdepth 1 -type f)))
+
 PROJECT_INPUTS := \
 	$(PROJECT) \
 	$(shell find $(ROOT)/src -path $(ROOT)/src/jtopl -prune -o -path $(ROOT)/src/jt49 -prune -o -path $(ROOT)/src/jt51 -prune -o -type f -print) \
-	$(shell find $(ROOT)/src/jtopl/hdl -type f) \
-	$(shell find $(ROOT)/src/jt49/hdl -type f) \
-	$(shell find $(ROOT)/src/jt51/hdl -maxdepth 1 -type f) \
+	$(JT_HDL_INPUTS) \
 	$(shell find $(ROOT)/roms -type f)
 
 .DEFAULT_GOAL := all
 
-.PHONY: all build rebuild program reprogram roms check-tools check-programmer
+.PHONY: all init build rebuild program reprogram roms check-submodules check-tools check-programmer
 
 all: build
 
+init:
+	@cd "$(ROOT)" && git submodule update --init --recursive
+	@$(MAKE) --no-print-directory check-submodules
+
 build: $(OUTPUT)
 
-rebuild: check-tools
+rebuild: check-submodules check-tools
 	$(call run-gowin)
 
 program: check-programmer $(OUTPUT)
@@ -66,7 +79,7 @@ roms: check-programmer $(DOS2_ROM) $(FM_ROM) $(SFG_ROM)
 	@echo "Programming DOS2 ROM at offset $(DOS2_ROM_OFFSET)"
 	@"$(OPENFPGALOADER)" -b "$(PROGRAMMER_BOARD)" \
 		$(ROM_PROGRAMMER_FLAGS) -o "$(DOS2_ROM_OFFSET)" "$(DOS2_ROM)"
-	@combined_rom="$$(mktemp -t new-juice-fm-sfg)"; \
+	@combined_rom="$$(mktemp -t new-juice-fm-sfg.XXX)"; \
 		trap 'rm -f "$$combined_rom"' EXIT; \
 		cp "$(FM_ROM)" "$$combined_rom"; \
 		dd if="$(SFG_ROM)" of="$$combined_rom" bs=16384 seek=1 \
@@ -79,6 +92,19 @@ check-tools:
 	@if [ ! -x "$(GW_SH)" ]; then \
 		echo "Gowin command-line tool not found: $(GW_SH)"; \
 		echo "Set GOWIN_IDE=/path/to/Gowin/IDE or GW_SH=/path/to/gw_sh."; \
+		exit 1; \
+	fi
+
+check-submodules:
+	@missing=0; \
+	for required_file in $(JT_REQUIRED_FILES); do \
+		if [ ! -f "$$required_file" ]; then \
+			echo "Missing initialized JT submodule file: $$required_file" >&2; \
+			missing=1; \
+		fi; \
+	done; \
+	if [ "$$missing" -ne 0 ]; then \
+		echo "Run 'make init' to initialize the required git submodules." >&2; \
 		exit 1; \
 	fi
 
@@ -98,5 +124,5 @@ define run-gowin
 	@echo "Generated $(OUTPUT)"
 endef
 
-$(OUTPUT): $(PROJECT_INPUTS) $(BUILD_TCL) | check-tools
+$(OUTPUT): $(PROJECT_INPUTS) $(BUILD_TCL) | check-submodules check-tools
 	$(call run-gowin)

@@ -136,6 +136,9 @@ Well, at this point in time and you still using this bloatware-AI-minion-copilot
 From the repository root, connect a powered Tang Nano 20K by USB and run:
 
 ```sh
+# Initialize the JT49, JT51, and JTOPL submodules after cloning
+make init
+
 # Synthesis, place-and-route, and bitstream generation
 make
 
@@ -148,9 +151,13 @@ make program
 # Flash the existing bitstream only (does not rebuild)
 make reprogram
 
-# Program the two ROM images into SPI flash
+# Program the ROM images into SPI flash
 make roms
 ```
+
+Both incremental and clean builds verify that all JT submodules are
+initialized. If any core is missing, the build stops with an instruction to
+run `make init`.
 
 The Makefile defaults to the macOS Gowin path above when running on macOS and
 `/opt/Gowin/IDE` on Linux. It also accepts `OPENFPGALOADER` and
