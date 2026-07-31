@@ -1,4 +1,7 @@
 module top
+#(
+    parameter AUDIO_FILTER_ENABLED = 1'b1
+)
 (
     input   clkin,
     input   s1,
@@ -271,6 +274,7 @@ module top
     wire signed [15:0] psg_audio_sample;
     wire signed [15:0] opll_audio_sample;
     wire signed [15:0] jt51_audio_sample;
+    wire signed [15:0] keyclick_audio_sample;
     wire signed [10:0] scc_sound;
     wire signed [15:0] scc_audio_sample;
     wire signed [10:0] jt89_sound;
@@ -280,7 +284,11 @@ module top
     wire [16:0] audio_filter_sum;
     wire [15:0] filtered_audio_sample;
     reg [15:0] audio_sample_hold = 16'd0;
+    reg [15:0] current_mixed_audio_hold = 16'd0;
+    reg [15:0] previous_mixed_audio_hold = 16'd0;
     reg [15:0] previous_mixed_audio_sample = 16'd0;
+    reg audio_mix_pending = 1'b0;
+    reg [1:0] audio_filter_switch_sync = 2'b00;
     (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
     reg [1:0] audio_req_sync = 2'b00;
     reg audio_req_sync_d = 1'b0;
@@ -426,14 +434,25 @@ module top
             audio_req_sync <= 2'b00;
             audio_req_sync_d <= 1'b0;
             audio_sample_hold <= 16'd0;
+            current_mixed_audio_hold <= 16'd0;
+            previous_mixed_audio_hold <= 16'd0;
             previous_mixed_audio_sample <= 16'd0;
+            audio_mix_pending <= 1'b0;
+            audio_filter_switch_sync <= 2'b00;
         end else begin
+            audio_filter_switch_sync <=
+                {audio_filter_switch_sync[0], s2};
             audio_req_sync <= {audio_req_sync[0], audio_req};
             audio_req_sync_d <= audio_req_sync[1];
 
             if (audio_req_sync[1] && !audio_req_sync_d) begin
-                audio_sample_hold <= filtered_audio_sample;
+                current_mixed_audio_hold <= mixed_audio_sample;
+                previous_mixed_audio_hold <= previous_mixed_audio_sample;
                 previous_mixed_audio_sample <= mixed_audio_sample;
+                audio_mix_pending <= 1'b1;
+            end else if (audio_mix_pending) begin
+                audio_sample_hold <= filtered_audio_sample;
+                audio_mix_pending <= 1'b0;
             end
         end
     end
@@ -543,6 +562,9 @@ module top
     wire psg_bdir;
     wire psg_bc;
     wire [9:0] jt49_sound;
+    wire ppi_port_c_write;
+    wire ppi_control_write;
+    reg keyclick_level = 1'b0;
     wire opll_write_selected;
     wire jt51_chip_selected;
     wire jt51_status_read;
@@ -602,6 +624,28 @@ module top
                             addr[7:0] == 8'hA1;
     assign psg_bdir = psg_address_write || psg_data_write;
     assign psg_bc = psg_address_write;
+
+    // The MSX key click is not a fixed-frequency oscillator. PPI port C bit 7
+    // is a one-bit audio level; software makes tones and digitized speech by
+    // toggling it. Observe both ways software can change that output: a full
+    // port-C write at AAh and the 8255 bit-set/reset command at ABh. A mode-set
+    // command clears the 8255 output latches, including the key-click output.
+    assign ppi_port_c_write = !iorq_n && m1_n && !wr_n &&
+                              addr[7:0] == 8'hAA;
+    assign ppi_control_write = !iorq_n && m1_n && !wr_n &&
+                               addr[7:0] == 8'hAB;
+
+    always_ff @(posedge main_clk or negedge board_reset_n)
+    begin
+        if (!board_reset_n)
+            keyclick_level <= 1'b0;
+        else if (ppi_port_c_write)
+            keyclick_level <= cd_in[7];
+        else if (ppi_control_write && cd_in[7])
+            keyclick_level <= 1'b0;
+        else if (ppi_control_write && cd_in[3:1] == 3'd7)
+            keyclick_level <= cd_in[0];
+    end
 
     jt49_bus psg_inst (
         .rst_n(psg_module_reset_n),
@@ -707,6 +751,11 @@ module top
     // JT49's unsigned 10-bit mix has true zero at silence. Scale it into the
     // same approximate 14-bit range used by the previous PSG implementation.
     assign psg_audio_sample = {2'b00, jt49_sound, 4'b0000};
+    // The original signal is attenuated before being mixed with the PSG.
+    // Feed its one-bit level directly into the existing wide mixer; software
+    // controls every transition and therefore the resulting frequency.
+    assign keyclick_audio_sample =
+        keyclick_level ? 16'sh1000 : 16'sd0;
     // Scale the 11-bit SCC and JT89 outputs into the same useful range.
     // This exact sample feeds both the physical audio DAC and HDMI.
     assign scc_audio_sample = {{2{scc_sound[10]}}, scc_sound, 3'b000};
@@ -718,7 +767,8 @@ module top
         {{2{opll_audio_sample[15]}}, opll_audio_sample} +
         {{3{jt51_audio_sample[15]}}, jt51_audio_sample[15:1]} +
         {{2{scc_audio_sample[15]}}, scc_audio_sample} +
-        {{2{jt89_audio_sample[15]}}, jt89_audio_sample};
+        {{2{jt89_audio_sample[15]}}, jt89_audio_sample} +
+        {{2{keyclick_audio_sample[15]}}, keyclick_audio_sample};
     // JT51 is attenuated by 6 dB above after its stereo-to-mono average.
     // Reducing the complete mix by 6 dB then guarantees 16-bit headroom
     // without changing the established levels of the other sources.
@@ -727,10 +777,16 @@ module top
     // equivalent to applying the same filter independently to every source.
     // It softens all source edges near the 44.1 kHz Nyquist limit with one
     // history register and one adder, outside every sound-core feedback cone.
+    // Keep both paths in every compiled netlist. This avoids changing global
+    // placement when testing the bypass mode. With S2 released, the parameter
+    // selects the default; pressing S2 temporarily selects the opposite path.
+    wire audio_filter_enabled_runtime =
+        AUDIO_FILTER_ENABLED ^ audio_filter_switch_sync[1];
     assign audio_filter_sum =
-        {previous_mixed_audio_sample[15], previous_mixed_audio_sample} +
-        {mixed_audio_sample[15], mixed_audio_sample};
-    assign filtered_audio_sample = audio_filter_sum[16:1];
+        {previous_mixed_audio_hold[15], previous_mixed_audio_hold} +
+        {current_mixed_audio_hold[15], current_mixed_audio_hold};
+    assign filtered_audio_sample = audio_filter_enabled_runtime ?
+        audio_filter_sum[16:1] : current_mixed_audio_hold;
 
     // ---------------------------------------------------------------------
     // Franky / Sega Master System VDP and PSG
@@ -1060,7 +1116,7 @@ module top
             hdmi_mix_sample <= 16'd0;
         end else begin
             // audio_sample_hold is a coherent, slowly changing snapshot of
-            // the same four-source mix sent to audio_drive.
+            // the same complete mix sent to audio_drive.
             hdmi_mix_meta <= hdmi_mix_louder_sample;
             hdmi_mix_sample <= hdmi_mix_meta;
         end
