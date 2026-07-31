@@ -234,10 +234,6 @@ metal fragment remains shorting a supply or signal before reassembly.
 <p><img src="images/with-rgb.JPG" alt="Tang Nano 20K board with RGB LED fitted" width="600"></p>
 <p><img src="images/without-rgb.JPG" alt="Tang Nano 20K board after RGB LED removal" width="600"></p>
 
-The documentation photos have had EXIF, GPS, and camera-identifying metadata
-removed. The explicit HTML width keeps the high-resolution photos from
-expanding to the full README width.
-
 ## MSX bus pins
 
 | MSX bus | FPGA signal | Direction | Notes |
