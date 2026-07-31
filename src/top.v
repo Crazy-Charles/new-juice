@@ -275,12 +275,12 @@ module top
     wire signed [15:0] scc_audio_sample;
     wire signed [10:0] jt89_sound;
     wire signed [15:0] jt89_audio_sample;
-    wire [16:0] psg_filter_sum;
-    wire [15:0] psg_filtered_audio_sample;
     wire signed [17:0] audio_mix_wide;
     wire [15:0] mixed_audio_sample;
+    wire [16:0] audio_filter_sum;
+    wire [15:0] filtered_audio_sample;
     reg [15:0] audio_sample_hold = 16'd0;
-    reg [15:0] psg_previous_audio_sample = 16'd0;
+    reg [15:0] previous_mixed_audio_sample = 16'd0;
     (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
     reg [1:0] audio_req_sync = 2'b00;
     reg audio_req_sync_d = 1'b0;
@@ -426,14 +426,14 @@ module top
             audio_req_sync <= 2'b00;
             audio_req_sync_d <= 1'b0;
             audio_sample_hold <= 16'd0;
-            psg_previous_audio_sample <= 16'd0;
+            previous_mixed_audio_sample <= 16'd0;
         end else begin
             audio_req_sync <= {audio_req_sync[0], audio_req};
             audio_req_sync_d <= audio_req_sync[1];
 
             if (audio_req_sync[1] && !audio_req_sync_d) begin
-                audio_sample_hold <= mixed_audio_sample;
-                psg_previous_audio_sample <= psg_audio_sample;
+                audio_sample_hold <= filtered_audio_sample;
+                previous_mixed_audio_sample <= mixed_audio_sample;
             end
         end
     end
@@ -707,12 +707,6 @@ module top
     // JT49's unsigned 10-bit mix has true zero at silence. Scale it into the
     // same approximate 14-bit range used by the previous PSG implementation.
     assign psg_audio_sample = {2'b00, jt49_sound, 4'b0000};
-    // Average consecutive 44.1 kHz output snapshots. This small boxcar filter
-    // softens PSG edges and suppresses content near the audio Nyquist limit
-    // without adding feedback logic to the timing-sensitive JT49/bus cone.
-    assign psg_filter_sum =
-        {1'b0, psg_previous_audio_sample} + {1'b0, psg_audio_sample};
-    assign psg_filtered_audio_sample = psg_filter_sum[16:1];
     // Scale the 11-bit SCC and JT89 outputs into the same useful range.
     // This exact sample feeds both the physical audio DAC and HDMI.
     assign scc_audio_sample = {{2{scc_sound[10]}}, scc_sound, 3'b000};
@@ -720,7 +714,7 @@ module top
     // sources before entering the shared mix.
     assign jt89_audio_sample = {{2{jt89_sound[10]}}, jt89_sound, 3'b00};
     assign audio_mix_wide =
-        {{2{psg_filtered_audio_sample[15]}}, psg_filtered_audio_sample} +
+        {{2{psg_audio_sample[15]}}, psg_audio_sample} +
         {{2{opll_audio_sample[15]}}, opll_audio_sample} +
         {{3{jt51_audio_sample[15]}}, jt51_audio_sample[15:1]} +
         {{2{scc_audio_sample[15]}}, scc_audio_sample} +
@@ -729,6 +723,14 @@ module top
     // Reducing the complete mix by 6 dB then guarantees 16-bit headroom
     // without changing the established levels of the other sources.
     assign mixed_audio_sample = audio_mix_wide[16:1];
+    // A two-sample moving average is linear, so filtering the completed mix is
+    // equivalent to applying the same filter independently to every source.
+    // It softens all source edges near the 44.1 kHz Nyquist limit with one
+    // history register and one adder, outside every sound-core feedback cone.
+    assign audio_filter_sum =
+        {previous_mixed_audio_sample[15], previous_mixed_audio_sample} +
+        {mixed_audio_sample[15], mixed_audio_sample};
+    assign filtered_audio_sample = audio_filter_sum[16:1];
 
     // ---------------------------------------------------------------------
     // Franky / Sega Master System VDP and PSG
