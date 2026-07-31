@@ -27,6 +27,28 @@
         <File path="src/jt49/hdl/jt49_eg.v" type="file.verilog" enable="1"/>
         <File path="src/jt49/hdl/jt49_exp.v" type="file.verilog" enable="1"/>
         <File path="src/jt49/hdl/jt49_noise.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_acc.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_eg.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_exp2lin.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_exprom.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_kon.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_lfo.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_lin2exp.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_mmr.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_mod.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_noise_lfsr.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_noise.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_op.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_pg.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_phinc_rom.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_phrom.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_pm.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_reg.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_sh.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_timers.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_reg_ch.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51_csr_op.v" type="file.verilog" enable="1"/>
+        <File path="src/jt51/hdl/jt51.v" type="file.verilog" enable="1"/>
         <File path="src/jtopl/hdl/jtopl_acc.v" type="file.verilog" enable="1"/>
         <File path="src/jtopl/hdl/jtopl_csr.v" type="file.verilog" enable="1"/>
         <File path="src/jtopl/hdl/jtopl_div.v" type="file.verilog" enable="1"/>

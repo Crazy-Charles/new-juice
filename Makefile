@@ -26,12 +26,14 @@ DOS2_ROM := $(ROOT)/roms/Nextor-2.1.1.WonderTANG.ROM.bin
 DOS2_ROM_OFFSET ?= 1048576
 FM_ROM := $(ROOT)/roms/16k_fm_opl.bin
 FM_ROM_OFFSET ?= 1179648
+SFG_ROM := $(ROOT)/roms/SFG01.ROM
 
 PROJECT_INPUTS := \
 	$(PROJECT) \
-	$(shell find $(ROOT)/src -path $(ROOT)/src/jtopl -prune -o -path $(ROOT)/src/jt49 -prune -o -type f -print) \
+	$(shell find $(ROOT)/src -path $(ROOT)/src/jtopl -prune -o -path $(ROOT)/src/jt49 -prune -o -path $(ROOT)/src/jt51 -prune -o -type f -print) \
 	$(shell find $(ROOT)/src/jtopl/hdl -type f) \
 	$(shell find $(ROOT)/src/jt49/hdl -type f) \
+	$(shell find $(ROOT)/src/jt51/hdl -maxdepth 1 -type f) \
 	$(shell find $(ROOT)/roms -type f)
 
 .DEFAULT_GOAL := all
@@ -60,13 +62,18 @@ reprogram: check-programmer
 	@"$(OPENFPGALOADER)" -b "$(PROGRAMMER_BOARD)" \
 		$(PROGRAMMER_FLAGS) "$(OUTPUT)"
 
-roms: check-programmer $(DOS2_ROM) $(FM_ROM)
+roms: check-programmer $(DOS2_ROM) $(FM_ROM) $(SFG_ROM)
 	@echo "Programming DOS2 ROM at offset $(DOS2_ROM_OFFSET)"
 	@"$(OPENFPGALOADER)" -b "$(PROGRAMMER_BOARD)" \
 		$(ROM_PROGRAMMER_FLAGS) -o "$(DOS2_ROM_OFFSET)" "$(DOS2_ROM)"
-	@echo "Programming FM ROM at offset $(FM_ROM_OFFSET)"
-	@"$(OPENFPGALOADER)" -b "$(PROGRAMMER_BOARD)" \
-		$(ROM_PROGRAMMER_FLAGS) -o "$(FM_ROM_OFFSET)" "$(FM_ROM)"
+	@combined_rom="$$(mktemp -t new-juice-fm-sfg)"; \
+		trap 'rm -f "$$combined_rom"' EXIT; \
+		cp "$(FM_ROM)" "$$combined_rom"; \
+		dd if="$(SFG_ROM)" of="$$combined_rom" bs=16384 seek=1 \
+			conv=notrunc status=none; \
+		echo "Programming FM and SFG-01 ROMs at offset $(FM_ROM_OFFSET)"; \
+		"$(OPENFPGALOADER)" -b "$(PROGRAMMER_BOARD)" \
+			$(ROM_PROGRAMMER_FLAGS) -o "$(FM_ROM_OFFSET)" "$$combined_rom"
 
 check-tools:
 	@if [ ! -x "$(GW_SH)" ]; then \

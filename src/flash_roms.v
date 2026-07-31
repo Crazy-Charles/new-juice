@@ -12,6 +12,7 @@ module flash_roms
     input wr_n,
     input rfsh_n,
     input sltsl_n,
+    input [3:0] page0_subslot_en,
     input [3:0] page1_subslot_en,
     input dos2_overlay_enabled,
 
@@ -37,7 +38,7 @@ module flash_roms
     localparam [2:0] SDRAM_CMD_READ = 3'b101;
     localparam [2:0] SDRAM_CMD_WRITE = 3'b100;
     localparam [23:0] FLASH_BASE = 24'h100000;
-    localparam [17:0] ROM_BYTE_COUNT = 18'h24000;
+    localparam [17:0] ROM_BYTE_COUNT = 18'h28000;
     localparam [22:0] SDRAM_ROM_BASE = 23'h600000;
 
     localparam [3:0] STATE_WAIT_ENABLE = 4'd0;
@@ -72,19 +73,29 @@ module flash_roms
     wire [7:0] flash_byte;
     wire flash_byte_valid;
 
+    wire page0_selected = !sltsl_n && !merq_n && iorq_n && rfsh_n &&
+                          addr[15:14] == 2'b00;
     wire page1_selected = !sltsl_n && !merq_n && iorq_n && rfsh_n &&
                           addr[15:14] == 2'b01;
+    wire sfg_selected = page0_selected && page0_subslot_en[1];
     wire dos2_selected = page1_selected && page1_subslot_en[0];
     wire fmpac_selected = page1_selected && page1_subslot_en[1];
+    wire sfg_io_selected = sfg_selected &&
+                           (addr == 16'h3ff0 || addr == 16'h3ff1);
     wire dos2_overlay_selected = dos2_overlay_enabled && dos2_selected &&
                                  addr >= 16'h7c00 && addr <= 16'h7eff;
     wire rom_read_selected = !rd_n &&
                              ((dos2_selected && !dos2_overlay_selected) ||
-                              fmpac_selected);
+                              fmpac_selected ||
+                              (sfg_selected && !sfg_io_selected));
     wire dos2_bank_write = !wr_n && dos2_selected && addr == 16'h6000;
     wire [17:0] dos2_offset = {dos2_bank, addr[13:0]};
     wire [17:0] fmpac_offset = 18'h20000 + {4'd0, addr[13:0]};
-    wire [17:0] selected_rom_offset = dos2_selected ? dos2_offset : fmpac_offset;
+    wire [17:0] sfg_offset = 18'h24000 + {4'd0, addr[13:0]};
+    wire [17:0] selected_rom_offset =
+        dos2_selected ? dos2_offset :
+        fmpac_selected ? fmpac_offset :
+                         sfg_offset;
     wire [22:0] selected_sdram_byte_addr = SDRAM_ROM_BASE + selected_rom_offset;
     wire [22:0] load_sdram_byte_addr = SDRAM_ROM_BASE + load_offset;
     // SMR reset maps banks 0/1 at 4000h and banks 2/3 at 8000h. Clear the

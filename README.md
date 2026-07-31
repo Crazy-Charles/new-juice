@@ -167,8 +167,11 @@ already-built `impl/prn/new-juice.fs`. Unlike `make program`, it does not add
 the bitstream as a build dependency or invoke synthesis; run `make` or
 `make rebuild` first when the bitstream needs to be regenerated.
 
-`make roms` writes DOS2 at SPI-flash offset `0x100000` and FM-PAC at
-`0x120000`; do not interrupt power while either operation is in progress.
+`make roms` writes DOS2 at SPI-flash offset `0x100000`, then writes one
+combined image containing FM-PAC at `0x120000` and SFG-01 at `0x124000`.
+FM-PAC and SFG-01 are programmed together because the adjacent images share
+one flash erase sector. Do not interrupt power while either programming
+operation is in progress.
 The same project can be opened in the Gowin GUI by opening `new-juice.gprj`.
 
 ## Tang Nano 20K hardware modifications

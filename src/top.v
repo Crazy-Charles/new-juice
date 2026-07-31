@@ -270,6 +270,7 @@ module top
     wire audio_hp_din;
     wire signed [15:0] psg_audio_sample;
     wire signed [15:0] opll_audio_sample;
+    wire signed [15:0] jt51_audio_sample;
     wire signed [10:0] scc_sound;
     wire signed [15:0] scc_audio_sample;
     wire signed [10:0] jt89_sound;
@@ -537,6 +538,14 @@ module top
     wire psg_bc;
     wire [9:0] jt49_sound;
     wire opll_write_selected;
+    wire jt51_chip_selected;
+    wire jt51_status_read;
+    wire [7:0] jt51_data_out;
+    wire jt51_irq_n;
+    wire signed [15:0] jt51_left;
+    wire signed [15:0] jt51_right;
+    wire signed [16:0] jt51_stereo_sum;
+    reg jt51_clock_phase = 1'b0;
     // 27 MHz * 569408471 / 2^32 = 3,579,545.0017 Hz.
     localparam [31:0] OPLL_PHASE_INCREMENT = 32'd569408471;
     reg [31:0] opll_phase_accumulator = 32'd0;
@@ -622,10 +631,13 @@ module top
         if (!opll_module_reset_n) begin
             opll_phase_accumulator <= 32'd0;
             opll_clock_enable <= 1'b0;
+            jt51_clock_phase <= 1'b0;
         end else begin
             {opll_clock_enable, opll_phase_accumulator} <=
                 {1'b0, opll_phase_accumulator} +
                 {1'b0, OPLL_PHASE_INCREMENT};
+            if (opll_clock_enable)
+                jt51_clock_phase <= ~jt51_clock_phase;
         end
     end
 
@@ -651,6 +663,41 @@ module top
         end
     endgenerate
 
+    // SFG-01/YM2151 memory-mapped interface in expanded subslot 1.
+    // 3FF0 selects a register and returns status; 3FF1 writes register data.
+    assign jt51_chip_selected =
+        active_module_reset_n && !sltsl_n && page0_subslot_en[1] &&
+        !merq_n && iorq_n && rfsh_n && addr[15:1] == 15'h1ff8;
+    assign jt51_status_read =
+        jt51_chip_selected && !rd_n && addr[0] == 1'b0;
+
+    // JT51 runs at the same precise 3.579545 MHz enable as JT2413. Its P1
+    // enable is asserted on every second chip enable, matching the core API.
+    jt51 jt51_inst (
+        .rst(~opll_module_reset_n),
+        .clk(clk),
+        .cen(opll_clock_enable),
+        .cen_p1(opll_clock_enable && jt51_clock_phase),
+        .cs_n(~jt51_chip_selected),
+        .wr_n(wr_n),
+        .a0(addr[0]),
+        .din(cd_in),
+        .dout(jt51_data_out),
+        .ct1(),
+        .ct2(),
+        .irq_n(jt51_irq_n),
+        .sample(),
+        .left(jt51_left),
+        .right(jt51_right),
+        .xleft(),
+        .xright()
+    );
+
+    // Average the stereo outputs to mono, retaining the full signed range.
+    assign jt51_stereo_sum =
+        {jt51_left[15], jt51_left} + {jt51_right[15], jt51_right};
+    assign jt51_audio_sample = jt51_stereo_sum[16:1];
+
     // JT49's unsigned 10-bit mix has true zero at silence. Scale it into the
     // same approximate 14-bit range used by the previous PSG implementation.
     assign psg_audio_sample = {2'b00, jt49_sound, 4'b0000};
@@ -663,12 +710,13 @@ module top
     assign audio_mix_wide =
         {{2{psg_audio_sample[15]}}, psg_audio_sample} +
         {{2{opll_audio_sample[15]}}, opll_audio_sample} +
+        {{3{jt51_audio_sample[15]}}, jt51_audio_sample[15:1]} +
         {{2{scc_audio_sample[15]}}, scc_audio_sample} +
         {{2{jt89_audio_sample[15]}}, jt89_audio_sample};
-    // The current source scalings can sum to about +49k. Reduce the signed
-    // wide mix by 6 dB, giving guaranteed 16-bit headroom without hard
-    // saturation or wraparound while preserving the relative source levels.
-    assign mixed_audio_sample = $signed(audio_mix_wide) >>> 1;
+    // JT51 is attenuated by 6 dB above after its stereo-to-mono average.
+    // Reducing the complete mix by 6 dB then guarantees 16-bit headroom
+    // without changing the established levels of the other sources.
+    assign mixed_audio_sample = audio_mix_wide[16:1];
 
     // ---------------------------------------------------------------------
     // Franky / Sega Master System VDP and PSG
@@ -1331,6 +1379,7 @@ module top
         .wr_n(wr_n),
         .rfsh_n(rfsh_n),
         .sltsl_n(sltsl_n),
+        .page0_subslot_en(page0_subslot_en),
         .page1_subslot_en(page1_subslot_en),
         .dos2_overlay_enabled(sd_overlay_enabled),
         .data_out(flash_rom_data_out),
@@ -1390,6 +1439,7 @@ module top
     wire sd_drive_en =
         active_module_reset_n && sd_data_out_en;
     wire sms_drive_en = sms_bridge_read_data_en;
+    wire jt51_drive_en = active_module_reset_n && jt51_status_read;
 
     assign data_out =
         ({8{slot_drive_en}} & slot_expander_data_out) |
@@ -1397,11 +1447,12 @@ module top
         ({8{smr_drive_en}} & smr_data_out) |
         ({8{bios_drive_en}} & flash_rom_data_out) |
         ({8{sd_drive_en}} & sd_data_out) |
-        ({8{sms_drive_en}} & sms_bridge_read_data);
+        ({8{sms_drive_en}} & sms_bridge_read_data) |
+        ({8{jt51_drive_en}} & jt51_data_out);
 
     assign data_out_en =
         slot_drive_en || mapper_drive_en || smr_drive_en ||
-        bios_drive_en || sd_drive_en || sms_drive_en;
+        bios_drive_en || sd_drive_en || sms_drive_en || jt51_drive_en;
 
     assign mapper_port_read =
         (active_module_reset_n && !iorq_n && m1_n && !rd_n &&
@@ -1488,7 +1539,9 @@ module top
     // driven active high by the board-level inverter below.
     // Franky's VDP supplies an active-low interrupt. int_out drives the
     // board-level inverter below, matching WonderTANG's external polarity.
-    assign int_n = sms_reset_n ? sms_vdp_irq_n : 1'b1;
+    assign int_n =
+        (sms_reset_n ? sms_vdp_irq_n : 1'b1) &&
+        (opll_module_reset_n ? jt51_irq_n : 1'b1);
 
     assign int_out = ~int_n;
     assign wait_out = ~wait_n;

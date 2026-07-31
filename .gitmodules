@@ -4,3 +4,6 @@
 [submodule "src/jt49"]
 	path = src/jt49
 	url = https://github.com/jotego/jt49.git
+[submodule "src/jt51"]
+	path = src/jt51
+	url = https://github.com/jotego/jt51

@@ -25,6 +25,28 @@
         <File path="/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_eg.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_exp.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_noise.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_acc.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_eg.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_exp2lin.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_exprom.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_kon.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_lfo.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_lin2exp.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_mmr.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_mod.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_noise_lfsr.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_noise.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_op.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_pg.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_phinc_rom.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_phrom.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_pm.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_reg.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_timers.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_reg_ch.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_csr_op.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_acc.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_csr.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_div.v" type="verilog"/>
