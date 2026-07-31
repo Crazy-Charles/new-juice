@@ -1,0 +1,6 @@
+[submodule "src/jtopl"]
+	path = src/jtopl
+	url = https://github.com/jotego/jtopl.git
+[submodule "src/jt49"]
+	path = src/jt49
+	url = https://github.com/jotego/jt49.git
