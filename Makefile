@@ -27,7 +27,12 @@ DOS2_ROM_OFFSET ?= 1048576
 FM_ROM := $(ROOT)/roms/16k_fm_opl.bin
 FM_ROM_OFFSET ?= 1179648
 
-PROJECT_INPUTS := $(PROJECT) $(shell find $(ROOT)/src $(ROOT)/roms -type f)
+PROJECT_INPUTS := \
+	$(PROJECT) \
+	$(shell find $(ROOT)/src -path $(ROOT)/src/jtopl -prune -o -path $(ROOT)/src/jt49 -prune -o -type f -print) \
+	$(shell find $(ROOT)/src/jtopl/hdl -type f) \
+	$(shell find $(ROOT)/src/jt49/hdl -type f) \
+	$(shell find $(ROOT)/roms -type f)
 
 .DEFAULT_GOAL := all
 

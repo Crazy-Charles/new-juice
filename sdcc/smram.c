@@ -8,6 +8,7 @@
 #define BDOS_C_RAWIO		6
 
 #define TYPE_MSCC 0x00
+#define TYPE_DDX 0x01
 #define TYPE_K4  0x04
 #define TYPE_K5  0x05
 #define TYPE_A16 0x16
@@ -455,6 +456,10 @@ int main(void)
                         else
                             megaram_type = TYPE_UNK;
                     } 
+                    else if (to_upper(*params) == 'D')
+                    {
+                        megaram_type = TYPE_DDX;
+                    }
                     else if (to_upper(*params) == 'S')
                     {
                         softReset = TRUE;
@@ -555,6 +560,7 @@ int main(void)
                 "   3: ASCII8      (/A8)\n\r"
                 "   5: Konami SCC  (/K5)\n\r"
                 "   6: Konami      (/K4)\n\r\n\r"
+                " /D: Set MegaRAM DDX type\n\r"
 //                " /Vxy: Set volume for\n\r"
 //                "   S: SCC+\n\r"
 //                "   P: PSG\n\r"
@@ -588,6 +594,9 @@ int main(void)
                 break;
         case TYPE_A8:
                 printf("ASCII8 (/R3 or /A8)\n\r");
+                break;
+        case TYPE_DDX:
+                printf("MegaRAM DDX (/D)\n\r");
                 break;
     }
 

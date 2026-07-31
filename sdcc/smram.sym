@@ -10,22 +10,23 @@ Symbol Table
     _MEGA_PORT0                                                 =   0000008E 
     _MEGA_PORT1                                                 =   0000008F 
     _PPIA                                                       =   000000A8 
-  0 ___str_0                                                        000006E9 R
-  0 ___str_1                                                        00000700 R
-  0 ___str_10                                                       0000090A R
-  0 ___str_11                                                       00000920 R
-  0 ___str_12                                                       00000938 R
-  0 ___str_13                                                       0000093F R
-  0 ___str_14                                                       0000094C R
-  0 ___str_15                                                       00000967 R
-  0 ___str_2                                                        00000720 R
-  0 ___str_3                                                        00000734 R
-  0 ___str_4                                                        00000756 R
-  0 ___str_5                                                        0000089A R
-  0 ___str_6                                                        000008AA R
-  0 ___str_7                                                        000008C2 R
-  0 ___str_8                                                        000008D8 R
-  0 ___str_9                                                        000008F2 R
+  0 ___str_0                                                        00000711 R
+  0 ___str_1                                                        00000728 R
+  0 ___str_10                                                       0000094D R
+  0 ___str_11                                                       00000963 R
+  0 ___str_12                                                       00000976 R
+  0 ___str_13                                                       0000098E R
+  0 ___str_14                                                       00000995 R
+  0 ___str_15                                                       000009A2 R
+  0 ___str_16                                                       000009BD R
+  0 ___str_2                                                        00000748 R
+  0 ___str_3                                                        0000075C R
+  0 ___str_4                                                        0000077E R
+  0 ___str_5                                                        000008DD R
+  0 ___str_6                                                        000008ED R
+  0 ___str_7                                                        00000905 R
+  0 ___str_8                                                        0000091B R
+  0 ___str_9                                                        00000935 R
   0 __no_turbo                                                      00000085 R
   0 __open_no_err                                                   00000096 R
   7 __xinit__cpumode                                                00000008 R
@@ -57,12 +58,12 @@ Symbol Table
   0 _dos2_read                                                      000000A4 GR
   0 _enaslt                                                         00000048 GR
   2 _filename                                                       00000001 GR
-  2 _found                                                          00000000 GR
 ASxxxx Assembler V05.50.4+NoICE+SDCCmods-WIP-R14  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80 / R800)                               Page 2
 Hexadecimal [32-Bits]
 
 Symbol Table
 
+  2 _found                                                          00000000 GR
   0 _fputs                                                          00000030 GR
   0 _getchar                                                        00000026 GR
   1 _handle                                                         0000000A GR
@@ -99,12 +100,13 @@ Symbol Table
   1 _t                                                              00000006 GR
   0 _to_upper                                                       0000003F GR
 
+
 ASxxxx Assembler V05.50.4+NoICE+SDCCmods-WIP-R14  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80 / R800)                               Page 3
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      98D   flags    0
+   0 _CODE                                      size      9E3   flags    0
    1 _DATA                                      size      11A   flags    0
    2 _INITIALIZED                               size        E   flags    0
    3 _DABS                                      size        0   flags    8

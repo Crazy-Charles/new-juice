@@ -268,7 +268,6 @@ module top
     wire audio_hp_bck;
     wire audio_hp_ws;
     wire audio_hp_din;
-    wire [13:0] psg_pcm;
     wire signed [15:0] psg_audio_sample;
     wire signed [15:0] opll_audio_sample;
     wire signed [10:0] scc_sound;
@@ -536,11 +535,7 @@ module top
     wire psg_data_write;
     wire psg_bdir;
     wire psg_bc;
-    wire [7:0] psg_data_out_unused;
-    wire [11:0] psg_channel_a_unused;
-    wire [11:0] psg_channel_b_unused;
-    wire [11:0] psg_channel_c_unused;
-    wire [13:0] psg_mix_unsigned_unused;
+    wire [9:0] jt49_sound;
     wire opll_write_selected;
     // 27 MHz * 569408471 / 2^32 = 3,579,545.0017 Hz.
     localparam [31:0] OPLL_PHASE_INCREMENT = 32'd569408471;
@@ -593,20 +588,26 @@ module top
     assign psg_bdir = psg_address_write || psg_data_write;
     assign psg_bc = psg_address_write;
 
-    ym2149_audio psg_inst (
-        .clk_i(main_clk),
-        .en_clk_psg_i(psg_clock_enable),
-        .sel_n_i(1'b1),
-        .reset_n_i(psg_module_reset_n),
-        .bc_i(psg_bc),
-        .bdir_i(psg_bdir),
-        .data_i(cd_in),
-        .data_r_o(psg_data_out_unused),
-        .ch_a_o(psg_channel_a_unused),
-        .ch_b_o(psg_channel_b_unused),
-        .ch_c_o(psg_channel_c_unused),
-        .mix_audio_o(psg_mix_unsigned_unused),
-        .pcm14s_o(psg_pcm)
+    jt49_bus psg_inst (
+        .rst_n(psg_module_reset_n),
+        .clk(main_clk),
+        .clk_en(psg_clock_enable),
+        .bdir(psg_bdir),
+        .bc1(psg_bc),
+        .din(cd_in),
+        .sel(1'b1),
+        .dout(),
+        .sound(jt49_sound),
+        .A(),
+        .B(),
+        .C(),
+        .sample(),
+        .IOA_in(8'hff),
+        .IOA_out(),
+        .IOA_oe(),
+        .IOB_in(8'hff),
+        .IOB_out(),
+        .IOB_oe()
     );
 
     // MSX-Music/YM2413 ports 7C (address) and 7D (data). Both are write-only.
@@ -614,7 +615,7 @@ module top
                                  !iorq_n && m1_n && !wr_n &&
                                  addr[7:1] == 7'h3E;
 
-    // Advance VM2413 at the native MSX-Music rate while keeping the whole
+    // Advance JT2413 at the native MSX-Music rate while keeping the whole
     // core on the clean 27 MHz clock tree. The carry is a one-cycle enable.
     always_ff @(posedge clk or negedge opll_module_reset_n)
     begin
@@ -630,34 +631,29 @@ module top
 
     generate
         if (INCLUDE_OPLL) begin : opll_enabled_impl
-            wire [13:0] opll_audio_raw;
+            wire signed [15:0] jt2413_sound;
 
-            // xena advances the emulated chip at 3.579545 MHz. Using the
-            // existing 27 MHz global clock avoids another fabric clock.
-            opll opll_inst (
-                .xin(clk),
-                .xout(),
-                .xena(opll_clock_enable),
-                .d(cd_in),
-                .a(addr[0]),
+            jt2413 jt2413_inst (
+                .rst(~opll_module_reset_n),
+                .clk(clk),
+                .cen(opll_clock_enable),
+                .din(cd_in),
+                .addr(addr[0]),
                 .cs_n(~opll_write_selected),
-                .we_n(wr_n),
-                .ic_n(opll_module_reset_n),
-                .mixout(opll_audio_raw)
+                .wr_n(wr_n),
+                .snd(jt2413_sound),
+                .sample()
             );
 
-            // VM2413 mixout is signed, zero-centered 14-bit PCM.
-            assign opll_audio_sample =
-                {opll_audio_raw, 2'b0};
+            assign opll_audio_sample = jt2413_sound;
         end else begin : opll_disabled_impl
             assign opll_audio_sample = 16'sd0;
         end
     endgenerate
 
-    // pcm14s_o deliberately recenters disabled channels around a negative DC
-    // level, which is inappropriate for this digital output path. The unsigned
-    // mix has true zero at silence and avoids the constant boot-time noise.
-    assign psg_audio_sample = {2'b00, psg_mix_unsigned_unused};
+    // JT49's unsigned 10-bit mix has true zero at silence. Scale it into the
+    // same approximate 14-bit range used by the previous PSG implementation.
+    assign psg_audio_sample = {2'b00, jt49_sound, 4'b0000};
     // Scale the 11-bit SCC and JT89 outputs into the same useful range.
     // This exact sample feeds both the physical audio DAC and HDMI.
     assign scc_audio_sample = {{2{scc_sound[10]}}, scc_sound, 3'b000};

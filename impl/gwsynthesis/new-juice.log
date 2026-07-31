@@ -14,6 +14,44 @@ Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modul
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC_modules/IKASCC_player_a.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_bus.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_div.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_cen.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_eg.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_exp.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_noise.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_acc.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_csr.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_div.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_cnt.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_comb.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_ctrl.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_final.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_pure.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_step.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_exprom.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_lfo.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_logsin.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_noise.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_op.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_comb.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_inc.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_rhy.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_sum.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pm.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_reg_ch.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_single_acc.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_slot_cnt.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_timers.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopll_mmr.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopll_reg.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopll_reg_ch.v'
+Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jt2413.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89_mixer.v'
@@ -42,72 +80,6 @@ Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/slot_expander.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/super_megaram.v'
 Analyzing Verilog file '/Users/felipe/src/fpga/new-juice/src/top.v'
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd'
-Analyzing entity 'ym2149_audio'("/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd":155)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd":176)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/vm2413.vhd'
-Analyzing package 'vm2413'("/Users/felipe/src/fpga/new-juice/src/VM2413/vm2413.vhd":36)
-Analyzing package body 'vm2413'("/Users/felipe/src/fpga/new-juice/src/VM2413/vm2413.vhd":152)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd'
-Analyzing entity 'attack_table_mul'("/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd":42)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd":50)
-Analyzing entity 'attacktable'("/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd":64)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd":73)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/controller.vhd'
-Analyzing entity 'controller'("/Users/felipe/src/fpga/new-juice/src/VM2413/controller.vhd":70)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/controller.vhd":106)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/envelopegenerator.vhd'
-Analyzing entity 'envelopegenerator'("/Users/felipe/src/fpga/new-juice/src/VM2413/envelopegenerator.vhd":42)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/envelopegenerator.vhd":65)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/envelopememory.vhd'
-Analyzing entity 'envelopememory'("/Users/felipe/src/fpga/new-juice/src/VM2413/envelopememory.vhd":36)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/envelopememory.vhd":48)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/feedbackmemory.vhd'
-Analyzing entity 'feedbackmemory'("/Users/felipe/src/fpga/new-juice/src/VM2413/feedbackmemory.vhd":41)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/feedbackmemory.vhd":52)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd'
-Analyzing entity 'linear_table_mul'("/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd":41)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd":49)
-Analyzing entity 'lineartable'("/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd":63)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd":72)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/operator.vhd'
-Analyzing entity 'operator'("/Users/felipe/src/fpga/new-juice/src/VM2413/operator.vhd":41)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/operator.vhd":65)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/outputgenerator.vhd'
-Analyzing entity 'outputgenerator'("/Users/felipe/src/fpga/new-juice/src/VM2413/outputgenerator.vhd":36)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/outputgenerator.vhd":55)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/outputmemory.vhd'
-Analyzing entity 'outputmemory'("/Users/felipe/src/fpga/new-juice/src/VM2413/outputmemory.vhd":36)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/outputmemory.vhd":48)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/phasegenerator.vhd'
-Analyzing entity 'phasegenerator'("/Users/felipe/src/fpga/new-juice/src/VM2413/phasegenerator.vhd":41)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/phasegenerator.vhd":61)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/phasememory.vhd'
-Analyzing entity 'phasememory'("/Users/felipe/src/fpga/new-juice/src/VM2413/phasememory.vhd":36)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/phasememory.vhd":47)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/registermemory.vhd'
-Analyzing entity 'registermemory'("/Users/felipe/src/fpga/new-juice/src/VM2413/registermemory.vhd":40)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/registermemory.vhd":51)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd'
-Analyzing entity 'interpolate_mul'("/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd":41)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd":49)
-Analyzing entity 'sinetable'("/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd":63)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd":73)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd'
-Analyzing entity 'slotcounter'("/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd":40)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd":54)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/temporalmixer.vhd'
-Analyzing entity 'temporalmixer'("/Users/felipe/src/fpga/new-juice/src/VM2413/temporalmixer.vhd":37)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/temporalmixer.vhd":55)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/voicememory.vhd'
-Analyzing entity 'voicememory'("/Users/felipe/src/fpga/new-juice/src/VM2413/voicememory.vhd":36)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/voicememory.vhd":50)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/voicerom.vhd'
-Analyzing entity 'voicerom'("/Users/felipe/src/fpga/new-juice/src/VM2413/voicerom.vhd":38)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/voicerom.vhd":47)
-Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd'
-Analyzing entity 'opll'("/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd":41)
-Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd":55)
 Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/SMS/vdp_background.vhd'
 Analyzing entity 'vdp_background'("/Users/felipe/src/fpga/new-juice/src/SMS/vdp_background.vhd":6)
 Analyzing architecture 'rtl'("/Users/felipe/src/fpga/new-juice/src/SMS/vdp_background.vhd":30)
@@ -134,61 +106,78 @@ Analyzing architecture 'behavioral'("/Users/felipe/src/fpga/new-juice/src/SMS/vd
 Analyzing VHDL file '/Users/felipe/src/fpga/new-juice/src/SMS/video.vhd'
 Analyzing entity 'video'("/Users/felipe/src/fpga/new-juice/src/SMS/video.vhd":6)
 Analyzing architecture 'behavioral'("/Users/felipe/src/fpga/new-juice/src/SMS/video.vhd":25)
-WARN  (EX3073) : Port 'clkoutd' remains unconnected for this instance("/Users/felipe/src/fpga/new-juice/src/top.v":362)
+WARN  (EX3073) : Port 'clkoutd' remains unconnected for this instance("/Users/felipe/src/fpga/new-juice/src/top.v":361)
 Compiling module 'top'("/Users/felipe/src/fpga/new-juice/src/top.v":1)
 Compiling module 'clockdiv'("/Users/felipe/src/fpga/new-juice/src/clockdiv.v":33)
 Compiling module 'audio_drive'("/Users/felipe/src/fpga/new-juice/src/audio_drive.v":1)
 Compiling module 'rpll_main'("/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v":10)
 Compiling module 'rpll_video'("/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v":10)
 Compiling module 'clockdiv2'("/Users/felipe/src/fpga/new-juice/src/clockdiv.v":1)
-Switching to VHDL mode to elaborate design unit 'ym2149_audio'("/Users/felipe/src/fpga/new-juice/src/top.v":610)
-Processing 'ym2149_audio(rtl)'("/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd":155)
-Extracting RAM for identifier 'dacrom_ar'("/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd":361)
-Returning to Verilog mode to proceed with elaboration("/Users/felipe/src/fpga/new-juice/src/top.v":610)
-Switching to VHDL mode to elaborate design unit 'opll'("/Users/felipe/src/fpga/new-juice/src/top.v":647)
-Processing 'opll(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd":41)
-Processing 'SlotCounter(delay=0)(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd":40)
-Processing 'SlotCounter(delay=2)(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd":40)
-Processing 'SlotCounter(delay=5)(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd":40)
-Processing 'SlotCounter(delay=8)(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd":40)
-Processing 'controller(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/controller.vhd":70)
-Processing 'RegisterMemory(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/registermemory.vhd":40)
-Extracting RAM for identifier 'regs_array'("/Users/felipe/src/fpga/new-juice/src/VM2413/registermemory.vhd":54)
-Processing 'VoiceMemory(RTL)'("/Users/felipe/src/fpga/new-juice/src/VM2413/voicememory.vhd":36)
-Extracting RAM for identifier 'voices'("/Users/felipe/src/fpga/new-juice/src/VM2413/voicememory.vhd":55)
-Processing 'VoiceRom(RTL)'("/Users/felipe/src/fpga/new-juice/src/VM2413/voicerom.vhd":38)
-WARN  (EX4545) : Array bounds of function return type do not match array bounds of function return value("/Users/felipe/src/fpga/new-juice/src/VM2413/vm2413.vhd":171)
-WARN  (EX4160) : Latch inferred for net 'tll[7]'("/Users/felipe/src/fpga/new-juice/src/VM2413/controller.vhd":511)
-Processing 'envelopegenerator(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/envelopegenerator.vhd":42)
-Processing 'AttackTable(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd":64)
-Processing 'attack_table_mul(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd":42)
-Processing 'EnvelopeMemory(RTL)'("/Users/felipe/src/fpga/new-juice/src/VM2413/envelopememory.vhd":36)
-Extracting RAM for identifier 'egdata_set'("/Users/felipe/src/fpga/new-juice/src/VM2413/envelopememory.vhd":51)
-WARN  (EX4545) : Array bounds of function return type do not match array bounds of function return value("/Users/felipe/src/fpga/new-juice/src/VM2413/vm2413.vhd":206)
-Processing 'PhaseGenerator(RTL)'("/Users/felipe/src/fpga/new-juice/src/VM2413/phasegenerator.vhd":41)
-WARN  (EX4160) : Latch inferred for net 'dphase[17]'("/Users/felipe/src/fpga/new-juice/src/VM2413/phasegenerator.vhd":172)
-Processing 'PhaseMemory(RTL)'("/Users/felipe/src/fpga/new-juice/src/VM2413/phasememory.vhd":36)
-Extracting RAM for identifier 'phase_array'("/Users/felipe/src/fpga/new-juice/src/VM2413/phasememory.vhd":50)
-Processing 'Operator(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/operator.vhd":41)
-Processing 'SineTable(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd":63)
-Processing 'interpolate_mul(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd":41)
-Processing 'OutputGenerator(RTL)'("/Users/felipe/src/fpga/new-juice/src/VM2413/outputgenerator.vhd":36)
-Processing 'FeedbackMemory(RTL)'("/Users/felipe/src/fpga/new-juice/src/VM2413/feedbackmemory.vhd":41)
-Extracting RAM for identifier 'data_array'("/Users/felipe/src/fpga/new-juice/src/VM2413/feedbackmemory.vhd":55)
-WARN  (EX4545) : Array bounds of function return type do not match array bounds of function return value("/Users/felipe/src/fpga/new-juice/src/VM2413/vm2413.vhd":186)
-Processing 'OutputMemory(RTL)'("/Users/felipe/src/fpga/new-juice/src/VM2413/outputmemory.vhd":36)
-Extracting RAM for identifier 'data_array'("/Users/felipe/src/fpga/new-juice/src/VM2413/outputmemory.vhd":51)
-Processing 'LinearTable(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd":63)
-Processing 'linear_table_mul(rtl)'("/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd":41)
-Processing 'TemporalMixer(RTL)'("/Users/felipe/src/fpga/new-juice/src/VM2413/temporalmixer.vhd":37)
-Returning to Verilog mode to proceed with elaboration("/Users/felipe/src/fpga/new-juice/src/top.v":647)
-WARN  (EX3791) : Expression size 17 truncated to fit in target size 16("/Users/felipe/src/fpga/new-juice/src/top.v":675)
+Compiling module 'jt49_bus'("/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_bus.v":26)
+Compiling module 'jt49'("/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49.v":24)
+Compiling module 'jt49_cen'("/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_cen.v":24)
+Compiling module 'jt49_div'("/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_div.v":25)
+Compiling module 'jt49_noise'("/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_noise.v":25)
+Compiling module 'jt49_div(W=5)'("/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_div.v":25)
+Compiling module 'jt49_div(W=16)'("/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_div.v":25)
+Compiling module 'jt49_eg'("/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_eg.v":24)
+Compiling module 'jt49_exp'("/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_exp.v":30)
+Extracting RAM for identifier 'lut'("/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_exp.v":37)
+Compiling module 'jt2413'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jt2413.v":22)
+Compiling module 'jtopll_mmr(OPL_TYPE=11)'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopll_mmr.v":21)
+Compiling module 'jtopl_div(OPL_TYPE=11)'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_div.v":22)
+Compiling module 'jtopll_reg'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopll_reg.v":22)
+Compiling module 'jtopl_slot_cnt'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_slot_cnt.v":22)
+Compiling module 'jtopl_sh_rst(width=9,stages=3)'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v":22)
+WARN  (EX2428) : Cannot index into scalar type parameter/localparam 'rstval'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v":32)
+Compiling module 'jtopll_reg_ch'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopll_reg_ch.v":22)
+Compiling module 'jtopl_lfo'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_lfo.v":27)
+Compiling module 'jtopl_pg'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg.v":22)
+Compiling module 'jtopl_noise'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_noise.v":27)
+Compiling module 'jtopl_pg_comb'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_comb.v":22)
+Compiling module 'jtopl_pm'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pm.v":23)
+Compiling module 'jtopl_pg_inc'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_inc.v":22)
+Compiling module 'jtopl_pg_sum'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_sum.v":26)
+Extracting RAM for identifier 'factor'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_sum.v":37)
+Compiling module 'jtopl_pg_rhy'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_rhy.v":22)
+Compiling module 'jtopl_sh_rst(width=19)'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v":22)
+WARN  (EX2428) : Cannot index into scalar type parameter/localparam 'rstval'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v":32)
+Compiling module 'jtopl_sh_rst(width=10,stages=2)'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v":22)
+WARN  (EX2428) : Cannot index into scalar type parameter/localparam 'rstval'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v":32)
+Compiling module 'jtopl_eg'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg.v":22)
+Compiling module 'jtopl_eg_cnt'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_cnt.v":22)
+Compiling module 'jtopl_eg_comb'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_comb.v":22)
+Compiling module 'jtopl_eg_ctrl'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_ctrl.v":22)
+Compiling module 'jtopl_eg_step'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_step.v":22)
+Compiling module 'jtopl_eg_pure'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_pure.v":22)
+Compiling module 'jtopl_eg_final'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_final.v":22)
+Extracting RAM for identifier 'ksl_lut'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_final.v":38)
+Compiling module 'jtopl_sh(width=1,stages=18)'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh.v":22)
+Compiling module 'jtopl_sh(width=4,stages=3)'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh.v":22)
+Compiling module 'jtopl_sh(width=3,stages=3)'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh.v":22)
+Compiling module 'jtopl_sh_rst(width=10,stages=15,rstval=1'b1)'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v":22)
+WARN  (EX2428) : Cannot index into scalar type parameter/localparam 'rstval'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v":32)
+Compiling module 'jtopl_sh_rst(width=3,rstval=1'b1)'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v":22)
+WARN  (EX2428) : Cannot index into scalar type parameter/localparam 'rstval'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v":32)
+Compiling module 'jtopl_sh_rst(width=1)'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v":22)
+WARN  (EX2428) : Cannot index into scalar type parameter/localparam 'rstval'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v":32)
+Compiling module 'jtopl_op(OPL_TYPE=11)'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_op.v":26)
+Compiling module 'jtopl_sh(width=9,stages=3)'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh.v":22)
+Compiling module 'jtopl_sh(width=2,stages=3)'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh.v":22)
+Compiling module 'jtopl_sh(width=26,stages=3)'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh.v":22)
+Compiling module 'jtopl_logsin'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_logsin.v":26)
+Extracting RAM for identifier 'sinelut'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_logsin.v":33)
+Compiling module 'jtopl_exprom'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_exprom.v":33)
+Extracting RAM for identifier 'explut_jt51'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_exprom.v":41)
+Compiling module 'jtopl_acc'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_acc.v":23)
+Compiling module 'jtopl_single_acc(INW=14,OUTW=16)'("/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_single_acc.v":26)
+WARN  (EX3791) : Expression size 17 truncated to fit in target size 16("/Users/felipe/src/fpga/new-juice/src/top.v":671)
 Compiling module 'jt89'("/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89.v":33)
 Compiling module 'jt89_mixer'("/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89_mixer.v":22)
 Compiling module 'jt89_tone'("/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89_tone.v":25)
 Compiling module 'jt89_vol'("/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89_vol.v":25)
 Compiling module 'jt89_noise'("/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89_noise.v":25)
-Switching to VHDL mode to elaborate design unit 'vdp'("/Users/felipe/src/fpga/new-juice/src/top.v":880)
+Switching to VHDL mode to elaborate design unit 'vdp'("/Users/felipe/src/fpga/new-juice/src/top.v":876)
 Processing 'vdp(Behavioral)'("/Users/felipe/src/fpga/new-juice/src/SMS/vdp.vhd":6)
 Processing 'vdp_main(Behavioral)'("/Users/felipe/src/fpga/new-juice/src/SMS/vdp_main.vhd":6)
 Processing 'vdp_background(rtl)'("/Users/felipe/src/fpga/new-juice/src/SMS/vdp_background.vhd":6)
@@ -201,10 +190,10 @@ Extracting RAM for identifier 'mem_r'("/Users/felipe/src/fpga/new-juice/src/dpra
 Returning to VHDL mode to continue with elaboration("/Users/felipe/src/fpga/new-juice/src/SMS/vdp.vhd":181)
 Processing 'vdp_cram(Behavioral)'("/Users/felipe/src/fpga/new-juice/src/SMS/vdp_cram.vhd":5)
 Extracting RAM for identifier 'ram'("/Users/felipe/src/fpga/new-juice/src/SMS/vdp_cram.vhd":19)
-Returning to Verilog mode to proceed with elaboration("/Users/felipe/src/fpga/new-juice/src/top.v":880)
-Switching to VHDL mode to elaborate design unit 'video'("/Users/felipe/src/fpga/new-juice/src/top.v":902)
+Returning to Verilog mode to proceed with elaboration("/Users/felipe/src/fpga/new-juice/src/top.v":876)
+Switching to VHDL mode to elaborate design unit 'video'("/Users/felipe/src/fpga/new-juice/src/top.v":898)
 Processing 'video(Behavioral)'("/Users/felipe/src/fpga/new-juice/src/SMS/video.vhd":6)
-Returning to Verilog mode to proceed with elaboration("/Users/felipe/src/fpga/new-juice/src/top.v":902)
+Returning to Verilog mode to proceed with elaboration("/Users/felipe/src/fpga/new-juice/src/top.v":898)
 Compiling module 'dpram(widthad_a=16,width_a=6)'("/Users/felipe/src/fpga/new-juice/src/dpram.v":1)
 Extracting RAM for identifier 'mem_r'("/Users/felipe/src/fpga/new-juice/src/dpram.v":23)
 Compiling module 'clockdiv(OUT_HZ=44100)'("/Users/felipe/src/fpga/new-juice/src/clockdiv.v":33)

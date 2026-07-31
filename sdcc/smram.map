@@ -26,23 +26,23 @@ Area                                    Addr        Size        Decimal Bytes (A
      00000025  l__GSINIT                       
      0000011A  l__DATA                         
      00000200  s__CODE                         
-     000014DE  l__CODE                         
-     000016DE  s__GSINIT                       
-     00001703  s__GSFINAL                      
-     00001704  s__HOME                         
-     00001704  s__INITIALIZER                  
-     00001712  s__INITFINAL                    
-     00001712  s__INITIALIZED                  
-     00001720  s__DATA                         
-     0000183A  s__BSS                          
-     0000183C  s__HEAP                         
+     00001534  l__CODE                         
+     00001734  s__GSINIT                       
+     00001759  s__GSFINAL                      
+     0000175A  s__HOME                         
+     0000175A  s__INITIALIZER                  
+     00001768  s__INITFINAL                    
+     00001768  s__INITIALIZED                  
+     00001776  s__DATA                         
+     00001890  s__BSS                          
+     00001892  s__HEAP                         
 
 ASxxxx Linker V05.50.4-SDLD,  page 2.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_CODE                               00000200    000014DE =        5342. bytes (REL,CON)
+_CODE                               00000200    00001534 =        5428. bytes (REL,CON)
 
          Value  Global                             Global Defined In Module
          -----  --------------------------------   ------------------------
@@ -69,11 +69,11 @@ _CODE                               00000200    000014DE =        5342. bytes (R
      0000030E  _runROM_page2_end                  smram
      00000328  _main                              smram
      00000328  _runROM_Reset_end                  smram
-     00000B93  _vprintf                           vprintf
-     00000B9F  _printf                            vprintf
-     00000C7B  __print_format                     printf_large
-     000016D1  ___sdcc_call_hl                    
-     000016D2  _strlen                            strlen
+     00000BE9  _vprintf                           vprintf
+     00000BF5  _printf                            vprintf
+     00000CD1  __print_format                     printf_large
+     00001727  ___sdcc_call_hl                    
+     00001728  _strlen                            strlen
 
 ASxxxx Linker V05.50.4-SDLD,  page 3.
 Hexadecimal  [32-Bits]
@@ -89,7 +89,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_GSINIT                             000016DE    00000025 =          37. bytes (REL,CON)
+_GSINIT                             00001734    00000025 =          37. bytes (REL,CON)
 
          Value  Global                             Global Defined In Module
          -----  --------------------------------   ------------------------
@@ -98,7 +98,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_GSFINAL                            00001703    00000001 =           1. bytes (REL,CON)
+_GSFINAL                            00001759    00000001 =           1. bytes (REL,CON)
 
          Value  Global                             Global Defined In Module
          -----  --------------------------------   ------------------------
@@ -107,7 +107,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_INITIALIZER                        00001704    0000000E =          14. bytes (REL,CON)
+_INITIALIZER                        0000175A    0000000E =          14. bytes (REL,CON)
 
          Value  Global                             Global Defined In Module
          -----  --------------------------------   ------------------------
@@ -116,71 +116,71 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_INITIALIZED                        00001712    0000000E =          14. bytes (REL,CON)
+_INITIALIZED                        00001768    0000000E =          14. bytes (REL,CON)
 
          Value  Global                             Global Defined In Module
          -----  --------------------------------   ------------------------
-     00001712  _found                             smram
-     00001713  _filename                          smram
-     00001715  _megaram_type                      smram
-     00001717  _paramlen                          smram
-     00001718  _presAB                            smram
-     00001719  _softReset                         smram
-     0000171A  _cpumode                           smram
-     0000171B  _page2                             smram
-     0000171C  _help                              smram
-     0000171D  _scc_vol                           smram
-     0000171E  _psg_vol                           smram
-     0000171F  _opll_vol                          smram
+     00001768  _found                             smram
+     00001769  _filename                          smram
+     0000176B  _megaram_type                      smram
+     0000176D  _paramlen                          smram
+     0000176E  _presAB                            smram
+     0000176F  _softReset                         smram
+     00001770  _cpumode                           smram
+     00001771  _page2                             smram
+     00001772  _help                              smram
+     00001773  _scc_vol                           smram
+     00001774  _psg_vol                           smram
+     00001775  _opll_vol                          smram
 ASxxxx Linker V05.50.4-SDLD,  page 8.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_DATA                               00001720    0000011A =         282. bytes (REL,CON)
+_DATA                               00001776    0000011A =         282. bytes (REL,CON)
 
          Value  Global                             Global Defined In Module
          -----  --------------------------------   ------------------------
-     00001720  _curslt                            smram
-     00001721  _cursslt                           smram
-     00001722  _sslt                              smram
-     00001723  _b                                 smram
-     00001724  _s                                 smram
-     00001726  _t                                 smram
-     00001728  _params                            smram
-     0000172A  _handle                            smram
-     0000172B  _bytes_read                        smram
-     0000172D  _i                                 smram
-     0000172F  _addr                              smram
-     00001731  _page                              smram
-     00001732  _romsize                           smram
-     00001736  _slotid                            smram
-     00001737  _path                              smram
-     00001837  _romstart                          smram
-     00001839  _c                                 smram
+     00001776  _curslt                            smram
+     00001777  _cursslt                           smram
+     00001778  _sslt                              smram
+     00001779  _b                                 smram
+     0000177A  _s                                 smram
+     0000177C  _t                                 smram
+     0000177E  _params                            smram
+     00001780  _handle                            smram
+     00001781  _bytes_read                        smram
+     00001783  _i                                 smram
+     00001785  _addr                              smram
+     00001787  _page                              smram
+     00001788  _romsize                           smram
+     0000178C  _slotid                            smram
+     0000178D  _path                              smram
+     0000188D  _romstart                          smram
+     0000188F  _c                                 smram
 
 ASxxxx Linker V05.50.4-SDLD,  page 9.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_BSS                                0000183A    00000002 =           2. bytes (REL,CON)
+_BSS                                00001890    00000002 =           2. bytes (REL,CON)
 
          Value  Global                             Global Defined In Module
          -----  --------------------------------   ------------------------
-     0000183A  __himem                            crt0
-     0000183C  __lomem                            crt0
+     00001890  __himem                            crt0
+     00001892  __lomem                            crt0
 
 ASxxxx Linker V05.50.4-SDLD,  page 10.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_HEAP                               0000183C    00000002 =           2. bytes (REL,CON)
+_HEAP                               00001892    00000002 =           2. bytes (REL,CON)
 
          Value  Global                             Global Defined In Module
          -----  --------------------------------   ------------------------
-     0000183C  __heap_start                       crt0
+     00001892  __heap_start                       crt0
 
 ASxxxx Linker V05.50.4-SDLD,  page 11.
 

@@ -20,26 +20,44 @@
         <File path="src/IKASCC/IKASCC.v" type="file.verilog" enable="1"/>
 
         <File path="src/mp_debouncer.v" type="file.verilog" enable="1"/>
-        <File path="src/YM2149/ym2149_audio.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/vm2413.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/attacktable.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/controller.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/envelopegenerator.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/envelopememory.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/feedbackmemory.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/lineartable.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/operator.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/outputgenerator.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/outputmemory.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/phasegenerator.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/phasememory.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/registermemory.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/sinetable.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/slotcounter.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/temporalmixer.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/voicememory.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/voicerom.vhd" type="file.vhdl" enable="1"/>
-        <File path="src/VM2413/opll.vhd" type="file.vhdl" enable="1"/>
+        <File path="src/jt49/hdl/jt49.v" type="file.verilog" enable="1"/>
+        <File path="src/jt49/hdl/jt49_bus.v" type="file.verilog" enable="1"/>
+        <File path="src/jt49/hdl/jt49_div.v" type="file.verilog" enable="1"/>
+        <File path="src/jt49/hdl/jt49_cen.v" type="file.verilog" enable="1"/>
+        <File path="src/jt49/hdl/jt49_eg.v" type="file.verilog" enable="1"/>
+        <File path="src/jt49/hdl/jt49_exp.v" type="file.verilog" enable="1"/>
+        <File path="src/jt49/hdl/jt49_noise.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_acc.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_csr.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_div.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_eg.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_eg_cnt.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_eg_comb.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_eg_ctrl.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_eg_final.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_eg_pure.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_eg_step.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_exprom.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_lfo.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_logsin.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_noise.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_op.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_pg.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_pg_comb.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_pg_inc.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_pg_rhy.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_pg_sum.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_pm.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_reg_ch.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_sh.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_sh_rst.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_single_acc.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_slot_cnt.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopl_timers.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopll_mmr.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopll_reg.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jtopll_reg_ch.v" type="file.verilog" enable="1"/>
+        <File path="src/jtopl/hdl/jt2413.v" type="file.verilog" enable="1"/>
         <File path="src/rpll/rpll_main.v" type="file.verilog" enable="1"/>
         <File path="src/rpll/rpll_video.v" type="file.verilog" enable="1"/>
         <File path="src/SMS/jt89/jt89_mixer.v" type="file.verilog" enable="1"/>
