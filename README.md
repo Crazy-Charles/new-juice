@@ -1,4 +1,29 @@
-# New Juice
+# NEW JUICE Firmware for WonderTANG 2.02b
+
+This is a brand new built from scratch firmware for the WonderTANG 2.0b boards only. Older boards requires the older firmware: https://github.com/lfantoniosi/WonderTANG
+
+# What's new
+
+This is a much stable FPGA code with new and improved features:
+- OPM FM chip (SFG-01 module). It can be used in Yamaha Voice Program or VGMPlayer
+- Improved MegaRAM SCC with support for larger K5 models and default mode to K4/K5/DDX
+- new SMRAM.COM program
+- FM bioses are loaded from SPI flash
+
+# TLDR;
+
+If you need to flash your band new WonderTang 2.0b do these steps:
+
+- Clone this repository
+- Install openFPGAloader (via brew, apt-get, pacman or any other package manager) 
+- execute on terminal: 
+```
+cd new-juice
+make roms
+make reprogram
+```
+
+# New Juice Project
 
 FPGA design for the WonderTANG MSX interface, targeting the Gowin
 GW2AR-LV18QN88C8/I7 device. The current design implements the MSX bus
