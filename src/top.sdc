@@ -1,6 +1,6 @@
 // 27 MHz board oscillator
 create_clock -name clkin -period 37.037 -waveform {0 18.518} [get_ports {clkin}] -add
-// Native MSX CPU/VM2413 clock, nominally 3.579545 MHz
+// Native MSX CPU/JT2413 clock, nominally 3.579545 MHz
 create_clock -name cpu_clk -period 279.365 -waveform {0 139.682} [get_ports {cpu_clkin}] -add
 
 // S1 only asynchronously restarts the power-on/PLL reset sequencer. It is
