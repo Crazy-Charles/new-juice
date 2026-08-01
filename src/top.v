@@ -233,13 +233,8 @@ module top
         end
     end
 
+    wire module_sequence_done;
     wire pll_run_reset_n = reset_n && !second_pll_reset_active;
-    // Do not start the 135 MHz video PLL during either SDRAM initialization.
-    // The synchronized pass indication drops during the one-shot main-PLL
-    // restart, so video is released only after the second test succeeds.
-    wire video_pll_reset_n =
-        pll_run_reset_n && second_pll_reset_done &&
-        startup_passed_pll_sync[1];
     wire board_reset_n;
     wire active_module_reset_n;
     wire sd_module_reset_n;
@@ -249,7 +244,25 @@ module top
     wire psg_module_reset_n;
     wire opll_module_reset_n;
     wire megaram_module_reset_n;
-    wire module_sequence_done;
+    (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
+    reg [1:0] module_sequence_video_sync = 2'b00;
+
+    // Start the video PLL only after every CPU-visible module has completed
+    // its startup sequence. This automatically starts SMS and HDMI without
+    // requiring an initial access to an SMS I/O port.
+    always_ff @(posedge clk or negedge pll_run_reset_n)
+    begin
+        if (!pll_run_reset_n)
+            module_sequence_video_sync <= 2'b00;
+        else
+            module_sequence_video_sync <=
+                {module_sequence_video_sync[0], module_sequence_done};
+    end
+
+    wire video_pll_reset_n =
+        pll_run_reset_n && second_pll_reset_done &&
+        startup_passed_pll_sync[1] &&
+        module_sequence_video_sync[1];
     (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
     reg [1:0] startup_passed_sd_sync = 2'b00;
     reg [3:0] sd_stage_count = 4'd0;
@@ -556,6 +569,8 @@ module top
     reg [2:0] psg_cpu_clk_sync = 3'b000;
     (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
     reg [2:0] psg_synth_enable_sync = 3'b000;
+    (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
+    reg [1:0] psg_reset_sync = 2'b00;
     reg psg_divide_phase = 1'b0;
     reg psg_clock_enable = 1'b0;
     wire psg_address_write;
@@ -590,6 +605,18 @@ module top
     end
 
     assign board_reset_n = board_reset_release;
+
+    // Assert the PSG reset immediately with the module sequence, but release
+    // it synchronously in the 108 MHz JT49 domain. This prevents the staged
+    // module-ready net from entering every PSG state path as a reset-release
+    // timing source.
+    always_ff @(posedge main_clk or negedge psg_module_reset_n)
+    begin
+        if (!psg_module_reset_n)
+            psg_reset_sync <= 2'b00;
+        else
+            psg_reset_sync <= {psg_reset_sync[0], 1'b1};
+    end
 
     // Keep a synchronized copy of the external CPU clock for bus interfaces
     // that need its level. For the PSG, synchronize the existing synthesized
@@ -651,7 +678,7 @@ module top
     end
 
     jt49_bus psg_inst (
-        .rst_n(psg_module_reset_n),
+        .rst_n(psg_reset_sync[1]),
         .clk(main_clk),
         .clk_en(psg_clock_enable),
         .bdir(psg_bdir),
@@ -898,6 +925,22 @@ module top
     wire sms_psg_selected =
         active_module_reset_n && sms_reset_n &&
         !iorq_n && m1_n && addr[7:1] == 7'b0100100;
+    wire sms_vdp_access = !iorq_n && m1_n &&
+                          addr[7:1] == 7'b1000100 &&
+                          (!rd_n || !wr_n);
+    reg sms_vdp_activated = 1'b0;
+
+    // The sound display owns the framebuffer until software first touches
+    // either SMS VDP port (88h/89h). Once activated, SMS video owns it until
+    // the next board reset; PSG-only accesses intentionally do not switch it.
+    always_ff @(posedge main_clk or negedge board_reset_n)
+    begin
+        if (!board_reset_n)
+            sms_vdp_activated <= 1'b0;
+        else if (sms_vdp_access)
+            sms_vdp_activated <= 1'b1;
+    end
+
     wire sms_vdp_rd_n;
     wire sms_vdp_wr_n;
     wire sms_psg_wr_n;
@@ -1024,6 +1067,31 @@ module top
     reg [8:0] sms_fb_y = 9'd0;
     wire [15:0] sms_fb_write_addr = {sms_fb_y[7:0], sms_fb_x[7:0]};
     wire [5:0] sms_fb_read_data;
+    wire [5:0] sound_scope_pixel;
+    wire [5:0] sms_vdp_framebuffer_pixel =
+        {sms_vdp_color[11:10], sms_vdp_color[7:6], sms_vdp_color[3:2]};
+    reg [1:0] sms_vdp_activated_fb_sync = 2'b00;
+
+    always_ff @(posedge clk or negedge sms_reset_n)
+    begin
+        if (!sms_reset_n)
+            sms_vdp_activated_fb_sync <= 2'b00;
+        else
+            sms_vdp_activated_fb_sync <=
+                {sms_vdp_activated_fb_sync[0], sms_vdp_activated};
+    end
+
+    sound_scope sound_scope_inst (
+        .clk(clk),
+        .reset_n(sms_reset_n),
+        .x(sms_fb_x[7:0]),
+        .y(sms_fb_y[7:0]),
+        .psg_sample(jt49_sound),
+        .scc_sample(scc_sound),
+        .opll_sample(opll_audio_sample),
+        .opm_sample(jt51_audio_sample),
+        .pixel(sound_scope_pixel)
+    );
 
     always_ff @(posedge sms_clk_54 or negedge sms_reset_n)
     begin
@@ -1047,6 +1115,10 @@ module top
     reg [9:0] hdmi_y_offset = 10'd0;
     wire [15:0] sms_fb_read_addr =
         {hdmi_y_offset[8:1], hdmi_x_offset[8:1]};
+    wire hdmi_fb_window_active =
+        !hdmi_x_offset[9] &&
+        !hdmi_y_offset[9] &&
+        (hdmi_y_offset < 10'd384);
 
     always_ff @(posedge clk or negedge sms_reset_n)
     begin
@@ -1067,9 +1139,8 @@ module top
         .address_a(sms_fb_write_addr),
         .wren_a(!sms_fb_x[8] && !sms_fb_y[8]),
         .rden_a(1'b0),
-        .data_a({sms_vdp_color[11:10],
-                 sms_vdp_color[7:6],
-                 sms_vdp_color[3:2]}),
+        .data_a(sms_vdp_activated_fb_sync[1] ?
+                sms_vdp_framebuffer_pixel : sound_scope_pixel),
         .q_a(),
         .clock_b(clk),
         .address_b(sms_fb_read_addr),
@@ -1080,11 +1151,11 @@ module top
     );
 
     wire [7:0] hdmi_red =
-        hdmi_x_offset[9] ? 8'd0 : {sms_fb_read_data[1:0], 6'd0};
+        hdmi_fb_window_active ? {sms_fb_read_data[1:0], 6'd0} : 8'd0;
     wire [7:0] hdmi_green =
-        hdmi_x_offset[9] ? 8'd0 : {sms_fb_read_data[3:2], 6'd0};
+        hdmi_fb_window_active ? {sms_fb_read_data[3:2], 6'd0} : 8'd0;
     wire [7:0] hdmi_blue =
-        hdmi_x_offset[9] ? 8'd0 : {sms_fb_read_data[5:4], 6'd0};
+        hdmi_fb_window_active ? {sms_fb_read_data[5:4], 6'd0} : 8'd0;
 
     wire hdmi_audio_clk_raw;
     wire hdmi_audio_clk;

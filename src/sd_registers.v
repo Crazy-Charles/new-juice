@@ -48,6 +48,8 @@ module sd_registers
     reg sd_init_start = 1'b0;
     reg [31:0] sd_sector = 32'd0;
     reg [7:0] register_data = 8'hff;
+    reg [15:0] register_read_addr = 16'd0;
+    reg register_read_pending = 1'b0;
     reg [1:0] cpu_clk_sync = 2'b00;
     reg write_cycle_seen = 1'b0;
 
@@ -262,6 +264,8 @@ module sd_registers
             sd_init_start <= 1'b0;
             sd_sector <= 32'd0;
             register_data <= 8'hff;
+            register_read_addr <= 16'd0;
+            register_read_pending <= 1'b0;
             cpu_clk_sync <= 2'b00;
             write_cycle_seen <= 1'b0;
             sd_status_meta <= 135'd0;
@@ -270,6 +274,9 @@ module sd_registers
             cpu_clk_sync <= {cpu_clk_sync[0], cpu_clk};
             sd_status_meta <= sd_status_async;
             sd_status_sync <= sd_status_meta;
+            register_read_pending <= register_selected && !rd_n;
+            if (register_selected && !rd_n)
+                register_read_addr <= addr;
 
             if (!cpu_clk_high || wr_n || !memory_cycle)
                 write_cycle_seen <= 1'b0;
@@ -300,8 +307,11 @@ module sd_registers
                 endcase
             end
 
-            if (register_selected && !rd_n) begin
-                case (addr)
+            // Decode the captured address one 108 MHz cycle after the read
+            // begins. An MSX bus cycle spans many such clocks, so this removes
+            // a long address-to-readback path without affecting CPU timing.
+            if (register_read_pending) begin
+                case (register_read_addr)
                     SDC_ENABLE:       register_data <= {7'b0, sd_enabled};
                     SDC_STATUS:       register_data <= {sd_busy_cpu, 5'b0, sd_timeout_error_cpu, sd_crc_error_cpu};
                     SDC_C_SIZE + 0:   register_data <= sd_c_size_cpu[7:0];
