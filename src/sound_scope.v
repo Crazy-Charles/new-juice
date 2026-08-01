@@ -23,6 +23,7 @@ module sound_scope
     localparam [5:0] COLOR_MAGENTA = 6'b110011;
 
     reg [10:0] envelope_divider = 11'd0;
+    reg [12:0] history_divider = 13'd0;
     reg [5:0] peak_divider = 6'd0;
     reg [7:0] psg_level = 8'd0;
     reg [7:0] scc_level = 8'd0;
@@ -32,6 +33,16 @@ module sound_scope
     reg [7:0] scc_peak = 8'd0;
     reg [7:0] opll_peak = 8'd0;
     reg [7:0] opm_peak = 8'd0;
+    reg [9:0] psg_dc_level = 10'd0;
+    reg [5:0] psg_bar_history [0:13];
+    reg [5:0] scc_bar_history [0:13];
+    reg [5:0] opll_bar_history [0:13];
+    reg [5:0] opm_bar_history [0:13];
+    reg signed [5:0] psg_wave_history [0:55];
+    reg signed [5:0] scc_wave_history [0:55];
+    reg signed [5:0] opll_wave_history [0:55];
+    reg signed [5:0] opm_wave_history [0:55];
+    integer history_index;
 
     function automatic [7:0] magnitude11;
         input signed [10:0] value;
@@ -55,11 +66,23 @@ module sound_scope
     wire [7:0] scc_magnitude = magnitude11(scc_sample);
     wire [7:0] opll_magnitude = magnitude16(opll_sample);
     wire [7:0] opm_magnitude = magnitude16(opm_sample);
+    wire signed [10:0] psg_centered =
+        $signed({1'b0, psg_sample}) -
+        $signed({1'b0, psg_dc_level});
+    wire signed [10:0] psg_wave_scaled = psg_centered >>> 4;
+    wire signed [5:0] psg_wave_sample =
+        psg_wave_scaled > 11'sd31 ? 6'sd31 :
+        psg_wave_scaled < -11'sd32 ? 6'sb100000 :
+        psg_wave_scaled[5:0];
+    wire signed [5:0] scc_wave_sample = scc_sample >>> 5;
+    wire signed [5:0] opll_wave_sample = opll_sample >>> 10;
+    wire signed [5:0] opm_wave_sample = opm_sample >>> 10;
 
     always_ff @(posedge clk or negedge reset_n)
     begin
         if (!reset_n) begin
             envelope_divider <= 11'd0;
+            history_divider <= 13'd0;
             peak_divider <= 6'd0;
             psg_level <= 8'd0;
             scc_level <= 8'd0;
@@ -69,10 +92,40 @@ module sound_scope
             scc_peak <= 8'd0;
             opll_peak <= 8'd0;
             opm_peak <= 8'd0;
+            psg_dc_level <= 10'd0;
+            for (history_index = 0; history_index < 14;
+                 history_index = history_index + 1) begin
+                psg_bar_history[history_index] <= 6'd0;
+                scc_bar_history[history_index] <= 6'd0;
+                opll_bar_history[history_index] <= 6'd0;
+                opm_bar_history[history_index] <= 6'd0;
+            end
+            for (history_index = 0; history_index < 56;
+                 history_index = history_index + 1) begin
+                psg_wave_history[history_index] <= 6'sd0;
+                scc_wave_history[history_index] <= 6'sd0;
+                opll_wave_history[history_index] <= 6'sd0;
+                opm_wave_history[history_index] <= 6'sd0;
+            end
         end else begin
             envelope_divider <= envelope_divider + 1'b1;
+            history_divider <= history_divider + 1'b1;
             if (&envelope_divider) begin
                 peak_divider <= peak_divider + 1'b1;
+                // JT49 is unipolar and its DC level varies with channel
+                // volume and duty activity. Track that level only for the
+                // visualizer so its trace shares the signed chips' zero line.
+                if (psg_sample > psg_dc_level) begin
+                    if (psg_dc_level <= 10'd1021)
+                        psg_dc_level <= psg_dc_level + 2'd2;
+                    else
+                        psg_dc_level <= 10'd1023;
+                end else if (psg_sample < psg_dc_level) begin
+                    if (psg_dc_level >= 10'd2)
+                        psg_dc_level <= psg_dc_level - 2'd2;
+                    else
+                        psg_dc_level <= 10'd0;
+                end
                 // Classic VU envelope: instantaneous attack with a linear
                 // decay. This responds crisply without four arithmetic
                 // smoothing filters or long carry chains.
@@ -115,6 +168,43 @@ module sound_scope
                     opm_peak <= opm_magnitude;
                 else if (&peak_divider && opm_peak != 8'd0)
                     opm_peak <= opm_peak - 1'b1;
+            end
+
+            // Keep short histories for the vertical LED bank and for a
+            // signed oscilloscope trace. At roughly 3.3 kHz, the trace shows
+            // several useful audio cycles while still moving visibly.
+            if (&history_divider) begin
+                for (history_index = 13; history_index > 0;
+                     history_index = history_index - 1) begin
+                    psg_bar_history[history_index] <=
+                        psg_bar_history[history_index-1];
+                    scc_bar_history[history_index] <=
+                        scc_bar_history[history_index-1];
+                    opll_bar_history[history_index] <=
+                        opll_bar_history[history_index-1];
+                    opm_bar_history[history_index] <=
+                        opm_bar_history[history_index-1];
+                end
+                psg_bar_history[0] <= psg_level[7:2];
+                scc_bar_history[0] <= scc_level[7:2];
+                opll_bar_history[0] <= opll_level[7:2];
+                opm_bar_history[0] <= opm_level[7:2];
+
+                for (history_index = 55; history_index > 0;
+                     history_index = history_index - 1) begin
+                    psg_wave_history[history_index] <=
+                        psg_wave_history[history_index-1];
+                    scc_wave_history[history_index] <=
+                        scc_wave_history[history_index-1];
+                    opll_wave_history[history_index] <=
+                        opll_wave_history[history_index-1];
+                    opm_wave_history[history_index] <=
+                        opm_wave_history[history_index-1];
+                end
+                psg_wave_history[0] <= psg_wave_sample;
+                scc_wave_history[0] <= scc_wave_sample;
+                opll_wave_history[0] <= opll_wave_sample;
+                opm_wave_history[0] <= opm_wave_sample;
             end
         end
     end
@@ -229,14 +319,16 @@ module sound_scope
     reg [1:0] panel;
     reg [6:0] local_x;
     reg [6:0] local_y;
-    reg [7:0] level;
-    reg [7:0] peak;
     reg [5:0] accent;
     reg [5:0] background;
-    reg [5:0] segment;
-    reg [7:0] filled_segments;
-    reg [7:0] peak_position;
-    reg [7:0] needle_position;
+    reg [3:0] bar_index;
+    reg [5:0] wave_index;
+    reg [5:0] bar_level;
+    reg [6:0] bar_top;
+    reg signed [5:0] wave_sample;
+    reg signed [5:0] wave_neighbor;
+    reg signed [8:0] wave_y;
+    reg signed [8:0] wave_neighbor_y;
 
     always_comb
     begin
@@ -244,83 +336,103 @@ module sound_scope
         local_x = x[6:0];
         local_y = y >= 8'd96 ? y[6:0] - 7'd96 : y[6:0];
 
-        level = psg_level;
-        peak = psg_peak;
+        bar_index = (local_x - 7'd8) >> 3;
+        wave_index = 6'd0;
+        if (local_x >= 7'd8 && local_x <= 7'd119)
+            wave_index = (7'd119 - local_x) >> 1;
+        bar_level = 6'd0;
+        wave_sample = psg_wave_history[wave_index];
+        wave_neighbor = wave_index == 6'd0 ?
+                        psg_wave_history[0] :
+                        psg_wave_history[wave_index-1'b1];
         accent = COLOR_GREEN;
         background = 6'b000100;
         case (panel)
             2'd1: begin
-                level=scc_level; peak=scc_peak;
+                if (bar_index < 4'd14)
+                    bar_level=scc_bar_history[bar_index];
+                wave_sample=scc_wave_history[wave_index];
+                wave_neighbor=wave_index == 6'd0 ?
+                              scc_wave_history[0] :
+                              scc_wave_history[wave_index-1'b1];
                 accent=COLOR_CYAN; background=6'b000101;
             end
             2'd2: begin
-                level=opll_level; peak=opll_peak;
+                if (bar_index < 4'd14)
+                    bar_level=opll_bar_history[bar_index];
+                wave_sample=opll_wave_history[wave_index];
+                wave_neighbor=wave_index == 6'd0 ?
+                              opll_wave_history[0] :
+                              opll_wave_history[wave_index-1'b1];
                 accent=COLOR_AMBER; background=6'b010100;
             end
             2'd3: begin
-                level=opm_level; peak=opm_peak;
+                if (bar_index < 4'd14)
+                    bar_level=opm_bar_history[bar_index];
+                wave_sample=opm_wave_history[wave_index];
+                wave_neighbor=wave_index == 6'd0 ?
+                              opm_wave_history[0] :
+                              opm_wave_history[wave_index-1'b1];
                 accent=COLOR_MAGENTA; background=6'b010001;
             end
-            default: begin end
+            default: begin
+                if (bar_index < 4'd14)
+                    bar_level=psg_bar_history[bar_index];
+            end
         endcase
 
-        // Approximate 107/256 scaling without a multiplier. Positions cover
-        // pixels 10 through 116 inside each 128-pixel-wide meter panel.
-        peak_position = 8'd10 + (peak >> 2) + (peak >> 3) +
-                        (peak >> 5) + (peak >> 6);
-        needle_position = 8'd10 + (level >> 2) + (level >> 3) +
-                          (level >> 5) + (level >> 6);
-        filled_segments = level >> 3;
-        segment = (local_x - 7'd10) >> 2;
+        bar_top = 7'd89 - {1'b0, bar_level};
+        wave_y = 9'sd57 - wave_sample;
+        wave_neighbor_y = 9'sd57 - wave_neighbor;
 
         // Subtle horizontal scanlines over four differently tinted metal
         // faceplates, with a black title recess at the top of each deck.
         pixel = local_y[1:0] == 2'b00 ? COLOR_BLACK : background;
-        if (local_y >= 7'd4 && local_y <= 7'd19)
+        if (local_y >= 7'd3 && local_y <= 7'd17)
             pixel = COLOR_BLACK;
-        if (local_y == 7'd21 || local_y == 7'd22)
+        if (local_y == 7'd19 || local_y == 7'd20)
             pixel = accent;
 
         if (label_pixel(panel, local_x, local_y))
             pixel = accent;
 
-        // Twenty-seven four-pixel LED segments. The last five segments move
-        // through amber into red, like a classic cassette-deck peak meter.
-        if (local_x >= 7'd10 && local_x <= 7'd117 &&
-            local_y >= 7'd34 && local_y <= 7'd57) begin
-            if (local_x[1:0] == 2'b11)
+        // Fourteen independent history columns fill nearly the whole panel.
+        // Every column is a segmented LED meter that rises bottom-to-top.
+        if (local_x >= 7'd8 && local_x <= 7'd119 &&
+            local_y >= 7'd24 && local_y <= 7'd89 &&
+            bar_index < 4'd14) begin
+            if (local_x[2:0] >= 3'd6 || local_y[1:0] == 2'b11)
                 pixel = COLOR_BLACK;
-            else if (segment < filled_segments) begin
-                if (segment < 6'd17)
-                    pixel = COLOR_GREEN;
-                else if (segment < 6'd23)
+            else if (local_y >= bar_top) begin
+                if (local_y < 7'd37)
+                    pixel = COLOR_RED;
+                else if (local_y < 7'd50)
                     pixel = COLOR_YELLOW;
                 else
-                    pixel = COLOR_RED;
-                if (local_y == 7'd35)
+                    pixel = accent;
+                if (local_y == bar_top)
                     pixel = COLOR_WHITE;
-            end else begin
+            end else
                 pixel = COLOR_DIM;
-            end
-
-            if (local_x == peak_position[6:0])
-                pixel = COLOR_WHITE;
         end
 
-        // Calibrated-looking tick marks and a second live needle underneath
-        // the LED bank make each quadrant read as an independent instrument.
-        if (local_y == 7'd65 && local_x >= 7'd10 && local_x <= 7'd117)
+        // Conventional oscilloscope orientation: history runs left-to-right,
+        // zero is the horizontal centerline and signed amplitude moves above
+        // or below it. A one-pixel connector joins each two-pixel sample.
+        if (local_y == 7'd57 &&
+            local_x >= 7'd8 && local_x <= 7'd119)
             pixel = COLOR_SILVER;
-        if ((local_x == 7'd10 || local_x == 7'd31 ||
-             local_x == 7'd52 || local_x == 7'd74 ||
-             local_x == 7'd95 || local_x == 7'd117) &&
-            local_y >= 7'd62 && local_y <= 7'd68)
-            pixel = COLOR_SILVER;
-        if (local_x == needle_position[6:0] &&
-            local_y >= 7'd70 && local_y <= 7'd84)
-            pixel = accent;
-        if (local_y == 7'd84 && local_x >= 7'd10 && local_x <= 7'd117)
-            pixel = COLOR_DIM;
+        if (local_x >= 7'd8 && local_x <= 7'd119 &&
+            local_y >= 7'd26 && local_y <= 7'd89) begin
+            if ($signed({1'b0, local_y}) == wave_y)
+                pixel = COLOR_WHITE;
+            if (local_x[0] && wave_index != 6'd0 &&
+                (($signed({1'b0, local_y}) >= wave_y &&
+                  $signed({1'b0, local_y}) <= wave_neighbor_y) ||
+                 ($signed({1'b0, local_y}) <= wave_y &&
+                  $signed({1'b0, local_y}) >= wave_neighbor_y)))
+                pixel = COLOR_WHITE;
+        end
 
         // Bezel, center cross and four small mounting screws per panel.
         if (local_x == 7'd0 || local_x == 7'd127 ||
