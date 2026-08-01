@@ -554,9 +554,10 @@ module top
     wire native_sdram_busy;
     wire native_sdram_enabled;
     reg [2:0] psg_cpu_clk_sync = 3'b000;
-    reg psg_clock_phase = 1'b0;
+    (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
+    reg [2:0] psg_synth_enable_sync = 3'b000;
+    reg psg_divide_phase = 1'b0;
     reg psg_clock_enable = 1'b0;
-    reg cpu_clock_rise_enable = 1'b0;
     wire psg_address_write;
     wire psg_data_write;
     wire psg_bdir;
@@ -590,25 +591,27 @@ module top
 
     assign board_reset_n = board_reset_release;
 
-    // Synchronize the external 3.58 MHz CPU clock into the 108 MHz domain.
-    // Every second detected rising edge produces one main_clk-wide enable,
-    // giving the PSG its required ~1.789 MHz operating rate.
+    // Keep a synchronized copy of the external CPU clock for bus interfaces
+    // that need its level. For the PSG, synchronize the existing synthesized
+    // 3.579545 MHz YM2413 enable from the 27 MHz domain. Every second rising
+    // edge advances JT49 at its required 1.7897725 MHz rate.
     always_ff @(posedge main_clk or negedge board_reset_n)
     begin
         if (!board_reset_n) begin
             psg_cpu_clk_sync <= 3'b000;
-            psg_clock_phase <= 1'b0;
+            psg_synth_enable_sync <= 3'b000;
+            psg_divide_phase <= 1'b0;
             psg_clock_enable <= 1'b0;
-            cpu_clock_rise_enable <= 1'b0;
         end else begin
             psg_cpu_clk_sync <= {psg_cpu_clk_sync[1:0], cpu_clk};
+            psg_synth_enable_sync <=
+                {psg_synth_enable_sync[1:0], opll_clock_enable};
             psg_clock_enable <= 1'b0;
-            cpu_clock_rise_enable <= 1'b0;
 
-            if (psg_cpu_clk_sync[1] && !psg_cpu_clk_sync[2]) begin
-                cpu_clock_rise_enable <= 1'b1;
-                psg_clock_phase <= ~psg_clock_phase;
-                if (psg_clock_phase)
+            if (psg_synth_enable_sync[1] &&
+                !psg_synth_enable_sync[2]) begin
+                psg_divide_phase <= ~psg_divide_phase;
+                if (psg_divide_phase)
                     psg_clock_enable <= 1'b1;
             end
         end
