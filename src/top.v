@@ -687,7 +687,7 @@ module top
     jt49_bus #(
         // AY/YM tone period zero behaves as period one. This is required by
         // PSG-DAC software such as Aleste 2's synthesized speech.
-        .PERIOD_ZERO_IS_ONE(1'b1)
+        .MUTE_NULL_PERIOD(1'b0)
     ) psg_inst (
         .rst_n(psg_reset_sync[1]),
         .clk(main_clk),

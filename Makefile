@@ -110,7 +110,7 @@ check-submodules:
 	if git -C "$(ROOT)" rev-parse --git-dir >/dev/null 2>&1; then \
 		for submodule in $(JT_SUBMODULE_DIRS); do \
 			relative="$${submodule#$(ROOT)/}"; \
-			expected="$$(git -C "$(ROOT)" ls-tree HEAD -- "$$relative" | awk '{print $$3}')"; \
+			expected="$$(git -C "$(ROOT)" ls-files --stage -- "$$relative" | awk '{print $$2}')"; \
 			actual="$$(git -C "$$submodule" rev-parse HEAD 2>/dev/null || true)"; \
 			if [ -z "$$expected" ] || [ "$$actual" != "$$expected" ]; then \
 				echo "Submodule $$relative is not at its locked commit." >&2; \

@@ -50,6 +50,9 @@ module sd_registers
     reg [7:0] register_data = 8'hff;
     reg [15:0] register_read_addr = 16'd0;
     reg register_read_pending = 1'b0;
+    reg [15:0] register_write_addr = 16'd0;
+    reg [7:0] register_write_data = 8'd0;
+    reg register_write_pending = 1'b0;
     reg [1:0] cpu_clk_sync = 2'b00;
     reg write_cycle_seen = 1'b0;
 
@@ -62,7 +65,6 @@ module sd_registers
     wire cpu_clk_high = cpu_clk_sync[1];
     wire cpu_write_strobe = cpu_clk_high && memory_cycle && !wr_n &&
                             !write_cycle_seen;
-    wire enable_write = cpu_write_strobe && addr == SDC_ENABLE;
     wire ram_selected = memory_cycle && sd_enabled &&
                         addr >= SDC_SDATA && addr < SDC_ENABLE;
     wire register_selected = memory_cycle && sd_enabled &&
@@ -266,6 +268,9 @@ module sd_registers
             register_data <= 8'hff;
             register_read_addr <= 16'd0;
             register_read_pending <= 1'b0;
+            register_write_addr <= 16'd0;
+            register_write_data <= 8'd0;
+            register_write_pending <= 1'b0;
             cpu_clk_sync <= 2'b00;
             write_cycle_seen <= 1'b0;
             sd_status_meta <= 135'd0;
@@ -278,13 +283,21 @@ module sd_registers
             if (register_selected && !rd_n)
                 register_read_addr <= addr;
 
+            // Pipeline CPU register writes. The external address/control
+            // decode otherwise feeds every SD command and sector register in
+            // one 108 MHz cycle. Capturing all writes in this subslot keeps
+            // the first stage small; irrelevant addresses fall through the
+            // registered case below without changing state.
+            register_write_pending <= cpu_write_strobe;
+            if (cpu_write_strobe) begin
+                register_write_addr <= addr;
+                register_write_data <= data_in;
+            end
+
             if (!cpu_clk_high || wr_n || !memory_cycle)
                 write_cycle_seen <= 1'b0;
             else if (cpu_write_strobe)
                 write_cycle_seen <= 1'b1;
-
-            if (enable_write)
-                sd_enabled <= data_in[0];
 
             if (sd_done_cpu) begin
                 sd_read_start <= 1'b0;
@@ -292,17 +305,32 @@ module sd_registers
                 sd_init_start <= 1'b0;
             end
 
-            if (register_selected && cpu_write_strobe) begin
-                case (addr)
+            if (register_write_pending) begin
+                case (register_write_addr)
+                    SDC_ENABLE:
+                        sd_enabled <= register_write_data[0];
                     SDC_CMD: begin
-                        sd_read_start <= sd_read_start | data_in[0];
-                        sd_write_start <= sd_write_start | data_in[1];
-                        sd_init_start <= sd_init_start | data_in[7];
+                        if (sd_enabled) begin
+                            sd_read_start <=
+                                sd_read_start | register_write_data[0];
+                            sd_write_start <=
+                                sd_write_start | register_write_data[1];
+                            sd_init_start <=
+                                sd_init_start | register_write_data[7];
+                        end
                     end
-                    SDC_SADDR + 0: sd_sector[7:0] <= data_in;
-                    SDC_SADDR + 1: sd_sector[15:8] <= data_in;
-                    SDC_SADDR + 2: sd_sector[23:16] <= data_in;
-                    SDC_SADDR + 3: sd_sector[31:24] <= data_in;
+                    SDC_SADDR + 0:
+                        if (sd_enabled)
+                            sd_sector[7:0] <= register_write_data;
+                    SDC_SADDR + 1:
+                        if (sd_enabled)
+                            sd_sector[15:8] <= register_write_data;
+                    SDC_SADDR + 2:
+                        if (sd_enabled)
+                            sd_sector[23:16] <= register_write_data;
+                    SDC_SADDR + 3:
+                        if (sd_enabled)
+                            sd_sector[31:24] <= register_write_data;
                     default: begin end
                 endcase
             end

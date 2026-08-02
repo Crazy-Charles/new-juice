@@ -90,7 +90,11 @@ module super_megaram
                     operation_mode == MODE_K5;
     wire scc_window = addr[15:11] == 5'b10011;
     wire scc_enabled = scc_mode && bank[2] == 8'h3f;
-    wire scc_window_active = INCLUDE_SCC && scc_enabled && scc_window;
+    // MegaRAM write mode exposes SDRAM across the complete mapped address
+    // space. Hide the SCC register overlay so 9800-9FFF can be written too;
+    // returning to ROM mode restores the SCC without resetting its state.
+    wire scc_window_active =
+        INCLUDE_SCC && rom_mode && scc_enabled && scc_window;
     wire scc_access_selected = memory_cycle && scc_window_active &&
                                (!rd_n || !wr_n);
 
