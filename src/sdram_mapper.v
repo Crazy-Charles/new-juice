@@ -20,6 +20,11 @@ module sdram_mapper
     output data_out_en,
     output wait_n,
 
+    output [7:0] debug_page0,
+    output [7:0] debug_page1,
+    output [7:0] debug_page2,
+    output [7:0] debug_page3,
+
     output sdrc_cmd_en,
     output [2:0] sdrc_cmd,
     output sdrc_precharge_ctrl,
@@ -179,6 +184,13 @@ module sdram_mapper
         read_data;
     assign data_out_en = mapper_port_read || (read_data_active && access_is_read && memory_read_held);
     assign wait_n = !memory_access_selected || (sdrc_init_done && state == STATE_DONE);
+
+    // Read-only visibility for the HDMI debugger. Keeping these separate
+    // from the mapper I/O readback avoids affecting the CPU data bus.
+    assign debug_page0 = mapper_page[0];
+    assign debug_page1 = mapper_page[1];
+    assign debug_page2 = mapper_page[2];
+    assign debug_page3 = mapper_page[3];
 
     assign sdrc_cmd_en = sdrc_cmd_en_reg;
     assign sdrc_cmd = sdrc_cmd_reg;

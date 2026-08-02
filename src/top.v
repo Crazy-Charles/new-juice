@@ -1,6 +1,7 @@
 module top
 #(
-    parameter AUDIO_FILTER_ENABLED = 1'b1
+    parameter AUDIO_FILTER_ENABLED = 1'b1,
+    parameter SMS_DEBUGGER_ENABLED = 1'b0
 )
 (
     input   clkin,
@@ -491,6 +492,10 @@ module top
     wire data_out_en;
     wire [7:0] sdram_mapper_data_out;
     wire sdram_mapper_data_out_en;
+    wire [7:0] mapper_debug_page0;
+    wire [7:0] mapper_debug_page1;
+    wire [7:0] mapper_debug_page2;
+    wire [7:0] mapper_debug_page3;
     wire [7:0] flash_rom_data_out;
     wire flash_rom_data_out_en;
     wire flash_rom_wait_n;
@@ -958,14 +963,19 @@ module top
     wire sms_psg_selected =
         active_module_reset_n && sms_reset_n &&
         !iorq_n && m1_n && addr[7:1] == 7'b0100100;
-    wire sms_vdp_access = !iorq_n && m1_n &&
-                          addr[7:1] == 7'b1000100 &&
-                          (!rd_n || !wr_n);
+    // WonderTANG mirrors VDP reads through the nominal PSG ports 48h/49h.
+    // Writes to those ports still go only to the PSG.
+    wire sms_vdp_read_selected =
+        (sms_vdp_selected || sms_psg_selected) && !rd_n;
+    wire sms_vdp_access =
+        (sms_vdp_selected && (!rd_n || !wr_n)) ||
+        (sms_psg_selected && !rd_n);
     reg sms_vdp_activated = 1'b0;
 
     // The sound display owns the framebuffer until software first touches
-    // either SMS VDP port (88h/89h). Once activated, SMS video owns it until
-    // the next board reset; PSG-only accesses intentionally do not switch it.
+    // either SMS VDP port, including mirrored reads at 48h/49h. Once
+    // activated, SMS video owns it until the next board reset. PSG writes do
+    // not switch it.
     always_ff @(posedge main_clk or negedge board_reset_n)
     begin
         if (!board_reset_n)
@@ -981,7 +991,7 @@ module top
     wire [7:0] sms_bridge_read_data;
     wire sms_bridge_read_data_en;
     wire sms_vdp_rd_request_n =
-        (!rd_n && (sms_vdp_selected || sms_psg_selected)) ? 1'b0 : 1'b1;
+        sms_vdp_read_selected ? 1'b0 : 1'b1;
     wire sms_vdp_wr_request_n =
         (!wr_n && sms_vdp_selected) ? 1'b0 : 1'b1;
     reg sms_vdp_rd_strobe_n = 1'b1;
@@ -1021,7 +1031,7 @@ module top
     assign sms_psg_wr_n =
         (!wr_n && sms_psg_selected) ? 1'b0 : 1'b1;
     assign sms_bridge_read_data = sms_vdp_data_out;
-    assign sms_bridge_read_data_en = sms_vdp_selected && !rd_n;
+    assign sms_bridge_read_data_en = sms_vdp_read_selected;
 
     jt89 sms_psg_inst (
         .rst(~sms_reset_n),
@@ -1183,12 +1193,56 @@ module top
         .q_b(sms_fb_read_data)
     );
 
-    wire [7:0] hdmi_red =
+    wire sms_debug_pixel_enabled;
+    generate
+        if (SMS_DEBUGGER_ENABLED) begin : sms_debugger_enabled_impl
+            // Cross the complete debugger state into the pixel clock domain
+            // and update it once per frame, preventing torn digits.
+            reg [47:0] sms_debug_meta = 48'd0;
+            reg [47:0] sms_debug_sync = 48'd0;
+            reg [47:0] sms_debug_frame = 48'd0;
+            always_ff @(posedge clk or negedge sms_reset_n)
+            begin
+                if (!sms_reset_n) begin
+                    sms_debug_meta <= 48'd0;
+                    sms_debug_sync <= 48'd0;
+                    sms_debug_frame <= 48'd0;
+                end else begin
+                    sms_debug_meta <= {sms_debug_address,
+                                       mapper_debug_page0,
+                                       mapper_debug_page1,
+                                       mapper_debug_page2,
+                                       mapper_debug_page3};
+                    sms_debug_sync <= sms_debug_meta;
+                    if (hdmi_x == 10'd0 && hdmi_y == 10'd0)
+                        sms_debug_frame <= sms_debug_sync;
+                end
+            end
+
+            sms_debug_overlay sms_debug_overlay_inst (
+                .x(hdmi_x),
+                .y(hdmi_y),
+                .address(sms_debug_frame[47:32]),
+                .page0(sms_debug_frame[31:24]),
+                .page1(sms_debug_frame[23:16]),
+                .page2(sms_debug_frame[15:8]),
+                .page3(sms_debug_frame[7:0]),
+                .pixel(sms_debug_pixel_enabled)
+            );
+        end else begin : sms_debugger_disabled_impl
+            assign sms_debug_pixel_enabled = 1'b0;
+        end
+    endgenerate
+
+    wire [7:0] hdmi_base_red =
         hdmi_fb_window_active ? {sms_fb_read_data[1:0], 6'd0} : 8'd0;
-    wire [7:0] hdmi_green =
+    wire [7:0] hdmi_base_green =
         hdmi_fb_window_active ? {sms_fb_read_data[3:2], 6'd0} : 8'd0;
-    wire [7:0] hdmi_blue =
+    wire [7:0] hdmi_base_blue =
         hdmi_fb_window_active ? {sms_fb_read_data[5:4], 6'd0} : 8'd0;
+    wire [7:0] hdmi_red = sms_debug_pixel_enabled ? 8'hFF : hdmi_base_red;
+    wire [7:0] hdmi_green = sms_debug_pixel_enabled ? 8'hFF : hdmi_base_green;
+    wire [7:0] hdmi_blue = sms_debug_pixel_enabled ? 8'hFF : hdmi_base_blue;
 
     wire hdmi_audio_clk_raw;
     wire hdmi_audio_clk;
@@ -1471,6 +1525,10 @@ module top
         .data_out(sdram_mapper_data_out),
         .data_out_en(sdram_mapper_data_out_en),
         .wait_n(mapper_wait_n),
+        .debug_page0(mapper_debug_page0),
+        .debug_page1(mapper_debug_page1),
+        .debug_page2(mapper_debug_page2),
+        .debug_page3(mapper_debug_page3),
         .sdrc_cmd_en(mapper_sdrc_cmd_en),
         .sdrc_cmd(mapper_sdrc_cmd),
         .sdrc_precharge_ctrl(mapper_sdrc_precharge_ctrl),
@@ -1484,6 +1542,18 @@ module top
         .sdrc_init_done(sdrc_init_done),
         .sdrc_cmd_ack(sdrc_cmd_ack)
     );
+
+    // Retain the most recent Z80 opcode-fetch address. A raw address-bus
+    // display would mostly show refresh and operand cycles; the fetch address
+    // is the useful value when diagnosing where execution has stopped.
+    reg [15:0] sms_debug_address = 16'h0000;
+    always_ff @(posedge main_clk or negedge memory_mapper_reset_n)
+    begin
+        if (!memory_mapper_reset_n)
+            sms_debug_address <= 16'h0000;
+        else if (!merq_n && !rd_n && !m1_n && rfsh_n)
+            sms_debug_address <= addr;
+    end
 
     super_megaram #(
         .INCLUDE_SCC(1'b1)
@@ -1634,7 +1704,7 @@ module top
     assign mapper_port_read =
         (active_module_reset_n && !iorq_n && m1_n && !rd_n &&
          addr[7:2] == 6'b111111) ||
-        (sms_vdp_selected && !rd_n);
+        sms_vdp_read_selected;
     
     cd_demux cd_demux_inst(
         .data_out(data_out),
