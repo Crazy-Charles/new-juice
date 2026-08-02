@@ -1,9 +1,12 @@
 [submodule "src/jtopl"]
 	path = src/jtopl
 	url = https://github.com/jotego/jtopl.git
+	update = checkout
 [submodule "src/jt49"]
 	path = src/jt49
 	url = https://github.com/lfantoniosi/jt49.git
+	update = checkout
 [submodule "src/jt51"]
 	path = src/jt51
 	url = https://github.com/jotego/jt51
+	update = checkout

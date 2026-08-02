@@ -106,6 +106,25 @@ check-submodules:
 	if [ "$$missing" -ne 0 ]; then \
 		echo "Run 'make init' to initialize the required git submodules." >&2; \
 		exit 1; \
+	fi; \
+	if git -C "$(ROOT)" rev-parse --git-dir >/dev/null 2>&1; then \
+		for submodule in $(JT_SUBMODULE_DIRS); do \
+			relative="$${submodule#$(ROOT)/}"; \
+			expected="$$(git -C "$(ROOT)" ls-tree HEAD -- "$$relative" | awk '{print $$3}')"; \
+			actual="$$(git -C "$$submodule" rev-parse HEAD 2>/dev/null || true)"; \
+			if [ -z "$$expected" ] || [ "$$actual" != "$$expected" ]; then \
+				echo "Submodule $$relative is not at its locked commit." >&2; \
+				echo "  expected: $${expected:-unknown}" >&2; \
+				echo "  actual:   $${actual:-uninitialized}" >&2; \
+				echo "Run 'make init' to restore locked submodule revisions." >&2; \
+				exit 1; \
+			fi; \
+			if [ -n "$$(git -C "$$submodule" status --porcelain)" ]; then \
+				echo "Submodule $$relative has local modifications." >&2; \
+				echo "Commit and pin them explicitly before building." >&2; \
+				exit 1; \
+			fi; \
+		done; \
 	fi
 
 check-programmer:

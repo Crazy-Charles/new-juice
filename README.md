@@ -180,9 +180,12 @@ make reprogram
 make roms
 ```
 
-Both incremental and clean builds verify that all JT submodules are
-initialized. If any core is missing, the build stops with an instruction to
-run `make init`.
+All JT submodules are locked to the exact gitlink commits recorded by this
+repository. Incremental and clean builds verify that each core is initialized,
+is checked out at that exact commit, and has no local modifications. If a core
+does not match, the build stops rather than silently synthesizing different
+HDL. Run `make init` to restore a mismatched revision; local submodule changes
+must be committed and pinned deliberately or removed before building.
 
 The Makefile defaults to the macOS Gowin path above when running on macOS and
 `/opt/Gowin/IDE` on Linux. It also accepts `OPENFPGALOADER` and
