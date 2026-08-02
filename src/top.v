@@ -578,6 +578,13 @@ module top
     wire psg_bdir;
     wire psg_bc;
     wire [9:0] jt49_sound;
+    reg [9:0] psg_filter_history [0:15];
+    reg [3:0] psg_filter_index = 4'd0;
+    reg [13:0] psg_filter_sum = 14'd0;
+    wire [14:0] psg_filter_next =
+        {1'b0, psg_filter_sum} + {5'd0, jt49_sound} -
+        {5'd0, psg_filter_history[psg_filter_index]};
+    wire [9:0] psg_sound = psg_filter_sum[13:4];
     wire ppi_port_c_write;
     wire ppi_control_write;
     reg keyclick_level = 1'b0;
@@ -677,7 +684,11 @@ module top
             keyclick_level <= cd_in[0];
     end
 
-    jt49_bus psg_inst (
+    jt49_bus #(
+        // AY/YM tone period zero behaves as period one. This is required by
+        // PSG-DAC software such as Aleste 2's synthesized speech.
+        .PERIOD_ZERO_IS_ONE(1'b1)
+    ) psg_inst (
         .rst_n(psg_reset_sync[1]),
         .clk(main_clk),
         .clk_en(psg_clock_enable),
@@ -698,6 +709,28 @@ module top
         .IOB_out(),
         .IOB_oe()
     );
+
+    // JT49 produces the period-one carrier digitally at 111.86 kHz. A real
+    // MSX attenuates that ultrasonic carrier in the analogue output stage but
+    // preserves rapid amplitude-register changes. Average exactly one carrier
+    // period (16 JT49 input enables) before the shared 44.1 kHz audio sampler.
+    // The resulting boxcar filter also prevents the carrier alias that led
+    // upstream JT49 to force period zero silent.
+    integer psg_filter_i;
+    always_ff @(posedge main_clk or negedge psg_reset_sync[1])
+    begin
+        if (!psg_reset_sync[1]) begin
+            psg_filter_index <= 4'd0;
+            psg_filter_sum <= 14'd0;
+            for (psg_filter_i = 0; psg_filter_i < 16;
+                 psg_filter_i = psg_filter_i + 1)
+                psg_filter_history[psg_filter_i] <= 10'd0;
+        end else if (psg_clock_enable) begin
+            psg_filter_history[psg_filter_index] <= jt49_sound;
+            psg_filter_sum <= psg_filter_next[13:0];
+            psg_filter_index <= psg_filter_index + 1'b1;
+        end
+    end
 
     // MSX-Music/YM2413 ports 7C (address) and 7D (data). Both are write-only.
     assign opll_write_selected = active_module_reset_n &&
@@ -780,7 +813,7 @@ module top
 
     // JT49's unsigned 10-bit mix has true zero at silence. Scale it into the
     // same approximate 14-bit range used by the previous PSG implementation.
-    assign psg_audio_sample = {2'b00, jt49_sound, 4'b0000};
+    assign psg_audio_sample = {2'b00, psg_sound, 4'b0000};
     // The original signal is attenuated before being mixed with the PSG.
     // Feed its one-bit level directly into the existing wide mixer; software
     // controls every transition and therefore the resulting frequency.
@@ -1086,7 +1119,7 @@ module top
         .reset_n(sms_reset_n),
         .x(sms_fb_x[7:0]),
         .y(sms_fb_y[7:0]),
-        .psg_sample(jt49_sound),
+        .psg_sample(psg_sound),
         .scc_sample(scc_sound),
         .opll_sample(opll_audio_sample),
         .opm_sample(jt51_audio_sample),
