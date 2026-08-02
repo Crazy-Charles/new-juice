@@ -329,6 +329,7 @@ module sound_scope
     reg signed [5:0] wave_neighbor;
     reg signed [8:0] wave_y;
     reg signed [8:0] wave_neighbor_y;
+    reg signed [8:0] wave_draw_y;
 
     always_comb
     begin
@@ -381,9 +382,25 @@ module sound_scope
             end
         endcase
 
+        // Give the display 6 dB of visual gain. Most of the sound cores
+        // deliberately leave digital headroom, so an unscaled peak meter
+        // seldom uses the upper half of the available display. Saturate the
+        // boosted value rather than allowing the six-bit level to wrap.
+        if (bar_level[5])
+            bar_level = 6'd63;
+        else
+            bar_level = {bar_level[4:0], 1'b0};
+
         bar_top = 7'd89 - {1'b0, bar_level};
         wave_y = 9'sd57 - wave_sample;
         wave_neighbor_y = 9'sd57 - wave_neighbor;
+        // Each history sample spans two screen columns. Put the exact sample
+        // on one column and a linear midpoint on the other, producing exactly
+        // one trace pixel per X coordinate even across a large transition.
+        if (local_x[0] && wave_index != 6'd0)
+            wave_draw_y = (wave_y + wave_neighbor_y) >>> 1;
+        else
+            wave_draw_y = wave_y;
 
         // Subtle horizontal scanlines over four differently tinted metal
         // faceplates, with a black title recess at the top of each deck.
@@ -418,19 +435,14 @@ module sound_scope
 
         // Conventional oscilloscope orientation: history runs left-to-right,
         // zero is the horizontal centerline and signed amplitude moves above
-        // or below it. A one-pixel connector joins each two-pixel sample.
+        // or below it. Odd columns contain a one-pixel interpolated midpoint,
+        // avoiding the thick vertical fills produced by steep transitions.
         if (local_y == 7'd57 &&
             local_x >= 7'd8 && local_x <= 7'd119)
             pixel = COLOR_SILVER;
         if (local_x >= 7'd8 && local_x <= 7'd119 &&
             local_y >= 7'd26 && local_y <= 7'd89) begin
-            if ($signed({1'b0, local_y}) == wave_y)
-                pixel = COLOR_WHITE;
-            if (local_x[0] && wave_index != 6'd0 &&
-                (($signed({1'b0, local_y}) >= wave_y &&
-                  $signed({1'b0, local_y}) <= wave_neighbor_y) ||
-                 ($signed({1'b0, local_y}) <= wave_y &&
-                  $signed({1'b0, local_y}) >= wave_neighbor_y)))
+            if ($signed({1'b0, local_y}) == wave_draw_y)
                 pixel = COLOR_WHITE;
         end
 
