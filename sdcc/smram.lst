@@ -539,7 +539,7 @@
                                     539 ; Function runROM_Reset
                                     540 ; ---------------------------------
     00000148                        541 _runROM_Reset::
-                                    542 ;smram.c:391: __endasm;
+                                    542 ;smram.c:389: __endasm;
     00000148 F3               [ 4]  543 	di
     00000149 31 FF CF         [10]  544 	ld sp,#0xCFFF
     0000014C 21 9A FD         [10]  545 	ld hl,#0xFD9A
@@ -547,1741 +547,1740 @@
     00000151 77               [ 7]  547 	ld (hl),a
     00000152 21 9F FD         [10]  548 	ld hl,#0xFD9F
     00000155 77               [ 7]  549 	ld (hl),a
-    00000156 3A C1 FC         [13]  550 	ld a,(0xFCC1)
-    00000159 21 00 00         [10]  551 	ld hl,#0
-    0000015C CD 24 00         [17]  552 	call #0x0024
-    0000015F C3 00 00         [10]  553 	jp 0x0000
-                                    554 ;smram.c:392: }
-                                    555 ;smram.c:394: void runROM_Reset_end() __naked {}
-                                    556 ;	---------------------------------
-                                    557 ; Function runROM_Reset_end
-                                    558 ; ---------------------------------
-    00000162                        559 _runROM_Reset_end::
-                                    560 ;smram.c:429: void print_mapper_type(void)
-                                    561 ;	---------------------------------
-                                    562 ; Function print_mapper_type
-                                    563 ; ---------------------------------
-    00000162                        564 _print_mapper_type::
-                                    565 ;smram.c:431: printf("\r\nMapper Type: ");
-    00000162 21rF1r01         [10]  566 	ld	hl, #___str_0
-    00000165 E5               [11]  567 	push	hl
-    00000166 CDr00r00         [17]  568 	call	_printf
-    00000169 F1               [10]  569 	pop	af
-                                    570 ;smram.c:432: switch(megaram_type)
-    0000016A 3Ar04r00         [13]  571 	ld	a, (_megaram_type+1)
-    0000016D FD 21r03r00      [14]  572 	ld	iy, #_megaram_type
-    00000171 FD B6 00         [19]  573 	or	a, 0 (iy)
-    00000174 28 3C            [12]  574 	jr	z, 00101$
-    00000176 3Ar03r00         [13]  575 	ld	a, (_megaram_type+0)
-    00000179 3D               [ 4]  576 	dec	a
-    0000017A FD B6 01         [19]  577 	or	a, 1 (iy)
-    0000017D 28 69            [12]  578 	jr	z, 00107$
-    0000017F 3Ar03r00         [13]  579 	ld	a, (_megaram_type+0)
-    00000182 D6 02            [ 7]  580 	sub	a, #0x02
-    00000184 FD B6 01         [19]  581 	or	a, 1 (iy)
-    00000187 28 32            [12]  582 	jr	z, 00102$
-    00000189 3Ar03r00         [13]  583 	ld	a, (_megaram_type+0)
-    0000018C D6 04            [ 7]  584 	sub	a, #0x04
-    0000018E FD B6 01         [19]  585 	or	a, 1 (iy)
-    00000191 28 31            [12]  586 	jr	z, 00103$
-    00000193 3Ar03r00         [13]  587 	ld	a, (_megaram_type+0)
-    00000196 D6 05            [ 7]  588 	sub	a, #0x05
-    00000198 FD B6 01         [19]  589 	or	a, 1 (iy)
-    0000019B 28 30            [12]  590 	jr	z, 00104$
-    0000019D 3Ar03r00         [13]  591 	ld	a, (_megaram_type+0)
-    000001A0 D6 08            [ 7]  592 	sub	a, #0x08
-    000001A2 FD B6 01         [19]  593 	or	a, 1 (iy)
-    000001A5 28 38            [12]  594 	jr	z, 00106$
-    000001A7 3Ar03r00         [13]  595 	ld	a, (_megaram_type+0)
-    000001AA D6 16            [ 7]  596 	sub	a, #0x16
-    000001AC FD B6 01         [19]  597 	or	a, 1 (iy)
-    000001AF 28 25            [12]  598 	jr	z, 00105$
-    000001B1 C9               [10]  599 	ret
-                                    600 ;smram.c:434: case TYPE_MSCC:
-    000001B2                        601 00101$:
-                                    602 ;smram.c:435: printf("MegaRAM SCC (default)\n\r");
-    000001B2 21r01r02         [10]  603 	ld	hl, #___str_1
-    000001B5 E5               [11]  604 	push	hl
-    000001B6 CDr00r00         [17]  605 	call	_printf
-    000001B9 F1               [10]  606 	pop	af
-                                    607 ;smram.c:436: break;
-    000001BA C9               [10]  608 	ret
-                                    609 ;smram.c:437: case TYPE_LINEAR:
-    000001BB                        610 00102$:
-                                    611 ;smram.c:438: printf("LINEAR (/L)\n\r");
-    000001BB 21r19r02         [10]  612 	ld	hl, #___str_2
-    000001BE E5               [11]  613 	push	hl
-    000001BF CDr00r00         [17]  614 	call	_printf
-    000001C2 F1               [10]  615 	pop	af
-                                    616 ;smram.c:439: break;
-    000001C3 C9               [10]  617 	ret
-                                    618 ;smram.c:440: case TYPE_K4:
-    000001C4                        619 00103$:
-                                    620 ;smram.c:441: printf("Konami (/R6 or /K4)\n\r");
-    000001C4 21r27r02         [10]  621 	ld	hl, #___str_3
-    000001C7 E5               [11]  622 	push	hl
-    000001C8 CDr00r00         [17]  623 	call	_printf
-    000001CB F1               [10]  624 	pop	af
-                                    625 ;smram.c:442: break;
-    000001CC C9               [10]  626 	ret
-                                    627 ;smram.c:443: case TYPE_K5:
-    000001CD                        628 00104$:
-                                    629 ;smram.c:444: printf("Konami SCC (/R5 or /K5)\n\r");
-    000001CD 01r3Dr02         [10]  630 	ld	bc, #___str_4+0
-    000001D0 C5               [11]  631 	push	bc
-    000001D1 CDr00r00         [17]  632 	call	_printf
-    000001D4 F1               [10]  633 	pop	af
-                                    634 ;smram.c:445: break;
-    000001D5 C9               [10]  635 	ret
-                                    636 ;smram.c:446: case TYPE_A16:
-    000001D6                        637 00105$:
-                                    638 ;smram.c:447: printf("ASCII16 (/R1 or /A16)\n\r");
-    000001D6 21r57r02         [10]  639 	ld	hl, #___str_5
-    000001D9 E5               [11]  640 	push	hl
-    000001DA CDr00r00         [17]  641 	call	_printf
-    000001DD F1               [10]  642 	pop	af
-                                    643 ;smram.c:448: break;
-    000001DE C9               [10]  644 	ret
-                                    645 ;smram.c:449: case TYPE_A8:
-    000001DF                        646 00106$:
-                                    647 ;smram.c:450: printf("ASCII8 (/R3 or /A8)\n\r");
-    000001DF 21r6Fr02         [10]  648 	ld	hl, #___str_6
-    000001E2 E5               [11]  649 	push	hl
-    000001E3 CDr00r00         [17]  650 	call	_printf
-    000001E6 F1               [10]  651 	pop	af
-                                    652 ;smram.c:451: break;
-    000001E7 C9               [10]  653 	ret
-                                    654 ;smram.c:452: case TYPE_DDX:
-    000001E8                        655 00107$:
-                                    656 ;smram.c:453: printf("MegaRAM DDX (/D)\n\r");
-    000001E8 21r85r02         [10]  657 	ld	hl, #___str_7
-    000001EB E5               [11]  658 	push	hl
-    000001EC CDr00r00         [17]  659 	call	_printf
-    000001EF F1               [10]  660 	pop	af
-                                    661 ;smram.c:455: }
-                                    662 ;smram.c:456: }
-    000001F0 C9               [10]  663 	ret
-    000001F1                        664 ___str_0:
-    000001F1 0D                     665 	.db 0x0d
-    000001F2 0A                     666 	.db 0x0a
-    000001F3 4D 61 70 70 65 72 20   667 	.ascii "Mapper Type: "
+    00000156 FD 2A C0 FC      [20]  550 	ld iy,(0xFCC1 -1)
+    0000015A DD 21 00 00      [14]  551 	ld ix,#0
+    0000015E CD 1C 00         [17]  552 	call #0x001C
+                                    553 ;smram.c:390: }
+                                    554 ;smram.c:392: void runROM_Reset_end() __naked {}
+                                    555 ;	---------------------------------
+                                    556 ; Function runROM_Reset_end
+                                    557 ; ---------------------------------
+    00000161                        558 _runROM_Reset_end::
+                                    559 ;smram.c:427: void print_mapper_type(void)
+                                    560 ;	---------------------------------
+                                    561 ; Function print_mapper_type
+                                    562 ; ---------------------------------
+    00000161                        563 _print_mapper_type::
+                                    564 ;smram.c:429: printf("\r\nMapper Type: ");
+    00000161 21rF0r01         [10]  565 	ld	hl, #___str_0
+    00000164 E5               [11]  566 	push	hl
+    00000165 CDr00r00         [17]  567 	call	_printf
+    00000168 F1               [10]  568 	pop	af
+                                    569 ;smram.c:430: switch(megaram_type)
+    00000169 3Ar04r00         [13]  570 	ld	a, (_megaram_type+1)
+    0000016C FD 21r03r00      [14]  571 	ld	iy, #_megaram_type
+    00000170 FD B6 00         [19]  572 	or	a, 0 (iy)
+    00000173 28 3C            [12]  573 	jr	z, 00101$
+    00000175 3Ar03r00         [13]  574 	ld	a, (_megaram_type+0)
+    00000178 3D               [ 4]  575 	dec	a
+    00000179 FD B6 01         [19]  576 	or	a, 1 (iy)
+    0000017C 28 69            [12]  577 	jr	z, 00107$
+    0000017E 3Ar03r00         [13]  578 	ld	a, (_megaram_type+0)
+    00000181 D6 02            [ 7]  579 	sub	a, #0x02
+    00000183 FD B6 01         [19]  580 	or	a, 1 (iy)
+    00000186 28 32            [12]  581 	jr	z, 00102$
+    00000188 3Ar03r00         [13]  582 	ld	a, (_megaram_type+0)
+    0000018B D6 04            [ 7]  583 	sub	a, #0x04
+    0000018D FD B6 01         [19]  584 	or	a, 1 (iy)
+    00000190 28 31            [12]  585 	jr	z, 00103$
+    00000192 3Ar03r00         [13]  586 	ld	a, (_megaram_type+0)
+    00000195 D6 05            [ 7]  587 	sub	a, #0x05
+    00000197 FD B6 01         [19]  588 	or	a, 1 (iy)
+    0000019A 28 30            [12]  589 	jr	z, 00104$
+    0000019C 3Ar03r00         [13]  590 	ld	a, (_megaram_type+0)
+    0000019F D6 08            [ 7]  591 	sub	a, #0x08
+    000001A1 FD B6 01         [19]  592 	or	a, 1 (iy)
+    000001A4 28 38            [12]  593 	jr	z, 00106$
+    000001A6 3Ar03r00         [13]  594 	ld	a, (_megaram_type+0)
+    000001A9 D6 16            [ 7]  595 	sub	a, #0x16
+    000001AB FD B6 01         [19]  596 	or	a, 1 (iy)
+    000001AE 28 25            [12]  597 	jr	z, 00105$
+    000001B0 C9               [10]  598 	ret
+                                    599 ;smram.c:432: case TYPE_MSCC:
+    000001B1                        600 00101$:
+                                    601 ;smram.c:433: printf("MegaRAM SCC (default)\n\r");
+    000001B1 21r00r02         [10]  602 	ld	hl, #___str_1
+    000001B4 E5               [11]  603 	push	hl
+    000001B5 CDr00r00         [17]  604 	call	_printf
+    000001B8 F1               [10]  605 	pop	af
+                                    606 ;smram.c:434: break;
+    000001B9 C9               [10]  607 	ret
+                                    608 ;smram.c:435: case TYPE_LINEAR:
+    000001BA                        609 00102$:
+                                    610 ;smram.c:436: printf("LINEAR (/L)\n\r");
+    000001BA 21r18r02         [10]  611 	ld	hl, #___str_2
+    000001BD E5               [11]  612 	push	hl
+    000001BE CDr00r00         [17]  613 	call	_printf
+    000001C1 F1               [10]  614 	pop	af
+                                    615 ;smram.c:437: break;
+    000001C2 C9               [10]  616 	ret
+                                    617 ;smram.c:438: case TYPE_K4:
+    000001C3                        618 00103$:
+                                    619 ;smram.c:439: printf("Konami (/R6 or /K4)\n\r");
+    000001C3 21r26r02         [10]  620 	ld	hl, #___str_3
+    000001C6 E5               [11]  621 	push	hl
+    000001C7 CDr00r00         [17]  622 	call	_printf
+    000001CA F1               [10]  623 	pop	af
+                                    624 ;smram.c:440: break;
+    000001CB C9               [10]  625 	ret
+                                    626 ;smram.c:441: case TYPE_K5:
+    000001CC                        627 00104$:
+                                    628 ;smram.c:442: printf("Konami SCC (/R5 or /K5)\n\r");
+    000001CC 01r3Cr02         [10]  629 	ld	bc, #___str_4+0
+    000001CF C5               [11]  630 	push	bc
+    000001D0 CDr00r00         [17]  631 	call	_printf
+    000001D3 F1               [10]  632 	pop	af
+                                    633 ;smram.c:443: break;
+    000001D4 C9               [10]  634 	ret
+                                    635 ;smram.c:444: case TYPE_A16:
+    000001D5                        636 00105$:
+                                    637 ;smram.c:445: printf("ASCII16 (/R1 or /A16)\n\r");
+    000001D5 21r56r02         [10]  638 	ld	hl, #___str_5
+    000001D8 E5               [11]  639 	push	hl
+    000001D9 CDr00r00         [17]  640 	call	_printf
+    000001DC F1               [10]  641 	pop	af
+                                    642 ;smram.c:446: break;
+    000001DD C9               [10]  643 	ret
+                                    644 ;smram.c:447: case TYPE_A8:
+    000001DE                        645 00106$:
+                                    646 ;smram.c:448: printf("ASCII8 (/R3 or /A8)\n\r");
+    000001DE 21r6Er02         [10]  647 	ld	hl, #___str_6
+    000001E1 E5               [11]  648 	push	hl
+    000001E2 CDr00r00         [17]  649 	call	_printf
+    000001E5 F1               [10]  650 	pop	af
+                                    651 ;smram.c:449: break;
+    000001E6 C9               [10]  652 	ret
+                                    653 ;smram.c:450: case TYPE_DDX:
+    000001E7                        654 00107$:
+                                    655 ;smram.c:451: printf("MegaRAM DDX (/D)\n\r");
+    000001E7 21r84r02         [10]  656 	ld	hl, #___str_7
+    000001EA E5               [11]  657 	push	hl
+    000001EB CDr00r00         [17]  658 	call	_printf
+    000001EE F1               [10]  659 	pop	af
+                                    660 ;smram.c:453: }
+                                    661 ;smram.c:454: }
+    000001EF C9               [10]  662 	ret
+    000001F0                        663 ___str_0:
+    000001F0 0D                     664 	.db 0x0d
+    000001F1 0A                     665 	.db 0x0a
+    000001F2 4D 61 70 70 65 72 20   666 	.ascii "Mapper Type: "
              54 79 70 65 3A 20
-    00000200 00                     668 	.db 0x00
-    00000201                        669 ___str_1:
-    00000201 4D 65 67 61 52 41 4D   670 	.ascii "MegaRAM SCC (default)"
+    000001FF 00                     667 	.db 0x00
+    00000200                        668 ___str_1:
+    00000200 4D 65 67 61 52 41 4D   669 	.ascii "MegaRAM SCC (default)"
              20 53 43 43 20 28 64
              65 66 61 75 6C 74 29
-    00000216 0A                     671 	.db 0x0a
-    00000217 0D                     672 	.db 0x0d
-    00000218 00                     673 	.db 0x00
-    00000219                        674 ___str_2:
-    00000219 4C 49 4E 45 41 52 20   675 	.ascii "LINEAR (/L)"
+    00000215 0A                     670 	.db 0x0a
+    00000216 0D                     671 	.db 0x0d
+    00000217 00                     672 	.db 0x00
+    00000218                        673 ___str_2:
+    00000218 4C 49 4E 45 41 52 20   674 	.ascii "LINEAR (/L)"
              28 2F 4C 29
-    00000224 0A                     676 	.db 0x0a
-    00000225 0D                     677 	.db 0x0d
-    00000226 00                     678 	.db 0x00
-    00000227                        679 ___str_3:
-    00000227 4B 6F 6E 61 6D 69 20   680 	.ascii "Konami (/R6 or /K4)"
+    00000223 0A                     675 	.db 0x0a
+    00000224 0D                     676 	.db 0x0d
+    00000225 00                     677 	.db 0x00
+    00000226                        678 ___str_3:
+    00000226 4B 6F 6E 61 6D 69 20   679 	.ascii "Konami (/R6 or /K4)"
              28 2F 52 36 20 6F 72
              20 2F 4B 34 29
-    0000023A 0A                     681 	.db 0x0a
-    0000023B 0D                     682 	.db 0x0d
-    0000023C 00                     683 	.db 0x00
-    0000023D                        684 ___str_4:
-    0000023D 4B 6F 6E 61 6D 69 20   685 	.ascii "Konami SCC (/R5 or /K5)"
+    00000239 0A                     680 	.db 0x0a
+    0000023A 0D                     681 	.db 0x0d
+    0000023B 00                     682 	.db 0x00
+    0000023C                        683 ___str_4:
+    0000023C 4B 6F 6E 61 6D 69 20   684 	.ascii "Konami SCC (/R5 or /K5)"
              53 43 43 20 28 2F 52
              35 20 6F 72 20 2F 4B
              35 29
-    00000254 0A                     686 	.db 0x0a
-    00000255 0D                     687 	.db 0x0d
-    00000256 00                     688 	.db 0x00
-    00000257                        689 ___str_5:
-    00000257 41 53 43 49 49 31 36   690 	.ascii "ASCII16 (/R1 or /A16)"
+    00000253 0A                     685 	.db 0x0a
+    00000254 0D                     686 	.db 0x0d
+    00000255 00                     687 	.db 0x00
+    00000256                        688 ___str_5:
+    00000256 41 53 43 49 49 31 36   689 	.ascii "ASCII16 (/R1 or /A16)"
              20 28 2F 52 31 20 6F
              72 20 2F 41 31 36 29
-    0000026C 0A                     691 	.db 0x0a
-    0000026D 0D                     692 	.db 0x0d
-    0000026E 00                     693 	.db 0x00
-    0000026F                        694 ___str_6:
-    0000026F 41 53 43 49 49 38 20   695 	.ascii "ASCII8 (/R3 or /A8)"
+    0000026B 0A                     690 	.db 0x0a
+    0000026C 0D                     691 	.db 0x0d
+    0000026D 00                     692 	.db 0x00
+    0000026E                        693 ___str_6:
+    0000026E 41 53 43 49 49 38 20   694 	.ascii "ASCII8 (/R3 or /A8)"
              28 2F 52 33 20 6F 72
              20 2F 41 38 29
-    00000282 0A                     696 	.db 0x0a
-    00000283 0D                     697 	.db 0x0d
-    00000284 00                     698 	.db 0x00
-    00000285                        699 ___str_7:
-    00000285 4D 65 67 61 52 41 4D   700 	.ascii "MegaRAM DDX (/D)"
+    00000281 0A                     695 	.db 0x0a
+    00000282 0D                     696 	.db 0x0d
+    00000283 00                     697 	.db 0x00
+    00000284                        698 ___str_7:
+    00000284 4D 65 67 61 52 41 4D   699 	.ascii "MegaRAM DDX (/D)"
              20 44 44 58 20 28 2F
              44 29
-    00000295 0A                     701 	.db 0x0a
-    00000296 0D                     702 	.db 0x0d
-    00000297 00                     703 	.db 0x00
-                                    704 ;smram.c:458: int main(void)
-                                    705 ;	---------------------------------
-                                    706 ; Function main
-                                    707 ; ---------------------------------
-    00000298                        708 _main::
-                                    709 ;smram.c:460: curslt = (PPIA & 0x0C) >> 2;
-    00000298 DB A8            [11]  710 	in	a, (_PPIA)
-    0000029A E6 0C            [ 7]  711 	and	a, #0x0c
-    0000029C 2E 00            [ 7]  712 	ld	l, #0x00
-    0000029E CB 2D            [ 8]  713 	sra	l
-    000002A0 CB 1F            [ 8]  714 	rr	a
-    000002A2 CB 2D            [ 8]  715 	sra	l
-    000002A4 CB 1F            [ 8]  716 	rr	a
-    000002A6 32r00r00         [13]  717 	ld	(_curslt), a
-                                    718 ;smram.c:461: cursslt = (~(*((uchar*)0xFFFF)) & 0x0C) | *((uchar*)EXPTBL+curslt);
-    000002A9 3A FF FF         [13]  719 	ld	a, (#0xffff)
-    000002AC 2F               [ 4]  720 	cpl
-    000002AD E6 0C            [ 7]  721 	and	a, #0x0c
-    000002AF 4F               [ 4]  722 	ld	c, a
-    000002B0 3Ar00r00         [13]  723 	ld	a, (_curslt)
-    000002B3 6F               [ 4]  724 	ld	l, a
-    000002B4 26 00            [ 7]  725 	ld	h, #0x00
-    000002B6 11 C1 FC         [10]  726 	ld	de, #0xfcc1
-    000002B9 19               [11]  727 	add	hl, de
-    000002BA 7E               [ 7]  728 	ld	a, (hl)
-    000002BB B1               [ 4]  729 	or	a, c
-    000002BC 32r01r00         [13]  730 	ld	(#_cursslt), a
-                                    731 ;smram.c:463: for(i = 1; i < 4; i++)
-    000002BF 21 01 00         [10]  732 	ld	hl, #0x0001
-    000002C2 22r0Dr00         [16]  733 	ld	(_i), hl
-    000002C5                        734 00286$:
-                                    735 ;smram.c:465: slotid = *((uchar*)EXPTBL+i);
-    000002C5 2Ar0Dr00         [16]  736 	ld	hl, (_i)
-    000002C8 11 C1 FC         [10]  737 	ld	de, #0xfcc1
-    000002CB 19               [11]  738 	add	hl, de
-    000002CC 7E               [ 7]  739 	ld	a, (hl)
-    000002CD 32r16r00         [13]  740 	ld	(#_slotid), a
-                                    741 ;smram.c:467: if (slotid & 0x80) {    // expanded ?
-    000002D0 3Ar16r00         [13]  742 	ld	a, (_slotid)
-    000002D3 07               [ 4]  743 	rlca
-    000002D4 30 74            [12]  744 	jr	nc, 00287$
-                                    745 ;smram.c:469: enaslt(i | 0x80, 0x4000); // looking for BIOS, sslot 0
-    000002D6 3Ar0Dr00         [13]  746 	ld	a, (_i)
-    000002D9 CB FF            [ 8]  747 	set	7, a
-    000002DB 11 00 40         [10]  748 	ld	de, #0x4000
-    000002DE CDr48r00         [17]  749 	call	_enaslt
-                                    750 ;smram.c:471: b = *(uchar*)(0x6000); // it might be RAM
-    000002E1 3A 00 60         [13]  751 	ld	a, (#0x6000)
-    000002E4 32r03r00         [13]  752 	ld	(#_b), a
-                                    753 ;smram.c:472: *((uchar*)0x6000) = 7;
-    000002E7 21 00 60         [10]  754 	ld	hl, #0x6000
-    000002EA 36 07            [10]  755 	ld	(hl), #0x07
-                                    756 ;smram.c:473: s = "WonderTANG! uSD Driver";
-    000002EC 21rD0r0A         [10]  757 	ld	hl, #___str_8
-    000002EF 22r04r00         [16]  758 	ld	(_s), hl
-                                    759 ;smram.c:474: t = (uchar*)0x4110;
-    000002F2 21 10 41         [10]  760 	ld	hl, #0x4110
-    000002F5 22r06r00         [16]  761 	ld	(_t), hl
-                                    762 ;smram.c:475: for(int j=0; j<22; j++)
-    000002F8 01 00 00         [10]  763 	ld	bc, #0x0000
-    000002FB                        764 00284$:
-    000002FB 79               [ 4]  765 	ld	a, c
-    000002FC D6 16            [ 7]  766 	sub	a, #0x16
-    000002FE 78               [ 4]  767 	ld	a, b
-    000002FF 17               [ 4]  768 	rla
-    00000300 3F               [ 4]  769 	ccf
-    00000301 1F               [ 4]  770 	rra
-    00000302 DE 80            [ 7]  771 	sbc	a, #0x80
-    00000304 30 2A            [12]  772 	jr	nc, 00105$
-                                    773 ;smram.c:477: if (*s++ != *t++) break;
-    00000306 2Ar04r00         [16]  774 	ld	hl, (_s)
-    00000309 5E               [ 7]  775 	ld	e, (hl)
-    0000030A 2Ar04r00         [16]  776 	ld	hl, (_s)
-    0000030D 23               [ 6]  777 	inc	hl
-    0000030E 22r04r00         [16]  778 	ld	(_s), hl
-    00000311 2Ar06r00         [16]  779 	ld	hl, (_t)
-    00000314 56               [ 7]  780 	ld	d, (hl)
-    00000315 2Ar06r00         [16]  781 	ld	hl, (_t)
-    00000318 23               [ 6]  782 	inc	hl
-    00000319 22r06r00         [16]  783 	ld	(_t), hl
-    0000031C 7B               [ 4]  784 	ld	a, e
-    0000031D 92               [ 4]  785 	sub	a, d
-    0000031E 20 10            [12]  786 	jr	nz, 00105$
-                                    787 ;smram.c:479: if (j == 21) 
-    00000320 79               [ 4]  788 	ld	a, c
-    00000321 D6 15            [ 7]  789 	sub	a, #0x15
-    00000323 B0               [ 4]  790 	or	a, b
-    00000324 20 07            [12]  791 	jr	nz, 00285$
-                                    792 ;smram.c:481: found = TRUE;
-    00000326 21r00r00         [10]  793 	ld	hl, #_found
-    00000329 36 01            [10]  794 	ld	(hl), #0x01
-                                    795 ;smram.c:482: break;
-    0000032B 18 03            [12]  796 	jr	00105$
-    0000032D                        797 00285$:
-                                    798 ;smram.c:475: for(int j=0; j<22; j++)
-    0000032D 03               [ 6]  799 	inc	bc
-    0000032E 18 CB            [12]  800 	jr	00284$
-    00000330                        801 00105$:
-                                    802 ;smram.c:486: *((uchar*)0x6000) = b; // return whatever was there
-    00000330 21 00 60         [10]  803 	ld	hl, #0x6000
-    00000333 3Ar03r00         [13]  804 	ld	a, (_b)
-    00000336 77               [ 7]  805 	ld	(hl), a
-                                    806 ;smram.c:488: enaslt(curslt | cursslt, 0x4000);
-    00000337 3Ar00r00         [13]  807 	ld	a, (_curslt)
-    0000033A 21r01r00         [10]  808 	ld	hl, #_cursslt
-    0000033D B6               [ 7]  809 	or	a, (hl)
-    0000033E 11 00 40         [10]  810 	ld	de, #0x4000
-    00000341 CDr48r00         [17]  811 	call	_enaslt
-                                    812 ;smram.c:490: if (found) break;
-    00000344 3Ar00r00         [13]  813 	ld	a, (_found+0)
-    00000347 B7               [ 4]  814 	or	a, a
-    00000348 20 17            [12]  815 	jr	nz, 00110$
-    0000034A                        816 00287$:
-                                    817 ;smram.c:463: for(i = 1; i < 4; i++)
-    0000034A 2Ar0Dr00         [16]  818 	ld	hl, (_i)
-    0000034D 23               [ 6]  819 	inc	hl
-    0000034E 22r0Dr00         [16]  820 	ld	(_i), hl
-    00000351 3Ar0Dr00         [13]  821 	ld	a, (_i+0)
-    00000354 D6 04            [ 7]  822 	sub	a, #0x04
-    00000356 3Ar0Er00         [13]  823 	ld	a, (_i+1)
-    00000359 17               [ 4]  824 	rla
-    0000035A 3F               [ 4]  825 	ccf
-    0000035B 1F               [ 4]  826 	rra
-    0000035C DE 80            [ 7]  827 	sbc	a, #0x80
-    0000035E DArC5r02         [10]  828 	jp	c, 00286$
-    00000361                        829 00110$:
-                                    830 ;smram.c:494: sslt = 0;
-    00000361 AF               [ 4]  831 	xor	a, a
-    00000362 32r02r00         [13]  832 	ld	(#_sslt), a
-                                    833 ;smram.c:496: if (found)
-    00000365 3Ar00r00         [13]  834 	ld	a, (_found+0)
-    00000368 B7               [ 4]  835 	or	a, a
-    00000369 CAr9Cr05         [10]  836 	jp	z, 00192$
-                                    837 ;smram.c:498: printf("WonderTANG! Super MegaRAM SCC\n\r");
-    0000036C 21rE7r0A         [10]  838 	ld	hl, #___str_9
-    0000036F E5               [11]  839 	push	hl
-    00000370 CDr00r00         [17]  840 	call	_printf
-                                    841 ;smram.c:499: printf("v3.01 (new-juice)\n\r");
-    00000373 21r07r0B         [10]  842 	ld	hl, #___str_10
-    00000376 E3               [19]  843 	ex	(sp),hl
-    00000377 CDr00r00         [17]  844 	call	_printf
-    0000037A F1               [10]  845 	pop	af
-                                    846 ;smram.c:501: sslt = 0x80 | (2 << 2) | i;
-    0000037B 3Ar0Dr00         [13]  847 	ld	a, (_i)
-    0000037E F6 88            [ 7]  848 	or	a, #0x88
-    00000380 32r02r00         [13]  849 	ld	(#_sslt), a
-                                    850 ;smram.c:502: paramlen = *((char*)0x80);
-    00000383 3A 80 00         [13]  851 	ld	a, (#0x0080)
-    00000386 32r05r00         [13]  852 	ld	(#_paramlen), a
-                                    853 ;smram.c:503: for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)
-    00000389 21 81 00         [10]  854 	ld	hl, #0x0081
-    0000038C 22r08r00         [16]  855 	ld	(_params), hl
-    0000038F                        856 00290$:
-    0000038F ED 4Br08r00      [20]  857 	ld	bc, (_params)
-    00000393 0A               [ 7]  858 	ld	a, (bc)
-    00000394 5F               [ 4]  859 	ld	e, a
-    00000395 B7               [ 4]  860 	or	a, a
-    00000396 20 07            [12]  861 	jr	nz, 00289$
-    00000398 3Ar05r00         [13]  862 	ld	a, (_paramlen+0)
-    0000039B B7               [ 4]  863 	or	a, a
-    0000039C C2rA2r05         [10]  864 	jp	nz, 00193$
-    0000039F                        865 00289$:
-                                    866 ;smram.c:505: if (*params != ' ')
-                                    867 ;smram.c:507: if (*params == '/')
-    0000039F 7B               [ 4]  868 	ld	a, e
-    000003A0 FE 20            [ 7]  869 	cp	a, #0x20
-    000003A2 CAr8Er05         [10]  870 	jp	z, 00291$
-    000003A5 D6 2F            [ 7]  871 	sub	a, #0x2f
-    000003A7 C2r70r05         [10]  872 	jp	nz, 00186$
-                                    873 ;smram.c:509: params++;
-    000003AA 2Ar08r00         [16]  874 	ld	hl, (_params)
-    000003AD 23               [ 6]  875 	inc	hl
-    000003AE 22r08r00         [16]  876 	ld	(_params), hl
-                                    877 ;smram.c:503: for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)
-    000003B1 2Ar08r00         [16]  878 	ld	hl, (_params)
-    000003B4 4E               [ 7]  879 	ld	c, (hl)
-                                    880 ;smram.c:510: if (to_upper(*params) == 'R') 
-    000003B5 C5               [11]  881 	push	bc
-    000003B6 79               [ 4]  882 	ld	a, c
-    000003B7 CDr3Fr00         [17]  883 	call	_to_upper
-    000003BA C1               [10]  884 	pop	bc
-                                    885 ;smram.c:509: params++;
-    000003BB 2Ar08r00         [16]  886 	ld	hl, (_params)
-    000003BE 23               [ 6]  887 	inc	hl
-                                    888 ;smram.c:510: if (to_upper(*params) == 'R') 
-    000003BF FE 52            [ 7]  889 	cp	a, #0x52
-    000003C1 20 63            [12]  890 	jr	nz, 00179$
-                                    891 ;smram.c:512: mapperSpecified = TRUE;
-    000003C3 3E 01            [ 7]  892 	ld	a, #0x01
-    000003C5 32r08r00         [13]  893 	ld	(_mapperSpecified+0), a
-                                    894 ;smram.c:513: params++;
-    000003C8 22r08r00         [16]  895 	ld	(_params), hl
-                                    896 ;smram.c:503: for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)
-    000003CB 2Ar08r00         [16]  897 	ld	hl, (_params)
-    000003CE 7E               [ 7]  898 	ld	a, (hl)
-                                    899 ;smram.c:514: if (*params == '0')
-    000003CF FE 30            [ 7]  900 	cp	a, #0x30
-    000003D1 20 09            [12]  901 	jr	nz, 00127$
-                                    902 ;smram.c:515: megaram_type = TYPE_MSCC;
-    000003D3 21 00 00         [10]  903 	ld	hl, #0x0000
-    000003D6 22r03r00         [16]  904 	ld	(_megaram_type), hl
-    000003D9 C3r8Er05         [10]  905 	jp	00291$
-    000003DC                        906 00127$:
-                                    907 ;smram.c:517: if (*params == '2')
-    000003DC FE 32            [ 7]  908 	cp	a, #0x32
-    000003DE 20 09            [12]  909 	jr	nz, 00124$
-                                    910 ;smram.c:518: megaram_type = TYPE_LINEAR;
-    000003E0 21 02 00         [10]  911 	ld	hl, #0x0002
-    000003E3 22r03r00         [16]  912 	ld	(_megaram_type), hl
-    000003E6 C3r8Er05         [10]  913 	jp	00291$
-    000003E9                        914 00124$:
-                                    915 ;smram.c:520: if (*params == '6')
-    000003E9 FE 36            [ 7]  916 	cp	a, #0x36
-    000003EB 20 09            [12]  917 	jr	nz, 00121$
-                                    918 ;smram.c:521: megaram_type = TYPE_K4;
-    000003ED 21 04 00         [10]  919 	ld	hl, #0x0004
-    000003F0 22r03r00         [16]  920 	ld	(_megaram_type), hl
-    000003F3 C3r8Er05         [10]  921 	jp	00291$
-    000003F6                        922 00121$:
-                                    923 ;smram.c:523: if (*params == '5')
-    000003F6 FE 35            [ 7]  924 	cp	a, #0x35
-    000003F8 20 09            [12]  925 	jr	nz, 00118$
-                                    926 ;smram.c:524: megaram_type = TYPE_K5;
-    000003FA 21 05 00         [10]  927 	ld	hl, #0x0005
-    000003FD 22r03r00         [16]  928 	ld	(_megaram_type), hl
-    00000400 C3r8Er05         [10]  929 	jp	00291$
-    00000403                        930 00118$:
-                                    931 ;smram.c:526: if (*params == '1')
-    00000403 FE 31            [ 7]  932 	cp	a, #0x31
-    00000405 20 09            [12]  933 	jr	nz, 00115$
-                                    934 ;smram.c:527: megaram_type = TYPE_A16;
-    00000407 21 16 00         [10]  935 	ld	hl, #0x0016
-    0000040A 22r03r00         [16]  936 	ld	(_megaram_type), hl
-    0000040D C3r8Er05         [10]  937 	jp	00291$
-    00000410                        938 00115$:
-                                    939 ;smram.c:529: if (*params == '3')
-    00000410 FE 33            [ 7]  940 	cp	a, #0x33
-    00000412 20 09            [12]  941 	jr	nz, 00112$
-                                    942 ;smram.c:530: megaram_type = TYPE_A8;
-    00000414 21 08 00         [10]  943 	ld	hl, #0x0008
-    00000417 22r03r00         [16]  944 	ld	(_megaram_type), hl
-    0000041A C3r8Er05         [10]  945 	jp	00291$
-    0000041D                        946 00112$:
-                                    947 ;smram.c:532: megaram_type = TYPE_UNK;                    
-    0000041D 21 FF 00         [10]  948 	ld	hl, #0x00ff
-    00000420 22r03r00         [16]  949 	ld	(_megaram_type), hl
-    00000423 C3r8Er05         [10]  950 	jp	00291$
-    00000426                        951 00179$:
-                                    952 ;smram.c:534: else if (to_upper(*params) == 'K')
-    00000426 E5               [11]  953 	push	hl
-    00000427 C5               [11]  954 	push	bc
-    00000428 79               [ 4]  955 	ld	a, c
-    00000429 CDr3Fr00         [17]  956 	call	_to_upper
-    0000042C C1               [10]  957 	pop	bc
-    0000042D E1               [10]  958 	pop	hl
-    0000042E FE 4B            [ 7]  959 	cp	a, #0x4b
-    00000430 20 2F            [12]  960 	jr	nz, 00176$
-                                    961 ;smram.c:536: mapperSpecified = TRUE;
-    00000432 3E 01            [ 7]  962 	ld	a, #0x01
-    00000434 32r08r00         [13]  963 	ld	(_mapperSpecified+0), a
-                                    964 ;smram.c:537: params++;
-    00000437 22r08r00         [16]  965 	ld	(_params), hl
-                                    966 ;smram.c:503: for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)
-    0000043A 2Ar08r00         [16]  967 	ld	hl, (_params)
-    0000043D 7E               [ 7]  968 	ld	a, (hl)
-                                    969 ;smram.c:538: if (*params == '5')
-    0000043E FE 35            [ 7]  970 	cp	a, #0x35
-    00000440 20 09            [12]  971 	jr	nz, 00133$
-                                    972 ;smram.c:539: megaram_type = TYPE_K5;
-    00000442 21 05 00         [10]  973 	ld	hl, #0x0005
-    00000445 22r03r00         [16]  974 	ld	(_megaram_type), hl
-    00000448 C3r8Er05         [10]  975 	jp	00291$
-    0000044B                        976 00133$:
-                                    977 ;smram.c:541: if (*params == '4')
-    0000044B FE 34            [ 7]  978 	cp	a, #0x34
-    0000044D 20 09            [12]  979 	jr	nz, 00130$
-                                    980 ;smram.c:542: megaram_type = TYPE_K4;
-    0000044F 21 04 00         [10]  981 	ld	hl, #0x0004
-    00000452 22r03r00         [16]  982 	ld	(_megaram_type), hl
-    00000455 C3r8Er05         [10]  983 	jp	00291$
-    00000458                        984 00130$:
-                                    985 ;smram.c:544: megaram_type = TYPE_UNK;
-    00000458 21 FF 00         [10]  986 	ld	hl, #0x00ff
-    0000045B 22r03r00         [16]  987 	ld	(_megaram_type), hl
-    0000045E C3r8Er05         [10]  988 	jp	00291$
-    00000461                        989 00176$:
-                                    990 ;smram.c:546: else if (to_upper(*params) == 'D')
-    00000461 E5               [11]  991 	push	hl
-    00000462 C5               [11]  992 	push	bc
-    00000463 79               [ 4]  993 	ld	a, c
-    00000464 CDr3Fr00         [17]  994 	call	_to_upper
-    00000467 C1               [10]  995 	pop	bc
-    00000468 E1               [10]  996 	pop	hl
-    00000469 FE 44            [ 7]  997 	cp	a, #0x44
-    0000046B 20 0E            [12]  998 	jr	nz, 00173$
-                                    999 ;smram.c:548: mapperSpecified = TRUE;
-    0000046D 21r08r00         [10] 1000 	ld	hl, #_mapperSpecified
-    00000470 36 01            [10] 1001 	ld	(hl), #0x01
-                                   1002 ;smram.c:549: megaram_type = TYPE_DDX;
-    00000472 21 01 00         [10] 1003 	ld	hl, #0x0001
-    00000475 22r03r00         [16] 1004 	ld	(_megaram_type), hl
-    00000478 C3r8Er05         [10] 1005 	jp	00291$
-    0000047B                       1006 00173$:
-                                   1007 ;smram.c:551: else if (to_upper(*params) == 'L')
-    0000047B E5               [11] 1008 	push	hl
-    0000047C C5               [11] 1009 	push	bc
-    0000047D 79               [ 4] 1010 	ld	a, c
-    0000047E CDr3Fr00         [17] 1011 	call	_to_upper
-    00000481 C1               [10] 1012 	pop	bc
-    00000482 E1               [10] 1013 	pop	hl
-    00000483 FE 4C            [ 7] 1014 	cp	a, #0x4c
-    00000485 20 0E            [12] 1015 	jr	nz, 00170$
-                                   1016 ;smram.c:553: mapperSpecified = TRUE;
-    00000487 21r08r00         [10] 1017 	ld	hl, #_mapperSpecified
-    0000048A 36 01            [10] 1018 	ld	(hl), #0x01
-                                   1019 ;smram.c:554: megaram_type = TYPE_LINEAR;
-    0000048C 21 02 00         [10] 1020 	ld	hl, #0x0002
-    0000048F 22r03r00         [16] 1021 	ld	(_megaram_type), hl
-    00000492 C3r8Er05         [10] 1022 	jp	00291$
-    00000495                       1023 00170$:
-                                   1024 ;smram.c:556: else if (to_upper(*params) == 'S')
-    00000495 E5               [11] 1025 	push	hl
-    00000496 C5               [11] 1026 	push	bc
-    00000497 79               [ 4] 1027 	ld	a, c
-    00000498 CDr3Fr00         [17] 1028 	call	_to_upper
-    0000049B C1               [10] 1029 	pop	bc
-    0000049C E1               [10] 1030 	pop	hl
-    0000049D FE 53            [ 7] 1031 	cp	a, #0x53
-    0000049F 20 0D            [12] 1032 	jr	nz, 00167$
-                                   1033 ;smram.c:558: softReset = TRUE;
-    000004A1 21r07r00         [10] 1034 	ld	hl, #_softReset
-    000004A4 36 01            [10] 1035 	ld	(hl), #0x01
-                                   1036 ;smram.c:559: presAB = TRUE;
-    000004A6 21r06r00         [10] 1037 	ld	hl, #_presAB
-    000004A9 36 01            [10] 1038 	ld	(hl), #0x01
-    000004AB C3r8Er05         [10] 1039 	jp	00291$
-    000004AE                       1040 00167$:
-                                   1041 ;smram.c:561: else if (to_upper(*params) == 'A')
-    000004AE E5               [11] 1042 	push	hl
-    000004AF C5               [11] 1043 	push	bc
-    000004B0 79               [ 4] 1044 	ld	a, c
-    000004B1 CDr3Fr00         [17] 1045 	call	_to_upper
-    000004B4 C1               [10] 1046 	pop	bc
-    000004B5 E1               [10] 1047 	pop	hl
-    000004B6 FE 41            [ 7] 1048 	cp	a, #0x41
-    000004B8 20 47            [12] 1049 	jr	nz, 00164$
-                                   1050 ;smram.c:563: mapperSpecified = TRUE;
-    000004BA 3E 01            [ 7] 1051 	ld	a, #0x01
-    000004BC 32r08r00         [13] 1052 	ld	(_mapperSpecified+0), a
-                                   1053 ;smram.c:564: params++;
-    000004BF 22r08r00         [16] 1054 	ld	(_params), hl
-                                   1055 ;smram.c:503: for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)
-    000004C2 2Ar08r00         [16] 1056 	ld	hl, (_params)
-    000004C5 7E               [ 7] 1057 	ld	a, (hl)
-                                   1058 ;smram.c:565: if (*params == '8')
-    000004C6 FE 38            [ 7] 1059 	cp	a, #0x38
-    000004C8 20 09            [12] 1060 	jr	nz, 00142$
-                                   1061 ;smram.c:566: megaram_type = TYPE_A8;
-    000004CA 21 08 00         [10] 1062 	ld	hl, #0x0008
-    000004CD 22r03r00         [16] 1063 	ld	(_megaram_type), hl
-    000004D0 C3r8Er05         [10] 1064 	jp	00291$
-    000004D3                       1065 00142$:
-                                   1066 ;smram.c:568: if (*params == '1')
-    000004D3 FE 31            [ 7] 1067 	cp	a, #0x31
-    000004D5 20 21            [12] 1068 	jr	nz, 00139$
-                                   1069 ;smram.c:570: params++;
-    000004D7 2Ar08r00         [16] 1070 	ld	hl, (_params)
-    000004DA 23               [ 6] 1071 	inc	hl
-    000004DB 22r08r00         [16] 1072 	ld	(_params), hl
-                                   1073 ;smram.c:571: if (*params == '6')
-    000004DE 2Ar08r00         [16] 1074 	ld	hl, (_params)
-    000004E1 7E               [ 7] 1075 	ld	a, (hl)
-    000004E2 FE 36            [ 7] 1076 	cp	a, #0x36
-    000004E4 20 09            [12] 1077 	jr	nz, 00136$
-                                   1078 ;smram.c:572: megaram_type = TYPE_A16;
-    000004E6 21 16 00         [10] 1079 	ld	hl, #0x0016
-    000004E9 22r03r00         [16] 1080 	ld	(_megaram_type), hl
-    000004EC C3r8Er05         [10] 1081 	jp	00291$
-    000004EF                       1082 00136$:
-                                   1083 ;smram.c:574: megaram_type = TYPE_UNK;
-    000004EF 21 FF 00         [10] 1084 	ld	hl, #0x00ff
-    000004F2 22r03r00         [16] 1085 	ld	(_megaram_type), hl
-    000004F5 C3r8Er05         [10] 1086 	jp	00291$
-    000004F8                       1087 00139$:
-                                   1088 ;smram.c:577: megaram_type = TYPE_UNK;
-    000004F8 21 FF 00         [10] 1089 	ld	hl, #0x00ff
-    000004FB 22r03r00         [16] 1090 	ld	(_megaram_type), hl
-    000004FE C3r8Er05         [10] 1091 	jp	00291$
-    00000501                       1092 00164$:
-                                   1093 ;smram.c:579: else if (to_upper(*params) == 'Y')
-    00000501 E5               [11] 1094 	push	hl
-    00000502 C5               [11] 1095 	push	bc
-    00000503 79               [ 4] 1096 	ld	a, c
-    00000504 CDr3Fr00         [17] 1097 	call	_to_upper
-    00000507 C1               [10] 1098 	pop	bc
-    00000508 E1               [10] 1099 	pop	hl
-    00000509 FE 59            [ 7] 1100 	cp	a, #0x59
-    0000050B 20 07            [12] 1101 	jr	nz, 00161$
-                                   1102 ;smram.c:581: presAB = TRUE;
-    0000050D 21r06r00         [10] 1103 	ld	hl, #_presAB
-    00000510 36 01            [10] 1104 	ld	(hl), #0x01
-    00000512 18 7A            [12] 1105 	jr	00291$
-    00000514                       1106 00161$:
-                                   1107 ;smram.c:583: else if (to_upper(*params) == 'X')
-    00000514 E5               [11] 1108 	push	hl
-    00000515 C5               [11] 1109 	push	bc
-    00000516 79               [ 4] 1110 	ld	a, c
-    00000517 CDr3Fr00         [17] 1111 	call	_to_upper
-    0000051A C1               [10] 1112 	pop	bc
-    0000051B E1               [10] 1113 	pop	hl
-    0000051C FE 58            [ 7] 1114 	cp	a, #0x58
-    0000051E 20 07            [12] 1115 	jr	nz, 00158$
-                                   1116 ;smram.c:585: exitAfterLoad = TRUE;
-    00000520 21r0Br00         [10] 1117 	ld	hl, #_exitAfterLoad
-    00000523 36 01            [10] 1118 	ld	(hl), #0x01
-    00000525 18 67            [12] 1119 	jr	00291$
-    00000527                       1120 00158$:
-                                   1121 ;smram.c:588: else if (to_upper(*params) == 'Z')
-    00000527 E5               [11] 1122 	push	hl
-    00000528 C5               [11] 1123 	push	bc
-    00000529 79               [ 4] 1124 	ld	a, c
-    0000052A CDr3Fr00         [17] 1125 	call	_to_upper
-    0000052D C1               [10] 1126 	pop	bc
-    0000052E E1               [10] 1127 	pop	hl
-    0000052F FE 5A            [ 7] 1128 	cp	a, #0x5a
-    00000531 20 16            [12] 1129 	jr	nz, 00155$
-                                   1130 ;smram.c:590: params++;
-    00000533 22r08r00         [16] 1131 	ld	(_params), hl
-                                   1132 ;smram.c:503: for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)
-    00000536 2Ar08r00         [16] 1133 	ld	hl, (_params)
-    00000539 7E               [ 7] 1134 	ld	a, (hl)
-                                   1135 ;smram.c:591: if (*params >= '0' && *params <= '3')
-    0000053A FE 30            [ 7] 1136 	cp	a, #0x30
-    0000053C 38 50            [12] 1137 	jr	c, 00291$
-    0000053E FE 34            [ 7] 1138 	cp	a, #0x34
-    00000540 30 4C            [12] 1139 	jr	nc, 00291$
-                                   1140 ;smram.c:592: cpumode = *params - '0';
-    00000542 C6 D0            [ 7] 1141 	add	a, #0xd0
-    00000544 32r0Cr00         [13] 1142 	ld	(#_cpumode), a
-    00000547 18 45            [12] 1143 	jr	00291$
-    00000549                       1144 00155$:
-                                   1145 ;smram.c:594: else if (to_upper(*params) == '?')
-    00000549 C5               [11] 1146 	push	bc
-    0000054A 79               [ 4] 1147 	ld	a, c
-    0000054B CDr3Fr00         [17] 1148 	call	_to_upper
-    0000054E C1               [10] 1149 	pop	bc
-    0000054F FE 3F            [ 7] 1150 	cp	a, #0x3f
-    00000551 20 07            [12] 1151 	jr	nz, 00148$
-                                   1152 ;smram.c:596: help = TRUE;
-    00000553 21r0Fr00         [10] 1153 	ld	hl, #_help
-    00000556 36 01            [10] 1154 	ld	(hl), #0x01
-    00000558 18 34            [12] 1155 	jr	00291$
-                                   1156 ;smram.c:601: while(*params++ != 0 && *params != ' ');
-    0000055A                       1157 00148$:
-    0000055A 2Ar08r00         [16] 1158 	ld	hl, (_params)
-    0000055D 23               [ 6] 1159 	inc	hl
-    0000055E 22r08r00         [16] 1160 	ld	(_params), hl
-    00000561 79               [ 4] 1161 	ld	a, c
-    00000562 B7               [ 4] 1162 	or	a, a
-    00000563 28 29            [12] 1163 	jr	z, 00291$
-                                   1164 ;smram.c:503: for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)
-    00000565 2Ar08r00         [16] 1165 	ld	hl, (_params)
-    00000568 4E               [ 7] 1166 	ld	c, (hl)
-                                   1167 ;smram.c:601: while(*params++ != 0 && *params != ' ');
-    00000569 79               [ 4] 1168 	ld	a, c
-    0000056A D6 20            [ 7] 1169 	sub	a, #0x20
-    0000056C 28 20            [12] 1170 	jr	z, 00291$
-    0000056E 18 EA            [12] 1171 	jr	00148$
-    00000570                       1172 00186$:
-                                   1173 ;smram.c:606: filename = params;
-    00000570 ED 43r01r00      [20] 1174 	ld	(_filename), bc
-                                   1175 ;smram.c:607: while(*params != 0 && *params != ' ') {
-    00000574                       1176 00182$:
-                                   1177 ;smram.c:503: for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)
-    00000574 2Ar08r00         [16] 1178 	ld	hl, (_params)
-    00000577 7E               [ 7] 1179 	ld	a, (hl)
-                                   1180 ;smram.c:607: while(*params != 0 && *params != ' ') {
-    00000578 B7               [ 4] 1181 	or	a, a
-    00000579 28 27            [12] 1182 	jr	z, 00193$
-    0000057B FE 20            [ 7] 1183 	cp	a, #0x20
-    0000057D 28 23            [12] 1184 	jr	z, 00193$
-                                   1185 ;smram.c:608: *params = to_upper(*params);
-    0000057F E5               [11] 1186 	push	hl
-    00000580 CDr3Fr00         [17] 1187 	call	_to_upper
-    00000583 E1               [10] 1188 	pop	hl
-    00000584 77               [ 7] 1189 	ld	(hl), a
-                                   1190 ;smram.c:609: params++;
-    00000585 2Ar08r00         [16] 1191 	ld	hl, (_params)
-    00000588 23               [ 6] 1192 	inc	hl
-    00000589 22r08r00         [16] 1193 	ld	(_params), hl
-    0000058C 18 E6            [12] 1194 	jr	00182$
-                                   1195 ;smram.c:612: break;
-    0000058E                       1196 00291$:
-                                   1197 ;smram.c:503: for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)
-    0000058E 2Ar08r00         [16] 1198 	ld	hl, (_params)
-    00000591 23               [ 6] 1199 	inc	hl
-    00000592 22r08r00         [16] 1200 	ld	(_params), hl
-    00000595 21r05r00         [10] 1201 	ld	hl, #_paramlen
-    00000598 35               [11] 1202 	dec	(hl)
-    00000599 C3r8Fr03         [10] 1203 	jp	00290$
-    0000059C                       1204 00192$:
-                                   1205 ;smram.c:617: } else megaram_type = TYPE_UNK;
-    0000059C 21 FF 00         [10] 1206 	ld	hl, #0x00ff
-    0000059F 22r03r00         [16] 1207 	ld	(_megaram_type), hl
-    000005A2                       1208 00193$:
-                                   1209 ;smram.c:619: if (!found) 
-    000005A2 3Ar00r00         [13] 1210 	ld	a, (_found+0)
-    000005A5 B7               [ 4] 1211 	or	a, a
-    000005A6 20 0C            [12] 1212 	jr	nz, 00198$
-                                   1213 ;smram.c:621: printf("ERROR: WonderTANG! not found...\n\r");
-    000005A8 21r1Br0B         [10] 1214 	ld	hl, #___str_11
-    000005AB E5               [11] 1215 	push	hl
-    000005AC CDr00r00         [17] 1216 	call	_printf
-    000005AF F1               [10] 1217 	pop	af
-                                   1218 ;smram.c:622: return 0;
-    000005B0 11 00 00         [10] 1219 	ld	de, #0x0000
-    000005B3 C9               [10] 1220 	ret
-    000005B4                       1221 00198$:
-                                   1222 ;smram.c:625: if (help == TRUE || megaram_type == TYPE_UNK)
-    000005B4 3Ar0Fr00         [13] 1223 	ld	a, (_help)
-    000005B7 3D               [ 4] 1224 	dec	a
-    000005B8 28 0A            [12] 1225 	jr	z, 00194$
-    000005BA 3Ar03r00         [13] 1226 	ld	a, (_megaram_type)
-    000005BD 3C               [ 4] 1227 	inc	a
-    000005BE 21r04r00         [10] 1228 	ld	hl, #_megaram_type + 1
-    000005C1 B6               [ 7] 1229 	or	a, (hl)
-    000005C2 20 0C            [12] 1230 	jr	nz, 00199$
-    000005C4                       1231 00194$:
-                                   1232 ;smram.c:645: );
-    000005C4 21r3Dr0B         [10] 1233 	ld	hl, #___str_12
-    000005C7 E5               [11] 1234 	push	hl
-    000005C8 CDr00r00         [17] 1235 	call	_printf
-    000005CB F1               [10] 1236 	pop	af
-                                   1237 ;smram.c:646: return 0;
-    000005CC 11 00 00         [10] 1238 	ld	de, #0x0000
-    000005CF C9               [10] 1239 	ret
-    000005D0                       1240 00199$:
-                                   1241 ;smram.c:649: if (filename == 0) {        
-    000005D0 3Ar02r00         [13] 1242 	ld	a, (_filename+1)
-    000005D3 21r01r00         [10] 1243 	ld	hl, #_filename
-    000005D6 B6               [ 7] 1244 	or	a, (hl)
-    000005D7 20 16            [12] 1245 	jr	nz, 00203$
-                                   1246 ;smram.c:650: print_mapper_type();
-    000005D9 CDr62r01         [17] 1247 	call	_print_mapper_type
-                                   1248 ;smram.c:651: if (megaram_type != TYPE_UNK)
-    000005DC 3Ar03r00         [13] 1249 	ld	a, (_megaram_type)
-    000005DF 3C               [ 4] 1250 	inc	a
-    000005E0 21r04r00         [10] 1251 	ld	hl, #_megaram_type + 1
-    000005E3 B6               [ 7] 1252 	or	a, (hl)
-    000005E4 28 05            [12] 1253 	jr	z, 00201$
-                                   1254 ;smram.c:652: MEGA_PORT1 = megaram_type;    
-    000005E6 3Ar03r00         [13] 1255 	ld	a, (_megaram_type+0)
-    000005E9 D3 8F            [11] 1256 	out	(_MEGA_PORT1), a
-    000005EB                       1257 00201$:
-                                   1258 ;smram.c:653: return 0;
-    000005EB 11 00 00         [10] 1259 	ld	de, #0x0000
-    000005EE C9               [10] 1260 	ret
-    000005EF                       1261 00203$:
-                                   1262 ;smram.c:656: for(t = filename; *t != ' ' && *t != 0; t++);
-    000005EF 2Ar01r00         [16] 1263 	ld	hl, (_filename)
-    000005F2 22r06r00         [16] 1264 	ld	(_t), hl
-    000005F5                       1265 00294$:
-                                   1266 ;smram.c:477: if (*s++ != *t++) break;
-    000005F5 2Ar06r00         [16] 1267 	ld	hl, (_t)
-                                   1268 ;smram.c:656: for(t = filename; *t != ' ' && *t != 0; t++);
-    000005F8 7E               [ 7] 1269 	ld	a, (hl)
-    000005F9 FE 20            [ 7] 1270 	cp	a, #0x20
-    000005FB 28 0C            [12] 1271 	jr	z, 00204$
-    000005FD B7               [ 4] 1272 	or	a, a
-    000005FE 28 09            [12] 1273 	jr	z, 00204$
-    00000600 2Ar06r00         [16] 1274 	ld	hl, (_t)
-    00000603 23               [ 6] 1275 	inc	hl
-    00000604 22r06r00         [16] 1276 	ld	(_t), hl
-    00000607 18 EC            [12] 1277 	jr	00294$
-    00000609                       1278 00204$:
-                                   1279 ;smram.c:657: *t = 0;
-    00000609 36 00            [10] 1280 	ld	(hl), #0x00
-                                   1281 ;smram.c:658: handle = dos2_open(0, filename);
-    0000060B ED 5Br01r00      [20] 1282 	ld	de, (_filename)
-    0000060F AF               [ 4] 1283 	xor	a, a
-    00000610 CDr89r00         [17] 1284 	call	_dos2_open
-    00000613 32r0Ar00         [13] 1285 	ld	(#_handle), a
-                                   1286 ;smram.c:660: MEGA_PORT1 = TYPE_K4;
-    00000616 3E 04            [ 7] 1287 	ld	a, #0x04
-    00000618 D3 8F            [11] 1288 	out	(_MEGA_PORT1), a
-                                   1289 ;smram.c:662: if (handle)
-    0000061A 3Ar0Ar00         [13] 1290 	ld	a, (_handle+0)
-    0000061D B7               [ 4] 1291 	or	a, a
-    0000061E CAr5Br07         [10] 1292 	jp	z, 00222$
-                                   1293 ;smram.c:664: printf("Loading ROM file: %s - ", filename);
-    00000621 01r1Ar0D         [10] 1294 	ld	bc, #___str_13+0
-    00000624 2Ar01r00         [16] 1295 	ld	hl, (_filename)
-    00000627 E5               [11] 1296 	push	hl
-    00000628 C5               [11] 1297 	push	bc
-    00000629 CDr00r00         [17] 1298 	call	_printf
+    00000294 0A                     700 	.db 0x0a
+    00000295 0D                     701 	.db 0x0d
+    00000296 00                     702 	.db 0x00
+                                    703 ;smram.c:456: int main(void)
+                                    704 ;	---------------------------------
+                                    705 ; Function main
+                                    706 ; ---------------------------------
+    00000297                        707 _main::
+                                    708 ;smram.c:458: curslt = (PPIA & 0x0C) >> 2;
+    00000297 DB A8            [11]  709 	in	a, (_PPIA)
+    00000299 E6 0C            [ 7]  710 	and	a, #0x0c
+    0000029B 2E 00            [ 7]  711 	ld	l, #0x00
+    0000029D CB 2D            [ 8]  712 	sra	l
+    0000029F CB 1F            [ 8]  713 	rr	a
+    000002A1 CB 2D            [ 8]  714 	sra	l
+    000002A3 CB 1F            [ 8]  715 	rr	a
+    000002A5 32r00r00         [13]  716 	ld	(_curslt), a
+                                    717 ;smram.c:459: cursslt = (~(*((uchar*)0xFFFF)) & 0x0C) | *((uchar*)EXPTBL+curslt);
+    000002A8 3A FF FF         [13]  718 	ld	a, (#0xffff)
+    000002AB 2F               [ 4]  719 	cpl
+    000002AC E6 0C            [ 7]  720 	and	a, #0x0c
+    000002AE 4F               [ 4]  721 	ld	c, a
+    000002AF 3Ar00r00         [13]  722 	ld	a, (_curslt)
+    000002B2 6F               [ 4]  723 	ld	l, a
+    000002B3 26 00            [ 7]  724 	ld	h, #0x00
+    000002B5 11 C1 FC         [10]  725 	ld	de, #0xfcc1
+    000002B8 19               [11]  726 	add	hl, de
+    000002B9 7E               [ 7]  727 	ld	a, (hl)
+    000002BA B1               [ 4]  728 	or	a, c
+    000002BB 32r01r00         [13]  729 	ld	(#_cursslt), a
+                                    730 ;smram.c:461: for(i = 1; i < 4; i++)
+    000002BE 21 01 00         [10]  731 	ld	hl, #0x0001
+    000002C1 22r0Dr00         [16]  732 	ld	(_i), hl
+    000002C4                        733 00286$:
+                                    734 ;smram.c:463: slotid = *((uchar*)EXPTBL+i);
+    000002C4 2Ar0Dr00         [16]  735 	ld	hl, (_i)
+    000002C7 11 C1 FC         [10]  736 	ld	de, #0xfcc1
+    000002CA 19               [11]  737 	add	hl, de
+    000002CB 7E               [ 7]  738 	ld	a, (hl)
+    000002CC 32r16r00         [13]  739 	ld	(#_slotid), a
+                                    740 ;smram.c:465: if (slotid & 0x80) {    // expanded ?
+    000002CF 3Ar16r00         [13]  741 	ld	a, (_slotid)
+    000002D2 07               [ 4]  742 	rlca
+    000002D3 30 74            [12]  743 	jr	nc, 00287$
+                                    744 ;smram.c:467: enaslt(i | 0x80, 0x4000); // looking for BIOS, sslot 0
+    000002D5 3Ar0Dr00         [13]  745 	ld	a, (_i)
+    000002D8 CB FF            [ 8]  746 	set	7, a
+    000002DA 11 00 40         [10]  747 	ld	de, #0x4000
+    000002DD CDr48r00         [17]  748 	call	_enaslt
+                                    749 ;smram.c:469: b = *(uchar*)(0x6000); // it might be RAM
+    000002E0 3A 00 60         [13]  750 	ld	a, (#0x6000)
+    000002E3 32r03r00         [13]  751 	ld	(#_b), a
+                                    752 ;smram.c:470: *((uchar*)0x6000) = 7;
+    000002E6 21 00 60         [10]  753 	ld	hl, #0x6000
+    000002E9 36 07            [10]  754 	ld	(hl), #0x07
+                                    755 ;smram.c:471: s = "WonderTANG! uSD Driver";
+    000002EB 21rCFr0A         [10]  756 	ld	hl, #___str_8
+    000002EE 22r04r00         [16]  757 	ld	(_s), hl
+                                    758 ;smram.c:472: t = (uchar*)0x4110;
+    000002F1 21 10 41         [10]  759 	ld	hl, #0x4110
+    000002F4 22r06r00         [16]  760 	ld	(_t), hl
+                                    761 ;smram.c:473: for(int j=0; j<22; j++)
+    000002F7 01 00 00         [10]  762 	ld	bc, #0x0000
+    000002FA                        763 00284$:
+    000002FA 79               [ 4]  764 	ld	a, c
+    000002FB D6 16            [ 7]  765 	sub	a, #0x16
+    000002FD 78               [ 4]  766 	ld	a, b
+    000002FE 17               [ 4]  767 	rla
+    000002FF 3F               [ 4]  768 	ccf
+    00000300 1F               [ 4]  769 	rra
+    00000301 DE 80            [ 7]  770 	sbc	a, #0x80
+    00000303 30 2A            [12]  771 	jr	nc, 00105$
+                                    772 ;smram.c:475: if (*s++ != *t++) break;
+    00000305 2Ar04r00         [16]  773 	ld	hl, (_s)
+    00000308 5E               [ 7]  774 	ld	e, (hl)
+    00000309 2Ar04r00         [16]  775 	ld	hl, (_s)
+    0000030C 23               [ 6]  776 	inc	hl
+    0000030D 22r04r00         [16]  777 	ld	(_s), hl
+    00000310 2Ar06r00         [16]  778 	ld	hl, (_t)
+    00000313 56               [ 7]  779 	ld	d, (hl)
+    00000314 2Ar06r00         [16]  780 	ld	hl, (_t)
+    00000317 23               [ 6]  781 	inc	hl
+    00000318 22r06r00         [16]  782 	ld	(_t), hl
+    0000031B 7B               [ 4]  783 	ld	a, e
+    0000031C 92               [ 4]  784 	sub	a, d
+    0000031D 20 10            [12]  785 	jr	nz, 00105$
+                                    786 ;smram.c:477: if (j == 21) 
+    0000031F 79               [ 4]  787 	ld	a, c
+    00000320 D6 15            [ 7]  788 	sub	a, #0x15
+    00000322 B0               [ 4]  789 	or	a, b
+    00000323 20 07            [12]  790 	jr	nz, 00285$
+                                    791 ;smram.c:479: found = TRUE;
+    00000325 21r00r00         [10]  792 	ld	hl, #_found
+    00000328 36 01            [10]  793 	ld	(hl), #0x01
+                                    794 ;smram.c:480: break;
+    0000032A 18 03            [12]  795 	jr	00105$
+    0000032C                        796 00285$:
+                                    797 ;smram.c:473: for(int j=0; j<22; j++)
+    0000032C 03               [ 6]  798 	inc	bc
+    0000032D 18 CB            [12]  799 	jr	00284$
+    0000032F                        800 00105$:
+                                    801 ;smram.c:484: *((uchar*)0x6000) = b; // return whatever was there
+    0000032F 21 00 60         [10]  802 	ld	hl, #0x6000
+    00000332 3Ar03r00         [13]  803 	ld	a, (_b)
+    00000335 77               [ 7]  804 	ld	(hl), a
+                                    805 ;smram.c:486: enaslt(curslt | cursslt, 0x4000);
+    00000336 3Ar00r00         [13]  806 	ld	a, (_curslt)
+    00000339 21r01r00         [10]  807 	ld	hl, #_cursslt
+    0000033C B6               [ 7]  808 	or	a, (hl)
+    0000033D 11 00 40         [10]  809 	ld	de, #0x4000
+    00000340 CDr48r00         [17]  810 	call	_enaslt
+                                    811 ;smram.c:488: if (found) break;
+    00000343 3Ar00r00         [13]  812 	ld	a, (_found+0)
+    00000346 B7               [ 4]  813 	or	a, a
+    00000347 20 17            [12]  814 	jr	nz, 00110$
+    00000349                        815 00287$:
+                                    816 ;smram.c:461: for(i = 1; i < 4; i++)
+    00000349 2Ar0Dr00         [16]  817 	ld	hl, (_i)
+    0000034C 23               [ 6]  818 	inc	hl
+    0000034D 22r0Dr00         [16]  819 	ld	(_i), hl
+    00000350 3Ar0Dr00         [13]  820 	ld	a, (_i+0)
+    00000353 D6 04            [ 7]  821 	sub	a, #0x04
+    00000355 3Ar0Er00         [13]  822 	ld	a, (_i+1)
+    00000358 17               [ 4]  823 	rla
+    00000359 3F               [ 4]  824 	ccf
+    0000035A 1F               [ 4]  825 	rra
+    0000035B DE 80            [ 7]  826 	sbc	a, #0x80
+    0000035D DArC4r02         [10]  827 	jp	c, 00286$
+    00000360                        828 00110$:
+                                    829 ;smram.c:492: sslt = 0;
+    00000360 AF               [ 4]  830 	xor	a, a
+    00000361 32r02r00         [13]  831 	ld	(#_sslt), a
+                                    832 ;smram.c:494: if (found)
+    00000364 3Ar00r00         [13]  833 	ld	a, (_found+0)
+    00000367 B7               [ 4]  834 	or	a, a
+    00000368 CAr9Br05         [10]  835 	jp	z, 00192$
+                                    836 ;smram.c:496: printf("WonderTANG! Super MegaRAM SCC\n\r");
+    0000036B 21rE6r0A         [10]  837 	ld	hl, #___str_9
+    0000036E E5               [11]  838 	push	hl
+    0000036F CDr00r00         [17]  839 	call	_printf
+                                    840 ;smram.c:497: printf("v3.01 (new-juice)\n\r");
+    00000372 21r06r0B         [10]  841 	ld	hl, #___str_10
+    00000375 E3               [19]  842 	ex	(sp),hl
+    00000376 CDr00r00         [17]  843 	call	_printf
+    00000379 F1               [10]  844 	pop	af
+                                    845 ;smram.c:499: sslt = 0x80 | (2 << 2) | i;
+    0000037A 3Ar0Dr00         [13]  846 	ld	a, (_i)
+    0000037D F6 88            [ 7]  847 	or	a, #0x88
+    0000037F 32r02r00         [13]  848 	ld	(#_sslt), a
+                                    849 ;smram.c:500: paramlen = *((char*)0x80);
+    00000382 3A 80 00         [13]  850 	ld	a, (#0x0080)
+    00000385 32r05r00         [13]  851 	ld	(#_paramlen), a
+                                    852 ;smram.c:501: for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)
+    00000388 21 81 00         [10]  853 	ld	hl, #0x0081
+    0000038B 22r08r00         [16]  854 	ld	(_params), hl
+    0000038E                        855 00290$:
+    0000038E ED 4Br08r00      [20]  856 	ld	bc, (_params)
+    00000392 0A               [ 7]  857 	ld	a, (bc)
+    00000393 5F               [ 4]  858 	ld	e, a
+    00000394 B7               [ 4]  859 	or	a, a
+    00000395 20 07            [12]  860 	jr	nz, 00289$
+    00000397 3Ar05r00         [13]  861 	ld	a, (_paramlen+0)
+    0000039A B7               [ 4]  862 	or	a, a
+    0000039B C2rA1r05         [10]  863 	jp	nz, 00193$
+    0000039E                        864 00289$:
+                                    865 ;smram.c:503: if (*params != ' ')
+                                    866 ;smram.c:505: if (*params == '/')
+    0000039E 7B               [ 4]  867 	ld	a, e
+    0000039F FE 20            [ 7]  868 	cp	a, #0x20
+    000003A1 CAr8Dr05         [10]  869 	jp	z, 00291$
+    000003A4 D6 2F            [ 7]  870 	sub	a, #0x2f
+    000003A6 C2r6Fr05         [10]  871 	jp	nz, 00186$
+                                    872 ;smram.c:507: params++;
+    000003A9 2Ar08r00         [16]  873 	ld	hl, (_params)
+    000003AC 23               [ 6]  874 	inc	hl
+    000003AD 22r08r00         [16]  875 	ld	(_params), hl
+                                    876 ;smram.c:501: for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)
+    000003B0 2Ar08r00         [16]  877 	ld	hl, (_params)
+    000003B3 4E               [ 7]  878 	ld	c, (hl)
+                                    879 ;smram.c:508: if (to_upper(*params) == 'R') 
+    000003B4 C5               [11]  880 	push	bc
+    000003B5 79               [ 4]  881 	ld	a, c
+    000003B6 CDr3Fr00         [17]  882 	call	_to_upper
+    000003B9 C1               [10]  883 	pop	bc
+                                    884 ;smram.c:507: params++;
+    000003BA 2Ar08r00         [16]  885 	ld	hl, (_params)
+    000003BD 23               [ 6]  886 	inc	hl
+                                    887 ;smram.c:508: if (to_upper(*params) == 'R') 
+    000003BE FE 52            [ 7]  888 	cp	a, #0x52
+    000003C0 20 63            [12]  889 	jr	nz, 00179$
+                                    890 ;smram.c:510: mapperSpecified = TRUE;
+    000003C2 3E 01            [ 7]  891 	ld	a, #0x01
+    000003C4 32r08r00         [13]  892 	ld	(_mapperSpecified+0), a
+                                    893 ;smram.c:511: params++;
+    000003C7 22r08r00         [16]  894 	ld	(_params), hl
+                                    895 ;smram.c:501: for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)
+    000003CA 2Ar08r00         [16]  896 	ld	hl, (_params)
+    000003CD 7E               [ 7]  897 	ld	a, (hl)
+                                    898 ;smram.c:512: if (*params == '0')
+    000003CE FE 30            [ 7]  899 	cp	a, #0x30
+    000003D0 20 09            [12]  900 	jr	nz, 00127$
+                                    901 ;smram.c:513: megaram_type = TYPE_MSCC;
+    000003D2 21 00 00         [10]  902 	ld	hl, #0x0000
+    000003D5 22r03r00         [16]  903 	ld	(_megaram_type), hl
+    000003D8 C3r8Dr05         [10]  904 	jp	00291$
+    000003DB                        905 00127$:
+                                    906 ;smram.c:515: if (*params == '2')
+    000003DB FE 32            [ 7]  907 	cp	a, #0x32
+    000003DD 20 09            [12]  908 	jr	nz, 00124$
+                                    909 ;smram.c:516: megaram_type = TYPE_LINEAR;
+    000003DF 21 02 00         [10]  910 	ld	hl, #0x0002
+    000003E2 22r03r00         [16]  911 	ld	(_megaram_type), hl
+    000003E5 C3r8Dr05         [10]  912 	jp	00291$
+    000003E8                        913 00124$:
+                                    914 ;smram.c:518: if (*params == '6')
+    000003E8 FE 36            [ 7]  915 	cp	a, #0x36
+    000003EA 20 09            [12]  916 	jr	nz, 00121$
+                                    917 ;smram.c:519: megaram_type = TYPE_K4;
+    000003EC 21 04 00         [10]  918 	ld	hl, #0x0004
+    000003EF 22r03r00         [16]  919 	ld	(_megaram_type), hl
+    000003F2 C3r8Dr05         [10]  920 	jp	00291$
+    000003F5                        921 00121$:
+                                    922 ;smram.c:521: if (*params == '5')
+    000003F5 FE 35            [ 7]  923 	cp	a, #0x35
+    000003F7 20 09            [12]  924 	jr	nz, 00118$
+                                    925 ;smram.c:522: megaram_type = TYPE_K5;
+    000003F9 21 05 00         [10]  926 	ld	hl, #0x0005
+    000003FC 22r03r00         [16]  927 	ld	(_megaram_type), hl
+    000003FF C3r8Dr05         [10]  928 	jp	00291$
+    00000402                        929 00118$:
+                                    930 ;smram.c:524: if (*params == '1')
+    00000402 FE 31            [ 7]  931 	cp	a, #0x31
+    00000404 20 09            [12]  932 	jr	nz, 00115$
+                                    933 ;smram.c:525: megaram_type = TYPE_A16;
+    00000406 21 16 00         [10]  934 	ld	hl, #0x0016
+    00000409 22r03r00         [16]  935 	ld	(_megaram_type), hl
+    0000040C C3r8Dr05         [10]  936 	jp	00291$
+    0000040F                        937 00115$:
+                                    938 ;smram.c:527: if (*params == '3')
+    0000040F FE 33            [ 7]  939 	cp	a, #0x33
+    00000411 20 09            [12]  940 	jr	nz, 00112$
+                                    941 ;smram.c:528: megaram_type = TYPE_A8;
+    00000413 21 08 00         [10]  942 	ld	hl, #0x0008
+    00000416 22r03r00         [16]  943 	ld	(_megaram_type), hl
+    00000419 C3r8Dr05         [10]  944 	jp	00291$
+    0000041C                        945 00112$:
+                                    946 ;smram.c:530: megaram_type = TYPE_UNK;                    
+    0000041C 21 FF 00         [10]  947 	ld	hl, #0x00ff
+    0000041F 22r03r00         [16]  948 	ld	(_megaram_type), hl
+    00000422 C3r8Dr05         [10]  949 	jp	00291$
+    00000425                        950 00179$:
+                                    951 ;smram.c:532: else if (to_upper(*params) == 'K')
+    00000425 E5               [11]  952 	push	hl
+    00000426 C5               [11]  953 	push	bc
+    00000427 79               [ 4]  954 	ld	a, c
+    00000428 CDr3Fr00         [17]  955 	call	_to_upper
+    0000042B C1               [10]  956 	pop	bc
+    0000042C E1               [10]  957 	pop	hl
+    0000042D FE 4B            [ 7]  958 	cp	a, #0x4b
+    0000042F 20 2F            [12]  959 	jr	nz, 00176$
+                                    960 ;smram.c:534: mapperSpecified = TRUE;
+    00000431 3E 01            [ 7]  961 	ld	a, #0x01
+    00000433 32r08r00         [13]  962 	ld	(_mapperSpecified+0), a
+                                    963 ;smram.c:535: params++;
+    00000436 22r08r00         [16]  964 	ld	(_params), hl
+                                    965 ;smram.c:501: for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)
+    00000439 2Ar08r00         [16]  966 	ld	hl, (_params)
+    0000043C 7E               [ 7]  967 	ld	a, (hl)
+                                    968 ;smram.c:536: if (*params == '5')
+    0000043D FE 35            [ 7]  969 	cp	a, #0x35
+    0000043F 20 09            [12]  970 	jr	nz, 00133$
+                                    971 ;smram.c:537: megaram_type = TYPE_K5;
+    00000441 21 05 00         [10]  972 	ld	hl, #0x0005
+    00000444 22r03r00         [16]  973 	ld	(_megaram_type), hl
+    00000447 C3r8Dr05         [10]  974 	jp	00291$
+    0000044A                        975 00133$:
+                                    976 ;smram.c:539: if (*params == '4')
+    0000044A FE 34            [ 7]  977 	cp	a, #0x34
+    0000044C 20 09            [12]  978 	jr	nz, 00130$
+                                    979 ;smram.c:540: megaram_type = TYPE_K4;
+    0000044E 21 04 00         [10]  980 	ld	hl, #0x0004
+    00000451 22r03r00         [16]  981 	ld	(_megaram_type), hl
+    00000454 C3r8Dr05         [10]  982 	jp	00291$
+    00000457                        983 00130$:
+                                    984 ;smram.c:542: megaram_type = TYPE_UNK;
+    00000457 21 FF 00         [10]  985 	ld	hl, #0x00ff
+    0000045A 22r03r00         [16]  986 	ld	(_megaram_type), hl
+    0000045D C3r8Dr05         [10]  987 	jp	00291$
+    00000460                        988 00176$:
+                                    989 ;smram.c:544: else if (to_upper(*params) == 'D')
+    00000460 E5               [11]  990 	push	hl
+    00000461 C5               [11]  991 	push	bc
+    00000462 79               [ 4]  992 	ld	a, c
+    00000463 CDr3Fr00         [17]  993 	call	_to_upper
+    00000466 C1               [10]  994 	pop	bc
+    00000467 E1               [10]  995 	pop	hl
+    00000468 FE 44            [ 7]  996 	cp	a, #0x44
+    0000046A 20 0E            [12]  997 	jr	nz, 00173$
+                                    998 ;smram.c:546: mapperSpecified = TRUE;
+    0000046C 21r08r00         [10]  999 	ld	hl, #_mapperSpecified
+    0000046F 36 01            [10] 1000 	ld	(hl), #0x01
+                                   1001 ;smram.c:547: megaram_type = TYPE_DDX;
+    00000471 21 01 00         [10] 1002 	ld	hl, #0x0001
+    00000474 22r03r00         [16] 1003 	ld	(_megaram_type), hl
+    00000477 C3r8Dr05         [10] 1004 	jp	00291$
+    0000047A                       1005 00173$:
+                                   1006 ;smram.c:549: else if (to_upper(*params) == 'L')
+    0000047A E5               [11] 1007 	push	hl
+    0000047B C5               [11] 1008 	push	bc
+    0000047C 79               [ 4] 1009 	ld	a, c
+    0000047D CDr3Fr00         [17] 1010 	call	_to_upper
+    00000480 C1               [10] 1011 	pop	bc
+    00000481 E1               [10] 1012 	pop	hl
+    00000482 FE 4C            [ 7] 1013 	cp	a, #0x4c
+    00000484 20 0E            [12] 1014 	jr	nz, 00170$
+                                   1015 ;smram.c:551: mapperSpecified = TRUE;
+    00000486 21r08r00         [10] 1016 	ld	hl, #_mapperSpecified
+    00000489 36 01            [10] 1017 	ld	(hl), #0x01
+                                   1018 ;smram.c:552: megaram_type = TYPE_LINEAR;
+    0000048B 21 02 00         [10] 1019 	ld	hl, #0x0002
+    0000048E 22r03r00         [16] 1020 	ld	(_megaram_type), hl
+    00000491 C3r8Dr05         [10] 1021 	jp	00291$
+    00000494                       1022 00170$:
+                                   1023 ;smram.c:554: else if (to_upper(*params) == 'S')
+    00000494 E5               [11] 1024 	push	hl
+    00000495 C5               [11] 1025 	push	bc
+    00000496 79               [ 4] 1026 	ld	a, c
+    00000497 CDr3Fr00         [17] 1027 	call	_to_upper
+    0000049A C1               [10] 1028 	pop	bc
+    0000049B E1               [10] 1029 	pop	hl
+    0000049C FE 53            [ 7] 1030 	cp	a, #0x53
+    0000049E 20 0D            [12] 1031 	jr	nz, 00167$
+                                   1032 ;smram.c:556: softReset = TRUE;
+    000004A0 21r07r00         [10] 1033 	ld	hl, #_softReset
+    000004A3 36 01            [10] 1034 	ld	(hl), #0x01
+                                   1035 ;smram.c:557: presAB = TRUE;
+    000004A5 21r06r00         [10] 1036 	ld	hl, #_presAB
+    000004A8 36 01            [10] 1037 	ld	(hl), #0x01
+    000004AA C3r8Dr05         [10] 1038 	jp	00291$
+    000004AD                       1039 00167$:
+                                   1040 ;smram.c:559: else if (to_upper(*params) == 'A')
+    000004AD E5               [11] 1041 	push	hl
+    000004AE C5               [11] 1042 	push	bc
+    000004AF 79               [ 4] 1043 	ld	a, c
+    000004B0 CDr3Fr00         [17] 1044 	call	_to_upper
+    000004B3 C1               [10] 1045 	pop	bc
+    000004B4 E1               [10] 1046 	pop	hl
+    000004B5 FE 41            [ 7] 1047 	cp	a, #0x41
+    000004B7 20 47            [12] 1048 	jr	nz, 00164$
+                                   1049 ;smram.c:561: mapperSpecified = TRUE;
+    000004B9 3E 01            [ 7] 1050 	ld	a, #0x01
+    000004BB 32r08r00         [13] 1051 	ld	(_mapperSpecified+0), a
+                                   1052 ;smram.c:562: params++;
+    000004BE 22r08r00         [16] 1053 	ld	(_params), hl
+                                   1054 ;smram.c:501: for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)
+    000004C1 2Ar08r00         [16] 1055 	ld	hl, (_params)
+    000004C4 7E               [ 7] 1056 	ld	a, (hl)
+                                   1057 ;smram.c:563: if (*params == '8')
+    000004C5 FE 38            [ 7] 1058 	cp	a, #0x38
+    000004C7 20 09            [12] 1059 	jr	nz, 00142$
+                                   1060 ;smram.c:564: megaram_type = TYPE_A8;
+    000004C9 21 08 00         [10] 1061 	ld	hl, #0x0008
+    000004CC 22r03r00         [16] 1062 	ld	(_megaram_type), hl
+    000004CF C3r8Dr05         [10] 1063 	jp	00291$
+    000004D2                       1064 00142$:
+                                   1065 ;smram.c:566: if (*params == '1')
+    000004D2 FE 31            [ 7] 1066 	cp	a, #0x31
+    000004D4 20 21            [12] 1067 	jr	nz, 00139$
+                                   1068 ;smram.c:568: params++;
+    000004D6 2Ar08r00         [16] 1069 	ld	hl, (_params)
+    000004D9 23               [ 6] 1070 	inc	hl
+    000004DA 22r08r00         [16] 1071 	ld	(_params), hl
+                                   1072 ;smram.c:569: if (*params == '6')
+    000004DD 2Ar08r00         [16] 1073 	ld	hl, (_params)
+    000004E0 7E               [ 7] 1074 	ld	a, (hl)
+    000004E1 FE 36            [ 7] 1075 	cp	a, #0x36
+    000004E3 20 09            [12] 1076 	jr	nz, 00136$
+                                   1077 ;smram.c:570: megaram_type = TYPE_A16;
+    000004E5 21 16 00         [10] 1078 	ld	hl, #0x0016
+    000004E8 22r03r00         [16] 1079 	ld	(_megaram_type), hl
+    000004EB C3r8Dr05         [10] 1080 	jp	00291$
+    000004EE                       1081 00136$:
+                                   1082 ;smram.c:572: megaram_type = TYPE_UNK;
+    000004EE 21 FF 00         [10] 1083 	ld	hl, #0x00ff
+    000004F1 22r03r00         [16] 1084 	ld	(_megaram_type), hl
+    000004F4 C3r8Dr05         [10] 1085 	jp	00291$
+    000004F7                       1086 00139$:
+                                   1087 ;smram.c:575: megaram_type = TYPE_UNK;
+    000004F7 21 FF 00         [10] 1088 	ld	hl, #0x00ff
+    000004FA 22r03r00         [16] 1089 	ld	(_megaram_type), hl
+    000004FD C3r8Dr05         [10] 1090 	jp	00291$
+    00000500                       1091 00164$:
+                                   1092 ;smram.c:577: else if (to_upper(*params) == 'Y')
+    00000500 E5               [11] 1093 	push	hl
+    00000501 C5               [11] 1094 	push	bc
+    00000502 79               [ 4] 1095 	ld	a, c
+    00000503 CDr3Fr00         [17] 1096 	call	_to_upper
+    00000506 C1               [10] 1097 	pop	bc
+    00000507 E1               [10] 1098 	pop	hl
+    00000508 FE 59            [ 7] 1099 	cp	a, #0x59
+    0000050A 20 07            [12] 1100 	jr	nz, 00161$
+                                   1101 ;smram.c:579: presAB = TRUE;
+    0000050C 21r06r00         [10] 1102 	ld	hl, #_presAB
+    0000050F 36 01            [10] 1103 	ld	(hl), #0x01
+    00000511 18 7A            [12] 1104 	jr	00291$
+    00000513                       1105 00161$:
+                                   1106 ;smram.c:581: else if (to_upper(*params) == 'X')
+    00000513 E5               [11] 1107 	push	hl
+    00000514 C5               [11] 1108 	push	bc
+    00000515 79               [ 4] 1109 	ld	a, c
+    00000516 CDr3Fr00         [17] 1110 	call	_to_upper
+    00000519 C1               [10] 1111 	pop	bc
+    0000051A E1               [10] 1112 	pop	hl
+    0000051B FE 58            [ 7] 1113 	cp	a, #0x58
+    0000051D 20 07            [12] 1114 	jr	nz, 00158$
+                                   1115 ;smram.c:583: exitAfterLoad = TRUE;
+    0000051F 21r0Br00         [10] 1116 	ld	hl, #_exitAfterLoad
+    00000522 36 01            [10] 1117 	ld	(hl), #0x01
+    00000524 18 67            [12] 1118 	jr	00291$
+    00000526                       1119 00158$:
+                                   1120 ;smram.c:586: else if (to_upper(*params) == 'Z')
+    00000526 E5               [11] 1121 	push	hl
+    00000527 C5               [11] 1122 	push	bc
+    00000528 79               [ 4] 1123 	ld	a, c
+    00000529 CDr3Fr00         [17] 1124 	call	_to_upper
+    0000052C C1               [10] 1125 	pop	bc
+    0000052D E1               [10] 1126 	pop	hl
+    0000052E FE 5A            [ 7] 1127 	cp	a, #0x5a
+    00000530 20 16            [12] 1128 	jr	nz, 00155$
+                                   1129 ;smram.c:588: params++;
+    00000532 22r08r00         [16] 1130 	ld	(_params), hl
+                                   1131 ;smram.c:501: for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)
+    00000535 2Ar08r00         [16] 1132 	ld	hl, (_params)
+    00000538 7E               [ 7] 1133 	ld	a, (hl)
+                                   1134 ;smram.c:589: if (*params >= '0' && *params <= '3')
+    00000539 FE 30            [ 7] 1135 	cp	a, #0x30
+    0000053B 38 50            [12] 1136 	jr	c, 00291$
+    0000053D FE 34            [ 7] 1137 	cp	a, #0x34
+    0000053F 30 4C            [12] 1138 	jr	nc, 00291$
+                                   1139 ;smram.c:590: cpumode = *params - '0';
+    00000541 C6 D0            [ 7] 1140 	add	a, #0xd0
+    00000543 32r0Cr00         [13] 1141 	ld	(#_cpumode), a
+    00000546 18 45            [12] 1142 	jr	00291$
+    00000548                       1143 00155$:
+                                   1144 ;smram.c:592: else if (to_upper(*params) == '?')
+    00000548 C5               [11] 1145 	push	bc
+    00000549 79               [ 4] 1146 	ld	a, c
+    0000054A CDr3Fr00         [17] 1147 	call	_to_upper
+    0000054D C1               [10] 1148 	pop	bc
+    0000054E FE 3F            [ 7] 1149 	cp	a, #0x3f
+    00000550 20 07            [12] 1150 	jr	nz, 00148$
+                                   1151 ;smram.c:594: help = TRUE;
+    00000552 21r0Fr00         [10] 1152 	ld	hl, #_help
+    00000555 36 01            [10] 1153 	ld	(hl), #0x01
+    00000557 18 34            [12] 1154 	jr	00291$
+                                   1155 ;smram.c:599: while(*params++ != 0 && *params != ' ');
+    00000559                       1156 00148$:
+    00000559 2Ar08r00         [16] 1157 	ld	hl, (_params)
+    0000055C 23               [ 6] 1158 	inc	hl
+    0000055D 22r08r00         [16] 1159 	ld	(_params), hl
+    00000560 79               [ 4] 1160 	ld	a, c
+    00000561 B7               [ 4] 1161 	or	a, a
+    00000562 28 29            [12] 1162 	jr	z, 00291$
+                                   1163 ;smram.c:501: for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)
+    00000564 2Ar08r00         [16] 1164 	ld	hl, (_params)
+    00000567 4E               [ 7] 1165 	ld	c, (hl)
+                                   1166 ;smram.c:599: while(*params++ != 0 && *params != ' ');
+    00000568 79               [ 4] 1167 	ld	a, c
+    00000569 D6 20            [ 7] 1168 	sub	a, #0x20
+    0000056B 28 20            [12] 1169 	jr	z, 00291$
+    0000056D 18 EA            [12] 1170 	jr	00148$
+    0000056F                       1171 00186$:
+                                   1172 ;smram.c:604: filename = params;
+    0000056F ED 43r01r00      [20] 1173 	ld	(_filename), bc
+                                   1174 ;smram.c:605: while(*params != 0 && *params != ' ') {
+    00000573                       1175 00182$:
+                                   1176 ;smram.c:501: for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)
+    00000573 2Ar08r00         [16] 1177 	ld	hl, (_params)
+    00000576 7E               [ 7] 1178 	ld	a, (hl)
+                                   1179 ;smram.c:605: while(*params != 0 && *params != ' ') {
+    00000577 B7               [ 4] 1180 	or	a, a
+    00000578 28 27            [12] 1181 	jr	z, 00193$
+    0000057A FE 20            [ 7] 1182 	cp	a, #0x20
+    0000057C 28 23            [12] 1183 	jr	z, 00193$
+                                   1184 ;smram.c:606: *params = to_upper(*params);
+    0000057E E5               [11] 1185 	push	hl
+    0000057F CDr3Fr00         [17] 1186 	call	_to_upper
+    00000582 E1               [10] 1187 	pop	hl
+    00000583 77               [ 7] 1188 	ld	(hl), a
+                                   1189 ;smram.c:607: params++;
+    00000584 2Ar08r00         [16] 1190 	ld	hl, (_params)
+    00000587 23               [ 6] 1191 	inc	hl
+    00000588 22r08r00         [16] 1192 	ld	(_params), hl
+    0000058B 18 E6            [12] 1193 	jr	00182$
+                                   1194 ;smram.c:610: break;
+    0000058D                       1195 00291$:
+                                   1196 ;smram.c:501: for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)
+    0000058D 2Ar08r00         [16] 1197 	ld	hl, (_params)
+    00000590 23               [ 6] 1198 	inc	hl
+    00000591 22r08r00         [16] 1199 	ld	(_params), hl
+    00000594 21r05r00         [10] 1200 	ld	hl, #_paramlen
+    00000597 35               [11] 1201 	dec	(hl)
+    00000598 C3r8Er03         [10] 1202 	jp	00290$
+    0000059B                       1203 00192$:
+                                   1204 ;smram.c:615: } else megaram_type = TYPE_UNK;
+    0000059B 21 FF 00         [10] 1205 	ld	hl, #0x00ff
+    0000059E 22r03r00         [16] 1206 	ld	(_megaram_type), hl
+    000005A1                       1207 00193$:
+                                   1208 ;smram.c:617: if (!found) 
+    000005A1 3Ar00r00         [13] 1209 	ld	a, (_found+0)
+    000005A4 B7               [ 4] 1210 	or	a, a
+    000005A5 20 0C            [12] 1211 	jr	nz, 00198$
+                                   1212 ;smram.c:619: printf("ERROR: WonderTANG! not found...\n\r");
+    000005A7 21r1Ar0B         [10] 1213 	ld	hl, #___str_11
+    000005AA E5               [11] 1214 	push	hl
+    000005AB CDr00r00         [17] 1215 	call	_printf
+    000005AE F1               [10] 1216 	pop	af
+                                   1217 ;smram.c:620: return 0;
+    000005AF 11 00 00         [10] 1218 	ld	de, #0x0000
+    000005B2 C9               [10] 1219 	ret
+    000005B3                       1220 00198$:
+                                   1221 ;smram.c:623: if (help == TRUE || megaram_type == TYPE_UNK)
+    000005B3 3Ar0Fr00         [13] 1222 	ld	a, (_help)
+    000005B6 3D               [ 4] 1223 	dec	a
+    000005B7 28 0A            [12] 1224 	jr	z, 00194$
+    000005B9 3Ar03r00         [13] 1225 	ld	a, (_megaram_type)
+    000005BC 3C               [ 4] 1226 	inc	a
+    000005BD 21r04r00         [10] 1227 	ld	hl, #_megaram_type + 1
+    000005C0 B6               [ 7] 1228 	or	a, (hl)
+    000005C1 20 0C            [12] 1229 	jr	nz, 00199$
+    000005C3                       1230 00194$:
+                                   1231 ;smram.c:643: );
+    000005C3 21r3Cr0B         [10] 1232 	ld	hl, #___str_12
+    000005C6 E5               [11] 1233 	push	hl
+    000005C7 CDr00r00         [17] 1234 	call	_printf
+    000005CA F1               [10] 1235 	pop	af
+                                   1236 ;smram.c:644: return 0;
+    000005CB 11 00 00         [10] 1237 	ld	de, #0x0000
+    000005CE C9               [10] 1238 	ret
+    000005CF                       1239 00199$:
+                                   1240 ;smram.c:647: if (filename == 0) {        
+    000005CF 3Ar02r00         [13] 1241 	ld	a, (_filename+1)
+    000005D2 21r01r00         [10] 1242 	ld	hl, #_filename
+    000005D5 B6               [ 7] 1243 	or	a, (hl)
+    000005D6 20 16            [12] 1244 	jr	nz, 00203$
+                                   1245 ;smram.c:648: print_mapper_type();
+    000005D8 CDr61r01         [17] 1246 	call	_print_mapper_type
+                                   1247 ;smram.c:649: if (megaram_type != TYPE_UNK)
+    000005DB 3Ar03r00         [13] 1248 	ld	a, (_megaram_type)
+    000005DE 3C               [ 4] 1249 	inc	a
+    000005DF 21r04r00         [10] 1250 	ld	hl, #_megaram_type + 1
+    000005E2 B6               [ 7] 1251 	or	a, (hl)
+    000005E3 28 05            [12] 1252 	jr	z, 00201$
+                                   1253 ;smram.c:650: MEGA_PORT1 = megaram_type;    
+    000005E5 3Ar03r00         [13] 1254 	ld	a, (_megaram_type+0)
+    000005E8 D3 8F            [11] 1255 	out	(_MEGA_PORT1), a
+    000005EA                       1256 00201$:
+                                   1257 ;smram.c:651: return 0;
+    000005EA 11 00 00         [10] 1258 	ld	de, #0x0000
+    000005ED C9               [10] 1259 	ret
+    000005EE                       1260 00203$:
+                                   1261 ;smram.c:654: for(t = filename; *t != ' ' && *t != 0; t++);
+    000005EE 2Ar01r00         [16] 1262 	ld	hl, (_filename)
+    000005F1 22r06r00         [16] 1263 	ld	(_t), hl
+    000005F4                       1264 00294$:
+                                   1265 ;smram.c:475: if (*s++ != *t++) break;
+    000005F4 2Ar06r00         [16] 1266 	ld	hl, (_t)
+                                   1267 ;smram.c:654: for(t = filename; *t != ' ' && *t != 0; t++);
+    000005F7 7E               [ 7] 1268 	ld	a, (hl)
+    000005F8 FE 20            [ 7] 1269 	cp	a, #0x20
+    000005FA 28 0C            [12] 1270 	jr	z, 00204$
+    000005FC B7               [ 4] 1271 	or	a, a
+    000005FD 28 09            [12] 1272 	jr	z, 00204$
+    000005FF 2Ar06r00         [16] 1273 	ld	hl, (_t)
+    00000602 23               [ 6] 1274 	inc	hl
+    00000603 22r06r00         [16] 1275 	ld	(_t), hl
+    00000606 18 EC            [12] 1276 	jr	00294$
+    00000608                       1277 00204$:
+                                   1278 ;smram.c:655: *t = 0;
+    00000608 36 00            [10] 1279 	ld	(hl), #0x00
+                                   1280 ;smram.c:656: handle = dos2_open(0, filename);
+    0000060A ED 5Br01r00      [20] 1281 	ld	de, (_filename)
+    0000060E AF               [ 4] 1282 	xor	a, a
+    0000060F CDr89r00         [17] 1283 	call	_dos2_open
+    00000612 32r0Ar00         [13] 1284 	ld	(#_handle), a
+                                   1285 ;smram.c:658: MEGA_PORT1 = TYPE_K4;
+    00000615 3E 04            [ 7] 1286 	ld	a, #0x04
+    00000617 D3 8F            [11] 1287 	out	(_MEGA_PORT1), a
+                                   1288 ;smram.c:660: if (handle)
+    00000619 3Ar0Ar00         [13] 1289 	ld	a, (_handle+0)
+    0000061C B7               [ 4] 1290 	or	a, a
+    0000061D CAr5Ar07         [10] 1291 	jp	z, 00222$
+                                   1292 ;smram.c:662: printf("Loading ROM file: %s - ", filename);
+    00000620 01r19r0D         [10] 1293 	ld	bc, #___str_13+0
+    00000623 2Ar01r00         [16] 1294 	ld	hl, (_filename)
+    00000626 E5               [11] 1295 	push	hl
+    00000627 C5               [11] 1296 	push	bc
+    00000628 CDr00r00         [17] 1297 	call	_printf
+    0000062B F1               [10] 1298 	pop	af
     0000062C F1               [10] 1299 	pop	af
-    0000062D F1               [10] 1300 	pop	af
-                                   1301 ;smram.c:666: enaslt(sslt, 0x4000);
-    0000062E 11 00 40         [10] 1302 	ld	de, #0x4000
-    00000631 3Ar02r00         [13] 1303 	ld	a, (_sslt)
-    00000634 CDr48r00         [17] 1304 	call	_enaslt
-                                   1305 ;smram.c:667: page = 0;
-                                   1306 ;smram.c:668: loadpage = 0;
-    00000637 AF               [ 4] 1307 	xor	a, a
-    00000638 32r11r00         [13] 1308 	ld	(#_page), a
-    0000063B 32r0Er00         [13] 1309 	ld	(#_loadpage), a
-                                   1310 ;smram.c:669: romsize = 0;
-    0000063E AF               [ 4] 1311 	xor	a, a
-    0000063F 32r12r00         [13] 1312 	ld	(_romsize+0), a
-    00000642 32r13r00         [13] 1313 	ld	(_romsize+1), a
-    00000645 32r14r00         [13] 1314 	ld	(_romsize+2), a
-    00000648 32r15r00         [13] 1315 	ld	(_romsize+3), a
-                                   1316 ;smram.c:670: printf("%04dKB", 0);
-    0000064B 21 00 00         [10] 1317 	ld	hl, #0x0000
-    0000064E E5               [11] 1318 	push	hl
-    0000064F 21r32r0D         [10] 1319 	ld	hl, #___str_14
-    00000652 E5               [11] 1320 	push	hl
-    00000653 CDr00r00         [17] 1321 	call	_printf
+                                   1300 ;smram.c:664: enaslt(sslt, 0x4000);
+    0000062D 11 00 40         [10] 1301 	ld	de, #0x4000
+    00000630 3Ar02r00         [13] 1302 	ld	a, (_sslt)
+    00000633 CDr48r00         [17] 1303 	call	_enaslt
+                                   1304 ;smram.c:665: page = 0;
+                                   1305 ;smram.c:666: loadpage = 0;
+    00000636 AF               [ 4] 1306 	xor	a, a
+    00000637 32r11r00         [13] 1307 	ld	(#_page), a
+    0000063A 32r0Er00         [13] 1308 	ld	(#_loadpage), a
+                                   1309 ;smram.c:667: romsize = 0;
+    0000063D AF               [ 4] 1310 	xor	a, a
+    0000063E 32r12r00         [13] 1311 	ld	(_romsize+0), a
+    00000641 32r13r00         [13] 1312 	ld	(_romsize+1), a
+    00000644 32r14r00         [13] 1313 	ld	(_romsize+2), a
+    00000647 32r15r00         [13] 1314 	ld	(_romsize+3), a
+                                   1315 ;smram.c:668: printf("%04dKB", 0);
+    0000064A 21 00 00         [10] 1316 	ld	hl, #0x0000
+    0000064D E5               [11] 1317 	push	hl
+    0000064E 21r31r0D         [10] 1318 	ld	hl, #___str_14
+    00000651 E5               [11] 1319 	push	hl
+    00000652 CDr00r00         [17] 1320 	call	_printf
+    00000655 F1               [10] 1321 	pop	af
     00000656 F1               [10] 1322 	pop	af
-    00000657 F1               [10] 1323 	pop	af
-                                   1324 ;smram.c:672: do {
-    00000658                       1325 00218$:
-                                   1326 ;smram.c:673: bytes_read = dos2_read(handle, (void*)0x8000, 0x2000);
-    00000658 21 00 20         [10] 1327 	ld	hl, #0x2000
-    0000065B E5               [11] 1328 	push	hl
-    0000065C 11 00 80         [10] 1329 	ld	de, #0x8000
-    0000065F 3Ar0Ar00         [13] 1330 	ld	a, (_handle)
-    00000662 CDrA4r00         [17] 1331 	call	_dos2_read
-    00000665 ED 53r0Br00      [20] 1332 	ld	(_bytes_read), de
-                                   1333 ;smram.c:678: if ((romsize & 0x3FFFUL) == 0 && bytes_read >= 4 &&
-    00000669 3Ar12r00         [13] 1334 	ld	a, (_romsize+0)
-    0000066C B7               [ 4] 1335 	or	a, a
-    0000066D 20 70            [12] 1336 	jr	nz, 00212$
-    0000066F 3Ar13r00         [13] 1337 	ld	a, (_romsize+1)
-    00000672 E6 3F            [ 7] 1338 	and	a, #0x3f
-    00000674 20 69            [12] 1339 	jr	nz, 00212$
-    00000676 11 04 00         [10] 1340 	ld	de, #0x0004
-    00000679 2Ar0Br00         [16] 1341 	ld	hl, (_bytes_read)
-    0000067C BF               [ 4] 1342 	cp	a, a
-    0000067D ED 52            [15] 1343 	sbc	hl, de
-    0000067F 38 5E            [12] 1344 	jr	c, 00212$
-                                   1345 ;smram.c:679: *((uchar*)0x8000) == 'A' &&
-    00000681 3A 00 80         [13] 1346 	ld	a, (#0x8000)
-    00000684 FE 41            [ 7] 1347 	cp	a, #0x41
-    00000686 20 57            [12] 1348 	jr	nz, 00212$
-                                   1349 ;smram.c:680: *((uchar*)0x8001) == 'B')
-    00000688 3A 01 80         [13] 1350 	ld	a, (#0x8001)
-    0000068B FE 42            [ 7] 1351 	cp	a, #0x42
-    0000068D 20 50            [12] 1352 	jr	nz, 00212$
-                                   1353 ;smram.c:682: if (!linearHeaderValid)
-    0000068F 3Ar0Ar00         [13] 1354 	ld	a, (_linearHeaderValid+0)
-    00000692 B7               [ 4] 1355 	or	a, a
-    00000693 20 11            [12] 1356 	jr	nz, 00206$
-                                   1357 ;smram.c:684: linearHeaderValid = TRUE;
-    00000695 21r0Ar00         [10] 1358 	ld	hl, #_linearHeaderValid
-    00000698 36 01            [10] 1359 	ld	(hl), #0x01
-                                   1360 ;smram.c:685: linearRomstart = *((uint*)0x8002);
-    0000069A 21 02 80         [10] 1361 	ld	hl, #0x8002
-    0000069D 7E               [ 7] 1362 	ld	a, (hl)
-    0000069E 23               [ 6] 1363 	inc	hl
-    0000069F 32r19r01         [13] 1364 	ld	(_linearRomstart+0), a
-    000006A2 7E               [ 7] 1365 	ld	a, (hl)
-    000006A3 32r1Ar01         [13] 1366 	ld	(_linearRomstart+1), a
-    000006A6                       1367 00206$:
-                                   1368 ;smram.c:688: if (romsize == 0)
-    000006A6 3Ar15r00         [13] 1369 	ld	a, (_romsize+3)
-    000006A9 FD 21r12r00      [14] 1370 	ld	iy, #_romsize
-    000006AD FD B6 02         [19] 1371 	or	a, 2 (iy)
-    000006B0 FD B6 01         [19] 1372 	or	a, 1 (iy)
-    000006B3 FD B6 00         [19] 1373 	or	a, 0 (iy)
-    000006B6 20 27            [12] 1374 	jr	nz, 00212$
-                                   1375 ;smram.c:690: headerValid = TRUE;
-    000006B8 21r09r00         [10] 1376 	ld	hl, #_headerValid
-    000006BB 36 01            [10] 1377 	ld	(hl), #0x01
-                                   1378 ;smram.c:691: romstart = *((uint*)0x8002);
-    000006BD 21 02 80         [10] 1379 	ld	hl, #0x8002
-    000006C0 7E               [ 7] 1380 	ld	a, (hl)
-    000006C1 23               [ 6] 1381 	inc	hl
-    000006C2 32r17r01         [13] 1382 	ld	(_romstart+0), a
-    000006C5 7E               [ 7] 1383 	ld	a, (hl)
-    000006C6 32r18r01         [13] 1384 	ld	(_romstart+1), a
-                                   1385 ;smram.c:693: if (megaram_type == TYPE_LINEAR)
-    000006C9 3Ar03r00         [13] 1386 	ld	a, (_megaram_type)
-    000006CC D6 02            [ 7] 1387 	sub	a, #0x02
-    000006CE 21r04r00         [10] 1388 	ld	hl, #_megaram_type + 1
-    000006D1 B6               [ 7] 1389 	or	a, (hl)
-    000006D2 20 0B            [12] 1390 	jr	nz, 00212$
-                                   1391 ;smram.c:694: loadpage = (uchar)((romstart >> 13) & 0xFE);
-    000006D4 3Ar18r01         [13] 1392 	ld	a, (_romstart+1)
+                                   1323 ;smram.c:670: do {
+    00000657                       1324 00218$:
+                                   1325 ;smram.c:671: bytes_read = dos2_read(handle, (void*)0x8000, 0x2000);
+    00000657 21 00 20         [10] 1326 	ld	hl, #0x2000
+    0000065A E5               [11] 1327 	push	hl
+    0000065B 11 00 80         [10] 1328 	ld	de, #0x8000
+    0000065E 3Ar0Ar00         [13] 1329 	ld	a, (_handle)
+    00000661 CDrA4r00         [17] 1330 	call	_dos2_read
+    00000664 ED 53r0Br00      [20] 1331 	ld	(_bytes_read), de
+                                   1332 ;smram.c:676: if ((romsize & 0x3FFFUL) == 0 && bytes_read >= 4 &&
+    00000668 3Ar12r00         [13] 1333 	ld	a, (_romsize+0)
+    0000066B B7               [ 4] 1334 	or	a, a
+    0000066C 20 70            [12] 1335 	jr	nz, 00212$
+    0000066E 3Ar13r00         [13] 1336 	ld	a, (_romsize+1)
+    00000671 E6 3F            [ 7] 1337 	and	a, #0x3f
+    00000673 20 69            [12] 1338 	jr	nz, 00212$
+    00000675 11 04 00         [10] 1339 	ld	de, #0x0004
+    00000678 2Ar0Br00         [16] 1340 	ld	hl, (_bytes_read)
+    0000067B BF               [ 4] 1341 	cp	a, a
+    0000067C ED 52            [15] 1342 	sbc	hl, de
+    0000067E 38 5E            [12] 1343 	jr	c, 00212$
+                                   1344 ;smram.c:677: *((uchar*)0x8000) == 'A' &&
+    00000680 3A 00 80         [13] 1345 	ld	a, (#0x8000)
+    00000683 FE 41            [ 7] 1346 	cp	a, #0x41
+    00000685 20 57            [12] 1347 	jr	nz, 00212$
+                                   1348 ;smram.c:678: *((uchar*)0x8001) == 'B')
+    00000687 3A 01 80         [13] 1349 	ld	a, (#0x8001)
+    0000068A FE 42            [ 7] 1350 	cp	a, #0x42
+    0000068C 20 50            [12] 1351 	jr	nz, 00212$
+                                   1352 ;smram.c:680: if (!linearHeaderValid)
+    0000068E 3Ar0Ar00         [13] 1353 	ld	a, (_linearHeaderValid+0)
+    00000691 B7               [ 4] 1354 	or	a, a
+    00000692 20 11            [12] 1355 	jr	nz, 00206$
+                                   1356 ;smram.c:682: linearHeaderValid = TRUE;
+    00000694 21r0Ar00         [10] 1357 	ld	hl, #_linearHeaderValid
+    00000697 36 01            [10] 1358 	ld	(hl), #0x01
+                                   1359 ;smram.c:683: linearRomstart = *((uint*)0x8002);
+    00000699 21 02 80         [10] 1360 	ld	hl, #0x8002
+    0000069C 7E               [ 7] 1361 	ld	a, (hl)
+    0000069D 23               [ 6] 1362 	inc	hl
+    0000069E 32r19r01         [13] 1363 	ld	(_linearRomstart+0), a
+    000006A1 7E               [ 7] 1364 	ld	a, (hl)
+    000006A2 32r1Ar01         [13] 1365 	ld	(_linearRomstart+1), a
+    000006A5                       1366 00206$:
+                                   1367 ;smram.c:686: if (romsize == 0)
+    000006A5 3Ar15r00         [13] 1368 	ld	a, (_romsize+3)
+    000006A8 FD 21r12r00      [14] 1369 	ld	iy, #_romsize
+    000006AC FD B6 02         [19] 1370 	or	a, 2 (iy)
+    000006AF FD B6 01         [19] 1371 	or	a, 1 (iy)
+    000006B2 FD B6 00         [19] 1372 	or	a, 0 (iy)
+    000006B5 20 27            [12] 1373 	jr	nz, 00212$
+                                   1374 ;smram.c:688: headerValid = TRUE;
+    000006B7 21r09r00         [10] 1375 	ld	hl, #_headerValid
+    000006BA 36 01            [10] 1376 	ld	(hl), #0x01
+                                   1377 ;smram.c:689: romstart = *((uint*)0x8002);
+    000006BC 21 02 80         [10] 1378 	ld	hl, #0x8002
+    000006BF 7E               [ 7] 1379 	ld	a, (hl)
+    000006C0 23               [ 6] 1380 	inc	hl
+    000006C1 32r17r01         [13] 1381 	ld	(_romstart+0), a
+    000006C4 7E               [ 7] 1382 	ld	a, (hl)
+    000006C5 32r18r01         [13] 1383 	ld	(_romstart+1), a
+                                   1384 ;smram.c:691: if (megaram_type == TYPE_LINEAR)
+    000006C8 3Ar03r00         [13] 1385 	ld	a, (_megaram_type)
+    000006CB D6 02            [ 7] 1386 	sub	a, #0x02
+    000006CD 21r04r00         [10] 1387 	ld	hl, #_megaram_type + 1
+    000006D0 B6               [ 7] 1388 	or	a, (hl)
+    000006D1 20 0B            [12] 1389 	jr	nz, 00212$
+                                   1390 ;smram.c:692: loadpage = (uchar)((romstart >> 13) & 0xFE);
+    000006D3 3Ar18r01         [13] 1391 	ld	a, (_romstart+1)
+    000006D6 07               [ 4] 1392 	rlca
     000006D7 07               [ 4] 1393 	rlca
     000006D8 07               [ 4] 1394 	rlca
-    000006D9 07               [ 4] 1395 	rlca
-    000006DA E6 06            [ 7] 1396 	and	a, #0x6
-    000006DC 32r0Er00         [13] 1397 	ld	(#_loadpage), a
-    000006DF                       1398 00212$:
-                                   1399 ;smram.c:698: if (bytes_read > 0)
-    000006DF 3Ar0Cr00         [13] 1400 	ld	a, (_bytes_read+1)
-    000006E2 21r0Br00         [10] 1401 	ld	hl, #_bytes_read
-    000006E5 B6               [ 7] 1402 	or	a, (hl)
-    000006E6 28 3F            [12] 1403 	jr	z, 00217$
-                                   1404 ;smram.c:700: MEGA_PORT0 = 0; // enable paging
-    000006E8 AF               [ 4] 1405 	xor	a, a
-    000006E9 D3 8E            [11] 1406 	out	(_MEGA_PORT0), a
-                                   1407 ;smram.c:701: *((uchar *)0x4000) = loadpage + page;
-    000006EB 21r11r00         [10] 1408 	ld	hl, #_page
-    000006EE 3Ar0Er00         [13] 1409 	ld	a, (_loadpage+0)
-    000006F1 86               [ 7] 1410 	add	a, (hl)
-    000006F2 32 00 40         [13] 1411 	ld	(#0x4000), a
-                                   1412 ;smram.c:702: b = MEGA_PORT0; (b); // enable ram
-    000006F5 DB 8E            [11] 1413 	in	a, (_MEGA_PORT0)
-    000006F7 32r03r00         [13] 1414 	ld	(#_b), a
-                                   1415 ;smram.c:703: memcpy((void*)0x4000, (void*)0x8000, bytes_read);
-    000006FA 11 00 40         [10] 1416 	ld	de, #0x4000
-    000006FD 21 00 80         [10] 1417 	ld	hl, #0x8000
-    00000700 ED 4Br0Br00      [20] 1418 	ld	bc, (_bytes_read)
-    00000704 78               [ 4] 1419 	ld	a, b
-    00000705 B1               [ 4] 1420 	or	a, c
-    00000706 28 02            [12] 1421 	jr	z, 01187$
-    00000708 ED B0            [21] 1422 	ldir
-    0000070A                       1423 01187$:
-                                   1424 ;smram.c:704: romsize += bytes_read;
-    0000070A ED 4Br0Br00      [20] 1425 	ld	bc, (_bytes_read)
-    0000070E 11 00 00         [10] 1426 	ld	de, #0x0000
-    00000711 79               [ 4] 1427 	ld	a, c
-    00000712 21r12r00         [10] 1428 	ld	hl, #_romsize
-    00000715 86               [ 7] 1429 	add	a, (hl)
-    00000716 77               [ 7] 1430 	ld	(hl), a
-    00000717 23               [ 6] 1431 	inc	hl
-    00000718 78               [ 4] 1432 	ld	a, b
-    00000719 8E               [ 7] 1433 	adc	a, (hl)
-    0000071A 77               [ 7] 1434 	ld	(hl), a
-    0000071B 23               [ 6] 1435 	inc	hl
-    0000071C 7B               [ 4] 1436 	ld	a, e
-    0000071D 8E               [ 7] 1437 	adc	a, (hl)
-    0000071E 77               [ 7] 1438 	ld	(hl), a
-    0000071F 23               [ 6] 1439 	inc	hl
-    00000720 7A               [ 4] 1440 	ld	a, d
-    00000721 8E               [ 7] 1441 	adc	a, (hl)
-    00000722 77               [ 7] 1442 	ld	(hl), a
-                                   1443 ;smram.c:705: page++;
-    00000723 21r11r00         [10] 1444 	ld	hl, #_page
-    00000726 34               [11] 1445 	inc	(hl)
-    00000727                       1446 00217$:
-                                   1447 ;smram.c:707: MEGA_PORT0 = 0; // enable paging
-    00000727 AF               [ 4] 1448 	xor	a, a
-    00000728 D3 8E            [11] 1449 	out	(_MEGA_PORT0), a
-                                   1450 ;smram.c:708: printf("\b\b\b\b\b\b%04dKB", (uint)(romsize >> 10));
-    0000072A 2Ar13r00         [16] 1451 	ld	hl, (_romsize + 1)
-    0000072D 3Ar15r00         [13] 1452 	ld	a, (_romsize+3)
-    00000730 06 02            [ 7] 1453 	ld	b, #0x02
-    00000732                       1454 01188$:
-    00000732 CB 3F            [ 8] 1455 	srl	a
-    00000734 CB 1C            [ 8] 1456 	rr	h
-    00000736 CB 1D            [ 8] 1457 	rr	l
-    00000738 10 F8            [13] 1458 	djnz	01188$
-    0000073A E5               [11] 1459 	push	hl
-    0000073B 21r39r0D         [10] 1460 	ld	hl, #___str_15
-    0000073E E5               [11] 1461 	push	hl
-    0000073F CDr00r00         [17] 1462 	call	_printf
+    000006D9 E6 06            [ 7] 1395 	and	a, #0x6
+    000006DB 32r0Er00         [13] 1396 	ld	(#_loadpage), a
+    000006DE                       1397 00212$:
+                                   1398 ;smram.c:696: if (bytes_read > 0)
+    000006DE 3Ar0Cr00         [13] 1399 	ld	a, (_bytes_read+1)
+    000006E1 21r0Br00         [10] 1400 	ld	hl, #_bytes_read
+    000006E4 B6               [ 7] 1401 	or	a, (hl)
+    000006E5 28 3F            [12] 1402 	jr	z, 00217$
+                                   1403 ;smram.c:698: MEGA_PORT0 = 0; // enable paging
+    000006E7 AF               [ 4] 1404 	xor	a, a
+    000006E8 D3 8E            [11] 1405 	out	(_MEGA_PORT0), a
+                                   1406 ;smram.c:699: *((uchar *)0x4000) = loadpage + page;
+    000006EA 21r11r00         [10] 1407 	ld	hl, #_page
+    000006ED 3Ar0Er00         [13] 1408 	ld	a, (_loadpage+0)
+    000006F0 86               [ 7] 1409 	add	a, (hl)
+    000006F1 32 00 40         [13] 1410 	ld	(#0x4000), a
+                                   1411 ;smram.c:700: b = MEGA_PORT0; (b); // enable ram
+    000006F4 DB 8E            [11] 1412 	in	a, (_MEGA_PORT0)
+    000006F6 32r03r00         [13] 1413 	ld	(#_b), a
+                                   1414 ;smram.c:701: memcpy((void*)0x4000, (void*)0x8000, bytes_read);
+    000006F9 11 00 40         [10] 1415 	ld	de, #0x4000
+    000006FC 21 00 80         [10] 1416 	ld	hl, #0x8000
+    000006FF ED 4Br0Br00      [20] 1417 	ld	bc, (_bytes_read)
+    00000703 78               [ 4] 1418 	ld	a, b
+    00000704 B1               [ 4] 1419 	or	a, c
+    00000705 28 02            [12] 1420 	jr	z, 01187$
+    00000707 ED B0            [21] 1421 	ldir
+    00000709                       1422 01187$:
+                                   1423 ;smram.c:702: romsize += bytes_read;
+    00000709 ED 4Br0Br00      [20] 1424 	ld	bc, (_bytes_read)
+    0000070D 11 00 00         [10] 1425 	ld	de, #0x0000
+    00000710 79               [ 4] 1426 	ld	a, c
+    00000711 21r12r00         [10] 1427 	ld	hl, #_romsize
+    00000714 86               [ 7] 1428 	add	a, (hl)
+    00000715 77               [ 7] 1429 	ld	(hl), a
+    00000716 23               [ 6] 1430 	inc	hl
+    00000717 78               [ 4] 1431 	ld	a, b
+    00000718 8E               [ 7] 1432 	adc	a, (hl)
+    00000719 77               [ 7] 1433 	ld	(hl), a
+    0000071A 23               [ 6] 1434 	inc	hl
+    0000071B 7B               [ 4] 1435 	ld	a, e
+    0000071C 8E               [ 7] 1436 	adc	a, (hl)
+    0000071D 77               [ 7] 1437 	ld	(hl), a
+    0000071E 23               [ 6] 1438 	inc	hl
+    0000071F 7A               [ 4] 1439 	ld	a, d
+    00000720 8E               [ 7] 1440 	adc	a, (hl)
+    00000721 77               [ 7] 1441 	ld	(hl), a
+                                   1442 ;smram.c:703: page++;
+    00000722 21r11r00         [10] 1443 	ld	hl, #_page
+    00000725 34               [11] 1444 	inc	(hl)
+    00000726                       1445 00217$:
+                                   1446 ;smram.c:705: MEGA_PORT0 = 0; // enable paging
+    00000726 AF               [ 4] 1447 	xor	a, a
+    00000727 D3 8E            [11] 1448 	out	(_MEGA_PORT0), a
+                                   1449 ;smram.c:706: printf("\b\b\b\b\b\b%04dKB", (uint)(romsize >> 10));
+    00000729 2Ar13r00         [16] 1450 	ld	hl, (_romsize + 1)
+    0000072C 3Ar15r00         [13] 1451 	ld	a, (_romsize+3)
+    0000072F 06 02            [ 7] 1452 	ld	b, #0x02
+    00000731                       1453 01188$:
+    00000731 CB 3F            [ 8] 1454 	srl	a
+    00000733 CB 1C            [ 8] 1455 	rr	h
+    00000735 CB 1D            [ 8] 1456 	rr	l
+    00000737 10 F8            [13] 1457 	djnz	01188$
+    00000739 E5               [11] 1458 	push	hl
+    0000073A 21r38r0D         [10] 1459 	ld	hl, #___str_15
+    0000073D E5               [11] 1460 	push	hl
+    0000073E CDr00r00         [17] 1461 	call	_printf
+    00000741 F1               [10] 1462 	pop	af
     00000742 F1               [10] 1463 	pop	af
-    00000743 F1               [10] 1464 	pop	af
-                                   1465 ;smram.c:710: } while (bytes_read > 0);
-    00000744 3Ar0Cr00         [13] 1466 	ld	a, (_bytes_read+1)
-    00000747 21r0Br00         [10] 1467 	ld	hl, #_bytes_read
-    0000074A B6               [ 7] 1468 	or	a, (hl)
-    0000074B C2r58r06         [10] 1469 	jp	nz, 00218$
-                                   1470 ;smram.c:712: *((uchar *)0x4000) = 0;
-    0000074E 21 00 40         [10] 1471 	ld	hl, #0x4000
-    00000751 36 00            [10] 1472 	ld	(hl), #0x00
-                                   1473 ;smram.c:714: dos2_close(handle);
-    00000753 3Ar0Ar00         [13] 1474 	ld	a, (_handle)
-    00000756 CDr9Br00         [17] 1475 	call	_dos2_close
-    00000759 18 22            [12] 1476 	jr	00223$
-    0000075B                       1477 00222$:
-                                   1478 ;smram.c:718: enaslt(*((uchar*)RAMAD1), 0x4000);
-    0000075B 3A 42 F3         [13] 1479 	ld	a, (#0xf342)
-    0000075E 11 00 40         [10] 1480 	ld	de, #0x4000
-    00000761 CDr48r00         [17] 1481 	call	_enaslt
-                                   1482 ;smram.c:719: enaslt(*((uchar*)RAMAD2), 0x8000);
-    00000764 3A 43 F3         [13] 1483 	ld	a, (#0xf343)
-    00000767 11 00 80         [10] 1484 	ld	de, #0x8000
-    0000076A CDr48r00         [17] 1485 	call	_enaslt
-                                   1486 ;smram.c:720: printf("ERROR: Failed loading %s\n\r", filename);
-    0000076D 2Ar01r00         [16] 1487 	ld	hl, (_filename)
-    00000770 E5               [11] 1488 	push	hl
-    00000771 21r46r0D         [10] 1489 	ld	hl, #___str_16
-    00000774 E5               [11] 1490 	push	hl
-    00000775 CDr00r00         [17] 1491 	call	_printf
+                                   1464 ;smram.c:708: } while (bytes_read > 0);
+    00000743 3Ar0Cr00         [13] 1465 	ld	a, (_bytes_read+1)
+    00000746 21r0Br00         [10] 1466 	ld	hl, #_bytes_read
+    00000749 B6               [ 7] 1467 	or	a, (hl)
+    0000074A C2r57r06         [10] 1468 	jp	nz, 00218$
+                                   1469 ;smram.c:710: *((uchar *)0x4000) = 0;
+    0000074D 21 00 40         [10] 1470 	ld	hl, #0x4000
+    00000750 36 00            [10] 1471 	ld	(hl), #0x00
+                                   1472 ;smram.c:712: dos2_close(handle);
+    00000752 3Ar0Ar00         [13] 1473 	ld	a, (_handle)
+    00000755 CDr9Br00         [17] 1474 	call	_dos2_close
+    00000758 18 22            [12] 1475 	jr	00223$
+    0000075A                       1476 00222$:
+                                   1477 ;smram.c:716: enaslt(*((uchar*)RAMAD1), 0x4000);
+    0000075A 3A 42 F3         [13] 1478 	ld	a, (#0xf342)
+    0000075D 11 00 40         [10] 1479 	ld	de, #0x4000
+    00000760 CDr48r00         [17] 1480 	call	_enaslt
+                                   1481 ;smram.c:717: enaslt(*((uchar*)RAMAD2), 0x8000);
+    00000763 3A 43 F3         [13] 1482 	ld	a, (#0xf343)
+    00000766 11 00 80         [10] 1483 	ld	de, #0x8000
+    00000769 CDr48r00         [17] 1484 	call	_enaslt
+                                   1485 ;smram.c:718: printf("ERROR: Failed loading %s\n\r", filename);
+    0000076C 2Ar01r00         [16] 1486 	ld	hl, (_filename)
+    0000076F E5               [11] 1487 	push	hl
+    00000770 21r45r0D         [10] 1488 	ld	hl, #___str_16
+    00000773 E5               [11] 1489 	push	hl
+    00000774 CDr00r00         [17] 1490 	call	_printf
+    00000777 F1               [10] 1491 	pop	af
     00000778 F1               [10] 1492 	pop	af
-    00000779 F1               [10] 1493 	pop	af
-                                   1494 ;smram.c:721: __asm jp 0x0000 __endasm;
-    0000077A C3 00 00         [10] 1495 	jp	0x0000 
-    0000077D                       1496 00223$:
-                                   1497 ;smram.c:723: *t = ' '; // restore space
-    0000077D 2Ar06r00         [16] 1498 	ld	hl, (_t)
-    00000780 36 20            [10] 1499 	ld	(hl), #0x20
-                                   1500 ;smram.c:725: if (!mapperSpecified && romsize <= 0x10000UL)
-    00000782 3Ar08r00         [13] 1501 	ld	a, (_mapperSpecified+0)
-    00000785 B7               [ 4] 1502 	or	a,a
-    00000786 20 2C            [12] 1503 	jr	nz, 00227$
-    00000788 FD 21r12r00      [14] 1504 	ld	iy, #_romsize
-    0000078C FD BE 00         [19] 1505 	cp	a, 0 (iy)
-    0000078F FD 9E 01         [19] 1506 	sbc	a, 1 (iy)
-    00000792 ED 5Br14r00      [20] 1507 	ld	de, (_romsize + 2)
-    00000796 21 01 00         [10] 1508 	ld	hl, #0x0001
-    00000799 ED 52            [15] 1509 	sbc	hl, de
-    0000079B 38 17            [12] 1510 	jr	c, 00227$
-                                   1511 ;smram.c:727: megaram_type = TYPE_LINEAR;
-    0000079D 21 02 00         [10] 1512 	ld	hl, #0x0002
-    000007A0 22r03r00         [16] 1513 	ld	(_megaram_type), hl
-                                   1514 ;smram.c:728: if (headerValid)
-    000007A3 3Ar09r00         [13] 1515 	ld	a, (_headerValid+0)
-    000007A6 B7               [ 4] 1516 	or	a, a
-    000007A7 28 0B            [12] 1517 	jr	z, 00227$
-                                   1518 ;smram.c:729: loadpage = (uchar)((romstart >> 13) & 0xFE);
-    000007A9 3Ar18r01         [13] 1519 	ld	a, (_romstart+1)
+                                   1493 ;smram.c:719: __asm jp 0x0000 __endasm;
+    00000779 C3 00 00         [10] 1494 	jp	0x0000 
+    0000077C                       1495 00223$:
+                                   1496 ;smram.c:721: *t = ' '; // restore space
+    0000077C 2Ar06r00         [16] 1497 	ld	hl, (_t)
+    0000077F 36 20            [10] 1498 	ld	(hl), #0x20
+                                   1499 ;smram.c:723: if (!mapperSpecified && romsize <= 0x10000UL)
+    00000781 3Ar08r00         [13] 1500 	ld	a, (_mapperSpecified+0)
+    00000784 B7               [ 4] 1501 	or	a,a
+    00000785 20 2C            [12] 1502 	jr	nz, 00227$
+    00000787 FD 21r12r00      [14] 1503 	ld	iy, #_romsize
+    0000078B FD BE 00         [19] 1504 	cp	a, 0 (iy)
+    0000078E FD 9E 01         [19] 1505 	sbc	a, 1 (iy)
+    00000791 ED 5Br14r00      [20] 1506 	ld	de, (_romsize + 2)
+    00000795 21 01 00         [10] 1507 	ld	hl, #0x0001
+    00000798 ED 52            [15] 1508 	sbc	hl, de
+    0000079A 38 17            [12] 1509 	jr	c, 00227$
+                                   1510 ;smram.c:725: megaram_type = TYPE_LINEAR;
+    0000079C 21 02 00         [10] 1511 	ld	hl, #0x0002
+    0000079F 22r03r00         [16] 1512 	ld	(_megaram_type), hl
+                                   1513 ;smram.c:726: if (headerValid)
+    000007A2 3Ar09r00         [13] 1514 	ld	a, (_headerValid+0)
+    000007A5 B7               [ 4] 1515 	or	a, a
+    000007A6 28 0B            [12] 1516 	jr	z, 00227$
+                                   1517 ;smram.c:727: loadpage = (uchar)((romstart >> 13) & 0xFE);
+    000007A8 3Ar18r01         [13] 1518 	ld	a, (_romstart+1)
+    000007AB 07               [ 4] 1519 	rlca
     000007AC 07               [ 4] 1520 	rlca
     000007AD 07               [ 4] 1521 	rlca
-    000007AE 07               [ 4] 1522 	rlca
-    000007AF E6 06            [ 7] 1523 	and	a, #0x6
-    000007B1 32r0Er00         [13] 1524 	ld	(#_loadpage), a
-    000007B4                       1525 00227$:
-                                   1526 ;smram.c:735: if (!presAB && megaram_type != TYPE_LINEAR)
-    000007B4 3Ar06r00         [13] 1527 	ld	a, (_presAB+0)
-    000007B7 B7               [ 4] 1528 	or	a, a
-    000007B8 20 20            [12] 1529 	jr	nz, 00230$
-    000007BA 3Ar03r00         [13] 1530 	ld	a, (_megaram_type)
-    000007BD D6 02            [ 7] 1531 	sub	a, #0x02
-    000007BF 21r04r00         [10] 1532 	ld	hl, #_megaram_type + 1
-    000007C2 B6               [ 7] 1533 	or	a, (hl)
-    000007C3 28 15            [12] 1534 	jr	z, 00230$
-                                   1535 ;smram.c:737: MEGA_PORT0 = 0;
-    000007C5 AF               [ 4] 1536 	xor	a, a
-    000007C6 D3 8E            [11] 1537 	out	(_MEGA_PORT0), a
-                                   1538 ;smram.c:738: *((uchar*)0x4000) = 0;
-    000007C8 21 00 40         [10] 1539 	ld	hl, #0x4000
-    000007CB 36 00            [10] 1540 	ld	(hl), #0x00
-                                   1541 ;smram.c:739: b = MEGA_PORT0; (b);
-    000007CD DB 8E            [11] 1542 	in	a, (_MEGA_PORT0)
-    000007CF 32r03r00         [13] 1543 	ld	(#_b), a
-                                   1544 ;smram.c:740: *((uchar*)0x4000) = 0;
-    000007D2 21 00 40         [10] 1545 	ld	hl, #0x4000
-    000007D5 36 00            [10] 1546 	ld	(hl), #0x00
-                                   1547 ;smram.c:741: MEGA_PORT0 = 0;
-    000007D7 AF               [ 4] 1548 	xor	a, a
-    000007D8 D3 8E            [11] 1549 	out	(_MEGA_PORT0), a
-    000007DA                       1550 00230$:
-                                   1551 ;smram.c:744: if (megaram_type == TYPE_LINEAR)
-    000007DA 3Ar03r00         [13] 1552 	ld	a, (_megaram_type)
-    000007DD D6 02            [ 7] 1553 	sub	a, #0x02
-    000007DF 21r04r00         [10] 1554 	ld	hl, #_megaram_type + 1
-    000007E2 B6               [ 7] 1555 	or	a, (hl)
-    000007E3 C2rE5r08         [10] 1556 	jp	nz, 00243$
-                                   1557 ;smram.c:746: if (!linearHeaderValid)
-    000007E6 3Ar0Ar00         [13] 1558 	ld	a, (_linearHeaderValid+0)
-    000007E9 B7               [ 4] 1559 	or	a, a
-    000007EA 20 1D            [12] 1560 	jr	nz, 00233$
-                                   1561 ;smram.c:748: enaslt(*((uchar*)RAMAD1), 0x4000);
-    000007EC 3A 42 F3         [13] 1562 	ld	a, (#0xf342)
-    000007EF 11 00 40         [10] 1563 	ld	de, #0x4000
-    000007F2 CDr48r00         [17] 1564 	call	_enaslt
-                                   1565 ;smram.c:749: enaslt(*((uchar*)RAMAD2), 0x8000);
-    000007F5 3A 43 F3         [13] 1566 	ld	a, (#0xf343)
-    000007F8 11 00 80         [10] 1567 	ld	de, #0x8000
-    000007FB CDr48r00         [17] 1568 	call	_enaslt
-                                   1569 ;smram.c:751: printf("ERROR: LINEAR ROM has no AB header\n\r");
-    000007FE 21r61r0D         [10] 1570 	ld	hl, #___str_17
-    00000801 E5               [11] 1571 	push	hl
-    00000802 CDr00r00         [17] 1572 	call	_printf
-    00000805 F1               [10] 1573 	pop	af
-                                   1574 ;smram.c:753: __asm jp 0x0000 __endasm;
-    00000806 C3 00 00         [10] 1575 	jp	0x0000 
-    00000809                       1576 00233$:
-                                   1577 ;smram.c:759: romstart = linearRomstart;
-    00000809 2Ar19r01         [16] 1578 	ld	hl, (_linearRomstart)
-    0000080C 22r17r01         [16] 1579 	ld	(_romstart), hl
-                                   1580 ;smram.c:760: if (romsize + ((ulong)loadpage << 13) > 0x10000UL)
-    0000080F 3Ar0Er00         [13] 1581 	ld	a, (_loadpage)
-    00000812 4F               [ 4] 1582 	ld	c, a
-    00000813 06 00            [ 7] 1583 	ld	b, #0x00
-    00000815 11 00 00         [10] 1584 	ld	de, #0x0000
-    00000818 53               [ 4] 1585 	ld	d, e
-    00000819 58               [ 4] 1586 	ld	e, b
-    0000081A 41               [ 4] 1587 	ld	b, c
-    0000081B 3E 05            [ 7] 1588 	ld	a, #0x05
-    0000081D                       1589 01193$:
-    0000081D CB 20            [ 8] 1590 	sla	b
-    0000081F CB 13            [ 8] 1591 	rl	e
-    00000821 CB 12            [ 8] 1592 	rl	d
-    00000823 3D               [ 4] 1593 	dec	a
-    00000824 20 F7            [12] 1594 	jr	nz, 01193$
-    00000826 3Ar12r00         [13] 1595 	ld	a, (#_romsize + 0)
-    00000829 4F               [ 4] 1596 	ld	c, a
-    0000082A 3Ar13r00         [13] 1597 	ld	a, (_romsize+1)
-    0000082D 80               [ 4] 1598 	add	a, b
-    0000082E 47               [ 4] 1599 	ld	b, a
-    0000082F 3Ar14r00         [13] 1600 	ld	a, (_romsize+2)
-    00000832 8B               [ 4] 1601 	adc	a, e
-    00000833 5F               [ 4] 1602 	ld	e, a
-    00000834 3Ar15r00         [13] 1603 	ld	a, (_romsize+3)
-    00000837 8A               [ 4] 1604 	adc	a, d
-    00000838 57               [ 4] 1605 	ld	d, a
-    00000839 AF               [ 4] 1606 	xor	a, a
-    0000083A B9               [ 4] 1607 	cp	a, c
-    0000083B 98               [ 4] 1608 	sbc	a, b
-    0000083C 21 01 00         [10] 1609 	ld	hl, #0x0001
-    0000083F ED 52            [15] 1610 	sbc	hl, de
-    00000841 30 2A            [12] 1611 	jr	nc, 00235$
-                                   1612 ;smram.c:762: enaslt(*((uchar*)RAMAD1), 0x4000);
-    00000843 3A 42 F3         [13] 1613 	ld	a, (#0xf342)
-    00000846 11 00 40         [10] 1614 	ld	de, #0x4000
-    00000849 CDr48r00         [17] 1615 	call	_enaslt
-                                   1616 ;smram.c:763: enaslt(*((uchar*)RAMAD2), 0x8000);
-    0000084C 3A 43 F3         [13] 1617 	ld	a, (#0xf343)
-    0000084F 11 00 80         [10] 1618 	ld	de, #0x8000
-    00000852 CDr48r00         [17] 1619 	call	_enaslt
-                                   1620 ;smram.c:766: (uint)((uint)loadpage << 13));
-    00000855 3Ar0Er00         [13] 1621 	ld	a, (_loadpage)
+    000007AE E6 06            [ 7] 1522 	and	a, #0x6
+    000007B0 32r0Er00         [13] 1523 	ld	(#_loadpage), a
+    000007B3                       1524 00227$:
+                                   1525 ;smram.c:733: if (!presAB && megaram_type != TYPE_LINEAR)
+    000007B3 3Ar06r00         [13] 1526 	ld	a, (_presAB+0)
+    000007B6 B7               [ 4] 1527 	or	a, a
+    000007B7 20 20            [12] 1528 	jr	nz, 00230$
+    000007B9 3Ar03r00         [13] 1529 	ld	a, (_megaram_type)
+    000007BC D6 02            [ 7] 1530 	sub	a, #0x02
+    000007BE 21r04r00         [10] 1531 	ld	hl, #_megaram_type + 1
+    000007C1 B6               [ 7] 1532 	or	a, (hl)
+    000007C2 28 15            [12] 1533 	jr	z, 00230$
+                                   1534 ;smram.c:735: MEGA_PORT0 = 0;
+    000007C4 AF               [ 4] 1535 	xor	a, a
+    000007C5 D3 8E            [11] 1536 	out	(_MEGA_PORT0), a
+                                   1537 ;smram.c:736: *((uchar*)0x4000) = 0;
+    000007C7 21 00 40         [10] 1538 	ld	hl, #0x4000
+    000007CA 36 00            [10] 1539 	ld	(hl), #0x00
+                                   1540 ;smram.c:737: b = MEGA_PORT0; (b);
+    000007CC DB 8E            [11] 1541 	in	a, (_MEGA_PORT0)
+    000007CE 32r03r00         [13] 1542 	ld	(#_b), a
+                                   1543 ;smram.c:738: *((uchar*)0x4000) = 0;
+    000007D1 21 00 40         [10] 1544 	ld	hl, #0x4000
+    000007D4 36 00            [10] 1545 	ld	(hl), #0x00
+                                   1546 ;smram.c:739: MEGA_PORT0 = 0;
+    000007D6 AF               [ 4] 1547 	xor	a, a
+    000007D7 D3 8E            [11] 1548 	out	(_MEGA_PORT0), a
+    000007D9                       1549 00230$:
+                                   1550 ;smram.c:742: if (megaram_type == TYPE_LINEAR)
+    000007D9 3Ar03r00         [13] 1551 	ld	a, (_megaram_type)
+    000007DC D6 02            [ 7] 1552 	sub	a, #0x02
+    000007DE 21r04r00         [10] 1553 	ld	hl, #_megaram_type + 1
+    000007E1 B6               [ 7] 1554 	or	a, (hl)
+    000007E2 C2rE4r08         [10] 1555 	jp	nz, 00243$
+                                   1556 ;smram.c:744: if (!linearHeaderValid)
+    000007E5 3Ar0Ar00         [13] 1557 	ld	a, (_linearHeaderValid+0)
+    000007E8 B7               [ 4] 1558 	or	a, a
+    000007E9 20 1D            [12] 1559 	jr	nz, 00233$
+                                   1560 ;smram.c:746: enaslt(*((uchar*)RAMAD1), 0x4000);
+    000007EB 3A 42 F3         [13] 1561 	ld	a, (#0xf342)
+    000007EE 11 00 40         [10] 1562 	ld	de, #0x4000
+    000007F1 CDr48r00         [17] 1563 	call	_enaslt
+                                   1564 ;smram.c:747: enaslt(*((uchar*)RAMAD2), 0x8000);
+    000007F4 3A 43 F3         [13] 1565 	ld	a, (#0xf343)
+    000007F7 11 00 80         [10] 1566 	ld	de, #0x8000
+    000007FA CDr48r00         [17] 1567 	call	_enaslt
+                                   1568 ;smram.c:749: printf("ERROR: LINEAR ROM has no AB header\n\r");
+    000007FD 21r60r0D         [10] 1569 	ld	hl, #___str_17
+    00000800 E5               [11] 1570 	push	hl
+    00000801 CDr00r00         [17] 1571 	call	_printf
+    00000804 F1               [10] 1572 	pop	af
+                                   1573 ;smram.c:751: __asm jp 0x0000 __endasm;
+    00000805 C3 00 00         [10] 1574 	jp	0x0000 
+    00000808                       1575 00233$:
+                                   1576 ;smram.c:757: romstart = linearRomstart;
+    00000808 2Ar19r01         [16] 1577 	ld	hl, (_linearRomstart)
+    0000080B 22r17r01         [16] 1578 	ld	(_romstart), hl
+                                   1579 ;smram.c:758: if (romsize + ((ulong)loadpage << 13) > 0x10000UL)
+    0000080E 3Ar0Er00         [13] 1580 	ld	a, (_loadpage)
+    00000811 4F               [ 4] 1581 	ld	c, a
+    00000812 06 00            [ 7] 1582 	ld	b, #0x00
+    00000814 11 00 00         [10] 1583 	ld	de, #0x0000
+    00000817 53               [ 4] 1584 	ld	d, e
+    00000818 58               [ 4] 1585 	ld	e, b
+    00000819 41               [ 4] 1586 	ld	b, c
+    0000081A 3E 05            [ 7] 1587 	ld	a, #0x05
+    0000081C                       1588 01193$:
+    0000081C CB 20            [ 8] 1589 	sla	b
+    0000081E CB 13            [ 8] 1590 	rl	e
+    00000820 CB 12            [ 8] 1591 	rl	d
+    00000822 3D               [ 4] 1592 	dec	a
+    00000823 20 F7            [12] 1593 	jr	nz, 01193$
+    00000825 3Ar12r00         [13] 1594 	ld	a, (#_romsize + 0)
+    00000828 4F               [ 4] 1595 	ld	c, a
+    00000829 3Ar13r00         [13] 1596 	ld	a, (_romsize+1)
+    0000082C 80               [ 4] 1597 	add	a, b
+    0000082D 47               [ 4] 1598 	ld	b, a
+    0000082E 3Ar14r00         [13] 1599 	ld	a, (_romsize+2)
+    00000831 8B               [ 4] 1600 	adc	a, e
+    00000832 5F               [ 4] 1601 	ld	e, a
+    00000833 3Ar15r00         [13] 1602 	ld	a, (_romsize+3)
+    00000836 8A               [ 4] 1603 	adc	a, d
+    00000837 57               [ 4] 1604 	ld	d, a
+    00000838 AF               [ 4] 1605 	xor	a, a
+    00000839 B9               [ 4] 1606 	cp	a, c
+    0000083A 98               [ 4] 1607 	sbc	a, b
+    0000083B 21 01 00         [10] 1608 	ld	hl, #0x0001
+    0000083E ED 52            [15] 1609 	sbc	hl, de
+    00000840 30 2A            [12] 1610 	jr	nc, 00235$
+                                   1611 ;smram.c:760: enaslt(*((uchar*)RAMAD1), 0x4000);
+    00000842 3A 42 F3         [13] 1612 	ld	a, (#0xf342)
+    00000845 11 00 40         [10] 1613 	ld	de, #0x4000
+    00000848 CDr48r00         [17] 1614 	call	_enaslt
+                                   1615 ;smram.c:761: enaslt(*((uchar*)RAMAD2), 0x8000);
+    0000084B 3A 43 F3         [13] 1616 	ld	a, (#0xf343)
+    0000084E 11 00 80         [10] 1617 	ld	de, #0x8000
+    00000851 CDr48r00         [17] 1618 	call	_enaslt
+                                   1619 ;smram.c:764: (uint)((uint)loadpage << 13));
+    00000854 3Ar0Er00         [13] 1620 	ld	a, (_loadpage)
+    00000857 0F               [ 4] 1621 	rrca
     00000858 0F               [ 4] 1622 	rrca
     00000859 0F               [ 4] 1623 	rrca
-    0000085A 0F               [ 4] 1624 	rrca
-    0000085B E6 E0            [ 7] 1625 	and	a, #0xe0
-    0000085D 57               [ 4] 1626 	ld	d, a
-    0000085E 1E 00            [ 7] 1627 	ld	e, #0x00
-                                   1628 ;smram.c:765: printf("ERROR: LINEAR ROM does not fit at 0x%04x\n\r",
-    00000860 01r86r0D         [10] 1629 	ld	bc, #___str_18+0
-    00000863 D5               [11] 1630 	push	de
-    00000864 C5               [11] 1631 	push	bc
-    00000865 CDr00r00         [17] 1632 	call	_printf
+    0000085A E6 E0            [ 7] 1624 	and	a, #0xe0
+    0000085C 57               [ 4] 1625 	ld	d, a
+    0000085D 1E 00            [ 7] 1626 	ld	e, #0x00
+                                   1627 ;smram.c:763: printf("ERROR: LINEAR ROM does not fit at 0x%04x\n\r",
+    0000085F 01r85r0D         [10] 1628 	ld	bc, #___str_18+0
+    00000862 D5               [11] 1629 	push	de
+    00000863 C5               [11] 1630 	push	bc
+    00000864 CDr00r00         [17] 1631 	call	_printf
+    00000867 F1               [10] 1632 	pop	af
     00000868 F1               [10] 1633 	pop	af
-    00000869 F1               [10] 1634 	pop	af
-                                   1635 ;smram.c:768: __asm jp 0x0000 __endasm;
-    0000086A C3 00 00         [10] 1636 	jp	0x0000 
-    0000086D                       1637 00235$:
-                                   1638 ;smram.c:775: if (!mapperSpecified && loadpage != 0)
-    0000086D 3Ar08r00         [13] 1639 	ld	a, (_mapperSpecified+0)
-    00000870 B7               [ 4] 1640 	or	a, a
-    00000871 20 72            [12] 1641 	jr	nz, 00243$
-    00000873 3Ar0Er00         [13] 1642 	ld	a, (_loadpage+0)
-    00000876 B7               [ 4] 1643 	or	a, a
-    00000877 28 6C            [12] 1644 	jr	z, 00243$
-                                   1645 ;smram.c:777: page = (uchar)((romsize + 0x1FFFUL) >> 13);
-    00000879 3Ar12r00         [13] 1646 	ld	a, (_romsize+0)
-    0000087C C6 FF            [ 7] 1647 	add	a, #0xff
-    0000087E 3Ar13r00         [13] 1648 	ld	a, (_romsize+1)
-    00000881 CE 1F            [ 7] 1649 	adc	a, #0x1f
-    00000883 57               [ 4] 1650 	ld	d, a
-    00000884 3Ar14r00         [13] 1651 	ld	a, (_romsize+2)
-    00000887 CE 00            [ 7] 1652 	adc	a, #0x00
-    00000889 4F               [ 4] 1653 	ld	c, a
-    0000088A 3Ar15r00         [13] 1654 	ld	a, (_romsize+3)
-    0000088D CE 00            [ 7] 1655 	adc	a, #0x00
-    0000088F 47               [ 4] 1656 	ld	b, a
-    00000890 7A               [ 4] 1657 	ld	a, d
-    00000891 58               [ 4] 1658 	ld	e, b
-    00000892 06 05            [ 7] 1659 	ld	b, #0x05
-    00000894                       1660 01195$:
-    00000894 CB 3B            [ 8] 1661 	srl	e
-    00000896 CB 19            [ 8] 1662 	rr	c
-    00000898 CB 1F            [ 8] 1663 	rr	a
-    0000089A 10 F8            [13] 1664 	djnz	01195$
-    0000089C 32r11r00         [13] 1665 	ld	(_page), a
-                                   1666 ;smram.c:778: while (page > 0)
-    0000089F                       1667 00236$:
-    0000089F 3Ar11r00         [13] 1668 	ld	a, (_page+0)
-    000008A2 B7               [ 4] 1669 	or	a, a
-    000008A3 28 3D            [12] 1670 	jr	z, 00238$
-                                   1671 ;smram.c:780: page--;
-    000008A5 21r11r00         [10] 1672 	ld	hl, #_page
-    000008A8 35               [11] 1673 	dec	(hl)
-                                   1674 ;smram.c:781: MEGA_PORT0 = 0;
-    000008A9 AF               [ 4] 1675 	xor	a, a
-    000008AA D3 8E            [11] 1676 	out	(_MEGA_PORT0), a
-                                   1677 ;smram.c:782: *((uchar*)0x4000) = page;
-    000008AC 21 00 40         [10] 1678 	ld	hl, #0x4000
-    000008AF 3Ar11r00         [13] 1679 	ld	a, (_page)
-    000008B2 77               [ 7] 1680 	ld	(hl), a
-                                   1681 ;smram.c:783: b = MEGA_PORT0; (b);
-    000008B3 DB 8E            [11] 1682 	in	a, (_MEGA_PORT0)
-    000008B5 32r03r00         [13] 1683 	ld	(#_b), a
-                                   1684 ;smram.c:784: memcpy((void*)0x8000, (void*)0x4000, 0x2000);
-    000008B8 11 00 80         [10] 1685 	ld	de, #0x8000
-    000008BB 21 00 40         [10] 1686 	ld	hl, #0x4000
-    000008BE 01 00 20         [10] 1687 	ld	bc, #0x2000
-    000008C1 ED B0            [21] 1688 	ldir
-                                   1689 ;smram.c:786: MEGA_PORT0 = 0;
-    000008C3 AF               [ 4] 1690 	xor	a, a
-    000008C4 D3 8E            [11] 1691 	out	(_MEGA_PORT0), a
-                                   1692 ;smram.c:787: *((uchar*)0x4000) = loadpage + page;
-    000008C6 21r11r00         [10] 1693 	ld	hl, #_page
-    000008C9 3Ar0Er00         [13] 1694 	ld	a, (_loadpage+0)
-    000008CC 86               [ 7] 1695 	add	a, (hl)
-    000008CD 32 00 40         [13] 1696 	ld	(#0x4000), a
-                                   1697 ;smram.c:788: b = MEGA_PORT0; (b);
-    000008D0 DB 8E            [11] 1698 	in	a, (_MEGA_PORT0)
-    000008D2 32r03r00         [13] 1699 	ld	(#_b), a
-                                   1700 ;smram.c:789: memcpy((void*)0x4000, (void*)0x8000, 0x2000);
-    000008D5 11 00 40         [10] 1701 	ld	de, #0x4000
-    000008D8 21 00 80         [10] 1702 	ld	hl, #0x8000
-    000008DB 01 00 20         [10] 1703 	ld	bc, #0x2000
-    000008DE ED B0            [21] 1704 	ldir
-    000008E0 18 BD            [12] 1705 	jr	00236$
-    000008E2                       1706 00238$:
-                                   1707 ;smram.c:791: MEGA_PORT0 = 0;
-    000008E2 AF               [ 4] 1708 	xor	a, a
-    000008E3 D3 8E            [11] 1709 	out	(_MEGA_PORT0), a
-    000008E5                       1710 00243$:
-                                   1711 ;smram.c:795: print_mapper_type();
-    000008E5 CDr62r01         [17] 1712 	call	_print_mapper_type
-                                   1713 ;smram.c:796: MEGA_PORT1 = megaram_type;
-    000008E8 3Ar03r00         [13] 1714 	ld	a, (_megaram_type+0)
-    000008EB D3 8F            [11] 1715 	out	(_MEGA_PORT1), a
-                                   1716 ;smram.c:798: if (exitAfterLoad)
-    000008ED 3Ar0Br00         [13] 1717 	ld	a, (_exitAfterLoad+0)
-    000008F0 B7               [ 4] 1718 	or	a, a
-    000008F1 28 1D            [12] 1719 	jr	z, 00245$
-                                   1720 ;smram.c:803: enaslt(*((uchar*)RAMAD1), 0x4000);
-    000008F3 3A 42 F3         [13] 1721 	ld	a, (#0xf342)
-    000008F6 11 00 40         [10] 1722 	ld	de, #0x4000
-    000008F9 CDr48r00         [17] 1723 	call	_enaslt
-                                   1724 ;smram.c:804: enaslt(*((uchar*)RAMAD2), 0x8000);
-    000008FC 3A 43 F3         [13] 1725 	ld	a, (#0xf343)
-    000008FF 11 00 80         [10] 1726 	ld	de, #0x8000
-    00000902 CDr48r00         [17] 1727 	call	_enaslt
-                                   1728 ;smram.c:805: printf("\n\rROM loaded; returning to DOS.\n\r");
-    00000905 21rB1r0D         [10] 1729 	ld	hl, #___str_19
-    00000908 E5               [11] 1730 	push	hl
-    00000909 CDr00r00         [17] 1731 	call	_printf
-    0000090C F1               [10] 1732 	pop	af
-                                   1733 ;smram.c:806: __asm jp 0x0000 __endasm;
-    0000090D C3 00 00         [10] 1734 	jp	0x0000 
-    00000910                       1735 00245$:
-                                   1736 ;smram.c:810: startpage = (uchar)(romstart >> 14);
-    00000910 3Ar18r01         [13] 1737 	ld	a, (_romstart+1)
+                                   1634 ;smram.c:766: __asm jp 0x0000 __endasm;
+    00000869 C3 00 00         [10] 1635 	jp	0x0000 
+    0000086C                       1636 00235$:
+                                   1637 ;smram.c:773: if (!mapperSpecified && loadpage != 0)
+    0000086C 3Ar08r00         [13] 1638 	ld	a, (_mapperSpecified+0)
+    0000086F B7               [ 4] 1639 	or	a, a
+    00000870 20 72            [12] 1640 	jr	nz, 00243$
+    00000872 3Ar0Er00         [13] 1641 	ld	a, (_loadpage+0)
+    00000875 B7               [ 4] 1642 	or	a, a
+    00000876 28 6C            [12] 1643 	jr	z, 00243$
+                                   1644 ;smram.c:775: page = (uchar)((romsize + 0x1FFFUL) >> 13);
+    00000878 3Ar12r00         [13] 1645 	ld	a, (_romsize+0)
+    0000087B C6 FF            [ 7] 1646 	add	a, #0xff
+    0000087D 3Ar13r00         [13] 1647 	ld	a, (_romsize+1)
+    00000880 CE 1F            [ 7] 1648 	adc	a, #0x1f
+    00000882 57               [ 4] 1649 	ld	d, a
+    00000883 3Ar14r00         [13] 1650 	ld	a, (_romsize+2)
+    00000886 CE 00            [ 7] 1651 	adc	a, #0x00
+    00000888 4F               [ 4] 1652 	ld	c, a
+    00000889 3Ar15r00         [13] 1653 	ld	a, (_romsize+3)
+    0000088C CE 00            [ 7] 1654 	adc	a, #0x00
+    0000088E 47               [ 4] 1655 	ld	b, a
+    0000088F 7A               [ 4] 1656 	ld	a, d
+    00000890 58               [ 4] 1657 	ld	e, b
+    00000891 06 05            [ 7] 1658 	ld	b, #0x05
+    00000893                       1659 01195$:
+    00000893 CB 3B            [ 8] 1660 	srl	e
+    00000895 CB 19            [ 8] 1661 	rr	c
+    00000897 CB 1F            [ 8] 1662 	rr	a
+    00000899 10 F8            [13] 1663 	djnz	01195$
+    0000089B 32r11r00         [13] 1664 	ld	(_page), a
+                                   1665 ;smram.c:776: while (page > 0)
+    0000089E                       1666 00236$:
+    0000089E 3Ar11r00         [13] 1667 	ld	a, (_page+0)
+    000008A1 B7               [ 4] 1668 	or	a, a
+    000008A2 28 3D            [12] 1669 	jr	z, 00238$
+                                   1670 ;smram.c:778: page--;
+    000008A4 21r11r00         [10] 1671 	ld	hl, #_page
+    000008A7 35               [11] 1672 	dec	(hl)
+                                   1673 ;smram.c:779: MEGA_PORT0 = 0;
+    000008A8 AF               [ 4] 1674 	xor	a, a
+    000008A9 D3 8E            [11] 1675 	out	(_MEGA_PORT0), a
+                                   1676 ;smram.c:780: *((uchar*)0x4000) = page;
+    000008AB 21 00 40         [10] 1677 	ld	hl, #0x4000
+    000008AE 3Ar11r00         [13] 1678 	ld	a, (_page)
+    000008B1 77               [ 7] 1679 	ld	(hl), a
+                                   1680 ;smram.c:781: b = MEGA_PORT0; (b);
+    000008B2 DB 8E            [11] 1681 	in	a, (_MEGA_PORT0)
+    000008B4 32r03r00         [13] 1682 	ld	(#_b), a
+                                   1683 ;smram.c:782: memcpy((void*)0x8000, (void*)0x4000, 0x2000);
+    000008B7 11 00 80         [10] 1684 	ld	de, #0x8000
+    000008BA 21 00 40         [10] 1685 	ld	hl, #0x4000
+    000008BD 01 00 20         [10] 1686 	ld	bc, #0x2000
+    000008C0 ED B0            [21] 1687 	ldir
+                                   1688 ;smram.c:784: MEGA_PORT0 = 0;
+    000008C2 AF               [ 4] 1689 	xor	a, a
+    000008C3 D3 8E            [11] 1690 	out	(_MEGA_PORT0), a
+                                   1691 ;smram.c:785: *((uchar*)0x4000) = loadpage + page;
+    000008C5 21r11r00         [10] 1692 	ld	hl, #_page
+    000008C8 3Ar0Er00         [13] 1693 	ld	a, (_loadpage+0)
+    000008CB 86               [ 7] 1694 	add	a, (hl)
+    000008CC 32 00 40         [13] 1695 	ld	(#0x4000), a
+                                   1696 ;smram.c:786: b = MEGA_PORT0; (b);
+    000008CF DB 8E            [11] 1697 	in	a, (_MEGA_PORT0)
+    000008D1 32r03r00         [13] 1698 	ld	(#_b), a
+                                   1699 ;smram.c:787: memcpy((void*)0x4000, (void*)0x8000, 0x2000);
+    000008D4 11 00 40         [10] 1700 	ld	de, #0x4000
+    000008D7 21 00 80         [10] 1701 	ld	hl, #0x8000
+    000008DA 01 00 20         [10] 1702 	ld	bc, #0x2000
+    000008DD ED B0            [21] 1703 	ldir
+    000008DF 18 BD            [12] 1704 	jr	00236$
+    000008E1                       1705 00238$:
+                                   1706 ;smram.c:789: MEGA_PORT0 = 0;
+    000008E1 AF               [ 4] 1707 	xor	a, a
+    000008E2 D3 8E            [11] 1708 	out	(_MEGA_PORT0), a
+    000008E4                       1709 00243$:
+                                   1710 ;smram.c:793: print_mapper_type();
+    000008E4 CDr61r01         [17] 1711 	call	_print_mapper_type
+                                   1712 ;smram.c:794: MEGA_PORT1 = megaram_type;
+    000008E7 3Ar03r00         [13] 1713 	ld	a, (_megaram_type+0)
+    000008EA D3 8F            [11] 1714 	out	(_MEGA_PORT1), a
+                                   1715 ;smram.c:796: if (exitAfterLoad)
+    000008EC 3Ar0Br00         [13] 1716 	ld	a, (_exitAfterLoad+0)
+    000008EF B7               [ 4] 1717 	or	a, a
+    000008F0 28 1D            [12] 1718 	jr	z, 00245$
+                                   1719 ;smram.c:801: enaslt(*((uchar*)RAMAD1), 0x4000);
+    000008F2 3A 42 F3         [13] 1720 	ld	a, (#0xf342)
+    000008F5 11 00 40         [10] 1721 	ld	de, #0x4000
+    000008F8 CDr48r00         [17] 1722 	call	_enaslt
+                                   1723 ;smram.c:802: enaslt(*((uchar*)RAMAD2), 0x8000);
+    000008FB 3A 43 F3         [13] 1724 	ld	a, (#0xf343)
+    000008FE 11 00 80         [10] 1725 	ld	de, #0x8000
+    00000901 CDr48r00         [17] 1726 	call	_enaslt
+                                   1727 ;smram.c:803: printf("\n\rROM loaded; returning to DOS.\n\r");
+    00000904 21rB0r0D         [10] 1728 	ld	hl, #___str_19
+    00000907 E5               [11] 1729 	push	hl
+    00000908 CDr00r00         [17] 1730 	call	_printf
+    0000090B F1               [10] 1731 	pop	af
+                                   1732 ;smram.c:804: __asm jp 0x0000 __endasm;
+    0000090C C3 00 00         [10] 1733 	jp	0x0000 
+    0000090F                       1734 00245$:
+                                   1735 ;smram.c:808: startpage = (uchar)(romstart >> 14);
+    0000090F 3Ar18r01         [13] 1736 	ld	a, (_romstart+1)
+    00000912 07               [ 4] 1737 	rlca
     00000913 07               [ 4] 1738 	rlca
-    00000914 07               [ 4] 1739 	rlca
-    00000915 E6 03            [ 7] 1740 	and	a, #0x03
-    00000917 32r0Dr00         [13] 1741 	ld	(_startpage), a
-                                   1742 ;smram.c:811: if (megaram_type == TYPE_LINEAR)
-    0000091A 3Ar03r00         [13] 1743 	ld	a, (_megaram_type)
-    0000091D D6 02            [ 7] 1744 	sub	a, #0x02
-    0000091F 21r04r00         [10] 1745 	ld	hl, #_megaram_type + 1
-    00000922 B6               [ 7] 1746 	or	a, (hl)
-    00000923 20 2C            [12] 1747 	jr	nz, 00254$
-                                   1748 ;smram.c:816: enaslt(*((uchar*)BASICSLT), 0x4000);
-    00000925 3A C2 FC         [13] 1749 	ld	a, (#0xfcc2)
-    00000928 11 00 40         [10] 1750 	ld	de, #0x4000
-    0000092B CDr48r00         [17] 1751 	call	_enaslt
-                                   1752 ;smram.c:817: if (startpage == 1)
-    0000092E 3Ar0Dr00         [13] 1753 	ld	a, (_startpage)
-    00000931 3D               [ 4] 1754 	dec	a
-    00000932 20 0B            [12] 1755 	jr	nz, 00249$
-                                   1756 ;smram.c:818: enaslt(sslt, 0x4000);
-    00000934 11 00 40         [10] 1757 	ld	de, #0x4000
-    00000937 3Ar02r00         [13] 1758 	ld	a, (_sslt)
-    0000093A CDr48r00         [17] 1759 	call	_enaslt
-    0000093D 18 2B            [12] 1760 	jr	00255$
-    0000093F                       1761 00249$:
-                                   1762 ;smram.c:819: else if (startpage == 2)
-    0000093F 3Ar0Dr00         [13] 1763 	ld	a, (_startpage)
-    00000942 D6 02            [ 7] 1764 	sub	a, #0x02
-    00000944 20 24            [12] 1765 	jr	nz, 00255$
-                                   1766 ;smram.c:820: enaslt(sslt, 0x8000);
-    00000946 11 00 80         [10] 1767 	ld	de, #0x8000
-    00000949 3Ar02r00         [13] 1768 	ld	a, (_sslt)
-    0000094C CDr48r00         [17] 1769 	call	_enaslt
-    0000094F 18 19            [12] 1770 	jr	00255$
-    00000951                       1771 00254$:
-                                   1772 ;smram.c:824: enaslt(sslt, 0x4000);
-    00000951 11 00 40         [10] 1773 	ld	de, #0x4000
-    00000954 3Ar02r00         [13] 1774 	ld	a, (_sslt)
-    00000957 CDr48r00         [17] 1775 	call	_enaslt
-                                   1776 ;smram.c:825: if (startpage >= 2)
-    0000095A 3Ar0Dr00         [13] 1777 	ld	a, (_startpage+0)
-    0000095D D6 02            [ 7] 1778 	sub	a, #0x02
-    0000095F 38 09            [12] 1779 	jr	c, 00255$
-                                   1780 ;smram.c:826: enaslt(sslt, 0x8000);
-    00000961 11 00 80         [10] 1781 	ld	de, #0x8000
-    00000964 3Ar02r00         [13] 1782 	ld	a, (_sslt)
-    00000967 CDr48r00         [17] 1783 	call	_enaslt
-    0000096A                       1784 00255$:
-                                   1785 ;smram.c:828: printf("\n\r\n\rStart address: 0x%04x (page %d)\n\r", romstart, (int)startpage);
-    0000096A 3Ar0Dr00         [13] 1786 	ld	a, (_startpage)
-    0000096D 4F               [ 4] 1787 	ld	c, a
-    0000096E 06 00            [ 7] 1788 	ld	b, #0x00
-    00000970 C5               [11] 1789 	push	bc
-    00000971 2Ar17r01         [16] 1790 	ld	hl, (_romstart)
-    00000974 E5               [11] 1791 	push	hl
-    00000975 21rD3r0D         [10] 1792 	ld	hl, #___str_20
-    00000978 E5               [11] 1793 	push	hl
-    00000979 CDr00r00         [17] 1794 	call	_printf
+    00000914 E6 03            [ 7] 1739 	and	a, #0x03
+    00000916 32r0Dr00         [13] 1740 	ld	(_startpage), a
+                                   1741 ;smram.c:809: if (megaram_type == TYPE_LINEAR)
+    00000919 3Ar03r00         [13] 1742 	ld	a, (_megaram_type)
+    0000091C D6 02            [ 7] 1743 	sub	a, #0x02
+    0000091E 21r04r00         [10] 1744 	ld	hl, #_megaram_type + 1
+    00000921 B6               [ 7] 1745 	or	a, (hl)
+    00000922 20 2C            [12] 1746 	jr	nz, 00254$
+                                   1747 ;smram.c:814: enaslt(*((uchar*)BASICSLT), 0x4000);
+    00000924 3A C2 FC         [13] 1748 	ld	a, (#0xfcc2)
+    00000927 11 00 40         [10] 1749 	ld	de, #0x4000
+    0000092A CDr48r00         [17] 1750 	call	_enaslt
+                                   1751 ;smram.c:815: if (startpage == 1)
+    0000092D 3Ar0Dr00         [13] 1752 	ld	a, (_startpage)
+    00000930 3D               [ 4] 1753 	dec	a
+    00000931 20 0B            [12] 1754 	jr	nz, 00249$
+                                   1755 ;smram.c:816: enaslt(sslt, 0x4000);
+    00000933 11 00 40         [10] 1756 	ld	de, #0x4000
+    00000936 3Ar02r00         [13] 1757 	ld	a, (_sslt)
+    00000939 CDr48r00         [17] 1758 	call	_enaslt
+    0000093C 18 2B            [12] 1759 	jr	00255$
+    0000093E                       1760 00249$:
+                                   1761 ;smram.c:817: else if (startpage == 2)
+    0000093E 3Ar0Dr00         [13] 1762 	ld	a, (_startpage)
+    00000941 D6 02            [ 7] 1763 	sub	a, #0x02
+    00000943 20 24            [12] 1764 	jr	nz, 00255$
+                                   1765 ;smram.c:818: enaslt(sslt, 0x8000);
+    00000945 11 00 80         [10] 1766 	ld	de, #0x8000
+    00000948 3Ar02r00         [13] 1767 	ld	a, (_sslt)
+    0000094B CDr48r00         [17] 1768 	call	_enaslt
+    0000094E 18 19            [12] 1769 	jr	00255$
+    00000950                       1770 00254$:
+                                   1771 ;smram.c:822: enaslt(sslt, 0x4000);
+    00000950 11 00 40         [10] 1772 	ld	de, #0x4000
+    00000953 3Ar02r00         [13] 1773 	ld	a, (_sslt)
+    00000956 CDr48r00         [17] 1774 	call	_enaslt
+                                   1775 ;smram.c:823: if (startpage >= 2)
+    00000959 3Ar0Dr00         [13] 1776 	ld	a, (_startpage+0)
+    0000095C D6 02            [ 7] 1777 	sub	a, #0x02
+    0000095E 38 09            [12] 1778 	jr	c, 00255$
+                                   1779 ;smram.c:824: enaslt(sslt, 0x8000);
+    00000960 11 00 80         [10] 1780 	ld	de, #0x8000
+    00000963 3Ar02r00         [13] 1781 	ld	a, (_sslt)
+    00000966 CDr48r00         [17] 1782 	call	_enaslt
+    00000969                       1783 00255$:
+                                   1784 ;smram.c:826: printf("\n\r\n\rStart address: 0x%04x (page %d)\n\r", romstart, (int)startpage);
+    00000969 3Ar0Dr00         [13] 1785 	ld	a, (_startpage)
+    0000096C 4F               [ 4] 1786 	ld	c, a
+    0000096D 06 00            [ 7] 1787 	ld	b, #0x00
+    0000096F C5               [11] 1788 	push	bc
+    00000970 2Ar17r01         [16] 1789 	ld	hl, (_romstart)
+    00000973 E5               [11] 1790 	push	hl
+    00000974 21rD2r0D         [10] 1791 	ld	hl, #___str_20
+    00000977 E5               [11] 1792 	push	hl
+    00000978 CDr00r00         [17] 1793 	call	_printf
+    0000097B F1               [10] 1794 	pop	af
     0000097C F1               [10] 1795 	pop	af
     0000097D F1               [10] 1796 	pop	af
-    0000097E F1               [10] 1797 	pop	af
-                                   1798 ;smram.c:830: switch(megaram_type)
-    0000097F 3Ar03r00         [13] 1799 	ld	a, (_megaram_type)
-    00000982 D6 04            [ 7] 1800 	sub	a, #0x04
-    00000984 FD 21r03r00      [14] 1801 	ld	iy, #_megaram_type
-    00000988 FD B6 01         [19] 1802 	or	a, 1 (iy)
-    0000098B 28 20            [12] 1803 	jr	z, 00257$
-    0000098D 3Ar03r00         [13] 1804 	ld	a, (_megaram_type+0)
-    00000990 D6 05            [ 7] 1805 	sub	a, #0x05
-    00000992 FD B6 01         [19] 1806 	or	a, 1 (iy)
-    00000995 28 16            [12] 1807 	jr	z, 00257$
-    00000997 3Ar03r00         [13] 1808 	ld	a, (_megaram_type+0)
-    0000099A D6 08            [ 7] 1809 	sub	a, #0x08
-    0000099C FD B6 01         [19] 1810 	or	a, 1 (iy)
-    0000099F 28 38            [12] 1811 	jr	z, 00263$
-    000009A1 3Ar03r00         [13] 1812 	ld	a, (_megaram_type+0)
-    000009A4 D6 16            [ 7] 1813 	sub	a, #0x16
-    000009A6 FD B6 01         [19] 1814 	or	a, 1 (iy)
-    000009A9 28 1C            [12] 1815 	jr	z, 00260$
-    000009AB 18 44            [12] 1816 	jr	00267$
-                                   1817 ;smram.c:833: case TYPE_K5:
-    000009AD                       1818 00257$:
-                                   1819 ;smram.c:834: *((uchar *)0x4000) = 0;
-    000009AD 21 00 40         [10] 1820 	ld	hl, #0x4000
-    000009B0 36 00            [10] 1821 	ld	(hl), #0x00
-                                   1822 ;smram.c:835: *((uchar *)0x6000) = 1;
-    000009B2 26 60            [ 7] 1823 	ld	h, #0x60
-    000009B4 36 01            [10] 1824 	ld	(hl), #0x01
-                                   1825 ;smram.c:836: if (startpage >= 2)
-    000009B6 3Ar0Dr00         [13] 1826 	ld	a, (_startpage+0)
-    000009B9 D6 02            [ 7] 1827 	sub	a, #0x02
-    000009BB 38 34            [12] 1828 	jr	c, 00267$
-                                   1829 ;smram.c:838: *((uchar *)0x8000) = 0;
-    000009BD 26 80            [ 7] 1830 	ld	h, #0x80
-    000009BF 36 00            [10] 1831 	ld	(hl), #0x00
-                                   1832 ;smram.c:839: *((uchar *)0xA000) = 1;
-    000009C1 26 A0            [ 7] 1833 	ld	h, #0xa0
-    000009C3 36 01            [10] 1834 	ld	(hl), #0x01
-                                   1835 ;smram.c:841: break;
-    000009C5 18 2A            [12] 1836 	jr	00267$
-                                   1837 ;smram.c:842: case TYPE_A16:
-    000009C7                       1838 00260$:
-                                   1839 ;smram.c:843: *((uchar *)0x6000) = 0;
-    000009C7 21 00 60         [10] 1840 	ld	hl, #0x6000
-    000009CA 36 00            [10] 1841 	ld	(hl), #0x00
-                                   1842 ;smram.c:844: if (startpage >= 2)
-    000009CC 3Ar0Dr00         [13] 1843 	ld	a, (_startpage+0)
-    000009CF D6 02            [ 7] 1844 	sub	a, #0x02
-    000009D1 38 1E            [12] 1845 	jr	c, 00267$
-                                   1846 ;smram.c:845: *((uchar *)0x8000) = 0;
-    000009D3 26 80            [ 7] 1847 	ld	h, #0x80
-    000009D5 36 00            [10] 1848 	ld	(hl), #0x00
-                                   1849 ;smram.c:846: break;
-    000009D7 18 18            [12] 1850 	jr	00267$
-                                   1851 ;smram.c:847: case TYPE_A8:
-    000009D9                       1852 00263$:
-                                   1853 ;smram.c:848: *((uchar *)0x6000) = 0;
-    000009D9 21 00 60         [10] 1854 	ld	hl, #0x6000
-    000009DC 36 00            [10] 1855 	ld	(hl), #0x00
-                                   1856 ;smram.c:849: *((uchar *)0x6800) = 1;
-    000009DE 26 68            [ 7] 1857 	ld	h, #0x68
-    000009E0 36 01            [10] 1858 	ld	(hl), #0x01
-                                   1859 ;smram.c:850: if (startpage >= 2)
-    000009E2 3Ar0Dr00         [13] 1860 	ld	a, (_startpage+0)
-    000009E5 D6 02            [ 7] 1861 	sub	a, #0x02
-    000009E7 38 08            [12] 1862 	jr	c, 00267$
-                                   1863 ;smram.c:852: *((uchar *)0x7000) = 0;
-    000009E9 26 70            [ 7] 1864 	ld	h, #0x70
-    000009EB 36 00            [10] 1865 	ld	(hl), #0x00
-                                   1866 ;smram.c:853: *((uchar *)0x7800) = 1;
-    000009ED 26 78            [ 7] 1867 	ld	h, #0x78
-    000009EF 36 01            [10] 1868 	ld	(hl), #0x01
-                                   1869 ;smram.c:858: }
-    000009F1                       1870 00267$:
-                                   1871 ;smram.c:860: if (cpumode != 0)
-    000009F1 3Ar0Cr00         [13] 1872 	ld	a, (_cpumode+0)
-    000009F4 B7               [ 4] 1873 	or	a, a
-    000009F5 28 14            [12] 1874 	jr	z, 00269$
-                                   1875 ;smram.c:861: chgcpu(cpumode == 1 ? Z80_ROM : cpumode == 2 ? R800_ROM : R800_DRAM);
-    000009F7 3Ar0Cr00         [13] 1876 	ld	a, (_cpumode)
-    000009FA 3D               [ 4] 1877 	dec	a
-    000009FB 28 0B            [12] 1878 	jr	z, 00299$
-    000009FD 3Ar0Cr00         [13] 1879 	ld	a, (_cpumode)
-    00000A00 D6 02            [ 7] 1880 	sub	a, #0x02
-    00000A02 3E 81            [ 7] 1881 	ld	a, #0x81
-    00000A04 28 02            [12] 1882 	jr	z, 00301$
-    00000A06 3E 82            [ 7] 1883 	ld	a, #0x82
-    00000A08                       1884 00301$:
-    00000A08                       1885 00299$:
-    00000A08 CDr67r00         [17] 1886 	call	_chgcpu
-    00000A0B                       1887 00269$:
-                                   1888 ;smram.c:863: if (softReset == FALSE)
-    00000A0B 3Ar07r00         [13] 1889 	ld	a, (_softReset+0)
-    00000A0E B7               [ 4] 1890 	or	a, a
-    00000A0F C2rAEr0A         [10] 1891 	jp	nz, 00282$
-                                   1892 ;smram.c:865: if (megaram_type == TYPE_LINEAR && startpage == 0)
-    00000A12 3Ar03r00         [13] 1893 	ld	a, (_megaram_type)
-    00000A15 D6 02            [ 7] 1894 	sub	a, #0x02
-    00000A17 21r04r00         [10] 1895 	ld	hl, #_megaram_type + 1
-    00000A1A B6               [ 7] 1896 	or	a, (hl)
-    00000A1B 3E 01            [ 7] 1897 	ld	a, #0x01
-    00000A1D 28 01            [12] 1898 	jr	z, 01212$
-    00000A1F AF               [ 4] 1899 	xor	a, a
-    00000A20                       1900 01212$:
-    00000A20 4F               [ 4] 1901 	ld	c, a
-    00000A21 B7               [ 4] 1902 	or	a, a
-    00000A22 28 20            [12] 1903 	jr	z, 00278$
-    00000A24 3Ar0Dr00         [13] 1904 	ld	a, (_startpage+0)
-    00000A27 B7               [ 4] 1905 	or	a, a
-    00000A28 20 1A            [12] 1906 	jr	nz, 00278$
-                                   1907 ;smram.c:866: memcpy((void*)0xC000, &runROM_page0, ((uint)&runROM_page0_end - (uint)&runROM_page0));
-    00000A2A 21rF3r00         [10] 1908 	ld	hl, #_runROM_page0
-    00000A2D 01r11r01         [10] 1909 	ld	bc, #_runROM_page0_end
-    00000A30 11rF3r00         [10] 1910 	ld	de, #_runROM_page0
-    00000A33 79               [ 4] 1911 	ld	a, c
-    00000A34 93               [ 4] 1912 	sub	a, e
-    00000A35 4F               [ 4] 1913 	ld	c, a
-    00000A36 78               [ 4] 1914 	ld	a, b
-    00000A37 9A               [ 4] 1915 	sbc	a, d
-    00000A38 47               [ 4] 1916 	ld	b, a
-    00000A39 11 00 C0         [10] 1917 	ld	de, #0xc000
-    00000A3C 78               [ 4] 1918 	ld	a, b
-    00000A3D B1               [ 4] 1919 	or	a, c
-    00000A3E 28 68            [12] 1920 	jr	z, 00279$
-    00000A40 ED B0            [21] 1921 	ldir
-    00000A42 18 64            [12] 1922 	jr	00279$
-    00000A44                       1923 00278$:
-                                   1924 ;smram.c:867: else if (megaram_type == TYPE_LINEAR && startpage == 3)
-    00000A44 79               [ 4] 1925 	ld	a, c
-    00000A45 B7               [ 4] 1926 	or	a, a
-    00000A46 28 27            [12] 1927 	jr	z, 00274$
-    00000A48 3Ar0Dr00         [13] 1928 	ld	a, (_startpage)
-    00000A4B D6 03            [ 7] 1929 	sub	a, #0x03
-    00000A4D 20 20            [12] 1930 	jr	nz, 00274$
-                                   1931 ;smram.c:869: memcpy((void*)0x8000, &runROM_page3, ((uint)&runROM_page3_end - (uint)&runROM_page3));
-    00000A4F 21r2Cr01         [10] 1932 	ld	hl, #_runROM_page3
-    00000A52 01r48r01         [10] 1933 	ld	bc, #_runROM_page3_end
-    00000A55 11r2Cr01         [10] 1934 	ld	de, #_runROM_page3
-    00000A58 79               [ 4] 1935 	ld	a, c
-    00000A59 93               [ 4] 1936 	sub	a, e
-    00000A5A 4F               [ 4] 1937 	ld	c, a
-    00000A5B 78               [ 4] 1938 	ld	a, b
-    00000A5C 9A               [ 4] 1939 	sbc	a, d
-    00000A5D 47               [ 4] 1940 	ld	b, a
-    00000A5E 11 00 80         [10] 1941 	ld	de, #0x8000
-    00000A61 78               [ 4] 1942 	ld	a, b
-    00000A62 B1               [ 4] 1943 	or	a, c
-    00000A63 28 02            [12] 1944 	jr	z, 01216$
-    00000A65 ED B0            [21] 1945 	ldir
-    00000A67                       1946 01216$:
-                                   1947 ;smram.c:870: jump(0x8000);
-    00000A67 21 00 80         [10] 1948 	ld	hl, #0x8000
-    00000A6A CDrD3r00         [17] 1949 	call	_jump
-    00000A6D 18 39            [12] 1950 	jr	00279$
-    00000A6F                       1951 00274$:
-                                   1952 ;smram.c:872: else if (startpage >= 2)
-    00000A6F 3Ar0Dr00         [13] 1953 	ld	a, (_startpage+0)
-    00000A72 D6 02            [ 7] 1954 	sub	a, #0x02
-    00000A74 38 1A            [12] 1955 	jr	c, 00271$
-                                   1956 ;smram.c:873: memcpy((void*)0xC000, &runROM_page2, ((uint)&runROM_page2_end - (uint)&runROM_page2));
-    00000A76 21r11r01         [10] 1957 	ld	hl, #_runROM_page2
-    00000A79 01r2Cr01         [10] 1958 	ld	bc, #_runROM_page2_end
-    00000A7C 11r11r01         [10] 1959 	ld	de, #_runROM_page2
-    00000A7F 79               [ 4] 1960 	ld	a, c
-    00000A80 93               [ 4] 1961 	sub	a, e
-    00000A81 4F               [ 4] 1962 	ld	c, a
-    00000A82 78               [ 4] 1963 	ld	a, b
-    00000A83 9A               [ 4] 1964 	sbc	a, d
-    00000A84 47               [ 4] 1965 	ld	b, a
-    00000A85 11 00 C0         [10] 1966 	ld	de, #0xc000
-    00000A88 78               [ 4] 1967 	ld	a, b
-    00000A89 B1               [ 4] 1968 	or	a, c
-    00000A8A 28 1C            [12] 1969 	jr	z, 00279$
-    00000A8C ED B0            [21] 1970 	ldir
-    00000A8E 18 18            [12] 1971 	jr	00279$
-    00000A90                       1972 00271$:
-                                   1973 ;smram.c:875: memcpy((void*)0xC000, &runROM_page1, ((uint)&runROM_page1_end - (uint)&runROM_page1));
-    00000A90 21rD8r00         [10] 1974 	ld	hl, #_runROM_page1
-    00000A93 01rF3r00         [10] 1975 	ld	bc, #_runROM_page1_end
-    00000A96 11rD8r00         [10] 1976 	ld	de, #_runROM_page1
-    00000A99 79               [ 4] 1977 	ld	a, c
-    00000A9A 93               [ 4] 1978 	sub	a, e
-    00000A9B 4F               [ 4] 1979 	ld	c, a
-    00000A9C 78               [ 4] 1980 	ld	a, b
-    00000A9D 9A               [ 4] 1981 	sbc	a, d
-    00000A9E 47               [ 4] 1982 	ld	b, a
-    00000A9F 11 00 C0         [10] 1983 	ld	de, #0xc000
-    00000AA2 78               [ 4] 1984 	ld	a, b
-    00000AA3 B1               [ 4] 1985 	or	a, c
-    00000AA4 28 02            [12] 1986 	jr	z, 01218$
-    00000AA6 ED B0            [21] 1987 	ldir
-    00000AA8                       1988 01218$:
-    00000AA8                       1989 00279$:
-                                   1990 ;smram.c:877: jump(0xC000);
-    00000AA8 21 00 C0         [10] 1991 	ld	hl, #0xc000
-    00000AAB CDrD3r00         [17] 1992 	call	_jump
-    00000AAE                       1993 00282$:
-                                   1994 ;smram.c:880: memcpy((void*)0xC000, &runROM_Reset, ((uint)&runROM_Reset_end - (uint)&runROM_Reset));
-    00000AAE 21r48r01         [10] 1995 	ld	hl, #_runROM_Reset
-    00000AB1 01r62r01         [10] 1996 	ld	bc, #_runROM_Reset_end
-    00000AB4 11r48r01         [10] 1997 	ld	de, #_runROM_Reset
-    00000AB7 79               [ 4] 1998 	ld	a, c
-    00000AB8 93               [ 4] 1999 	sub	a, e
-    00000AB9 4F               [ 4] 2000 	ld	c, a
-    00000ABA 78               [ 4] 2001 	ld	a, b
-    00000ABB 9A               [ 4] 2002 	sbc	a, d
-    00000ABC 47               [ 4] 2003 	ld	b, a
-    00000ABD 11 00 C0         [10] 2004 	ld	de, #0xc000
-    00000AC0 78               [ 4] 2005 	ld	a, b
-    00000AC1 B1               [ 4] 2006 	or	a, c
-    00000AC2 28 02            [12] 2007 	jr	z, 01219$
-    00000AC4 ED B0            [21] 2008 	ldir
-    00000AC6                       2009 01219$:
-                                   2010 ;smram.c:881: jump(0xC000);
-    00000AC6 21 00 C0         [10] 2011 	ld	hl, #0xc000
-    00000AC9 CDrD3r00         [17] 2012 	call	_jump
-                                   2013 ;smram.c:883: return 1; // make sdcc happy
-    00000ACC 11 01 00         [10] 2014 	ld	de, #0x0001
-                                   2015 ;smram.c:884: }
-    00000ACF C9               [10] 2016 	ret
-    00000AD0                       2017 ___str_8:
-    00000AD0 57 6F 6E 64 65 72 54  2018 	.ascii "WonderTANG! uSD Driver"
+                                   1797 ;smram.c:828: switch(megaram_type)
+    0000097E 3Ar03r00         [13] 1798 	ld	a, (_megaram_type)
+    00000981 D6 04            [ 7] 1799 	sub	a, #0x04
+    00000983 FD 21r03r00      [14] 1800 	ld	iy, #_megaram_type
+    00000987 FD B6 01         [19] 1801 	or	a, 1 (iy)
+    0000098A 28 20            [12] 1802 	jr	z, 00257$
+    0000098C 3Ar03r00         [13] 1803 	ld	a, (_megaram_type+0)
+    0000098F D6 05            [ 7] 1804 	sub	a, #0x05
+    00000991 FD B6 01         [19] 1805 	or	a, 1 (iy)
+    00000994 28 16            [12] 1806 	jr	z, 00257$
+    00000996 3Ar03r00         [13] 1807 	ld	a, (_megaram_type+0)
+    00000999 D6 08            [ 7] 1808 	sub	a, #0x08
+    0000099B FD B6 01         [19] 1809 	or	a, 1 (iy)
+    0000099E 28 38            [12] 1810 	jr	z, 00263$
+    000009A0 3Ar03r00         [13] 1811 	ld	a, (_megaram_type+0)
+    000009A3 D6 16            [ 7] 1812 	sub	a, #0x16
+    000009A5 FD B6 01         [19] 1813 	or	a, 1 (iy)
+    000009A8 28 1C            [12] 1814 	jr	z, 00260$
+    000009AA 18 44            [12] 1815 	jr	00267$
+                                   1816 ;smram.c:831: case TYPE_K5:
+    000009AC                       1817 00257$:
+                                   1818 ;smram.c:832: *((uchar *)0x4000) = 0;
+    000009AC 21 00 40         [10] 1819 	ld	hl, #0x4000
+    000009AF 36 00            [10] 1820 	ld	(hl), #0x00
+                                   1821 ;smram.c:833: *((uchar *)0x6000) = 1;
+    000009B1 26 60            [ 7] 1822 	ld	h, #0x60
+    000009B3 36 01            [10] 1823 	ld	(hl), #0x01
+                                   1824 ;smram.c:834: if (startpage >= 2)
+    000009B5 3Ar0Dr00         [13] 1825 	ld	a, (_startpage+0)
+    000009B8 D6 02            [ 7] 1826 	sub	a, #0x02
+    000009BA 38 34            [12] 1827 	jr	c, 00267$
+                                   1828 ;smram.c:836: *((uchar *)0x8000) = 0;
+    000009BC 26 80            [ 7] 1829 	ld	h, #0x80
+    000009BE 36 00            [10] 1830 	ld	(hl), #0x00
+                                   1831 ;smram.c:837: *((uchar *)0xA000) = 1;
+    000009C0 26 A0            [ 7] 1832 	ld	h, #0xa0
+    000009C2 36 01            [10] 1833 	ld	(hl), #0x01
+                                   1834 ;smram.c:839: break;
+    000009C4 18 2A            [12] 1835 	jr	00267$
+                                   1836 ;smram.c:840: case TYPE_A16:
+    000009C6                       1837 00260$:
+                                   1838 ;smram.c:841: *((uchar *)0x6000) = 0;
+    000009C6 21 00 60         [10] 1839 	ld	hl, #0x6000
+    000009C9 36 00            [10] 1840 	ld	(hl), #0x00
+                                   1841 ;smram.c:842: if (startpage >= 2)
+    000009CB 3Ar0Dr00         [13] 1842 	ld	a, (_startpage+0)
+    000009CE D6 02            [ 7] 1843 	sub	a, #0x02
+    000009D0 38 1E            [12] 1844 	jr	c, 00267$
+                                   1845 ;smram.c:843: *((uchar *)0x8000) = 0;
+    000009D2 26 80            [ 7] 1846 	ld	h, #0x80
+    000009D4 36 00            [10] 1847 	ld	(hl), #0x00
+                                   1848 ;smram.c:844: break;
+    000009D6 18 18            [12] 1849 	jr	00267$
+                                   1850 ;smram.c:845: case TYPE_A8:
+    000009D8                       1851 00263$:
+                                   1852 ;smram.c:846: *((uchar *)0x6000) = 0;
+    000009D8 21 00 60         [10] 1853 	ld	hl, #0x6000
+    000009DB 36 00            [10] 1854 	ld	(hl), #0x00
+                                   1855 ;smram.c:847: *((uchar *)0x6800) = 1;
+    000009DD 26 68            [ 7] 1856 	ld	h, #0x68
+    000009DF 36 01            [10] 1857 	ld	(hl), #0x01
+                                   1858 ;smram.c:848: if (startpage >= 2)
+    000009E1 3Ar0Dr00         [13] 1859 	ld	a, (_startpage+0)
+    000009E4 D6 02            [ 7] 1860 	sub	a, #0x02
+    000009E6 38 08            [12] 1861 	jr	c, 00267$
+                                   1862 ;smram.c:850: *((uchar *)0x7000) = 0;
+    000009E8 26 70            [ 7] 1863 	ld	h, #0x70
+    000009EA 36 00            [10] 1864 	ld	(hl), #0x00
+                                   1865 ;smram.c:851: *((uchar *)0x7800) = 1;
+    000009EC 26 78            [ 7] 1866 	ld	h, #0x78
+    000009EE 36 01            [10] 1867 	ld	(hl), #0x01
+                                   1868 ;smram.c:856: }
+    000009F0                       1869 00267$:
+                                   1870 ;smram.c:858: if (cpumode != 0)
+    000009F0 3Ar0Cr00         [13] 1871 	ld	a, (_cpumode+0)
+    000009F3 B7               [ 4] 1872 	or	a, a
+    000009F4 28 14            [12] 1873 	jr	z, 00269$
+                                   1874 ;smram.c:859: chgcpu(cpumode == 1 ? Z80_ROM : cpumode == 2 ? R800_ROM : R800_DRAM);
+    000009F6 3Ar0Cr00         [13] 1875 	ld	a, (_cpumode)
+    000009F9 3D               [ 4] 1876 	dec	a
+    000009FA 28 0B            [12] 1877 	jr	z, 00299$
+    000009FC 3Ar0Cr00         [13] 1878 	ld	a, (_cpumode)
+    000009FF D6 02            [ 7] 1879 	sub	a, #0x02
+    00000A01 3E 81            [ 7] 1880 	ld	a, #0x81
+    00000A03 28 02            [12] 1881 	jr	z, 00301$
+    00000A05 3E 82            [ 7] 1882 	ld	a, #0x82
+    00000A07                       1883 00301$:
+    00000A07                       1884 00299$:
+    00000A07 CDr67r00         [17] 1885 	call	_chgcpu
+    00000A0A                       1886 00269$:
+                                   1887 ;smram.c:861: if (softReset == FALSE)
+    00000A0A 3Ar07r00         [13] 1888 	ld	a, (_softReset+0)
+    00000A0D B7               [ 4] 1889 	or	a, a
+    00000A0E C2rADr0A         [10] 1890 	jp	nz, 00282$
+                                   1891 ;smram.c:863: if (megaram_type == TYPE_LINEAR && startpage == 0)
+    00000A11 3Ar03r00         [13] 1892 	ld	a, (_megaram_type)
+    00000A14 D6 02            [ 7] 1893 	sub	a, #0x02
+    00000A16 21r04r00         [10] 1894 	ld	hl, #_megaram_type + 1
+    00000A19 B6               [ 7] 1895 	or	a, (hl)
+    00000A1A 3E 01            [ 7] 1896 	ld	a, #0x01
+    00000A1C 28 01            [12] 1897 	jr	z, 01212$
+    00000A1E AF               [ 4] 1898 	xor	a, a
+    00000A1F                       1899 01212$:
+    00000A1F 4F               [ 4] 1900 	ld	c, a
+    00000A20 B7               [ 4] 1901 	or	a, a
+    00000A21 28 20            [12] 1902 	jr	z, 00278$
+    00000A23 3Ar0Dr00         [13] 1903 	ld	a, (_startpage+0)
+    00000A26 B7               [ 4] 1904 	or	a, a
+    00000A27 20 1A            [12] 1905 	jr	nz, 00278$
+                                   1906 ;smram.c:864: memcpy((void*)0xC000, &runROM_page0, ((uint)&runROM_page0_end - (uint)&runROM_page0));
+    00000A29 21rF3r00         [10] 1907 	ld	hl, #_runROM_page0
+    00000A2C 01r11r01         [10] 1908 	ld	bc, #_runROM_page0_end
+    00000A2F 11rF3r00         [10] 1909 	ld	de, #_runROM_page0
+    00000A32 79               [ 4] 1910 	ld	a, c
+    00000A33 93               [ 4] 1911 	sub	a, e
+    00000A34 4F               [ 4] 1912 	ld	c, a
+    00000A35 78               [ 4] 1913 	ld	a, b
+    00000A36 9A               [ 4] 1914 	sbc	a, d
+    00000A37 47               [ 4] 1915 	ld	b, a
+    00000A38 11 00 C0         [10] 1916 	ld	de, #0xc000
+    00000A3B 78               [ 4] 1917 	ld	a, b
+    00000A3C B1               [ 4] 1918 	or	a, c
+    00000A3D 28 68            [12] 1919 	jr	z, 00279$
+    00000A3F ED B0            [21] 1920 	ldir
+    00000A41 18 64            [12] 1921 	jr	00279$
+    00000A43                       1922 00278$:
+                                   1923 ;smram.c:865: else if (megaram_type == TYPE_LINEAR && startpage == 3)
+    00000A43 79               [ 4] 1924 	ld	a, c
+    00000A44 B7               [ 4] 1925 	or	a, a
+    00000A45 28 27            [12] 1926 	jr	z, 00274$
+    00000A47 3Ar0Dr00         [13] 1927 	ld	a, (_startpage)
+    00000A4A D6 03            [ 7] 1928 	sub	a, #0x03
+    00000A4C 20 20            [12] 1929 	jr	nz, 00274$
+                                   1930 ;smram.c:867: memcpy((void*)0x8000, &runROM_page3, ((uint)&runROM_page3_end - (uint)&runROM_page3));
+    00000A4E 21r2Cr01         [10] 1931 	ld	hl, #_runROM_page3
+    00000A51 01r48r01         [10] 1932 	ld	bc, #_runROM_page3_end
+    00000A54 11r2Cr01         [10] 1933 	ld	de, #_runROM_page3
+    00000A57 79               [ 4] 1934 	ld	a, c
+    00000A58 93               [ 4] 1935 	sub	a, e
+    00000A59 4F               [ 4] 1936 	ld	c, a
+    00000A5A 78               [ 4] 1937 	ld	a, b
+    00000A5B 9A               [ 4] 1938 	sbc	a, d
+    00000A5C 47               [ 4] 1939 	ld	b, a
+    00000A5D 11 00 80         [10] 1940 	ld	de, #0x8000
+    00000A60 78               [ 4] 1941 	ld	a, b
+    00000A61 B1               [ 4] 1942 	or	a, c
+    00000A62 28 02            [12] 1943 	jr	z, 01216$
+    00000A64 ED B0            [21] 1944 	ldir
+    00000A66                       1945 01216$:
+                                   1946 ;smram.c:868: jump(0x8000);
+    00000A66 21 00 80         [10] 1947 	ld	hl, #0x8000
+    00000A69 CDrD3r00         [17] 1948 	call	_jump
+    00000A6C 18 39            [12] 1949 	jr	00279$
+    00000A6E                       1950 00274$:
+                                   1951 ;smram.c:870: else if (startpage >= 2)
+    00000A6E 3Ar0Dr00         [13] 1952 	ld	a, (_startpage+0)
+    00000A71 D6 02            [ 7] 1953 	sub	a, #0x02
+    00000A73 38 1A            [12] 1954 	jr	c, 00271$
+                                   1955 ;smram.c:871: memcpy((void*)0xC000, &runROM_page2, ((uint)&runROM_page2_end - (uint)&runROM_page2));
+    00000A75 21r11r01         [10] 1956 	ld	hl, #_runROM_page2
+    00000A78 01r2Cr01         [10] 1957 	ld	bc, #_runROM_page2_end
+    00000A7B 11r11r01         [10] 1958 	ld	de, #_runROM_page2
+    00000A7E 79               [ 4] 1959 	ld	a, c
+    00000A7F 93               [ 4] 1960 	sub	a, e
+    00000A80 4F               [ 4] 1961 	ld	c, a
+    00000A81 78               [ 4] 1962 	ld	a, b
+    00000A82 9A               [ 4] 1963 	sbc	a, d
+    00000A83 47               [ 4] 1964 	ld	b, a
+    00000A84 11 00 C0         [10] 1965 	ld	de, #0xc000
+    00000A87 78               [ 4] 1966 	ld	a, b
+    00000A88 B1               [ 4] 1967 	or	a, c
+    00000A89 28 1C            [12] 1968 	jr	z, 00279$
+    00000A8B ED B0            [21] 1969 	ldir
+    00000A8D 18 18            [12] 1970 	jr	00279$
+    00000A8F                       1971 00271$:
+                                   1972 ;smram.c:873: memcpy((void*)0xC000, &runROM_page1, ((uint)&runROM_page1_end - (uint)&runROM_page1));
+    00000A8F 21rD8r00         [10] 1973 	ld	hl, #_runROM_page1
+    00000A92 01rF3r00         [10] 1974 	ld	bc, #_runROM_page1_end
+    00000A95 11rD8r00         [10] 1975 	ld	de, #_runROM_page1
+    00000A98 79               [ 4] 1976 	ld	a, c
+    00000A99 93               [ 4] 1977 	sub	a, e
+    00000A9A 4F               [ 4] 1978 	ld	c, a
+    00000A9B 78               [ 4] 1979 	ld	a, b
+    00000A9C 9A               [ 4] 1980 	sbc	a, d
+    00000A9D 47               [ 4] 1981 	ld	b, a
+    00000A9E 11 00 C0         [10] 1982 	ld	de, #0xc000
+    00000AA1 78               [ 4] 1983 	ld	a, b
+    00000AA2 B1               [ 4] 1984 	or	a, c
+    00000AA3 28 02            [12] 1985 	jr	z, 01218$
+    00000AA5 ED B0            [21] 1986 	ldir
+    00000AA7                       1987 01218$:
+    00000AA7                       1988 00279$:
+                                   1989 ;smram.c:875: jump(0xC000);
+    00000AA7 21 00 C0         [10] 1990 	ld	hl, #0xc000
+    00000AAA CDrD3r00         [17] 1991 	call	_jump
+    00000AAD                       1992 00282$:
+                                   1993 ;smram.c:878: memcpy((void*)0xC000, &runROM_Reset, ((uint)&runROM_Reset_end - (uint)&runROM_Reset));
+    00000AAD 21r48r01         [10] 1994 	ld	hl, #_runROM_Reset
+    00000AB0 01r61r01         [10] 1995 	ld	bc, #_runROM_Reset_end
+    00000AB3 11r48r01         [10] 1996 	ld	de, #_runROM_Reset
+    00000AB6 79               [ 4] 1997 	ld	a, c
+    00000AB7 93               [ 4] 1998 	sub	a, e
+    00000AB8 4F               [ 4] 1999 	ld	c, a
+    00000AB9 78               [ 4] 2000 	ld	a, b
+    00000ABA 9A               [ 4] 2001 	sbc	a, d
+    00000ABB 47               [ 4] 2002 	ld	b, a
+    00000ABC 11 00 C0         [10] 2003 	ld	de, #0xc000
+    00000ABF 78               [ 4] 2004 	ld	a, b
+    00000AC0 B1               [ 4] 2005 	or	a, c
+    00000AC1 28 02            [12] 2006 	jr	z, 01219$
+    00000AC3 ED B0            [21] 2007 	ldir
+    00000AC5                       2008 01219$:
+                                   2009 ;smram.c:879: jump(0xC000);
+    00000AC5 21 00 C0         [10] 2010 	ld	hl, #0xc000
+    00000AC8 CDrD3r00         [17] 2011 	call	_jump
+                                   2012 ;smram.c:881: return 1; // make sdcc happy
+    00000ACB 11 01 00         [10] 2013 	ld	de, #0x0001
+                                   2014 ;smram.c:882: }
+    00000ACE C9               [10] 2015 	ret
+    00000ACF                       2016 ___str_8:
+    00000ACF 57 6F 6E 64 65 72 54  2017 	.ascii "WonderTANG! uSD Driver"
              41 4E 47 21 20 75 53
              44 20 44 72 69 76 65
              72
-    00000AE6 00                    2019 	.db 0x00
-    00000AE7                       2020 ___str_9:
-    00000AE7 57 6F 6E 64 65 72 54  2021 	.ascii "WonderTANG! Super MegaRAM SCC"
+    00000AE5 00                    2018 	.db 0x00
+    00000AE6                       2019 ___str_9:
+    00000AE6 57 6F 6E 64 65 72 54  2020 	.ascii "WonderTANG! Super MegaRAM SCC"
              41 4E 47 21 20 53 75
              70 65 72 20 4D 65 67
              61 52 41 4D 20 53 43
              43
-    00000B04 0A                    2022 	.db 0x0a
-    00000B05 0D                    2023 	.db 0x0d
-    00000B06 00                    2024 	.db 0x00
-    00000B07                       2025 ___str_10:
-    00000B07 76 33 2E 30 31 20 28  2026 	.ascii "v3.01 (new-juice)"
+    00000B03 0A                    2021 	.db 0x0a
+    00000B04 0D                    2022 	.db 0x0d
+    00000B05 00                    2023 	.db 0x00
+    00000B06                       2024 ___str_10:
+    00000B06 76 33 2E 30 31 20 28  2025 	.ascii "v3.01 (new-juice)"
              6E 65 77 2D 6A 75 69
              63 65 29
-    00000B18 0A                    2027 	.db 0x0a
-    00000B19 0D                    2028 	.db 0x0d
-    00000B1A 00                    2029 	.db 0x00
-    00000B1B                       2030 ___str_11:
-    00000B1B 45 52 52 4F 52 3A 20  2031 	.ascii "ERROR: WonderTANG! not found..."
+    00000B17 0A                    2026 	.db 0x0a
+    00000B18 0D                    2027 	.db 0x0d
+    00000B19 00                    2028 	.db 0x00
+    00000B1A                       2029 ___str_11:
+    00000B1A 45 52 52 4F 52 3A 20  2030 	.ascii "ERROR: WonderTANG! not found..."
              57 6F 6E 64 65 72 54
              41 4E 47 21 20 6E 6F
              74 20 66 6F 75 6E 64
              2E 2E 2E
-    00000B3A 0A                    2032 	.db 0x0a
-    00000B3B 0D                    2033 	.db 0x0d
-    00000B3C 00                    2034 	.db 0x00
-    00000B3D                       2035 ___str_12:
-    00000B3D 0A                    2036 	.db 0x0a
-    00000B3E 0D                    2037 	.db 0x0d
-    00000B3F 55 53 41 47 45 3A 20  2038 	.ascii "USAGE: SMRAM [/Rx /L /X /Zx /Y] [romfile]"
+    00000B39 0A                    2031 	.db 0x0a
+    00000B3A 0D                    2032 	.db 0x0d
+    00000B3B 00                    2033 	.db 0x00
+    00000B3C                       2034 ___str_12:
+    00000B3C 0A                    2035 	.db 0x0a
+    00000B3D 0D                    2036 	.db 0x0d
+    00000B3E 55 53 41 47 45 3A 20  2037 	.ascii "USAGE: SMRAM [/Rx /L /X /Zx /Y] [romfile]"
              53 4D 52 41 4D 20 5B
              2F 52 78 20 2F 4C 20
              2F 58 20 2F 5A 78 20
              2F 59 5D 20 5B 72 6F
              6D 66 69 6C 65 5D
-    00000B68 0A                    2039 	.db 0x0a
-    00000B69 0D                    2040 	.db 0x0d
-    00000B6A 0A                    2041 	.db 0x0a
-    00000B6B 0D                    2042 	.db 0x0d
-    00000B6C 20 2F 52 78 3A 20 53  2043 	.ascii " /Rx: Set MegaROM type"
+    00000B67 0A                    2038 	.db 0x0a
+    00000B68 0D                    2039 	.db 0x0d
+    00000B69 0A                    2040 	.db 0x0a
+    00000B6A 0D                    2041 	.db 0x0d
+    00000B6B 20 2F 52 78 3A 20 53  2042 	.ascii " /Rx: Set MegaROM type"
              65 74 20 4D 65 67 61
              52 4F 4D 20 74 79 70
              65
-    00000B82 0A                    2044 	.db 0x0a
-    00000B83 0D                    2045 	.db 0x0d
-    00000B84 20 20 20 30 3A 20 4D  2046 	.ascii "   0: Megaram SCC (default)"
+    00000B81 0A                    2043 	.db 0x0a
+    00000B82 0D                    2044 	.db 0x0d
+    00000B83 20 20 20 30 3A 20 4D  2045 	.ascii "   0: Megaram SCC (default)"
              65 67 61 72 61 6D 20
              53 43 43 20 28 64 65
              66 61 75 6C 74 29
-    00000B9F 0A                    2047 	.db 0x0a
-    00000BA0 0D                    2048 	.db 0x0d
-    00000BA1 20 20 20 31 3A 20 41  2049 	.ascii "   1: ASCII16     (/A16)"
+    00000B9E 0A                    2046 	.db 0x0a
+    00000B9F 0D                    2047 	.db 0x0d
+    00000BA0 20 20 20 31 3A 20 41  2048 	.ascii "   1: ASCII16     (/A16)"
              53 43 49 49 31 36 20
              20 20 20 20 28 2F 41
              31 36 29
-    00000BB9 0A                    2050 	.db 0x0a
-    00000BBA 0D                    2051 	.db 0x0d
-    00000BBB 20 20 20 32 3A 20 4C  2052 	.ascii "   2: LINEAR      (/L)"
+    00000BB8 0A                    2049 	.db 0x0a
+    00000BB9 0D                    2050 	.db 0x0d
+    00000BBA 20 20 20 32 3A 20 4C  2051 	.ascii "   2: LINEAR      (/L)"
              49 4E 45 41 52 20 20
              20 20 20 20 28 2F 4C
              29
-    00000BD1 0A                    2053 	.db 0x0a
-    00000BD2 0D                    2054 	.db 0x0d
-    00000BD3 20 20 20 33 3A 20 41  2055 	.ascii "   3: ASCII8      (/A8)"
+    00000BD0 0A                    2052 	.db 0x0a
+    00000BD1 0D                    2053 	.db 0x0d
+    00000BD2 20 20 20 33 3A 20 41  2054 	.ascii "   3: ASCII8      (/A8)"
              53 43 49 49 38 20 20
              20 20 20 20 28 2F 41
              38 29
-    00000BEA 0A                    2056 	.db 0x0a
-    00000BEB 0D                    2057 	.db 0x0d
-    00000BEC 20 20 20 35 3A 20 4B  2058 	.ascii "   5: Konami SCC  (/K5)"
+    00000BE9 0A                    2055 	.db 0x0a
+    00000BEA 0D                    2056 	.db 0x0d
+    00000BEB 20 20 20 35 3A 20 4B  2057 	.ascii "   5: Konami SCC  (/K5)"
              6F 6E 61 6D 69 20 53
              43 43 20 20 28 2F 4B
              35 29
-    00000C03 0A                    2059 	.db 0x0a
-    00000C04 0D                    2060 	.db 0x0d
-    00000C05 20 20 20 36 3A 20 4B  2061 	.ascii "   6: Konami      (/K4)"
+    00000C02 0A                    2058 	.db 0x0a
+    00000C03 0D                    2059 	.db 0x0d
+    00000C04 20 20 20 36 3A 20 4B  2060 	.ascii "   6: Konami      (/K4)"
              6F 6E 61 6D 69 20 20
              20 20 20 20 28 2F 4B
              34 29
-    00000C1C 0A                    2062 	.db 0x0a
-    00000C1D 0D                    2063 	.db 0x0d
-    00000C1E 0A                    2064 	.db 0x0a
-    00000C1F 0D                    2065 	.db 0x0d
-    00000C20 20 2F 44 3A 20 53 65  2066 	.ascii " /D: Set MegaRAM DDX type"
+    00000C1B 0A                    2061 	.db 0x0a
+    00000C1C 0D                    2062 	.db 0x0d
+    00000C1D 0A                    2063 	.db 0x0a
+    00000C1E 0D                    2064 	.db 0x0d
+    00000C1F 20 2F 44 3A 20 53 65  2065 	.ascii " /D: Set MegaRAM DDX type"
              74 20 4D 65 67 61 52
              41 4D 20 44 44 58 20
              74 79 70 65
-    00000C39 0A                    2067 	.db 0x0a
-    00000C3A 0D                    2068 	.db 0x0d
-    00000C3B 20 2F 4C 3A 20 53 65  2069 	.ascii " /L: Set LINEAR type (automatic for ROMs <=64KB)"
+    00000C38 0A                    2066 	.db 0x0a
+    00000C39 0D                    2067 	.db 0x0d
+    00000C3A 20 2F 4C 3A 20 53 65  2068 	.ascii " /L: Set LINEAR type (automatic for ROMs <=64KB)"
              74 20 4C 49 4E 45 41
              52 20 74 79 70 65 20
              28 61 75 74 6F 6D 61
              74 69 63 20 66 6F 72
              20 52 4F 4D 73 20 3C
              3D 36 34 4B 42 29
-    00000C6B 0A                    2070 	.db 0x0a
-    00000C6C 0D                    2071 	.db 0x0d
-    00000C6D 20 2F 53 3A 20 53 6F  2072 	.ascii " /S: Soft reset"
+    00000C6A 0A                    2069 	.db 0x0a
+    00000C6B 0D                    2070 	.db 0x0d
+    00000C6C 20 2F 53 3A 20 53 6F  2071 	.ascii " /S: Soft reset"
              66 74 20 72 65 73 65
              74
-    00000C7C 0A                    2073 	.db 0x0a
-    00000C7D 0D                    2074 	.db 0x0d
-    00000C7E 20 2F 58 3A 20 4C 6F  2075 	.ascii " /X: Load ROM, set mapper, and return to DOS"
+    00000C7B 0A                    2072 	.db 0x0a
+    00000C7C 0D                    2073 	.db 0x0d
+    00000C7D 20 2F 58 3A 20 4C 6F  2074 	.ascii " /X: Load ROM, set mapper, and return to DOS"
              61 64 20 52 4F 4D 2C
              20 73 65 74 20 6D 61
              70 70 65 72 2C 20 61
              6E 64 20 72 65 74 75
              72 6E 20 74 6F 20 44
              4F 53
-    00000CAA 0A                    2076 	.db 0x0a
-    00000CAB 0D                    2077 	.db 0x0d
-    00000CAC 20 2F 5A 78 3A 20 53  2078 	.ascii " /Zx: Set cpu mode"
+    00000CA9 0A                    2075 	.db 0x0a
+    00000CAA 0D                    2076 	.db 0x0d
+    00000CAB 20 2F 5A 78 3A 20 53  2077 	.ascii " /Zx: Set cpu mode"
              65 74 20 63 70 75 20
              6D 6F 64 65
-    00000CBE 0A                    2079 	.db 0x0a
-    00000CBF 0D                    2080 	.db 0x0d
-    00000CC0 20 20 20 30 3A 20 63  2081 	.ascii "   0: current"
+    00000CBD 0A                    2078 	.db 0x0a
+    00000CBE 0D                    2079 	.db 0x0d
+    00000CBF 20 20 20 30 3A 20 63  2080 	.ascii "   0: current"
              75 72 72 65 6E 74
-    00000CCD 0A                    2082 	.db 0x0a
-    00000CCE 0D                    2083 	.db 0x0d
-    00000CCF 20 20 20 31 3A 20 5A  2084 	.ascii "   1: Z80"
+    00000CCC 0A                    2081 	.db 0x0a
+    00000CCD 0D                    2082 	.db 0x0d
+    00000CCE 20 20 20 31 3A 20 5A  2083 	.ascii "   1: Z80"
              38 30
-    00000CD8 0A                    2085 	.db 0x0a
-    00000CD9 0D                    2086 	.db 0x0d
-    00000CDA 20 20 20 32 3A 20 52  2087 	.ascii "   2: R800 ROM"
+    00000CD7 0A                    2084 	.db 0x0a
+    00000CD8 0D                    2085 	.db 0x0d
+    00000CD9 20 20 20 32 3A 20 52  2086 	.ascii "   2: R800 ROM"
              38 30 30 20 52 4F 4D
-    00000CE8 0A                    2088 	.db 0x0a
-    00000CE9 0D                    2089 	.db 0x0d
-    00000CEA 20 20 20 33 3A 20 52  2090 	.ascii "   3: R800 DRAM"
+    00000CE7 0A                    2087 	.db 0x0a
+    00000CE8 0D                    2088 	.db 0x0d
+    00000CE9 20 20 20 33 3A 20 52  2089 	.ascii "   3: R800 DRAM"
              38 30 30 20 44 52 41
              4D
-    00000CF9 0A                    2091 	.db 0x0a
-    00000CFA 0D                    2092 	.db 0x0d
-    00000CFB 0A                    2093 	.db 0x0a
-    00000CFC 0D                    2094 	.db 0x0d
-    00000CFD 20 2F 59 3A 20 20 50  2095 	.ascii " /Y:  Preserve AB header"
+    00000CF8 0A                    2090 	.db 0x0a
+    00000CF9 0D                    2091 	.db 0x0d
+    00000CFA 0A                    2092 	.db 0x0a
+    00000CFB 0D                    2093 	.db 0x0d
+    00000CFC 20 2F 59 3A 20 20 50  2094 	.ascii " /Y:  Preserve AB header"
              72 65 73 65 72 76 65
              20 41 42 20 68 65 61
              64 65 72
-    00000D15 0A                    2096 	.db 0x0a
-    00000D16 0D                    2097 	.db 0x0d
-    00000D17 0A                    2098 	.db 0x0a
-    00000D18 0D                    2099 	.db 0x0d
-    00000D19 00                    2100 	.db 0x00
-    00000D1A                       2101 ___str_13:
-    00000D1A 4C 6F 61 64 69 6E 67  2102 	.ascii "Loading ROM file: %s - "
+    00000D14 0A                    2095 	.db 0x0a
+    00000D15 0D                    2096 	.db 0x0d
+    00000D16 0A                    2097 	.db 0x0a
+    00000D17 0D                    2098 	.db 0x0d
+    00000D18 00                    2099 	.db 0x00
+    00000D19                       2100 ___str_13:
+    00000D19 4C 6F 61 64 69 6E 67  2101 	.ascii "Loading ROM file: %s - "
              20 52 4F 4D 20 66 69
              6C 65 3A 20 25 73 20
              2D 20
-    00000D31 00                    2103 	.db 0x00
-    00000D32                       2104 ___str_14:
-    00000D32 25 30 34 64 4B 42     2105 	.ascii "%04dKB"
-    00000D38 00                    2106 	.db 0x00
-    00000D39                       2107 ___str_15:
+    00000D30 00                    2102 	.db 0x00
+    00000D31                       2103 ___str_14:
+    00000D31 25 30 34 64 4B 42     2104 	.ascii "%04dKB"
+    00000D37 00                    2105 	.db 0x00
+    00000D38                       2106 ___str_15:
+    00000D38 08                    2107 	.db 0x08
     00000D39 08                    2108 	.db 0x08
     00000D3A 08                    2109 	.db 0x08
     00000D3B 08                    2110 	.db 0x08
     00000D3C 08                    2111 	.db 0x08
     00000D3D 08                    2112 	.db 0x08
-    00000D3E 08                    2113 	.db 0x08
-    00000D3F 25 30 34 64 4B 42     2114 	.ascii "%04dKB"
-    00000D45 00                    2115 	.db 0x00
-    00000D46                       2116 ___str_16:
-    00000D46 45 52 52 4F 52 3A 20  2117 	.ascii "ERROR: Failed loading %s"
+    00000D3E 25 30 34 64 4B 42     2113 	.ascii "%04dKB"
+    00000D44 00                    2114 	.db 0x00
+    00000D45                       2115 ___str_16:
+    00000D45 45 52 52 4F 52 3A 20  2116 	.ascii "ERROR: Failed loading %s"
              46 61 69 6C 65 64 20
              6C 6F 61 64 69 6E 67
              20 25 73
-    00000D5E 0A                    2118 	.db 0x0a
-    00000D5F 0D                    2119 	.db 0x0d
-    00000D60 00                    2120 	.db 0x00
-    00000D61                       2121 ___str_17:
-    00000D61 45 52 52 4F 52 3A 20  2122 	.ascii "ERROR: LINEAR ROM has no AB header"
+    00000D5D 0A                    2117 	.db 0x0a
+    00000D5E 0D                    2118 	.db 0x0d
+    00000D5F 00                    2119 	.db 0x00
+    00000D60                       2120 ___str_17:
+    00000D60 45 52 52 4F 52 3A 20  2121 	.ascii "ERROR: LINEAR ROM has no AB header"
              4C 49 4E 45 41 52 20
              52 4F 4D 20 68 61 73
              20 6E 6F 20 41 42 20
              68 65 61 64 65 72
-    00000D83 0A                    2123 	.db 0x0a
-    00000D84 0D                    2124 	.db 0x0d
-    00000D85 00                    2125 	.db 0x00
-    00000D86                       2126 ___str_18:
-    00000D86 45 52 52 4F 52 3A 20  2127 	.ascii "ERROR: LINEAR ROM does not fit at 0x%04x"
+    00000D82 0A                    2122 	.db 0x0a
+    00000D83 0D                    2123 	.db 0x0d
+    00000D84 00                    2124 	.db 0x00
+    00000D85                       2125 ___str_18:
+    00000D85 45 52 52 4F 52 3A 20  2126 	.ascii "ERROR: LINEAR ROM does not fit at 0x%04x"
              4C 49 4E 45 41 52 20
              52 4F 4D 20 64 6F 65
              73 20 6E 6F 74 20 66
              69 74 20 61 74 20 30
              78 25 30 34 78
-    00000DAE 0A                    2128 	.db 0x0a
-    00000DAF 0D                    2129 	.db 0x0d
-    00000DB0 00                    2130 	.db 0x00
-    00000DB1                       2131 ___str_19:
-    00000DB1 0A                    2132 	.db 0x0a
-    00000DB2 0D                    2133 	.db 0x0d
-    00000DB3 52 4F 4D 20 6C 6F 61  2134 	.ascii "ROM loaded; returning to DOS."
+    00000DAD 0A                    2127 	.db 0x0a
+    00000DAE 0D                    2128 	.db 0x0d
+    00000DAF 00                    2129 	.db 0x00
+    00000DB0                       2130 ___str_19:
+    00000DB0 0A                    2131 	.db 0x0a
+    00000DB1 0D                    2132 	.db 0x0d
+    00000DB2 52 4F 4D 20 6C 6F 61  2133 	.ascii "ROM loaded; returning to DOS."
              64 65 64 3B 20 72 65
              74 75 72 6E 69 6E 67
              20 74 6F 20 44 4F 53
              2E
-    00000DD0 0A                    2135 	.db 0x0a
-    00000DD1 0D                    2136 	.db 0x0d
-    00000DD2 00                    2137 	.db 0x00
-    00000DD3                       2138 ___str_20:
-    00000DD3 0A                    2139 	.db 0x0a
-    00000DD4 0D                    2140 	.db 0x0d
-    00000DD5 0A                    2141 	.db 0x0a
-    00000DD6 0D                    2142 	.db 0x0d
-    00000DD7 53 74 61 72 74 20 61  2143 	.ascii "Start address: 0x%04x (page %d)"
+    00000DCF 0A                    2134 	.db 0x0a
+    00000DD0 0D                    2135 	.db 0x0d
+    00000DD1 00                    2136 	.db 0x00
+    00000DD2                       2137 ___str_20:
+    00000DD2 0A                    2138 	.db 0x0a
+    00000DD3 0D                    2139 	.db 0x0d
+    00000DD4 0A                    2140 	.db 0x0a
+    00000DD5 0D                    2141 	.db 0x0d
+    00000DD6 53 74 61 72 74 20 61  2142 	.ascii "Start address: 0x%04x (page %d)"
              64 64 72 65 73 73 3A
              20 30 78 25 30 34 78
              20 28 70 61 67 65 20
              25 64 29
-    00000DF6 0A                    2144 	.db 0x0a
-    00000DF7 0D                    2145 	.db 0x0d
-    00000DF8 00                    2146 	.db 0x00
-                                   2147 	.area _CODE
-                                   2148 	.area _INITIALIZER
-    00000000                       2149 __xinit__found:
-    00000000 00                    2150 	.db #0x00	; 0
-    00000001                       2151 __xinit__filename:
-    00000001 00 00                 2152 	.dw #0x0000
-    00000003                       2153 __xinit__megaram_type:
-    00000003 00 00                 2154 	.dw #0x0000
-    00000005                       2155 __xinit__paramlen:
-    00000005 00                    2156 	.db #0x00	; 0
-    00000006                       2157 __xinit__presAB:
-    00000006 00                    2158 	.db #0x00	; 0
-    00000007                       2159 __xinit__softReset:
-    00000007 00                    2160 	.db #0x00	; 0
-    00000008                       2161 __xinit__mapperSpecified:
-    00000008 00                    2162 	.db #0x00	; 0
-    00000009                       2163 __xinit__headerValid:
-    00000009 00                    2164 	.db #0x00	; 0
-    0000000A                       2165 __xinit__linearHeaderValid:
-    0000000A 00                    2166 	.db #0x00	; 0
-    0000000B                       2167 __xinit__exitAfterLoad:
-    0000000B 00                    2168 	.db #0x00	; 0
-    0000000C                       2169 __xinit__cpumode:
-    0000000C 01                    2170 	.db #0x01	; 1
-    0000000D                       2171 __xinit__startpage:
-    0000000D 01                    2172 	.db #0x01	; 1
-    0000000E                       2173 __xinit__loadpage:
-    0000000E 00                    2174 	.db #0x00	; 0
-    0000000F                       2175 __xinit__help:
-    0000000F 00                    2176 	.db #0x00	; 0
-    00000010                       2177 __xinit__scc_vol:
-    00000010 09                    2178 	.db #0x09	; 9
-    00000011                       2179 __xinit__psg_vol:
-    00000011 09                    2180 	.db #0x09	; 9
-    00000012                       2181 __xinit__opll_vol:
-    00000012 09                    2182 	.db #0x09	; 9
-                                   2183 	.area _CABS (ABS)
+    00000DF5 0A                    2143 	.db 0x0a
+    00000DF6 0D                    2144 	.db 0x0d
+    00000DF7 00                    2145 	.db 0x00
+                                   2146 	.area _CODE
+                                   2147 	.area _INITIALIZER
+    00000000                       2148 __xinit__found:
+    00000000 00                    2149 	.db #0x00	; 0
+    00000001                       2150 __xinit__filename:
+    00000001 00 00                 2151 	.dw #0x0000
+    00000003                       2152 __xinit__megaram_type:
+    00000003 00 00                 2153 	.dw #0x0000
+    00000005                       2154 __xinit__paramlen:
+    00000005 00                    2155 	.db #0x00	; 0
+    00000006                       2156 __xinit__presAB:
+    00000006 00                    2157 	.db #0x00	; 0
+    00000007                       2158 __xinit__softReset:
+    00000007 00                    2159 	.db #0x00	; 0
+    00000008                       2160 __xinit__mapperSpecified:
+    00000008 00                    2161 	.db #0x00	; 0
+    00000009                       2162 __xinit__headerValid:
+    00000009 00                    2163 	.db #0x00	; 0
+    0000000A                       2164 __xinit__linearHeaderValid:
+    0000000A 00                    2165 	.db #0x00	; 0
+    0000000B                       2166 __xinit__exitAfterLoad:
+    0000000B 00                    2167 	.db #0x00	; 0
+    0000000C                       2168 __xinit__cpumode:
+    0000000C 01                    2169 	.db #0x01	; 1
+    0000000D                       2170 __xinit__startpage:
+    0000000D 01                    2171 	.db #0x01	; 1
+    0000000E                       2172 __xinit__loadpage:
+    0000000E 00                    2173 	.db #0x00	; 0
+    0000000F                       2174 __xinit__help:
+    0000000F 00                    2175 	.db #0x00	; 0
+    00000010                       2176 __xinit__scc_vol:
+    00000010 09                    2177 	.db #0x09	; 9
+    00000011                       2178 __xinit__psg_vol:
+    00000011 09                    2179 	.db #0x09	; 9
+    00000012                       2180 __xinit__opll_vol:
+    00000012 09                    2181 	.db #0x09	; 9
+                                   2182 	.area _CABS (ABS)

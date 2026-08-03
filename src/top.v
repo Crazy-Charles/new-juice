@@ -496,6 +496,7 @@ module top
     wire [7:0] mapper_debug_page1;
     wire [7:0] mapper_debug_page2;
     wire [7:0] mapper_debug_page3;
+    reg [15:0] sms_debug_address = 16'h0000;
     wire [7:0] flash_rom_data_out;
     wire flash_rom_data_out_en;
     wire flash_rom_wait_n;
@@ -1196,37 +1197,18 @@ module top
     wire sms_debug_pixel_enabled;
     generate
         if (SMS_DEBUGGER_ENABLED) begin : sms_debugger_enabled_impl
-            // Cross the complete debugger state into the pixel clock domain
-            // and update it once per frame, preventing torn digits.
-            reg [47:0] sms_debug_meta = 48'd0;
-            reg [47:0] sms_debug_sync = 48'd0;
-            reg [47:0] sms_debug_frame = 48'd0;
-            always_ff @(posedge clk or negedge sms_reset_n)
-            begin
-                if (!sms_reset_n) begin
-                    sms_debug_meta <= 48'd0;
-                    sms_debug_sync <= 48'd0;
-                    sms_debug_frame <= 48'd0;
-                end else begin
-                    sms_debug_meta <= {sms_debug_address,
-                                       mapper_debug_page0,
-                                       mapper_debug_page1,
-                                       mapper_debug_page2,
-                                       mapper_debug_page3};
-                    sms_debug_sync <= sms_debug_meta;
-                    if (hdmi_x == 10'd0 && hdmi_y == 10'd0)
-                        sms_debug_frame <= sms_debug_sync;
-                end
-            end
-
+            // Debug values are observational only.  Driving the overlay
+            // directly avoids a 144-bit CDC/frame pipeline whose inferred
+            // distributed RAM substantially perturbs SDRAM placement. A
+            // changing digit can tear briefly without affecting machine state.
             sms_debug_overlay sms_debug_overlay_inst (
                 .x(hdmi_x),
                 .y(hdmi_y),
-                .address(sms_debug_frame[47:32]),
-                .page0(sms_debug_frame[31:24]),
-                .page1(sms_debug_frame[23:16]),
-                .page2(sms_debug_frame[15:8]),
-                .page3(sms_debug_frame[7:0]),
+                .address(sms_debug_address),
+                .page0(mapper_debug_page0),
+                .page1(mapper_debug_page1),
+                .page2(mapper_debug_page2),
+                .page3(mapper_debug_page3),
                 .pixel(sms_debug_pixel_enabled)
             );
         end else begin : sms_debugger_disabled_impl
@@ -1546,7 +1528,6 @@ module top
     // Retain the most recent Z80 opcode-fetch address. A raw address-bus
     // display would mostly show refresh and operand cycles; the fetch address
     // is the useful value when diagnosing where execution has stopped.
-    reg [15:0] sms_debug_address = 16'h0000;
     always_ff @(posedge main_clk or negedge memory_mapper_reset_n)
     begin
         if (!memory_mapper_reset_n)

@@ -382,11 +382,9 @@ void runROM_Reset() __naked
     ld      hl,#HKEYI
     ld      (hl),a
 
-    ld      a,(EXPTBL)
-    ld      hl,#0
-    call    #ENASLT
-
-    jp      0x0000
+    ld      iy,(EXPTBL-1)
+    ld      ix,#0
+    call    #CALSLT
 
     __endasm;
 }
