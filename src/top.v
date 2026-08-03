@@ -974,11 +974,11 @@ module top
 
     // The sound display owns the framebuffer until software first touches
     // either SMS VDP port, including mirrored reads at 48h/49h. Once
-    // activated, SMS video owns it until the next board reset. PSG writes do
-    // not switch it.
+    // activated, SMS video owns it until the next board or external MSX reset.
+    // PSG writes do not switch it.
     always_ff @(posedge main_clk or negedge board_reset_n)
     begin
-        if (!board_reset_n)
+        if (!board_reset_n || !reset_in_n)
             sms_vdp_activated <= 1'b0;
         else if (sms_vdp_access)
             sms_vdp_activated <= 1'b1;
