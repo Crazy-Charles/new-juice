@@ -274,7 +274,7 @@ the official schematic linked below for their board/header routing.
 | CPU clock | `cpu_clkin` | 76 | External MSX CPU clock |
 | Wait/bus direction | `wait_out`, `busdir_n` | 42, 74 | MSX `/WAIT` and `/BUSDIR` |
 | Board clock | `clkin` | 4 | 27 MHz oscillator |
-| User buttons | `s1`, `s2` | 88, 87 | Active-low reset/control inputs |
+| User button | `s1` | 88 | Active-low reset input |
 | Status LED | `led` | 75 | Board status LED |
 | I2S audio | `hp_din`, `hp_bck`, `hp_ws`, `pa_en` | 54, 56, 55, 51 | MAX98357A data, bit clock, word select, enable |
 | microSD | `sd_dat3`, `sd_dat2`, `sd_dat1`, `sd_sclk`, `sd_dat0`, `sd_cmd` | 81, 80, 85, 83, 84, 82 | SDIO data, clock, and command |

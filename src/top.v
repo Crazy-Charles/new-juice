@@ -1,12 +1,10 @@
 module top
 #(
-    parameter AUDIO_FILTER_ENABLED = 1'b1,
     parameter SMS_DEBUGGER_ENABLED = 1'b0
 )
 (
     input   clkin,
     input   s1,
-    input   s2,
 
     output hp_ws,
     output hp_din,
@@ -295,14 +293,7 @@ module top
     wire signed [15:0] jt89_audio_sample;
     wire signed [17:0] audio_mix_wide;
     wire [15:0] mixed_audio_sample;
-    wire [16:0] audio_filter_sum;
-    wire [15:0] filtered_audio_sample;
     reg [15:0] audio_sample_hold = 16'd0;
-    reg [15:0] current_mixed_audio_hold = 16'd0;
-    reg [15:0] previous_mixed_audio_hold = 16'd0;
-    reg [15:0] previous_mixed_audio_sample = 16'd0;
-    reg audio_mix_pending = 1'b0;
-    reg [1:0] audio_filter_switch_sync = 2'b00;
     (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
     reg [1:0] audio_req_sync = 2'b00;
     reg audio_req_sync_d = 1'b0;
@@ -448,26 +439,12 @@ module top
             audio_req_sync <= 2'b00;
             audio_req_sync_d <= 1'b0;
             audio_sample_hold <= 16'd0;
-            current_mixed_audio_hold <= 16'd0;
-            previous_mixed_audio_hold <= 16'd0;
-            previous_mixed_audio_sample <= 16'd0;
-            audio_mix_pending <= 1'b0;
-            audio_filter_switch_sync <= 2'b00;
         end else begin
-            audio_filter_switch_sync <=
-                {audio_filter_switch_sync[0], s2};
             audio_req_sync <= {audio_req_sync[0], audio_req};
             audio_req_sync_d <= audio_req_sync[1];
 
-            if (audio_req_sync[1] && !audio_req_sync_d) begin
-                current_mixed_audio_hold <= mixed_audio_sample;
-                previous_mixed_audio_hold <= previous_mixed_audio_sample;
-                previous_mixed_audio_sample <= mixed_audio_sample;
-                audio_mix_pending <= 1'b1;
-            end else if (audio_mix_pending) begin
-                audio_sample_hold <= filtered_audio_sample;
-                audio_mix_pending <= 1'b0;
-            end
+            if (audio_req_sync[1] && !audio_req_sync_d)
+                audio_sample_hold <= mixed_audio_sample;
         end
     end
 
@@ -842,20 +819,6 @@ module top
     // Reducing the complete mix by 6 dB then guarantees 16-bit headroom
     // without changing the established levels of the other sources.
     assign mixed_audio_sample = audio_mix_wide[16:1];
-    // A two-sample moving average is linear, so filtering the completed mix is
-    // equivalent to applying the same filter independently to every source.
-    // It softens all source edges near the 44.1 kHz Nyquist limit with one
-    // history register and one adder, outside every sound-core feedback cone.
-    // Keep both paths in every compiled netlist. This avoids changing global
-    // placement when testing the bypass mode. With S2 released, the parameter
-    // selects the default; pressing S2 temporarily selects the opposite path.
-    wire audio_filter_enabled_runtime =
-        AUDIO_FILTER_ENABLED ^ audio_filter_switch_sync[1];
-    assign audio_filter_sum =
-        {previous_mixed_audio_hold[15], previous_mixed_audio_hold} +
-        {current_mixed_audio_hold[15], current_mixed_audio_hold};
-    assign filtered_audio_sample = audio_filter_enabled_runtime ?
-        audio_filter_sum[16:1] : current_mixed_audio_hold;
 
     // ---------------------------------------------------------------------
     // Franky / Sega Master System VDP and PSG
