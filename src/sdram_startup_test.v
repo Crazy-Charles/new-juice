@@ -31,14 +31,15 @@ module sdram_startup_test
     localparam [31:0] LFSR_SEED = 32'h1a2b3c4d;
     localparam [15:0] LAST_TEST_ADDR = 16'hfffe;
 
-    localparam [2:0] STATE_WAIT_INIT = 3'd0;
-    localparam [2:0] STATE_WRITE_CMD = 3'd1;
-    localparam [2:0] STATE_WRITE_ACK = 3'd2;
-    localparam [2:0] STATE_READ_CMD = 3'd3;
-    localparam [2:0] STATE_READ_ACK = 3'd4;
-    localparam [2:0] STATE_READ_CHECK = 3'd5;
-    localparam [2:0] STATE_PASS = 3'd6;
-    localparam [2:0] STATE_FAIL = 3'd7;
+    localparam [3:0] STATE_WAIT_INIT = 4'd0;
+    localparam [3:0] STATE_WRITE_CMD = 4'd1;
+    localparam [3:0] STATE_WRITE_ACK = 4'd2;
+    localparam [3:0] STATE_READ_CMD = 4'd3;
+    localparam [3:0] STATE_READ_ACK = 4'd4;
+    localparam [3:0] STATE_READ_CAPTURE = 4'd5;
+    localparam [3:0] STATE_READ_CHECK = 4'd6;
+    localparam [3:0] STATE_PASS = 4'd7;
+    localparam [3:0] STATE_FAIL = 4'd8;
 
     localparam [2:0] LED_START_OFF = 3'd0;
     localparam [2:0] LED_ONE_ON = 3'd1;
@@ -55,7 +56,7 @@ module sdram_startup_test
     localparam integer BIT_GAP_CYCLES = CLK_FREQ_HZ;
     localparam integer REPEAT_OFF_CYCLES = CLK_FREQ_HZ * 5;
 
-    reg [2:0] state = STATE_WAIT_INIT;
+    reg [3:0] state = STATE_WAIT_INIT;
     reg [15:0] test_addr = 16'd0;
     reg [15:0] error_addr = 16'd0;
     reg [31:0] lfsr = LFSR_SEED;
@@ -64,6 +65,7 @@ module sdram_startup_test
     reg [20:0] sdrc_addr_reg = 21'd0;
     reg [3:0] sdrc_dqm_reg = 4'b1111;
     reg [31:0] sdrc_data_reg = 32'd0;
+    reg [7:0] read_byte_reg = 8'd0;
     reg test_passed_reg = 1'b0;
     reg test_failed_reg = 1'b0;
 
@@ -110,6 +112,7 @@ module sdram_startup_test
             sdrc_addr_reg <= 21'd0;
             sdrc_dqm_reg <= 4'b1111;
             sdrc_data_reg <= 32'd0;
+            read_byte_reg <= 8'd0;
             test_passed_reg <= 1'b0;
             test_failed_reg <= 1'b0;
         end else begin
@@ -160,12 +163,21 @@ module sdram_startup_test
 
                 STATE_READ_ACK: begin
                     if (sdrc_cmd_ack) begin
-                        state <= STATE_READ_CHECK;
+                        state <= STATE_READ_CAPTURE;
                     end
                 end
 
+                // The adapter updates its 32-bit read register with the ACK.
+                // Capture the selected byte on the following cycle, then
+                // compare the local register. This removes the lane mux and
+                // comparison network from the marginal 108 MHz return path.
+                STATE_READ_CAPTURE: begin
+                    read_byte_reg <= read_byte;
+                    state <= STATE_READ_CHECK;
+                end
+
                 STATE_READ_CHECK: begin
-                    if (read_byte != expected_byte) begin
+                    if (read_byte_reg != expected_byte) begin
                         error_addr <= test_addr;
                         test_failed_reg <= 1'b1;
                         state <= STATE_FAIL;

@@ -9,6 +9,7 @@
 
 #define TYPE_MSCC 0x00
 #define TYPE_DDX 0x01
+#define TYPE_LINEAR 0x02
 #define TYPE_K4  0x04
 #define TYPE_K5  0x05
 #define TYPE_A16 0x16
@@ -24,6 +25,7 @@
 #define RDSLT               0x000C
 #define CALSLT				0x001C
 #define EXPTBL				0xFCC1
+#define BASICSLT            0xFCC2
 #define ENASLT              0x0024
 #define HTIMI               0xFD9A
 #define HKEYI               0xFD9F
@@ -304,6 +306,30 @@ void runROM_page1() __naked
 }
 void runROM_page1_end() __naked {}
 
+void runROM_page0() __naked
+{
+	__asm
+    di
+    ld      sp,#0xCFFF
+    ld      hl,#HTIMI
+    ld      a,#0xC9
+    ld      (hl),a
+    ld      hl,#HKEYI
+    ld      (hl),a
+
+    // Keep the BIOS mapped in page 0: CALSLT performs the inter-slot call
+    // without ENASLT changing the page beneath the BIOS routine itself.
+    ld      a,(_sslt)
+    ld      h,a
+    ld      l,#0
+    push    hl
+    pop     iy
+    ld      ix,(_romstart)
+    call    #CALSLT
+	__endasm;
+}
+void runROM_page0_end() __naked {}
+
 void runROM_page2() __naked
 {
 	__asm
@@ -323,6 +349,27 @@ void runROM_page2() __naked
 	__endasm;
 }
 void runROM_page2_end() __naked {}
+
+void runROM_page3() __naked
+{
+	__asm
+    di
+    ld      sp,#0xBFFF
+
+    ld      a,(_sslt)
+    push    af
+    ld      a,(EXPTBL)
+    ld      hl,#0
+    call    #ENASLT
+
+    pop     af
+    ld      hl,#0xC000
+    call    #ENASLT
+    ld      hl,(0xC002)
+    jp      (hl)
+	__endasm;
+}
+void runROM_page3_end() __naked {}
 
 void runROM_Reset() __naked
 {
@@ -363,15 +410,50 @@ ulong romsize;
 uchar slotid;
 bool presAB = FALSE;
 bool softReset = FALSE;
+bool mapperSpecified = FALSE;
+bool headerValid = FALSE;
+bool linearHeaderValid = FALSE;
+bool exitAfterLoad = FALSE;
 char path[256];
 char cpumode = 1; // defaults to Z80_ROM
 uint romstart;
-bool page2 = FALSE;
+uint linearRomstart;
+uchar startpage = 1;
+uchar loadpage = 0;
 bool help = FALSE;
 char scc_vol = 9;
 char psg_vol = 9;
 char opll_vol = 9;
 char c;
+
+void print_mapper_type(void)
+{
+    printf("\r\nMapper Type: ");
+    switch(megaram_type)
+    {
+        case TYPE_MSCC:
+            printf("MegaRAM SCC (default)\n\r");
+            break;
+        case TYPE_LINEAR:
+            printf("LINEAR (/L)\n\r");
+            break;
+        case TYPE_K4:
+            printf("Konami (/R6 or /K4)\n\r");
+            break;
+        case TYPE_K5:
+            printf("Konami SCC (/R5 or /K5)\n\r");
+            break;
+        case TYPE_A16:
+            printf("ASCII16 (/R1 or /A16)\n\r");
+            break;
+        case TYPE_A8:
+            printf("ASCII8 (/R3 or /A8)\n\r");
+            break;
+        case TYPE_DDX:
+            printf("MegaRAM DDX (/D)\n\r");
+            break;
+    }
+}
 
 int main(void)
 {
@@ -414,7 +496,7 @@ int main(void)
     if (found)
     {
         printf("WonderTANG! Super MegaRAM SCC\n\r");
-        printf("v3.00 (new-juice)\n\r");
+        printf("v3.01 (new-juice)\n\r");
 
         sslt = 0x80 | (2 << 2) | i;
         paramlen = *((char*)0x80);
@@ -427,9 +509,13 @@ int main(void)
                     params++;
                     if (to_upper(*params) == 'R') 
                     {
+                        mapperSpecified = TRUE;
                         params++;
                         if (*params == '0')
                             megaram_type = TYPE_MSCC;
+                        else
+                        if (*params == '2')
+                            megaram_type = TYPE_LINEAR;
                         else
                         if (*params == '6')
                             megaram_type = TYPE_K4;
@@ -447,6 +533,7 @@ int main(void)
                     } 
                     else if (to_upper(*params) == 'K')
                     {
+                        mapperSpecified = TRUE;
                         params++;
                         if (*params == '5')
                             megaram_type = TYPE_K5;
@@ -458,7 +545,13 @@ int main(void)
                     } 
                     else if (to_upper(*params) == 'D')
                     {
+                        mapperSpecified = TRUE;
                         megaram_type = TYPE_DDX;
+                    }
+                    else if (to_upper(*params) == 'L')
+                    {
+                        mapperSpecified = TRUE;
+                        megaram_type = TYPE_LINEAR;
                     }
                     else if (to_upper(*params) == 'S')
                     {
@@ -467,6 +560,7 @@ int main(void)
                     }
                     else if (to_upper(*params) == 'A')
                     {
+                        mapperSpecified = TRUE;
                         params++;
                         if (*params == '8')
                             megaram_type = TYPE_A8;
@@ -486,34 +580,11 @@ int main(void)
                     {
                         presAB = TRUE;
                     }
-  /*
-                    else if (to_upper(*params) == 'V')
+                    else if (to_upper(*params) == 'X')
                     {
-                        params++;
-                        uchar param = to_upper(*params++);
-                        switch(param)
-                        {
-                            case 'S': 
-                                scc_vol = hexToNum(to_upper(*params));
-                                printf("SCC+ volume %d\n\r", (int)scc_vol);
-                                break;
-                            case 'P': 
-                                psg_vol = hexToNum(to_upper(*params));
-                                printf("PSG volume %d\n\r", (int)psg_vol);
-                                break;
-                            case 'O': 
-                                opll_vol = hexToNum(to_upper(*params));
-                                printf("OPLL volume %d\n\r", (int)opll_vol);
-                                break;
-                            default:
-                            {
-                                printf("ERROR: wrong device volume...\n\r");
-                                return 0;
-                            }
-                            break;
-                        }
+                        exitAfterLoad = TRUE;
                     }
-*/                    
+               
                     else if (to_upper(*params) == 'Z')
                     {
                         params++;
@@ -553,20 +624,18 @@ int main(void)
     else
     if (help == TRUE || megaram_type == TYPE_UNK)
     {
-        printf("\n\rUSAGE: SMRAM [/Rx /Zx /Y] [romfile]\n\r\n\r"
+        printf("\n\rUSAGE: SMRAM [/Rx /L /X /Zx /Y] [romfile]\n\r\n\r"
                 " /Rx: Set MegaROM type\n\r"
                 "   0: Megaram SCC (default)\n\r"
                 "   1: ASCII16     (/A16)\n\r"
+                "   2: LINEAR      (/L)\n\r"
                 "   3: ASCII8      (/A8)\n\r"
                 "   5: Konami SCC  (/K5)\n\r"
                 "   6: Konami      (/K4)\n\r\n\r"
                 " /D: Set MegaRAM DDX type\n\r"
-//                " /Vxy: Set volume for\n\r"
-//                "   S: SCC+\n\r"
-//                "   P: PSG\n\r"
-//                "   O: OPLL\n\r"
-//                "   y: 0-9\n\r\n\r"
+                " /L: Set LINEAR type (automatic for ROMs <=64KB)\n\r"
                 " /S: Soft reset\n\r"
+                " /X: Load ROM, set mapper, and return to DOS\n\r"
                 " /Zx: Set cpu mode\n\r"
                 "   0: current\n\r"
                 "   1: Z80\n\r"
@@ -577,34 +646,8 @@ int main(void)
         return 0;
     }
 
-    printf("\r\nMapper Type: ");
-    switch(megaram_type)
-    {
-        case TYPE_MSCC:
-                printf("MegaRAM SCC (default)\n\r");
-                break;
-        case TYPE_K4:
-                printf("Konami (/R6 or /K4)\n\r");
-                break;
-        case TYPE_K5:
-                printf("Konami SCC (/R5 or /K5)\n\r");
-                break;
-        case TYPE_A16:
-                printf("ASCII16 (/R1 or /A16)\n\r");
-                break;
-        case TYPE_A8:
-                printf("ASCII8 (/R3 or /A8)\n\r");
-                break;
-        case TYPE_DDX:
-                printf("MegaRAM DDX (/D)\n\r");
-                break;
-    }
-
-    //MEGA_PORT1 = 0xF0 | scc_vol;
-    //MEGA_PORT1 = 0xE0 | psg_vol;
-    //MEGA_PORT1 = 0xD0 | opll_vol;
-
     if (filename == 0) {        
+        print_mapper_type();
         if (megaram_type != TYPE_UNK)
             MEGA_PORT1 = megaram_type;    
         return 0;
@@ -622,24 +665,47 @@ int main(void)
             
             enaslt(sslt, 0x4000);
             page = 0;
+            loadpage = 0;
             romsize = 0;
             printf("%04dKB", 0);
 
             do {
-
-                MEGA_PORT0 = 0; // enable paging
-                *((uchar *)0x4000) = page;
-                b = MEGA_PORT0; (b); // enable ram
                 bytes_read = dos2_read(handle, (void*)0x8000, 0x2000);
-                if (presAB == FALSE && romsize == 0) 
-                    *((uchar*)(0x8000)) = 0;
-                romsize += bytes_read;
-                memcpy((void*)0x4000, (void*)0x8000, bytes_read);
-                if (page == 0)
-                    romstart = *((uint*)0x8002);
+                // A linear image may begin at address 0 while its cartridge
+                // header lives at a later 16 KiB boundary.  Remember the
+                // first such header for launching, but only a header at file
+                // offset zero is allowed to shift the image's load base.
+                if ((romsize & 0x3FFFUL) == 0 && bytes_read >= 4 &&
+                    *((uchar*)0x8000) == 'A' &&
+                    *((uchar*)0x8001) == 'B')
+                {
+                    if (!linearHeaderValid)
+                    {
+                        linearHeaderValid = TRUE;
+                        linearRomstart = *((uint*)0x8002);
+                    }
+
+                    if (romsize == 0)
+                    {
+                        headerValid = TRUE;
+                        romstart = *((uint*)0x8002);
+
+                        if (megaram_type == TYPE_LINEAR)
+                            loadpage = (uchar)((romstart >> 13) & 0xFE);
+                    }
+                }
+
+                if (bytes_read > 0)
+                {
+                    MEGA_PORT0 = 0; // enable paging
+                    *((uchar *)0x4000) = loadpage + page;
+                    b = MEGA_PORT0; (b); // enable ram
+                    memcpy((void*)0x4000, (void*)0x8000, bytes_read);
+                    romsize += bytes_read;
+                    page++;
+                }
                 MEGA_PORT0 = 0; // enable paging
                 printf("\b\b\b\b\b\b%04dKB", (uint)(romsize >> 10));
-                page++;
 
             } while (bytes_read > 0);
 
@@ -649,21 +715,117 @@ int main(void)
     } 
     else 
     {
+        enaslt(*((uchar*)RAMAD1), 0x4000);
+        enaslt(*((uchar*)RAMAD2), 0x8000);
         printf("ERROR: Failed loading %s\n\r", filename);
-        return 0;
+        __asm jp 0x0000 __endasm;
     }
     *t = ' '; // restore space
 
-    MEGA_PORT1 = megaram_type;
-    
-    enaslt(sslt, 0x4000);
-
-    if (romstart > 0x7fff)
+    if (!mapperSpecified && romsize <= 0x10000UL)
     {
-        enaslt(sslt, 0x8000);
-        page2 = TRUE;
+        megaram_type = TYPE_LINEAR;
+        if (headerValid)
+            loadpage = (uchar)((romstart >> 13) & 0xFE);
     }
-    printf("\n\r\n\rStart address: 0x%04x (page %d)\n\r", romstart, page2 == TRUE ? 2 : 1);
+
+    // LINEAR exposes the ROM image verbatim at its 16 KiB page base: the
+    // init address is a jump target, not a file offset. Preserve its AB
+    // header. Retain the legacy header removal only for banked MegaROMs.
+    if (!presAB && megaram_type != TYPE_LINEAR)
+    {
+        MEGA_PORT0 = 0;
+        *((uchar*)0x4000) = 0;
+        b = MEGA_PORT0; (b);
+        *((uchar*)0x4000) = 0;
+        MEGA_PORT0 = 0;
+    }
+
+    if (megaram_type == TYPE_LINEAR)
+    {
+        if (!linearHeaderValid)
+        {
+            enaslt(*((uchar*)RAMAD1), 0x4000);
+            enaslt(*((uchar*)RAMAD2), 0x8000);
+
+            printf("ERROR: LINEAR ROM has no AB header\n\r");
+            
+            __asm jp 0x0000 __endasm;
+        }
+
+        // Launch through the first AB header found on a 16 KiB boundary.
+        // This need not be the first bank (for example, a 48 KiB image can
+        // load at 0x0000 and carry its header at 0x4000).
+        romstart = linearRomstart;
+        if (romsize + ((ulong)loadpage << 13) > 0x10000UL)
+        {
+            enaslt(*((uchar*)RAMAD1), 0x4000);
+            enaslt(*((uchar*)RAMAD2), 0x8000);
+
+            printf("ERROR: LINEAR ROM does not fit at 0x%04x\n\r",
+                   (uint)((uint)loadpage << 13));
+
+            __asm jp 0x0000 __endasm;
+        }
+
+        // With no mapper parameter the size was not known up front, so an
+        // image whose first bank has AB was loaded at bank zero. Move it into
+        // the 16 KiB page selected by that header without overwriting source
+        // banks that have not been copied yet.
+        if (!mapperSpecified && loadpage != 0)
+        {
+            page = (uchar)((romsize + 0x1FFFUL) >> 13);
+            while (page > 0)
+            {
+                page--;
+                MEGA_PORT0 = 0;
+                *((uchar*)0x4000) = page;
+                b = MEGA_PORT0; (b);
+                memcpy((void*)0x8000, (void*)0x4000, 0x2000);
+
+                MEGA_PORT0 = 0;
+                *((uchar*)0x4000) = loadpage + page;
+                b = MEGA_PORT0; (b);
+                memcpy((void*)0x4000, (void*)0x8000, 0x2000);
+            }
+            MEGA_PORT0 = 0;
+        }
+    }
+
+    print_mapper_type();
+    MEGA_PORT1 = megaram_type;
+
+    if (exitAfterLoad)
+    {
+        // Loading temporarily maps MegaRAM in page 1 and uses page 2 as its
+        // DOS transfer buffer. Restore both BIOS-designated RAM slots;
+        // the PPI-derived current slot is not necessarily the DOS RAM slot.
+        enaslt(*((uchar*)RAMAD1), 0x4000);
+        enaslt(*((uchar*)RAMAD2), 0x8000);
+        printf("\n\rROM loaded; returning to DOS.\n\r");
+        __asm jp 0x0000 __endasm;
+        //return 0;
+    }
+
+    startpage = (uchar)(romstart >> 14);
+    if (megaram_type == TYPE_LINEAR)
+    {
+        // Establish the normal cartridge environment first: system BIOS in
+        // page 0 (the copied launcher does this) and BASIC in page 1. Then
+        // replace only the page containing the ROM entry point with MegaRAM.
+        enaslt(*((uchar*)BASICSLT), 0x4000);
+        if (startpage == 1)
+            enaslt(sslt, 0x4000);
+        else if (startpage == 2)
+            enaslt(sslt, 0x8000);
+    }
+    else
+    {
+        enaslt(sslt, 0x4000);
+        if (startpage >= 2)
+            enaslt(sslt, 0x8000);
+    }
+    printf("\n\r\n\rStart address: 0x%04x (page %d)\n\r", romstart, (int)startpage);
 
     switch(megaram_type)
     {
@@ -671,7 +833,7 @@ int main(void)
         case TYPE_K5:
             *((uchar *)0x4000) = 0;
             *((uchar *)0x6000) = 1;
-            if (page2)
+            if (startpage >= 2)
             {
                 *((uchar *)0x8000) = 0;
                 *((uchar *)0xA000) = 1;
@@ -679,13 +841,13 @@ int main(void)
             break;
         case TYPE_A16:
             *((uchar *)0x6000) = 0;
-            if (page2)
+            if (startpage >= 2)
                 *((uchar *)0x8000) = 0;
             break;
         case TYPE_A8:
             *((uchar *)0x6000) = 0;
             *((uchar *)0x6800) = 1;
-            if (page2)
+            if (startpage >= 2)
             {
                 *((uchar *)0x7000) = 0;
                 *((uchar *)0x7800) = 1;
@@ -700,7 +862,14 @@ int main(void)
 
     if (softReset == FALSE)
     {
-        if (page2 == TRUE)
+        if (megaram_type == TYPE_LINEAR && startpage == 0)
+            memcpy((void*)0xC000, &runROM_page0, ((uint)&runROM_page0_end - (uint)&runROM_page0));
+        else if (megaram_type == TYPE_LINEAR && startpage == 3)
+        {
+            memcpy((void*)0x8000, &runROM_page3, ((uint)&runROM_page3_end - (uint)&runROM_page3));
+            jump(0x8000);
+        }
+        else if (startpage >= 2)
             memcpy((void*)0xC000, &runROM_page2, ((uint)&runROM_page2_end - (uint)&runROM_page2));
         else
             memcpy((void*)0xC000, &runROM_page1, ((uint)&runROM_page1_end - (uint)&runROM_page1));

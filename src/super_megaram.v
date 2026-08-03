@@ -18,8 +18,10 @@ module super_megaram
     input rfsh_n,
     input m1_n,
     input sltsl_n,
+    input [3:0] page0_subslot_en,
     input [3:0] page1_subslot_en,
     input [3:0] page2_subslot_en,
+    input [3:0] page3_subslot_en,
 
     output [7:0] data_out,
     output data_out_en,
@@ -38,6 +40,7 @@ module super_megaram
 
     localparam [4:0] MODE_DDX_SCC = 5'd0;
     localparam [4:0] MODE_DDX = 5'd1;
+    localparam [4:0] MODE_LINEAR = 5'd2;
     localparam [4:0] MODE_K4 = 5'd4;
     localparam [4:0] MODE_K5 = 5'd5;
     localparam [4:0] MODE_ASCII8 = 5'd8;
@@ -79,11 +82,16 @@ module super_megaram
     wire port_8f_write = !iorq_n && m1_n && !wr_n &&
                          addr[7:0] == 8'h8f;
 
+    wire linear_mode = operation_mode == MODE_LINEAR;
+    wire page0_smr_selected = !sltsl_n && page0_subslot_en[2];
     wire page1_smr_selected = !sltsl_n && page1_subslot_en[2];
     wire page2_smr_selected = !sltsl_n && page2_subslot_en[2];
+    wire page3_smr_selected = !sltsl_n && page3_subslot_en[2];
     wire smr_slot_selected =
+        (linear_mode && addr[15:14] == 2'b00 && page0_smr_selected) ||
         (addr[15:14] == 2'b01 && page1_smr_selected) ||
-        (addr[15:14] == 2'b10 && page2_smr_selected);
+        (addr[15:14] == 2'b10 && page2_smr_selected) ||
+        (linear_mode && addr[15:14] == 2'b11 && page3_smr_selected);
     wire memory_cycle = !merq_n && iorq_n && rfsh_n && smr_slot_selected;
 
     wire scc_mode = operation_mode == MODE_DDX_SCC ||
@@ -193,6 +201,7 @@ module super_megaram
     wire [6:0] selected_16k_bank =
         (addr[15:14] == 2'b01) ? bank[0][6:0] : bank[2][6:0];
     wire [20:0] selected_smr_offset =
+        linear_mode ? {5'b00000, addr} :
         (operation_mode == MODE_ASCII16) ?
             {selected_16k_bank, addr[13:0]} :
             {selected_8k_bank, addr[12:0]};
@@ -245,10 +254,13 @@ module super_megaram
             else if (port_8e_selected && !wr_n)
                 rom_mode <= 1'b1;
 
-            if (port_8f_write) begin
+            // LINEAR is intentionally latched until reset. Cartridge code
+            // cannot turn fixed 0000-FFFF mapping back into a banked mapper.
+            if (port_8f_write && !linear_mode) begin
                 case (data_in)
                     8'd0: operation_mode <= MODE_DDX_SCC;
                     8'd1: operation_mode <= MODE_DDX;
+                    8'd2: operation_mode <= MODE_LINEAR;
                     8'd4: operation_mode <= MODE_K4;
                     8'd5: operation_mode <= MODE_K5;
                     8'd8: operation_mode <= MODE_ASCII8;
