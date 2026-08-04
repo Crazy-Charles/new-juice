@@ -77,6 +77,15 @@ write-protected paging/ROM mode. Port `0x8F` selects mapper type `0`, `1`, `2`
 (LINEAR), `4`, `5`, `8`, or `0x16`. Neither MegaRAM control port drives the
 data bus during a read.
 
+When `SMS_DEBUGGER_ENABLED` is enabled, holding S2 for one second toggles the
+instruction-stepper. While stepping is active, a short S2 press releases the
+current opcode fetch and holds `/WAIT` at the following opcode fetch, allowing
+one complete Z80 instruction to execute. Another one-second hold disables
+stepping and releases `/WAIT`. `SMRAM /W romfile` requests the same activation
+through the reserved `0x57` command on port `0x8F` immediately before the ROM
+launcher transfers control. The stepper and its `/WAIT` gate are compiled out
+when `SMS_DEBUGGER_ENABLED` is disabled.
+
 ## SD-card interface
 
 The onboard microSD card is exposed through the DOS2 ROM in expanded subslot
@@ -274,7 +283,7 @@ the official schematic linked below for their board/header routing.
 | CPU clock | `cpu_clkin` | 76 | External MSX CPU clock |
 | Wait/bus direction | `wait_out`, `busdir_n` | 42, 74 | MSX `/WAIT` and `/BUSDIR` |
 | Board clock | `clkin` | 4 | 27 MHz oscillator |
-| User button | `s1` | 88 | Active-low reset input |
+| User buttons | `s1`, `s2` | 88, 87 | Reset and debugger-step controls |
 | Status LED | `led` | 75 | Board status LED |
 | I2S audio | `hp_din`, `hp_bck`, `hp_ws`, `pa_en` | 54, 56, 55, 51 | MAX98357A data, bit clock, word select, enable |
 | microSD | `sd_dat3`, `sd_dat2`, `sd_dat1`, `sd_sclk`, `sd_dat0`, `sd_cmd` | 81, 80, 85, 83, 84, 82 | SDIO data, clock, and command |

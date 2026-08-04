@@ -1,10 +1,11 @@
 module top
 #(
-    parameter SMS_DEBUGGER_ENABLED = 1'b0
+    parameter SMS_DEBUGGER_ENABLED = 1'b1
 )
 (
     input   clkin,
     input   s1,
+    input   s2,
 
     output hp_ws,
     output hp_din,
@@ -482,6 +483,9 @@ module top
     wire [7:0] smr_data_out;
     wire smr_data_out_en;
     wire smr_wait_n;
+    wire step_debug_toggle;
+    wire step_debug_wait_n;
+    wire step_debug_enabled;
     wire [7:0] sd_data_out;
     wire sd_data_out_en;
     wire sd_overlay_enabled;
@@ -636,11 +640,12 @@ module top
 
     // MSX PSG I/O ports. This is deliberately a write-only slave: port A2
     // reads are not decoded and the PSG output data is never put on cd.
-    assign psg_address_write = active_module_reset_n &&
-                               !iorq_n && m1_n && !wr_n &&
+    // The PSG's synchronized reset already suppresses all activity until the
+    // module sequence is ready, so its bus decode does not need the startup
+    // flag on this timing-sensitive combinational path.
+    assign psg_address_write = !iorq_n && m1_n && !wr_n &&
                                addr[7:0] == 8'hA0;
-    assign psg_data_write = active_module_reset_n &&
-                            !iorq_n && m1_n && !wr_n &&
+    assign psg_data_write = !iorq_n && m1_n && !wr_n &&
                             addr[7:0] == 8'hA1;
     assign psg_bdir = psg_address_write || psg_data_write;
     assign psg_bc = psg_address_write;
@@ -716,8 +721,10 @@ module top
     end
 
     // MSX-Music/YM2413 ports 7C (address) and 7D (data). Both are write-only.
-    assign opll_write_selected = active_module_reset_n &&
-                                 !iorq_n && m1_n && !wr_n &&
+    // The OPLL is held in its own module reset until startup completes.
+    // Keeping that same startup flag out of the write decode avoids a long
+    // combinational path into the sound core.
+    assign opll_write_selected = !iorq_n && m1_n && !wr_n &&
                                  addr[7:1] == 7'h3E;
 
     // Advance JT2413 at the native MSX-Music rate while keeping the whole
@@ -1323,6 +1330,23 @@ module top
         .inputs_latched(inputs_latched)
     );
 
+    generate
+        if (SMS_DEBUGGER_ENABLED) begin : cpu_step_debugger_enabled_impl
+            cpu_step_debugger cpu_step_debugger_inst (
+                .clk(main_clk),
+                .reset_n(board_reset_n),
+                .s2(s2),
+                .m1_n(m1_n),
+                .software_toggle(step_debug_toggle),
+                .wait_n(step_debug_wait_n),
+                .enabled(step_debug_enabled)
+            );
+        end else begin : cpu_step_debugger_disabled_impl
+            assign step_debug_wait_n = 1'b1;
+            assign step_debug_enabled = 1'b0;
+        end
+    endgenerate
+
     // SDRAM owns the external memory bus until its startup test has passed.
     // Synchronize that result into the SD controller's 27 MHz domain and
     // leave a full 16 SD clocks between the SDRAM and SD reset releases.
@@ -1500,7 +1524,8 @@ module top
     end
 
     super_megaram #(
-        .INCLUDE_SCC(1'b1)
+        .INCLUDE_SCC(1'b1),
+        .DEBUGGER_ENABLED(SMS_DEBUGGER_ENABLED)
     ) super_megaram_inst(
         .clk(main_clk),
         .cpu_clk(cpu_clk),
@@ -1521,6 +1546,7 @@ module top
         .data_out(smr_data_out),
         .data_out_en(smr_data_out_en),
         .wait_n(smr_wait_n),
+        .step_debug_toggle(step_debug_toggle),
         .scc_sound(scc_sound),
         .sdrc_cmd_en(smr_sdrc_cmd_en),
         .sdrc_cmd(smr_sdrc_cmd),
@@ -1657,7 +1683,7 @@ module top
         .data_out_en(data_out_en),
         .wait_in_n(module_sequence_done &&
                    startup_test_wait_n && flash_rom_wait_n &&
-                   smr_wait_n && mapper_wait_n),
+                   smr_wait_n && mapper_wait_n && step_debug_wait_n),
         .rd_n(rd_n),
         .sltsl_n(sltsl_n),
         .mapper_port_read(mapper_port_read),

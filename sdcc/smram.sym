@@ -10,60 +10,66 @@ Symbol Table
     _MEGA_PORT0                                                 =   0000008E 
     _MEGA_PORT1                                                 =   0000008F 
     _PPIA                                                       =   000000A8 
-  0 ___str_0                                                        000001F0 R
-  0 ___str_1                                                        00000200 R
-  0 ___str_10                                                       00000B06 R
-  0 ___str_11                                                       00000B1A R
-  0 ___str_12                                                       00000B3C R
-  0 ___str_13                                                       00000D19 R
-  0 ___str_14                                                       00000D31 R
-  0 ___str_15                                                       00000D38 R
-  0 ___str_16                                                       00000D45 R
-  0 ___str_17                                                       00000D60 R
-  0 ___str_18                                                       00000D85 R
-  0 ___str_19                                                       00000DB0 R
-  0 ___str_2                                                        00000218 R
-  0 ___str_20                                                       00000DD2 R
-  0 ___str_3                                                        00000226 R
-  0 ___str_4                                                        0000023C R
-  0 ___str_5                                                        00000256 R
-  0 ___str_6                                                        0000026E R
-  0 ___str_7                                                        00000284 R
-  0 ___str_8                                                        00000ACF R
-  0 ___str_9                                                        00000AE6 R
+  0 ___str_0                                                        0000022C R
+  0 ___str_1                                                        0000023C R
+  0 ___str_10                                                       00000B56 R
+  0 ___str_11                                                       00000B6A R
+  0 ___str_12                                                       00000B8C R
+  0 ___str_13                                                       00000DA0 R
+  0 ___str_14                                                       00000DB8 R
+  0 ___str_15                                                       00000DBF R
+  0 ___str_16                                                       00000DCC R
+  0 ___str_17                                                       00000DE7 R
+  0 ___str_18                                                       00000E0C R
+  0 ___str_19                                                       00000E37 R
+  0 ___str_2                                                        00000254 R
+  0 ___str_20                                                       00000E59 R
+  0 ___str_3                                                        00000262 R
+  0 ___str_4                                                        00000278 R
+  0 ___str_5                                                        00000292 R
+  0 ___str_6                                                        000002AA R
+  0 ___str_7                                                        000002C0 R
+  0 ___str_8                                                        00000B1F R
+  0 ___str_9                                                        00000B36 R
   0 __no_turbo                                                      00000085 R
   0 __open_no_err                                                   00000096 R
-  7 __xinit__cpumode                                                0000000C R
+  0 __page0_no_step                                                 00000126 R
+  0 __page1_no_step                                                 000000FE R
+  0 __page2_no_step                                                 0000014F R
+  0 __page3_no_step                                                 00000177 R
+  0 __reset_no_step                                                 0000019A R
+  7 __xinit__cpumode                                                0000000D R
   7 __xinit__exitAfterLoad                                          0000000B R
   7 __xinit__filename                                               00000001 R
   7 __xinit__found                                                  00000000 R
   7 __xinit__headerValid                                            00000009 R
-  7 __xinit__help                                                   0000000F R
+  7 __xinit__help                                                   00000010 R
   7 __xinit__linearHeaderValid                                      0000000A R
-  7 __xinit__loadpage                                               0000000E R
+  7 __xinit__loadpage                                               0000000F R
   7 __xinit__mapperSpecified                                        00000008 R
   7 __xinit__megaram_type                                           00000003 R
-  7 __xinit__opll_vol                                               00000012 R
+  7 __xinit__opll_vol                                               00000013 R
   7 __xinit__paramlen                                               00000005 R
   7 __xinit__presAB                                                 00000006 R
-  7 __xinit__psg_vol                                                00000011 R
-  7 __xinit__scc_vol                                                00000010 R
+  7 __xinit__psg_vol                                                00000012 R
+  7 __xinit__scc_vol                                                00000011 R
   7 __xinit__softReset                                              00000007 R
-  7 __xinit__startpage                                              0000000D R
+  7 __xinit__startpage                                              0000000E R
+  7 __xinit__stepDebug                                              0000000C R
   1 _addr                                                           0000000F GR
   1 _b                                                              00000003 GR
+ASxxxx Assembler V05.50.4+NoICE+SDCCmods-WIP-R14  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80 / R800)                               Page 2
+Hexadecimal [32-Bits]
+
+Symbol Table
+
   0 _bdos                                                           00000000 GR
   0 _bdos_c_rawio                                                   00000013 GR
   0 _bdos_c_write                                                   0000000C GR
   1 _bytes_read                                                     0000000B GR
   1 _c                                                              0000011B GR
   0 _chgcpu                                                         00000067 GR
-ASxxxx Assembler V05.50.4+NoICE+SDCCmods-WIP-R14  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80 / R800)                               Page 2
-Hexadecimal [32-Bits]
-
-Symbol Table
-
-  2 _cpumode                                                        0000000C GR
+  2 _cpumode                                                        0000000D GR
   1 _curslt                                                         00000000 GR
   1 _cursslt                                                        00000001 GR
   0 _dos2_close                                                     0000009B GR
@@ -78,65 +84,67 @@ Symbol Table
   0 _getchar                                                        00000026 GR
   1 _handle                                                         0000000A GR
   2 _headerValid                                                    00000009 GR
-  2 _help                                                           0000000F GR
+  2 _help                                                           00000010 GR
   0 _hexToNum                                                       000000C6 GR
   1 _i                                                              0000000D GR
   0 _jump                                                           000000D3 GR
   2 _linearHeaderValid                                              0000000A GR
   1 _linearRomstart                                                 00000119 GR
-  2 _loadpage                                                       0000000E GR
-  0 _main                                                           00000297 GR
+  2 _loadpage                                                       0000000F GR
+  0 _main                                                           000002D3 GR
   2 _mapperSpecified                                                00000008 GR
   2 _megaram_type                                                   00000003 GR
-  2 _opll_vol                                                       00000012 GR
+  2 _opll_vol                                                       00000013 GR
   1 _page                                                           00000011 GR
   2 _paramlen                                                       00000005 GR
   1 _params                                                         00000008 GR
   1 _path                                                           00000017 GR
   2 _presAB                                                         00000006 GR
-  0 _print_mapper_type                                              00000161 GR
+  0 _print_mapper_type                                              0000019D GR
     _printf                                                         ******** GX
-  2 _psg_vol                                                        00000011 GR
+  2 _psg_vol                                                        00000012 GR
   0 _putchar                                                        0000001B GR
   0 _rdslt                                                          0000005D GR
   1 _romsize                                                        00000012 GR
   1 _romstart                                                       00000117 GR
-  0 _runROM_Reset                                                   00000148 GR
-  0 _runROM_Reset_end                                               00000161 GR
-  0 _runROM_page0                                                   000000F3 GR
-  0 _runROM_page0_end                                               00000111 GR
+  0 _runROM_Reset                                                   00000178 GR
+  0 _runROM_Reset_end                                               0000019D GR
+  0 _runROM_page0                                                   000000FF GR
+  0 _runROM_page0_end                                               00000129 GR
   0 _runROM_page1                                                   000000D8 GR
-  0 _runROM_page1_end                                               000000F3 GR
-  0 _runROM_page2                                                   00000111 GR
-  0 _runROM_page2_end                                               0000012C GR
-  0 _runROM_page3                                                   0000012C GR
-  0 _runROM_page3_end                                               00000148 GR
+  0 _runROM_page1_end                                               000000FF GR
+  0 _runROM_page2                                                   00000129 GR
+  0 _runROM_page2_end                                               00000150 GR
+  0 _runROM_page3                                                   00000150 GR
+  0 _runROM_page3_end                                               00000178 GR
   1 _s                                                              00000004 GR
-  2 _scc_vol                                                        00000010 GR
-  1 _slotid                                                         00000016 GR
-  2 _softReset                                                      00000007 GR
-  1 _sslt                                                           00000002 GR
-  2 _startpage                                                      0000000D GR
-  1 _t                                                              00000006 GR
 ASxxxx Assembler V05.50.4+NoICE+SDCCmods-WIP-R14  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80 / R800)                               Page 3
 Hexadecimal [32-Bits]
 
 Symbol Table
 
+  2 _scc_vol                                                        00000011 GR
+  1 _slotid                                                         00000016 GR
+  2 _softReset                                                      00000007 GR
+  1 _sslt                                                           00000002 GR
+  2 _startpage                                                      0000000E GR
+  2 _stepDebug                                                      0000000C GR
+  1 _t                                                              00000006 GR
   0 _to_upper                                                       0000003F GR
+
 
 ASxxxx Assembler V05.50.4+NoICE+SDCCmods-WIP-R14  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80 / R800)                               Page 4
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      DF8   flags    0
+   0 _CODE                                      size      E7F   flags    0
    1 _DATA                                      size      11C   flags    0
-   2 _INITIALIZED                               size       13   flags    0
+   2 _INITIALIZED                               size       14   flags    0
    3 _DABS                                      size        0   flags    8
    4 _HOME                                      size        0   flags    0
    5 _GSINIT                                    size        0   flags    0
    6 _GSFINAL                                   size        0   flags    0
-   7 _INITIALIZER                               size       13   flags    0
+   7 _INITIALIZER                               size       14   flags    0
    8 _CABS                                      size        0   flags    8
 

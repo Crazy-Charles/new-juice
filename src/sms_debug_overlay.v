@@ -14,181 +14,101 @@ module sms_debug_overlay
     output pixel
 );
 
-    localparam [4:0] CHAR_LBRACKET = 5'd16;
-    localparam [4:0] CHAR_RBRACKET = 5'd17;
-    localparam [4:0] CHAR_COLON = 5'd18;
-    localparam [4:0] CHAR_SPACE = 5'd19;
+    wire [9:0] local_x = x - X_START;
+    wire [9:0] local_y = y - Y_START;
+    wire [4:0] character_cell = local_x[8:4];
+    wire [2:0] glyph_x = local_x[3:1];
+    wire [2:0] glyph_y = local_y[3:1];
 
-    reg [9:0] local_x;
-    reg [9:0] local_y;
-    reg [4:0] character;
-    reg [4:0] glyph_bits;
-    reg pixel_reg;
+    reg [3:0] digit;
+    reg digit_valid;
+    reg bracket_left;
+    reg bracket_right;
+    reg colon;
+    reg [6:0] segments;
 
-    function automatic [4:0] glyph_row;
-        input [4:0] glyph;
-        input [2:0] row;
-        begin
-            glyph_row = 5'b00000;
-            case (glyph)
-                5'h0: case (row)
-                    0:glyph_row=5'b01110; 1:glyph_row=5'b10001;
-                    2:glyph_row=5'b10011; 3:glyph_row=5'b10101;
-                    4:glyph_row=5'b11001; 5:glyph_row=5'b10001;
-                    6:glyph_row=5'b01110; default:glyph_row=5'b00000;
-                endcase
-                5'h1: case (row)
-                    0:glyph_row=5'b00100; 1:glyph_row=5'b01100;
-                    2:glyph_row=5'b00100; 3:glyph_row=5'b00100;
-                    4:glyph_row=5'b00100; 5:glyph_row=5'b00100;
-                    6:glyph_row=5'b01110; default:glyph_row=5'b00000;
-                endcase
-                5'h2: case (row)
-                    0:glyph_row=5'b01110; 1:glyph_row=5'b10001;
-                    2:glyph_row=5'b00001; 3:glyph_row=5'b00010;
-                    4:glyph_row=5'b00100; 5:glyph_row=5'b01000;
-                    6:glyph_row=5'b11111; default:glyph_row=5'b00000;
-                endcase
-                5'h3: case (row)
-                    0:glyph_row=5'b11110; 1:glyph_row=5'b00001;
-                    2:glyph_row=5'b00001; 3:glyph_row=5'b01110;
-                    4:glyph_row=5'b00001; 5:glyph_row=5'b00001;
-                    6:glyph_row=5'b11110; default:glyph_row=5'b00000;
-                endcase
-                5'h4: case (row)
-                    0:glyph_row=5'b00010; 1:glyph_row=5'b00110;
-                    2:glyph_row=5'b01010; 3:glyph_row=5'b10010;
-                    4:glyph_row=5'b11111; 5:glyph_row=5'b00010;
-                    6:glyph_row=5'b00010; default:glyph_row=5'b00000;
-                endcase
-                5'h5: case (row)
-                    0:glyph_row=5'b11111; 1:glyph_row=5'b10000;
-                    2:glyph_row=5'b10000; 3:glyph_row=5'b11110;
-                    4:glyph_row=5'b00001; 5:glyph_row=5'b00001;
-                    6:glyph_row=5'b11110; default:glyph_row=5'b00000;
-                endcase
-                5'h6: case (row)
-                    0:glyph_row=5'b01110; 1:glyph_row=5'b10000;
-                    2:glyph_row=5'b10000; 3:glyph_row=5'b11110;
-                    4:glyph_row=5'b10001; 5:glyph_row=5'b10001;
-                    6:glyph_row=5'b01110; default:glyph_row=5'b00000;
-                endcase
-                5'h7: case (row)
-                    0:glyph_row=5'b11111; 1:glyph_row=5'b00001;
-                    2:glyph_row=5'b00010; 3:glyph_row=5'b00100;
-                    4:glyph_row=5'b01000; 5:glyph_row=5'b01000;
-                    6:glyph_row=5'b01000; default:glyph_row=5'b00000;
-                endcase
-                5'h8: case (row)
-                    0:glyph_row=5'b01110; 1:glyph_row=5'b10001;
-                    2:glyph_row=5'b10001; 3:glyph_row=5'b01110;
-                    4:glyph_row=5'b10001; 5:glyph_row=5'b10001;
-                    6:glyph_row=5'b01110; default:glyph_row=5'b00000;
-                endcase
-                5'h9: case (row)
-                    0:glyph_row=5'b01110; 1:glyph_row=5'b10001;
-                    2:glyph_row=5'b10001; 3:glyph_row=5'b01111;
-                    4:glyph_row=5'b00001; 5:glyph_row=5'b00001;
-                    6:glyph_row=5'b01110; default:glyph_row=5'b00000;
-                endcase
-                5'hA: case (row)
-                    0:glyph_row=5'b01110; 1:glyph_row=5'b10001;
-                    2:glyph_row=5'b10001; 3:glyph_row=5'b11111;
-                    4:glyph_row=5'b10001; 5:glyph_row=5'b10001;
-                    6:glyph_row=5'b10001; default:glyph_row=5'b00000;
-                endcase
-                5'hB: case (row)
-                    0:glyph_row=5'b11110; 1:glyph_row=5'b10001;
-                    2:glyph_row=5'b10001; 3:glyph_row=5'b11110;
-                    4:glyph_row=5'b10001; 5:glyph_row=5'b10001;
-                    6:glyph_row=5'b11110; default:glyph_row=5'b00000;
-                endcase
-                5'hC: case (row)
-                    0:glyph_row=5'b01111; 1:glyph_row=5'b10000;
-                    2:glyph_row=5'b10000; 3:glyph_row=5'b10000;
-                    4:glyph_row=5'b10000; 5:glyph_row=5'b10000;
-                    6:glyph_row=5'b01111; default:glyph_row=5'b00000;
-                endcase
-                5'hD: case (row)
-                    0:glyph_row=5'b11110; 1:glyph_row=5'b10001;
-                    2:glyph_row=5'b10001; 3:glyph_row=5'b10001;
-                    4:glyph_row=5'b10001; 5:glyph_row=5'b10001;
-                    6:glyph_row=5'b11110; default:glyph_row=5'b00000;
-                endcase
-                5'hE: case (row)
-                    0:glyph_row=5'b11111; 1:glyph_row=5'b10000;
-                    2:glyph_row=5'b10000; 3:glyph_row=5'b11110;
-                    4:glyph_row=5'b10000; 5:glyph_row=5'b10000;
-                    6:glyph_row=5'b11111; default:glyph_row=5'b00000;
-                endcase
-                5'hF: case (row)
-                    0:glyph_row=5'b11111; 1:glyph_row=5'b10000;
-                    2:glyph_row=5'b10000; 3:glyph_row=5'b11110;
-                    4:glyph_row=5'b10000; 5:glyph_row=5'b10000;
-                    6:glyph_row=5'b10000; default:glyph_row=5'b00000;
-                endcase
-                CHAR_LBRACKET: case (row)
-                    0:glyph_row=5'b01110; 1:glyph_row=5'b01000;
-                    2:glyph_row=5'b01000; 3:glyph_row=5'b01000;
-                    4:glyph_row=5'b01000; 5:glyph_row=5'b01000;
-                    6:glyph_row=5'b01110; default:glyph_row=5'b00000;
-                endcase
-                CHAR_RBRACKET: case (row)
-                    0:glyph_row=5'b01110; 1:glyph_row=5'b00010;
-                    2:glyph_row=5'b00010; 3:glyph_row=5'b00010;
-                    4:glyph_row=5'b00010; 5:glyph_row=5'b00010;
-                    6:glyph_row=5'b01110; default:glyph_row=5'b00000;
-                endcase
-                CHAR_COLON: case (row)
-                    1:glyph_row=5'b00100; 2:glyph_row=5'b00100;
-                    4:glyph_row=5'b00100; 5:glyph_row=5'b00100;
-                    default:glyph_row=5'b00000;
-                endcase
-                default: glyph_row=5'b00000;
-            endcase
-        end
-    endfunction
-
+    // Seven-segment hexadecimal digits are much smaller than the previous
+    // full 5x7 character ROM. Segment order is {a,b,c,d,e,f,g}; B and D use
+    // their conventional lower-case seven-segment forms.
     always @* begin
-        local_x = x - X_START;
-        local_y = y - Y_START;
-        character = CHAR_SPACE;
-        glyph_bits = 5'b00000;
-        pixel_reg = 1'b0;
-
-        // 20 characters: [AAAA] [00:11:22:33]
-        if (x >= X_START && x < X_START + 10'd320 &&
-            y >= Y_START && y < Y_START + 10'd16) begin
-            case (local_x[8:4])
-                5'd0:  character = CHAR_LBRACKET;
-                5'd1:  character = {1'b0, address[15:12]};
-                5'd2:  character = {1'b0, address[11:8]};
-                5'd3:  character = {1'b0, address[7:4]};
-                5'd4:  character = {1'b0, address[3:0]};
-                5'd5:  character = CHAR_RBRACKET;
-                5'd6:  character = CHAR_SPACE;
-                5'd7:  character = CHAR_LBRACKET;
-                5'd8:  character = {1'b0, page0[7:4]};
-                5'd9:  character = {1'b0, page0[3:0]};
-                5'd10: character = CHAR_COLON;
-                5'd11: character = {1'b0, page1[7:4]};
-                5'd12: character = {1'b0, page1[3:0]};
-                5'd13: character = CHAR_COLON;
-                5'd14: character = {1'b0, page2[7:4]};
-                5'd15: character = {1'b0, page2[3:0]};
-                5'd16: character = CHAR_COLON;
-                5'd17: character = {1'b0, page3[7:4]};
-                5'd18: character = {1'b0, page3[3:0]};
-                5'd19: character = CHAR_RBRACKET;
-                default: character = CHAR_SPACE;
-            endcase
-
-            glyph_bits = glyph_row(character, local_y[3:1]);
-            if (local_x[3:1] >= 3'd1 && local_x[3:1] <= 3'd5)
-                pixel_reg = glyph_bits[5-local_x[3:1]];
-        end
+        case (digit)
+            4'h0: segments = 7'b1111110;
+            4'h1: segments = 7'b0110000;
+            4'h2: segments = 7'b1101101;
+            4'h3: segments = 7'b1111001;
+            4'h4: segments = 7'b0110011;
+            4'h5: segments = 7'b1011011;
+            4'h6: segments = 7'b1011111;
+            4'h7: segments = 7'b1110000;
+            4'h8: segments = 7'b1111111;
+            4'h9: segments = 7'b1111011;
+            4'hA: segments = 7'b1110111;
+            4'hB: segments = 7'b0011111;
+            4'hC: segments = 7'b1001110;
+            4'hD: segments = 7'b0111101;
+            4'hE: segments = 7'b1001111;
+            default: segments = 7'b1000111;
+        endcase
     end
 
-    assign pixel = pixel_reg;
+    always @* begin
+        digit = 4'd0;
+        digit_valid = 1'b1;
+        bracket_left = 1'b0;
+        bracket_right = 1'b0;
+        colon = 1'b0;
+
+        case (character_cell)
+            5'd0:  begin digit_valid = 1'b0; bracket_left = 1'b1; end
+            5'd1:  digit = address[15:12];
+            5'd2:  digit = address[11:8];
+            5'd3:  digit = address[7:4];
+            5'd4:  digit = address[3:0];
+            5'd5:  begin digit_valid = 1'b0; bracket_right = 1'b1; end
+            5'd6:  digit_valid = 1'b0;
+            5'd7:  begin digit_valid = 1'b0; bracket_left = 1'b1; end
+            5'd8:  digit = page0[7:4];
+            5'd9:  digit = page0[3:0];
+            5'd10: begin digit_valid = 1'b0; colon = 1'b1; end
+            5'd11: digit = page1[7:4];
+            5'd12: digit = page1[3:0];
+            5'd13: begin digit_valid = 1'b0; colon = 1'b1; end
+            5'd14: digit = page2[7:4];
+            5'd15: digit = page2[3:0];
+            5'd16: begin digit_valid = 1'b0; colon = 1'b1; end
+            5'd17: digit = page3[7:4];
+            5'd18: digit = page3[3:0];
+            5'd19: begin digit_valid = 1'b0; bracket_right = 1'b1; end
+            default: digit_valid = 1'b0;
+        endcase
+    end
+
+    wire horizontal = glyph_x >= 3'd2 && glyph_x <= 3'd4;
+    wire upper_vertical = glyph_y >= 3'd1 && glyph_y <= 3'd3;
+    wire lower_vertical = glyph_y >= 3'd4 && glyph_y <= 3'd6;
+    wire digit_pixel = digit_valid && (
+        (segments[6] && glyph_y == 3'd0 && horizontal) ||
+        (segments[5] && glyph_x == 3'd5 && upper_vertical) ||
+        (segments[4] && glyph_x == 3'd5 && lower_vertical) ||
+        (segments[3] && glyph_y == 3'd7 && horizontal) ||
+        (segments[2] && glyph_x == 3'd1 && lower_vertical) ||
+        (segments[1] && glyph_x == 3'd1 && upper_vertical) ||
+        (segments[0] && glyph_y == 3'd3 && horizontal));
+    wire left_bracket_pixel = bracket_left &&
+        ((glyph_x == 3'd2) ||
+         (glyph_x >= 3'd2 && glyph_x <= 3'd4 &&
+          (glyph_y == 3'd0 || glyph_y == 3'd7)));
+    wire right_bracket_pixel = bracket_right &&
+        ((glyph_x == 3'd4) ||
+         (glyph_x >= 3'd2 && glyph_x <= 3'd4 &&
+          (glyph_y == 3'd0 || glyph_y == 3'd7)));
+    wire colon_pixel = colon && glyph_x == 3'd3 &&
+        (glyph_y == 3'd2 || glyph_y == 3'd5);
+    wire overlay_window = x >= X_START && x < X_START + 10'd320 &&
+                          y >= Y_START && y < Y_START + 10'd16;
+
+    assign pixel = overlay_window &&
+                   (digit_pixel || left_bracket_pixel ||
+                    right_bracket_pixel || colon_pixel);
 
 endmodule

@@ -2,7 +2,8 @@ module super_megaram
 #(
     // Keep the mapper fully operational while allowing IKASCC to be compiled
     // out for timing/isolation testing.
-    parameter INCLUDE_SCC = 1'b0
+    parameter INCLUDE_SCC = 1'b0,
+    parameter DEBUGGER_ENABLED = 1'b0
 )
 (
     input clk,
@@ -26,6 +27,7 @@ module super_megaram
     output [7:0] data_out,
     output data_out_en,
     output wait_n,
+    output step_debug_toggle,
     output signed [10:0] scc_sound,
 
     output sdrc_cmd_en,
@@ -74,6 +76,8 @@ module super_megaram
     reg read_data_active = 1'b0;
     reg [15:0] ikascc_addr_latched = 16'd0;
     reg [7:0] ikascc_data_latched = 8'd0;
+    reg step_debug_toggle_reg = 1'b0;
+    reg step_debug_command_seen = 1'b0;
 
     reg bank_write_selected;
     reg [1:0] bank_write_index;
@@ -81,6 +85,8 @@ module super_megaram
     wire port_8e_selected = !iorq_n && m1_n && addr[7:0] == 8'h8e;
     wire port_8f_write = !iorq_n && m1_n && !wr_n &&
                          addr[7:0] == 8'h8f;
+    wire step_debug_command = DEBUGGER_ENABLED && port_8f_write &&
+                              data_in == 8'h57;
 
     wire linear_mode = operation_mode == MODE_LINEAR;
     wire page0_smr_selected = !sltsl_n && page0_subslot_en[2];
@@ -246,8 +252,18 @@ module super_megaram
             read_data_active <= 1'b0;
             ikascc_addr_latched <= 16'd0;
             ikascc_data_latched <= 8'd0;
+            step_debug_toggle_reg <= 1'b0;
+            step_debug_command_seen <= 1'b0;
         end else begin
             sdrc_cmd_en_reg <= 1'b0;
+            step_debug_toggle_reg <= 1'b0;
+
+            if (!step_debug_command)
+                step_debug_command_seen <= 1'b0;
+            else if (!step_debug_command_seen) begin
+                step_debug_command_seen <= 1'b1;
+                step_debug_toggle_reg <= 1'b1;
+            end
 
             if (port_8e_selected && !rd_n)
                 rom_mode <= 1'b0;
@@ -256,7 +272,7 @@ module super_megaram
 
             // LINEAR is intentionally latched until reset. Cartridge code
             // cannot turn fixed 0000-FFFF mapping back into a banked mapper.
-            if (port_8f_write && !linear_mode) begin
+            if (port_8f_write && !linear_mode && !step_debug_command) begin
                 case (data_in)
                     8'd0: operation_mode <= MODE_DDX_SCC;
                     8'd1: operation_mode <= MODE_DDX;
@@ -378,6 +394,7 @@ module super_megaram
 
     assign wait_n = !memory_access_selected ||
                     (sdrc_init_done && state == STATE_DONE);
+    assign step_debug_toggle = step_debug_toggle_reg;
 
     assign sdrc_cmd_en = sdrc_cmd_en_reg;
     assign sdrc_cmd = sdrc_cmd_reg;
