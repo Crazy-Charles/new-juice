@@ -32,6 +32,7 @@ module super_megaram
     output [7:0] debug_bank1,
     output [7:0] debug_bank2,
     output [7:0] debug_bank3,
+    output [7:0] debug_mode,
     output signed [10:0] scc_sound,
 
     output sdrc_cmd_en,
@@ -62,6 +63,7 @@ module super_megaram
     localparam [2:0] STATE_CMD = 3'd1;
     localparam [2:0] STATE_WAIT_ACK = 3'd2;
     localparam [2:0] STATE_DONE = 3'd3;
+    localparam [2:0] STATE_READ_SETTLE = 3'd4;
 
     reg [4:0] operation_mode = MODE_DDX_SCC;
     reg rom_mode = 1'b1;
@@ -343,9 +345,19 @@ module super_megaram
                             endcase
                             if (memory_read_selected)
                                 read_data_active <= 1'b1;
+                            // Drive the registered byte for a complete main
+                            // clock before releasing WAIT. Previously the data
+                            // register, output enable, and WAIT release all
+                            // changed on this edge, making CPU-visible bits
+                            // depend on their individual routed delays.
+                            state <= STATE_READ_SETTLE;
+                        end else begin
+                            state <= STATE_DONE;
                         end
-                        state <= STATE_DONE;
                     end
+                end
+                STATE_READ_SETTLE: begin
+                    state <= STATE_DONE;
                 end
                 default: begin
                     if (!memory_access_selected)
@@ -410,6 +422,8 @@ module super_megaram
     assign debug_bank1 = bank[1];
     assign debug_bank2 = bank[2];
     assign debug_bank3 = bank[3];
+    assign debug_mode = operation_mode == MODE_ASCII16 ?
+                        8'h16 : {3'b000, operation_mode};
 
     assign sdrc_cmd_en = sdrc_cmd_en_reg;
     assign sdrc_cmd = sdrc_cmd_reg;

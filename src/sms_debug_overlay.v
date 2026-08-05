@@ -1,12 +1,14 @@
 module sms_debug_overlay
 #(
-    parameter X_START = 10'd112,
+    parameter X_START = 10'd96,
     parameter Y_START = 10'd432
 )
 (
     input [9:0] x,
     input [9:0] y,
     input [15:0] address,
+    input [7:0] subslot,
+    input [7:0] mapper_mode,
     input [7:0] page0,
     input [7:0] page1,
     input [7:0] page2,
@@ -23,7 +25,7 @@ module sms_debug_overlay
 
     wire [9:0] local_x = x - X_START;
     wire [9:0] local_y = y - Y_START;
-    wire [4:0] character_cell = local_x[8:4];
+    wire [5:0] character_cell = local_x[9:4];
     wire separator = local_y == 10'd16;
     wire line = local_y >= 10'd17;
     wire [9:0] line_y = line ? local_y - 10'd17 : local_y;
@@ -93,37 +95,43 @@ module sms_debug_overlay
         color = 2'd1;
 
         if (!line) begin
-            // AAAA P0:P1:P2:P3 B0:B1:B2:B3, with Pn/Bn replaced by
-            // their two-digit hexadecimal values.
+            // AAAA SS MM P0:P1:P2:P3 B0:B1:B2:B3. SS is the directly
+            // written expanded-slot register and MM is the current 8Fh mode.
             case (character_cell)
-                5'd0:  digit = address[15:12];
-                5'd1:  digit = address[11:8];
-                5'd2:  digit = address[7:4];
-                5'd3:  digit = address[3:0];
-                5'd4:  digit_valid = 1'b0;
-                5'd5:  digit = page0[7:4];
-                5'd6:  digit = page0[3:0];
-                5'd7:  begin digit_valid = 1'b0; colon = 1'b1; end
-                5'd8:  digit = page1[7:4];
-                5'd9:  digit = page1[3:0];
-                5'd10: begin digit_valid = 1'b0; colon = 1'b1; end
-                5'd11: digit = page2[7:4];
-                5'd12: digit = page2[3:0];
-                5'd13: begin digit_valid = 1'b0; colon = 1'b1; end
-                5'd14: digit = page3[7:4];
-                5'd15: digit = page3[3:0];
-                5'd16: digit_valid = 1'b0;
-                5'd17: digit = bank0[7:4];
-                5'd18: digit = bank0[3:0];
-                5'd19: begin digit_valid = 1'b0; colon = 1'b1; end
-                5'd20: digit = bank1[7:4];
-                5'd21: digit = bank1[3:0];
-                5'd22: begin digit_valid = 1'b0; colon = 1'b1; end
-                5'd23: digit = bank2[7:4];
-                5'd24: digit = bank2[3:0];
-                5'd25: begin digit_valid = 1'b0; colon = 1'b1; end
-                5'd26: digit = bank3[7:4];
-                5'd27: digit = bank3[3:0];
+                6'd0:  digit = address[15:12];
+                6'd1:  digit = address[11:8];
+                6'd2:  digit = address[7:4];
+                6'd3:  digit = address[3:0];
+                6'd4:  digit_valid = 1'b0;
+                6'd5:  digit = subslot[7:4];
+                6'd6:  digit = subslot[3:0];
+                6'd7:  digit_valid = 1'b0;
+                6'd8:  digit = mapper_mode[7:4];
+                6'd9:  digit = mapper_mode[3:0];
+                6'd10: digit_valid = 1'b0;
+                6'd11: digit = page0[7:4];
+                6'd12: digit = page0[3:0];
+                6'd13: begin digit_valid = 1'b0; colon = 1'b1; end
+                6'd14: digit = page1[7:4];
+                6'd15: digit = page1[3:0];
+                6'd16: begin digit_valid = 1'b0; colon = 1'b1; end
+                6'd17: digit = page2[7:4];
+                6'd18: digit = page2[3:0];
+                6'd19: begin digit_valid = 1'b0; colon = 1'b1; end
+                6'd20: digit = page3[7:4];
+                6'd21: digit = page3[3:0];
+                6'd22: digit_valid = 1'b0;
+                6'd23: digit = bank0[7:4];
+                6'd24: digit = bank0[3:0];
+                6'd25: begin digit_valid = 1'b0; colon = 1'b1; end
+                6'd26: digit = bank1[7:4];
+                6'd27: digit = bank1[3:0];
+                6'd28: begin digit_valid = 1'b0; colon = 1'b1; end
+                6'd29: digit = bank2[7:4];
+                6'd30: digit = bank2[3:0];
+                6'd31: begin digit_valid = 1'b0; colon = 1'b1; end
+                6'd32: digit = bank3[7:4];
+                6'd33: digit = bank3[3:0];
                 default: digit_valid = 1'b0;
             endcase
         end else begin
@@ -182,7 +190,7 @@ module sms_debug_overlay
          (glyph_x == 3'd5 && glyph_row[0]));
     wire colon_pixel = colon && glyph_x == 3'd3 &&
         (glyph_y == 3'd2 || glyph_y == 3'd5);
-    wire overlay_window = x >= X_START && x < X_START + 10'd448 &&
+    wire overlay_window = x >= X_START && x < X_START + 10'd544 &&
                           y >= Y_START && y < Y_START + 10'd33;
 
     assign pixel = overlay_window && !separator &&

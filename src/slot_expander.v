@@ -14,7 +14,8 @@ module slot_expander
     output [3:0] page0_subslot_en,
     output [3:0] page1_subslot_en,
     output [3:0] page2_subslot_en,
-    output [3:0] page3_subslot_en
+    output [3:0] page3_subslot_en,
+    output [7:0] debug_expanded_slot
 );
 
     localparam [15:0] EXPANDED_SLOT_REG_ADDR = 16'hffff;
@@ -42,6 +43,7 @@ module slot_expander
 
     assign data_out = ~expanded_slot_reg;
     assign data_out_en = read_selected;
+    assign debug_expanded_slot = expanded_slot_reg;
 
     // Direct equality decoders avoid implementing each one-hot output as a
     // variable barrel shift. This is on the critical CPU-to-SDRAM path.

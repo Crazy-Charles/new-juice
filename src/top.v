@@ -464,6 +464,10 @@ module top
     wire rd_n;
     wire wr_n;
     wire sltsl_n;
+    (* ASYNC_REG = "TRUE" *) reg [1:0] smr_rd_n_sync = 2'b11;
+    (* ASYNC_REG = "TRUE" *) reg [1:0] smr_wr_n_sync = 2'b11;
+    wire smr_rd_n_fast = smr_rd_n_sync[1];
+    wire smr_wr_n_fast = smr_wr_n_sync[1];
     wire [7:0] slot_expander_data_out;
     wire slot_expander_data_out_en;
     wire [7:0] data_out;
@@ -478,6 +482,8 @@ module top
     wire [7:0] megaram_debug_bank1;
     wire [7:0] megaram_debug_bank2;
     wire [7:0] megaram_debug_bank3;
+    wire [7:0] megaram_debug_mode;
+    wire [7:0] debug_expanded_slot;
     reg [15:0] sms_debug_address = 16'h0000;
     reg [63:0] sms_debug_read_bytes = 64'h0000000000000000;
     reg [15:0] sms_debug_read_tags = 16'h0000;
@@ -524,6 +530,22 @@ module top
     wire [7:0] sdrc_data_len;
     wire [31:0] sdrc_data_in;
     wire sdrc_init_done;
+
+    // Super-MegaRAM and the expanded-slot register must distinguish a memory
+    // access from the refresh phase immediately following M1. The general bus
+    // debouncer intentionally changes slowly and can retain RD low after the
+    // multiplexed address has already become I:R, so use dedicated two-flop
+    // strobe synchronizers for these paths.
+    always_ff @(posedge main_clk or negedge board_reset_n)
+    begin
+        if (!board_reset_n) begin
+            smr_rd_n_sync <= 2'b11;
+            smr_wr_n_sync <= 2'b11;
+        end else begin
+            smr_rd_n_sync <= {smr_rd_n_sync[0], rd_n_in};
+            smr_wr_n_sync <= {smr_wr_n_sync[0], wr_n_in};
+        end
+    end
     wire sdrc_cmd_ack;
     wire mapper_sdrc_cmd_en;
     wire [2:0] mapper_sdrc_cmd;
@@ -1191,6 +1213,8 @@ module top
                 .x(hdmi_x),
                 .y(hdmi_y),
                 .address(sms_debug_address),
+                .subslot(debug_expanded_slot),
+                .mapper_mode(megaram_debug_mode),
                 .page0(mapper_debug_page0),
                 .page1(mapper_debug_page1),
                 .page2(mapper_debug_page2),
@@ -1480,15 +1504,16 @@ module top
         .data_in(cd_in),
         .merq_n(merq_n),
         .iorq_n(iorq_n),
-        .rd_n(rd_n),
-        .wr_n(wr_n),
+        .rd_n(smr_rd_n_fast),
+        .wr_n(smr_wr_n_fast),
         .sltsl_n(sltsl_n),
         .data_out(slot_expander_data_out),
         .data_out_en(slot_expander_data_out_en),
         .page0_subslot_en(page0_subslot_en),
         .page1_subslot_en(page1_subslot_en),
         .page2_subslot_en(page2_subslot_en),
-        .page3_subslot_en(page3_subslot_en)
+        .page3_subslot_en(page3_subslot_en),
+        .debug_expanded_slot(debug_expanded_slot)
     );
 
     sdram_startup_test
@@ -1571,7 +1596,13 @@ module top
             sms_debug_next_code_address <= 16'h0000;
             sms_debug_read_seen <= 1'b0;
         end else begin
-            if (!merq_n && !rd_n && !m1_n && rfsh_n)
+            // Publish a PC only while the debugger is holding a real opcode
+            // fetch. During an ordinary M1 cycle the multiplexed bus proceeds
+            // into refresh and presents I:R on the address lines; RD is
+            // filtered independently and can otherwise make that refresh
+            // address look briefly like the next PC.
+            if (!step_debug_wait_n && !merq_n && !rd_n &&
+                !m1_n && rfsh_n)
                 sms_debug_address <= addr;
 
             if (!merq_n && (!rd_n || !wr_n) && rfsh_n) begin
@@ -1619,8 +1650,8 @@ module top
         .data_in(cd_in),
         .merq_n(merq_n),
         .iorq_n(iorq_n),
-        .rd_n(rd_n),
-        .wr_n(wr_n),
+        .rd_n(smr_rd_n_fast),
+        .wr_n(smr_wr_n_fast),
         .rfsh_n(rfsh_n),
         .m1_n(m1_n),
         .sltsl_n(sltsl_n),
@@ -1636,6 +1667,7 @@ module top
         .debug_bank1(megaram_debug_bank1),
         .debug_bank2(megaram_debug_bank2),
         .debug_bank3(megaram_debug_bank3),
+        .debug_mode(megaram_debug_mode),
         .scc_sound(scc_sound),
         .sdrc_cmd_en(smr_sdrc_cmd_en),
         .sdrc_cmd(smr_sdrc_cmd),

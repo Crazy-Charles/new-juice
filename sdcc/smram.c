@@ -290,6 +290,8 @@ void jump(uint addr) __naked
 void runROM_page1() __naked
 {
 	__asm
+    ei
+    halt
     di
     ld      sp,#0xCFFF
     ld      a,(_stepDebug)
@@ -318,6 +320,8 @@ void runROM_page1_end() __naked {}
 void runROM_page0() __naked
 {
 	__asm
+    ei
+    halt
     di
     ld      sp,#0xCFFF
     ld      a,(_stepDebug)
@@ -350,6 +354,8 @@ void runROM_page0_end() __naked {}
 void runROM_page2() __naked
 {
 	__asm
+    ei
+    halt
     di
     ld      sp,#0xCFFF
     ld      a,(_stepDebug)
@@ -378,6 +384,8 @@ void runROM_page2_end() __naked {}
 void runROM_page3() __naked
 {
 	__asm
+    ei
+    halt
     di
     ld      sp,#0xBFFF
 
@@ -408,6 +416,8 @@ void runROM_page3_end() __naked {}
 void runROM_Reset() __naked
 {
     __asm
+    ei
+    halt
     di
     ld      sp,#0xCFFF
     ld      a,(_stepDebug)

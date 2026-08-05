@@ -10,34 +10,34 @@ Symbol Table
     _MEGA_PORT0                                                 =   0000008E 
     _MEGA_PORT1                                                 =   0000008F 
     _PPIA                                                       =   000000A8 
-  0 ___str_0                                                        0000022C R
-  0 ___str_1                                                        0000023C R
-  0 ___str_10                                                       00000B30 R
-  0 ___str_11                                                       00000B44 R
-  0 ___str_12                                                       00000B66 R
-  0 ___str_13                                                       00000D7A R
-  0 ___str_14                                                       00000D92 R
-  0 ___str_15                                                       00000D99 R
-  0 ___str_16                                                       00000DA6 R
-  0 ___str_17                                                       00000DC1 R
-  0 ___str_18                                                       00000DE6 R
-  0 ___str_19                                                       00000E11 R
-  0 ___str_2                                                        00000254 R
-  0 ___str_20                                                       00000E33 R
-  0 ___str_3                                                        00000262 R
-  0 ___str_4                                                        00000278 R
-  0 ___str_5                                                        00000292 R
-  0 ___str_6                                                        000002AA R
-  0 ___str_7                                                        000002C0 R
-  0 ___str_8                                                        00000AF9 R
-  0 ___str_9                                                        00000B10 R
+  0 ___str_0                                                        00000236 R
+  0 ___str_1                                                        00000246 R
+  0 ___str_10                                                       00000B3A R
+  0 ___str_11                                                       00000B4E R
+  0 ___str_12                                                       00000B70 R
+  0 ___str_13                                                       00000D84 R
+  0 ___str_14                                                       00000D9C R
+  0 ___str_15                                                       00000DA3 R
+  0 ___str_16                                                       00000DB0 R
+  0 ___str_17                                                       00000DCB R
+  0 ___str_18                                                       00000DF0 R
+  0 ___str_19                                                       00000E1B R
+  0 ___str_2                                                        0000025E R
+  0 ___str_20                                                       00000E3D R
+  0 ___str_3                                                        0000026C R
+  0 ___str_4                                                        00000282 R
+  0 ___str_5                                                        0000029C R
+  0 ___str_6                                                        000002B4 R
+  0 ___str_7                                                        000002CA R
+  0 ___str_8                                                        00000B03 R
+  0 ___str_9                                                        00000B1A R
   0 __no_turbo                                                      00000085 R
   0 __open_no_err                                                   00000096 R
-  0 __page0_no_step                                                 00000126 R
-  0 __page1_no_step                                                 000000FE R
-  0 __page2_no_step                                                 0000014F R
-  0 __page3_no_step                                                 00000177 R
-  0 __reset_no_step                                                 0000019A R
+  0 __page0_no_step                                                 0000012A R
+  0 __page1_no_step                                                 00000100 R
+  0 __page2_no_step                                                 00000155 R
+  0 __page3_no_step                                                 0000017F R
+  0 __reset_no_step                                                 000001A4 R
   7 __xinit__cpumode                                                0000000D R
   7 __xinit__exitAfterLoad                                          0000000B R
   7 __xinit__filename                                               00000001 R
@@ -91,7 +91,7 @@ Symbol Table
   2 _linearHeaderValid                                              0000000A GR
   1 _linearRomstart                                                 00000119 GR
   2 _loadpage                                                       0000000F GR
-  0 _main                                                           000002D3 GR
+  0 _main                                                           000002DD GR
   2 _mapperSpecified                                                00000008 GR
   2 _megaram_type                                                   00000003 GR
   2 _opll_vol                                                       00000013 GR
@@ -100,23 +100,23 @@ Symbol Table
   1 _params                                                         00000008 GR
   1 _path                                                           00000017 GR
   2 _presAB                                                         00000006 GR
-  0 _print_mapper_type                                              0000019D GR
+  0 _print_mapper_type                                              000001A7 GR
     _printf                                                         ******** GX
   2 _psg_vol                                                        00000012 GR
   0 _putchar                                                        0000001B GR
   0 _rdslt                                                          0000005D GR
   1 _romsize                                                        00000012 GR
   1 _romstart                                                       00000117 GR
-  0 _runROM_Reset                                                   00000178 GR
-  0 _runROM_Reset_end                                               0000019D GR
-  0 _runROM_page0                                                   000000FF GR
-  0 _runROM_page0_end                                               00000129 GR
+  0 _runROM_Reset                                                   00000180 GR
+  0 _runROM_Reset_end                                               000001A7 GR
+  0 _runROM_page0                                                   00000101 GR
+  0 _runROM_page0_end                                               0000012D GR
   0 _runROM_page1                                                   000000D8 GR
-  0 _runROM_page1_end                                               000000FF GR
-  0 _runROM_page2                                                   00000129 GR
-  0 _runROM_page2_end                                               00000150 GR
-  0 _runROM_page3                                                   00000150 GR
-  0 _runROM_page3_end                                               00000178 GR
+  0 _runROM_page1_end                                               00000101 GR
+  0 _runROM_page2                                                   0000012D GR
+  0 _runROM_page2_end                                               00000156 GR
+  0 _runROM_page3                                                   00000156 GR
+  0 _runROM_page3_end                                               00000180 GR
   1 _s                                                              00000004 GR
 ASxxxx Assembler V05.50.4+NoICE+SDCCmods-WIP-R14  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80 / R800)                               Page 3
 Hexadecimal [32-Bits]
@@ -138,7 +138,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      E59   flags    0
+   0 _CODE                                      size      E63   flags    0
    1 _DATA                                      size      11C   flags    0
    2 _INITIALIZED                               size       14   flags    0
    3 _DABS                                      size        0   flags    8
