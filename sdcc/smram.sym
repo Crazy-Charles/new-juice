@@ -12,25 +12,25 @@ Symbol Table
     _PPIA                                                       =   000000A8 
   0 ___str_0                                                        0000022C R
   0 ___str_1                                                        0000023C R
-  0 ___str_10                                                       00000B56 R
-  0 ___str_11                                                       00000B6A R
-  0 ___str_12                                                       00000B8C R
-  0 ___str_13                                                       00000DA0 R
-  0 ___str_14                                                       00000DB8 R
-  0 ___str_15                                                       00000DBF R
-  0 ___str_16                                                       00000DCC R
-  0 ___str_17                                                       00000DE7 R
-  0 ___str_18                                                       00000E0C R
-  0 ___str_19                                                       00000E37 R
+  0 ___str_10                                                       00000B30 R
+  0 ___str_11                                                       00000B44 R
+  0 ___str_12                                                       00000B66 R
+  0 ___str_13                                                       00000D7A R
+  0 ___str_14                                                       00000D92 R
+  0 ___str_15                                                       00000D99 R
+  0 ___str_16                                                       00000DA6 R
+  0 ___str_17                                                       00000DC1 R
+  0 ___str_18                                                       00000DE6 R
+  0 ___str_19                                                       00000E11 R
   0 ___str_2                                                        00000254 R
-  0 ___str_20                                                       00000E59 R
+  0 ___str_20                                                       00000E33 R
   0 ___str_3                                                        00000262 R
   0 ___str_4                                                        00000278 R
   0 ___str_5                                                        00000292 R
   0 ___str_6                                                        000002AA R
   0 ___str_7                                                        000002C0 R
-  0 ___str_8                                                        00000B1F R
-  0 ___str_9                                                        00000B36 R
+  0 ___str_8                                                        00000AF9 R
+  0 ___str_9                                                        00000B10 R
   0 __no_turbo                                                      00000085 R
   0 __open_no_err                                                   00000096 R
   0 __page0_no_step                                                 00000126 R
@@ -138,7 +138,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      E7F   flags    0
+   0 _CODE                                      size      E59   flags    0
    1 _DATA                                      size      11C   flags    0
    2 _INITIALIZED                               size       14   flags    0
    3 _DABS                                      size        0   flags    8

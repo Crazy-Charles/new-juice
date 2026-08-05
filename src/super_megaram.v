@@ -28,6 +28,10 @@ module super_megaram
     output data_out_en,
     output wait_n,
     output step_debug_toggle,
+    output [7:0] debug_bank0,
+    output [7:0] debug_bank1,
+    output [7:0] debug_bank2,
+    output [7:0] debug_bank3,
     output signed [10:0] scc_sound,
 
     output sdrc_cmd_en,
@@ -98,7 +102,14 @@ module super_megaram
         (addr[15:14] == 2'b01 && page1_smr_selected) ||
         (addr[15:14] == 2'b10 && page2_smr_selected) ||
         (linear_mode && addr[15:14] == 2'b11 && page3_smr_selected);
-    wire memory_cycle = !merq_n && iorq_n && rfsh_n && smr_slot_selected;
+    // SLTSL plus an active read/write strobe is sufficient to identify a
+    // cartridge memory access. Do not gate this critical path with the
+    // multiplexed MERQ/IORQ/RFSH snapshot: immediately after an interrupt
+    // acknowledge or refresh that snapshot can retain the previous bus phase
+    // long enough to miss the CPU's WAIT sampling point. Interrupt acknowledge
+    // and refresh assert neither RD nor WR, so they remain excluded here.
+    wire memory_cycle = smr_slot_selected &&
+                        ((!rd_n && wr_n) || (rd_n && !wr_n));
 
     wire scc_mode = operation_mode == MODE_DDX_SCC ||
                     operation_mode == MODE_K5;
@@ -395,6 +406,10 @@ module super_megaram
     assign wait_n = !memory_access_selected ||
                     (sdrc_init_done && state == STATE_DONE);
     assign step_debug_toggle = step_debug_toggle_reg;
+    assign debug_bank0 = bank[0];
+    assign debug_bank1 = bank[1];
+    assign debug_bank2 = bank[2];
+    assign debug_bank3 = bank[3];
 
     assign sdrc_cmd_en = sdrc_cmd_en_reg;
     assign sdrc_cmd = sdrc_cmd_reg;

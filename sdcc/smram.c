@@ -778,14 +778,14 @@ int main(void)
     // LINEAR exposes the ROM image verbatim at its 16 KiB page base: the
     // init address is a jump target, not a file offset. Preserve its AB
     // header. Retain the legacy header removal only for banked MegaROMs.
-    if (!presAB && megaram_type != TYPE_LINEAR)
-    {
-        MEGA_PORT0 = 0;
-        *((uchar*)0x4000) = 0;
-        b = MEGA_PORT0; (b);
-        *((uchar*)0x4000) = 0;
-        MEGA_PORT0 = 0;
-    }
+    //if (!presAB && megaram_type != TYPE_LINEAR)
+    //{
+    //    MEGA_PORT0 = 0;
+    //    *((uchar*)0x4000) = 0;
+    //    b = MEGA_PORT0; (b);
+    //    *((uchar*)0x4000) = 0;
+    //    MEGA_PORT0 = 0;
+    //}
 
     if (megaram_type == TYPE_LINEAR)
     {
