@@ -485,13 +485,6 @@ module top
     wire [7:0] megaram_debug_mode;
     wire linear_mode_enabled;
     wire [7:0] debug_expanded_slot;
-    reg [15:0] sms_debug_address = 16'h0000;
-    reg [63:0] sms_debug_read_bytes = 64'h0000000000000000;
-    reg [15:0] sms_debug_read_tags = 16'h0000;
-    reg [7:0] sms_debug_read_byte = 8'h00;
-    reg [1:0] sms_debug_read_tag = 2'd0;
-    reg [15:0] sms_debug_next_code_address = 16'h0000;
-    reg sms_debug_read_seen = 1'b0;
     wire [7:0] flash_rom_data_out;
     wire flash_rom_data_out_en;
     wire flash_rom_wait_n;
@@ -1231,38 +1224,39 @@ module top
         .q_b(sms_fb_read_data)
     );
 
-    wire sms_debug_pixel_enabled;
-    wire sms_debug_overlay_pixel;
-    wire [1:0] sms_debug_overlay_color;
+    wire sms_debug_terminal_pixel;
     generate
         if (SMS_DEBUGGER_ENABLED) begin : sms_debugger_enabled_impl
-            // Debug values are observational only.  Driving the overlay
-            // directly avoids a 144-bit CDC/frame pipeline whose inferred
-            // distributed RAM substantially perturbs SDRAM placement. A
-            // changing digit can tear briefly without affecting machine state.
-            sms_debug_overlay sms_debug_overlay_inst (
+            debug_trace_terminal debug_trace_terminal_inst (
+                .cpu_clk(main_clk),
+                .pixel_clk(clk),
+                .reset_n(board_reset_n),
+                .enabled(step_debug_enabled),
+                .debug_wait_n(step_debug_wait_n),
+                .instruction_color(step_debug_instruction_color_alt),
+                .bus_address(addr),
+                .bus_data(cd_in),
+                .m1_n(m1_n),
+                .merq_n(merq_n),
+                .rd_n(rd_n),
+                .wr_n(wr_n),
+                .rfsh_n(rfsh_n),
                 .x(hdmi_x),
                 .y(hdmi_y),
-                .address(sms_debug_address),
                 .subslot(debug_expanded_slot),
-                .mapper_mode(megaram_debug_mode),
-                .page0(mapper_debug_page0),
-                .page1(mapper_debug_page1),
-                .page2(mapper_debug_page2),
-                .page3(mapper_debug_page3),
-                .bank0(megaram_debug_bank0),
-                .bank1(megaram_debug_bank1),
-                .bank2(megaram_debug_bank2),
-                .bank3(megaram_debug_bank3),
-                .read_history(sms_debug_read_bytes),
-                .read_tags(sms_debug_read_tags),
-                .pixel(sms_debug_overlay_pixel),
-                .color(sms_debug_overlay_color)
+                .mapper_page0(mapper_debug_page0),
+                .mapper_page1(mapper_debug_page1),
+                .mapper_page2(mapper_debug_page2),
+                .mapper_page3(mapper_debug_page3),
+                .megaram_bank0(megaram_debug_bank0),
+                .megaram_bank1(megaram_debug_bank1),
+                .megaram_bank2(megaram_debug_bank2),
+                .megaram_bank3(megaram_debug_bank3),
+                .megaram_type(megaram_debug_mode),
+                .pixel(sms_debug_terminal_pixel)
             );
-            assign sms_debug_pixel_enabled =
-                step_debug_enabled && sms_debug_overlay_pixel;
         end else begin : sms_debugger_disabled_impl
-            assign sms_debug_pixel_enabled = 1'b0;
+            assign sms_debug_terminal_pixel = 1'b0;
         end
     endgenerate
 
@@ -1272,20 +1266,14 @@ module top
         hdmi_fb_window_active ? {sms_fb_read_data[3:2], 6'd0} : 8'd0;
     wire [7:0] hdmi_base_blue =
         hdmi_fb_window_active ? {sms_fb_read_data[5:4], 6'd0} : 8'd0;
-    // Color 0 is blue instruction bytes, 1 is white instruction bytes,
-    // 2 is yellow data read by the instruction, and 3 is green data written
-    // by the instruction. The upper status row is white.
-    wire [7:0] hdmi_red = sms_debug_pixel_enabled ?
-        ((sms_debug_overlay_color == 2'd1 ||
-          sms_debug_overlay_color == 2'd2) ? 8'hFF : 8'h00) :
-        hdmi_base_red;
-    wire [7:0] hdmi_green = sms_debug_pixel_enabled ?
-        (sms_debug_overlay_color == 2'd0 ? 8'h00 : 8'hFF) :
-        hdmi_base_green;
-    wire [7:0] hdmi_blue = sms_debug_pixel_enabled ?
-        ((sms_debug_overlay_color == 2'd0 ||
-          sms_debug_overlay_color == 2'd1) ? 8'hFF : 8'h00) :
-        hdmi_base_blue;
+    // Debug mode owns the complete HDMI picture: white trace text on black.
+    // As soon as it is disabled the normal SMS VDP/sound-scope image resumes.
+    wire [7:0] hdmi_red = step_debug_enabled ?
+                          {8{sms_debug_terminal_pixel}} : hdmi_base_red;
+    wire [7:0] hdmi_green = step_debug_enabled ?
+                            {8{sms_debug_terminal_pixel}} : hdmi_base_green;
+    wire [7:0] hdmi_blue = step_debug_enabled ?
+                           {8{sms_debug_terminal_pixel}} : hdmi_base_blue;
 
     wire hdmi_audio_clk_raw;
     wire hdmi_audio_clk;
@@ -1613,65 +1601,6 @@ module top
         .sdrc_init_done(sdrc_init_done),
         .sdrc_cmd_ack(sdrc_cmd_ack)
     );
-
-    // Retain the most recent Z80 opcode-fetch address, but collect bytes from
-    // every memory read and write. M1 covers opcode/prefix fetches only;
-    // operands use later RD cycles with M1 high. A bus access can be stretched
-    // by WAIT, so update a candidate while active and enqueue it once when the
-    // access releases.
-    always_ff @(posedge main_clk or negedge memory_mapper_reset_n)
-    begin
-        if (!memory_mapper_reset_n) begin
-            sms_debug_address <= 16'h0000;
-            sms_debug_read_bytes <= 64'h0000000000000000;
-            sms_debug_read_tags <= 16'h0000;
-            sms_debug_read_byte <= 8'h00;
-            sms_debug_read_tag <= 2'd0;
-            sms_debug_next_code_address <= 16'h0000;
-            sms_debug_read_seen <= 1'b0;
-        end else begin
-            // Publish a PC only while the debugger is holding a real opcode
-            // fetch. During an ordinary M1 cycle the multiplexed bus proceeds
-            // into refresh and presents I:R on the address lines; RD is
-            // filtered independently and can otherwise make that refresh
-            // address look briefly like the next PC.
-            if (!step_debug_wait_n && !merq_n && !rd_n &&
-                !m1_n && rfsh_n)
-                sms_debug_address <= addr;
-
-            if (!merq_n && (!rd_n || !wr_n) && rfsh_n) begin
-                sms_debug_read_byte <= cd_in;
-                if (!sms_debug_read_seen) begin
-                    if (!wr_n) begin
-                        // Data driven by the CPU into memory/SDRAM.
-                        sms_debug_read_tag <= 2'd3;
-                    end else if (!m1_n) begin
-                        sms_debug_read_tag <=
-                            {1'b0, step_debug_instruction_color_alt};
-                        sms_debug_next_code_address <= addr + 1'b1;
-                    end else if (addr == sms_debug_next_code_address) begin
-                        // Sequential reads following an opcode fetch are
-                        // immediate/displacement bytes belonging to the same
-                        // decoded instruction.
-                        sms_debug_read_tag <=
-                            {1'b0, step_debug_instruction_color_alt};
-                        sms_debug_next_code_address <= addr + 1'b1;
-                    end else begin
-                        // A non-sequential memory read is incoming data
-                        // consumed by the decoded instruction.
-                        sms_debug_read_tag <= 2'd2;
-                    end
-                end
-                sms_debug_read_seen <= 1'b1;
-            end else if (sms_debug_read_seen) begin
-                sms_debug_read_bytes <=
-                    {sms_debug_read_bytes[55:0], sms_debug_read_byte};
-                sms_debug_read_tags <=
-                    {sms_debug_read_tags[13:0], sms_debug_read_tag};
-                sms_debug_read_seen <= 1'b0;
-            end
-        end
-    end
 
     super_megaram #(
         .INCLUDE_SCC(1'b1),
