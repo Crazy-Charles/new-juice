@@ -15,7 +15,7 @@
 #define TYPE_A16 0x16
 #define TYPE_A8  0x08
 #define TYPE_UNK 0xFF
-#define STEP_DEBUG_CODE 0x57
+#define STEP_DEBUG_BREAKPOINT_CODE 0xFE
 
 #define FHANDLE     uchar
 #define DOS2_OPEN	0x43
@@ -295,7 +295,15 @@ void runROM_page1() __naked
     di
     ld      sp,#0xCFFF
     ld      a,(_stepDebug)
-    push    af
+    or      a
+    jr      z,__page1_breakpoint_programmed
+    ld      a,#STEP_DEBUG_BREAKPOINT_CODE
+    out     (#0x8F),a
+    ld      a,(_breakpointAddress)
+    out     (#0x8F),a
+    ld      a,(_breakpointAddress+1)
+    out     (#0x8F),a
+__page1_breakpoint_programmed:
     ld      hl,#HTIMI
     ld      a,#0xC9
     ld      (hl),a
@@ -306,12 +314,6 @@ void runROM_page1() __naked
     ld      hl,#0
     call    #ENASLT
     ld      hl,(0x4002)
-    pop     af
-    or      a
-    jr      z,__page1_no_step
-    ld      a,#STEP_DEBUG_CODE
-    out     (#0x8F),a
-__page1_no_step:
     jp      (hl)
 	__endasm;
 }
@@ -325,7 +327,15 @@ void runROM_page0() __naked
     di
     ld      sp,#0xCFFF
     ld      a,(_stepDebug)
-    push    af
+    or      a
+    jr      z,__page0_breakpoint_programmed
+    ld      a,#STEP_DEBUG_BREAKPOINT_CODE
+    out     (#0x8F),a
+    ld      a,(_breakpointAddress)
+    out     (#0x8F),a
+    ld      a,(_breakpointAddress+1)
+    out     (#0x8F),a
+__page0_breakpoint_programmed:
     ld      hl,#HTIMI
     ld      a,#0xC9
     ld      (hl),a
@@ -340,12 +350,6 @@ void runROM_page0() __naked
     push    hl
     pop     iy
     ld      ix,(_romstart)
-    pop     af
-    or      a
-    jr      z,__page0_no_step
-    ld      a,#STEP_DEBUG_CODE
-    out     (#0x8F),a
-__page0_no_step:
     call    #CALSLT
 	__endasm;
 }
@@ -359,7 +363,15 @@ void runROM_page2() __naked
     di
     ld      sp,#0xCFFF
     ld      a,(_stepDebug)
-    push    af
+    or      a
+    jr      z,__page2_breakpoint_programmed
+    ld      a,#STEP_DEBUG_BREAKPOINT_CODE
+    out     (#0x8F),a
+    ld      a,(_breakpointAddress)
+    out     (#0x8F),a
+    ld      a,(_breakpointAddress+1)
+    out     (#0x8F),a
+__page2_breakpoint_programmed:
     ld      hl,#HTIMI
     ld      a,#0xC9
     ld      (hl),a
@@ -370,12 +382,6 @@ void runROM_page2() __naked
     ld      hl,#0
     call    #ENASLT
     ld      hl,(0x8002)
-    pop     af
-    or      a
-    jr      z,__page2_no_step
-    ld      a,#STEP_DEBUG_CODE
-    out     (#0x8F),a
-__page2_no_step:
     jp      (hl)
 	__endasm;
 }
@@ -390,7 +396,15 @@ void runROM_page3() __naked
     ld      sp,#0xBFFF
 
     ld      a,(_stepDebug)
-    push    af
+    or      a
+    jr      z,__page3_breakpoint_programmed
+    ld      a,#STEP_DEBUG_BREAKPOINT_CODE
+    out     (#0x8F),a
+    ld      a,(_breakpointAddress)
+    out     (#0x8F),a
+    ld      a,(_breakpointAddress+1)
+    out     (#0x8F),a
+__page3_breakpoint_programmed:
 
     ld      a,(_sslt)
     push    af
@@ -402,12 +416,6 @@ void runROM_page3() __naked
     ld      hl,#0xC000
     call    #ENASLT
     ld      hl,(0xC002)
-    pop     af
-    or      a
-    jr      z,__page3_no_step
-    ld      a,#STEP_DEBUG_CODE
-    out     (#0x8F),a
-__page3_no_step:
     jp      (hl)
 	__endasm;
 }
@@ -421,7 +429,15 @@ void runROM_Reset() __naked
     di
     ld      sp,#0xCFFF
     ld      a,(_stepDebug)
-    push    af
+    or      a
+    jr      z,__reset_breakpoint_programmed
+    ld      a,#STEP_DEBUG_BREAKPOINT_CODE
+    out     (#0x8F),a
+    ld      a,(_breakpointAddress)
+    out     (#0x8F),a
+    ld      a,(_breakpointAddress+1)
+    out     (#0x8F),a
+__reset_breakpoint_programmed:
     ld      hl,#HTIMI
     ld      a,#0xC9
     ld      (hl),a
@@ -430,12 +446,6 @@ void runROM_Reset() __naked
 
     ld      iy,(EXPTBL-1)
     ld      ix,#0
-    pop     af
-    or      a
-    jr      z,__reset_no_step
-    ld      a,#STEP_DEBUG_CODE
-    out     (#0x8F),a
-__reset_no_step:
     call    #CALSLT
 
     __endasm;
@@ -465,9 +475,11 @@ bool headerValid = FALSE;
 bool linearHeaderValid = FALSE;
 bool exitAfterLoad = FALSE;
 bool stepDebug = FALSE;
+bool breakpointAddressSpecified = FALSE;
 char path[256];
 char cpumode = 1; // defaults to Z80_ROM
 uint romstart;
+uint breakpointAddress;
 uint linearRomstart;
 uchar startpage = 1;
 uchar loadpage = 0;
@@ -637,7 +649,33 @@ int main(void)
                     }
                     else if (to_upper(*params) == 'W')
                     {
+                        uchar digits = 0;
+                        uint parsedAddress = 0;
+
                         stepDebug = TRUE;
+                        while (digits < 4) {
+                            char digit = to_upper(*(params + 1));
+                            uchar value;
+
+                            if (digit >= '0' && digit <= '9')
+                                value = digit - '0';
+                            else if (digit >= 'A' && digit <= 'F')
+                                value = digit - 'A' + 10;
+                            else
+                                break;
+
+                            parsedAddress = (parsedAddress << 4) | value;
+                            params++;
+                            digits++;
+                        }
+
+                        // /W by itself uses the ROM entry point. An explicit
+                        // breakpoint address is exactly four hexadecimal
+                        // digits, accepted in either case.
+                        if (digits == 4) {
+                            breakpointAddress = parsedAddress;
+                            breakpointAddressSpecified = TRUE;
+                        }
                     }
                
                     else if (to_upper(*params) == 'Z')
@@ -690,7 +728,8 @@ int main(void)
                 " /D: Set MegaRAM DDX type\n\r"
                 " /L: Set LINEAR type (automatic for ROMs <=64KB)\n\r"
                 " /S: Soft reset\n\r"
-                " /W: Enable instruction stepping before ROM launch\n\r"
+                " /Wxxxx: Break on M1 at hex address xxxx\n\r"
+                "          (/W defaults to ROM start)\n\r"
                 " /X: Load ROM, set mapper, and return to DOS\n\r"
                 " /Zx: Set cpu mode\n\r"
                 "   0: current\n\r"
@@ -864,6 +903,8 @@ int main(void)
     }
 
     startpage = (uchar)(romstart >> 14);
+    if (stepDebug && !breakpointAddressSpecified)
+        breakpointAddress = romstart;
     if (megaram_type == TYPE_LINEAR)
     {
         // Establish the normal cartridge environment first: system BIOS in

@@ -483,6 +483,7 @@ module top
     wire [7:0] megaram_debug_bank2;
     wire [7:0] megaram_debug_bank3;
     wire [7:0] megaram_debug_mode;
+    wire linear_mode_enabled;
     wire [7:0] debug_expanded_slot;
     reg [15:0] sms_debug_address = 16'h0000;
     reg [63:0] sms_debug_read_bytes = 64'h0000000000000000;
@@ -499,7 +500,12 @@ module top
     wire [7:0] smr_data_out;
     wire smr_data_out_en;
     wire smr_wait_n;
+    wire [7:0] linear_data_out;
+    wire linear_data_out_en;
+    wire linear_wait_n;
     wire step_debug_toggle;
+    wire [15:0] step_debug_breakpoint_address;
+    wire step_debug_breakpoint_arm;
     wire step_debug_wait_n;
     wire step_debug_enabled;
     wire step_debug_instruction_color_alt;
@@ -517,7 +523,7 @@ module top
     wire [7:0] cd_in;
     wire memory_wait_n = module_sequence_done &&
                          startup_test_wait_n && flash_rom_wait_n &&
-                         smr_wait_n && mapper_wait_n;
+                         smr_wait_n && linear_wait_n && mapper_wait_n;
 
     wire sdrc_cmd_en;
     wire [2:0] sdrc_cmd;
@@ -561,6 +567,11 @@ module top
     wire [20:0] smr_sdrc_addr;
     wire [3:0] smr_sdrc_dqm;
     wire [31:0] smr_sdrc_data;
+    wire linear_sdrc_cmd_en;
+    wire [2:0] linear_sdrc_cmd;
+    wire [20:0] linear_sdrc_addr;
+    wire [3:0] linear_sdrc_dqm;
+    wire [31:0] linear_sdrc_data;
     wire rom_sdrc_cmd_en;
     wire [2:0] rom_sdrc_cmd;
     wire [20:0] rom_sdrc_addr;
@@ -600,6 +611,9 @@ module top
     wire psg_data_write;
     wire psg_bdir;
     wire psg_bc;
+    reg psg_bdir_latched = 1'b0;
+    reg psg_bc_latched = 1'b0;
+    reg [7:0] psg_data_latched = 8'h00;
     wire [9:0] jt49_sound;
     reg [9:0] psg_filter_history [0:15];
     reg [3:0] psg_filter_index = 4'd0;
@@ -686,6 +700,23 @@ module top
     assign psg_bdir = psg_address_write || psg_data_write;
     assign psg_bc = psg_address_write;
 
+    // Register the slow external I/O decode before JT49's bus wrapper. A PSG
+    // I/O cycle spans many 108 MHz clocks, so this one-clock pipeline retains
+    // bus behavior while removing the multiplexed address path from JT49's
+    // internal write-control timing cone.
+    always_ff @(posedge main_clk or negedge psg_module_reset_n)
+    begin
+        if (!psg_module_reset_n) begin
+            psg_bdir_latched <= 1'b0;
+            psg_bc_latched <= 1'b0;
+            psg_data_latched <= 8'h00;
+        end else begin
+            psg_bdir_latched <= psg_bdir;
+            psg_bc_latched <= psg_bc;
+            psg_data_latched <= cd_in;
+        end
+    end
+
     // The MSX key click is not a fixed-frequency oscillator. PPI port C bit 7
     // is a one-bit audio level; software makes tones and digitized speech by
     // toggling it. Observe both ways software can change that output: a full
@@ -716,9 +747,9 @@ module top
         .rst_n(psg_reset_sync[1]),
         .clk(main_clk),
         .clk_en(psg_clock_enable),
-        .bdir(psg_bdir),
-        .bc1(psg_bc),
-        .din(cd_in),
+        .bdir(psg_bdir_latched),
+        .bc1(psg_bc_latched),
+        .din(psg_data_latched),
         .sel(1'b1),
         .dout(),
         .sound(jt49_sound),
@@ -1401,8 +1432,11 @@ module top
                 .iorq_n(iorq_n),
                 .rd_n(rd_n),
                 .rfsh_n(rfsh_n),
+                .fetch_address(addr),
                 .fetch_data(cd_in),
                 .software_toggle(step_debug_toggle),
+                .breakpoint_address(step_debug_breakpoint_address),
+                .breakpoint_arm(step_debug_breakpoint_arm),
                 .wait_n(step_debug_wait_n),
                 .enabled(step_debug_enabled),
                 .instruction_color_alt(step_debug_instruction_color_alt)
@@ -1654,6 +1688,7 @@ module top
         .wr_n(smr_wr_n_fast),
         .rfsh_n(rfsh_n),
         .m1_n(m1_n),
+        .bus_snapshot_valid(inputs_latched),
         .sltsl_n(sltsl_n),
         .page0_subslot_en(page0_subslot_en),
         .page1_subslot_en(page1_subslot_en),
@@ -1663,17 +1698,49 @@ module top
         .data_out_en(smr_data_out_en),
         .wait_n(smr_wait_n),
         .step_debug_toggle(step_debug_toggle),
+        .breakpoint_address(step_debug_breakpoint_address),
+        .breakpoint_arm(step_debug_breakpoint_arm),
         .debug_bank0(megaram_debug_bank0),
         .debug_bank1(megaram_debug_bank1),
         .debug_bank2(megaram_debug_bank2),
         .debug_bank3(megaram_debug_bank3),
         .debug_mode(megaram_debug_mode),
+        .linear_mode_enabled(linear_mode_enabled),
         .scc_sound(scc_sound),
         .sdrc_cmd_en(smr_sdrc_cmd_en),
         .sdrc_cmd(smr_sdrc_cmd),
         .sdrc_addr(smr_sdrc_addr),
         .sdrc_dqm(smr_sdrc_dqm),
         .sdrc_data(smr_sdrc_data),
+        .sdrc_data_in(sdrc_data_in),
+        .sdrc_init_done(sdrc_init_done),
+        .sdrc_cmd_ack(sdrc_cmd_ack)
+    );
+
+    linear_rom linear_rom_inst(
+        .clk(main_clk),
+        .reset_n(megaram_module_reset_n),
+        .enabled(linear_mode_enabled),
+        .addr(addr),
+        .merq_n(merq_n),
+        .iorq_n(iorq_n),
+        .rd_n(smr_rd_n_fast),
+        .wr_n(smr_wr_n_fast),
+        .rfsh_n(rfsh_n),
+        .bus_snapshot_valid(inputs_latched),
+        .sltsl_n(sltsl_n),
+        .page0_subslot_en(page0_subslot_en),
+        .page1_subslot_en(page1_subslot_en),
+        .page2_subslot_en(page2_subslot_en),
+        .page3_subslot_en(page3_subslot_en),
+        .data_out(linear_data_out),
+        .data_out_en(linear_data_out_en),
+        .wait_n(linear_wait_n),
+        .sdrc_cmd_en(linear_sdrc_cmd_en),
+        .sdrc_cmd(linear_sdrc_cmd),
+        .sdrc_addr(linear_sdrc_addr),
+        .sdrc_dqm(linear_sdrc_dqm),
+        .sdrc_data(linear_sdrc_data),
         .sdrc_data_in(sdrc_data_in),
         .sdrc_init_done(sdrc_init_done),
         .sdrc_cmd_ack(sdrc_cmd_ack)
@@ -1741,10 +1808,12 @@ module top
 
     assign sdrc_cmd_en = board_enabled ?
         (startup_test_passed ?
-            (rom_sdrc_cmd_en || smr_sdrc_cmd_en || mapper_sdrc_cmd_en) :
+            (rom_sdrc_cmd_en || linear_sdrc_cmd_en ||
+             smr_sdrc_cmd_en || mapper_sdrc_cmd_en) :
             test_sdrc_cmd_en) : 1'b0;
     assign sdrc_cmd = startup_test_passed ?
         (rom_sdrc_cmd_en ? rom_sdrc_cmd :
+         linear_sdrc_cmd_en ? linear_sdrc_cmd :
          smr_sdrc_cmd_en ? smr_sdrc_cmd : mapper_sdrc_cmd) :
         test_sdrc_cmd;
     assign sdrc_precharge_ctrl = startup_test_passed ? mapper_sdrc_precharge_ctrl : test_sdrc_precharge_ctrl;
@@ -1752,14 +1821,17 @@ module top
     assign sdram_selfrefresh = startup_test_passed ? mapper_sdram_selfrefresh : test_sdram_selfrefresh;
     assign sdrc_addr = startup_test_passed ?
         (rom_sdrc_cmd_en ? rom_sdrc_addr :
+         linear_sdrc_cmd_en ? linear_sdrc_addr :
          smr_sdrc_cmd_en ? smr_sdrc_addr : mapper_sdrc_addr) :
         test_sdrc_addr;
     assign sdrc_dqm = startup_test_passed ?
         (rom_sdrc_cmd_en ? rom_sdrc_dqm :
+         linear_sdrc_cmd_en ? linear_sdrc_dqm :
          smr_sdrc_cmd_en ? smr_sdrc_dqm : mapper_sdrc_dqm) :
         test_sdrc_dqm;
     assign sdrc_data = startup_test_passed ?
         (rom_sdrc_cmd_en ? rom_sdrc_data :
+         linear_sdrc_cmd_en ? linear_sdrc_data :
          smr_sdrc_cmd_en ? smr_sdrc_data : mapper_sdrc_data) :
         test_sdrc_data;
     assign sdrc_data_len = startup_test_passed ? mapper_sdrc_data_len : test_sdrc_data_len;
@@ -1773,6 +1845,8 @@ module top
         active_module_reset_n && sdram_mapper_data_out_en;
     wire smr_drive_en =
         active_module_reset_n && smr_data_out_en;
+    wire linear_drive_en =
+        active_module_reset_n && linear_data_out_en;
     wire bios_drive_en =
         active_module_reset_n && bios_module_enabled &&
         flash_rom_data_out_en;
@@ -1785,6 +1859,7 @@ module top
         ({8{slot_drive_en}} & slot_expander_data_out) |
         ({8{mapper_drive_en}} & sdram_mapper_data_out) |
         ({8{smr_drive_en}} & smr_data_out) |
+        ({8{linear_drive_en}} & linear_data_out) |
         ({8{bios_drive_en}} & flash_rom_data_out) |
         ({8{sd_drive_en}} & sd_data_out) |
         ({8{sms_drive_en}} & sms_bridge_read_data) |
@@ -1792,6 +1867,7 @@ module top
 
     assign data_out_en =
         slot_drive_en || mapper_drive_en || smr_drive_en ||
+        linear_drive_en ||
         bios_drive_en || sd_drive_en || sms_drive_en || jt51_drive_en;
 
     assign mapper_port_read =
@@ -1816,6 +1892,11 @@ module top
         .clk(main_clk),
         .reset_n(board_enabled),
         .rfsh_n(rfsh_n),
+        .m1_n(m1_n),
+        .merq_n(merq_n),
+        .iorq_n(iorq_n),
+        .rd_n(smr_rd_n_fast),
+        .wr_n(smr_wr_n_fast),
         .cmd_en(sdrc_cmd_en),
         .cmd(sdrc_cmd),
         .cmd_addr(sdrc_addr),

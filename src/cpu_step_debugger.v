@@ -13,8 +13,11 @@ module cpu_step_debugger
     input iorq_n,
     input rd_n,
     input rfsh_n,
+    input [15:0] fetch_address,
     input [7:0] fetch_data,
     input software_toggle,
+    input [15:0] breakpoint_address,
+    input breakpoint_arm,
     output wait_n,
     output enabled,
     output instruction_color_alt
@@ -43,6 +46,7 @@ module cpu_step_debugger
     reg [6:0] fetch_data_ready_count = 7'd0;
     reg release_pending = 1'b0;
     reg instruction_color_toggle = 1'b0;
+    reg breakpoint_armed = 1'b0;
 
     localparam [1:0] PREFIX_NONE = 2'd0;
     localparam [1:0] PREFIX_SIMPLE = 2'd1;
@@ -121,10 +125,17 @@ module cpu_step_debugger
             fetch_data_ready_count <= 7'd0;
             release_pending <= 1'b0;
             instruction_color_toggle <= 1'b0;
+            breakpoint_armed <= 1'b0;
         end else begin
             previous_m1_n <= m1_n;
 
+            if (breakpoint_arm)
+                breakpoint_armed <= 1'b1;
+
             if (long_press_pulse || software_toggle) begin
+                // A manual request takes precedence over a pending automatic
+                // breakpoint and retains the original toggle behavior.
+                breakpoint_armed <= 1'b0;
                 if (step_enabled) begin
                     step_enabled <= 1'b0;
                     wait_hold <= 1'b0;
@@ -146,6 +157,24 @@ module cpu_step_debugger
                     release_pending <= 1'b0;
                     instruction_color_toggle <= 1'b0;
                 end
+            end else if (!step_enabled && breakpoint_armed &&
+                         fetch_cycle_active && !interrupt_ack &&
+                         fetch_address == breakpoint_address) begin
+                // Address and control are published by the multiplexed bus
+                // scanner after the first M1 edge. Compare throughout the
+                // stable opcode-fetch window so the coherent address can
+                // arrive, then stop this fetch before the CPU executes it.
+                // The programmed breakpoint is one-shot.
+                breakpoint_armed <= 1'b0;
+                step_enabled <= 1'b1;
+                wait_hold <= 1'b1;
+                arm_next_fetch <= 1'b0;
+                skip_next_fetch <= 1'b0;
+                auto_continue <= 1'b0;
+                prefix_state <= PREFIX_NONE;
+                fetch_data_ready_count <= 7'd0;
+                release_pending <= 1'b0;
+                instruction_color_toggle <= !instruction_color_toggle;
             end else if (step_enabled && arm_next_fetch && fetch_start) begin
                 if (skip_next_fetch) begin
                     skip_next_fetch <= 1'b0;

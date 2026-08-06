@@ -3,6 +3,11 @@ module sdram_command_adapter
     input clk,
     input reset_n,
     input rfsh_n,
+    input m1_n,
+    input merq_n,
+    input iorq_n,
+    input rd_n,
+    input wr_n,
 
     input cmd_en,
     input [2:0] cmd,
@@ -49,6 +54,11 @@ module sdram_command_adapter
     reg [1:0] request_lane = 2'd0;
 
     reg [1:0] lane;
+
+    // A Z80 refresh request is remembered when RFSH is observed, but the
+    // physical SDRAM refresh is launched only between complete CPU bus cycles.
+    wire cpu_bus_idle = rfsh_n && m1_n && merq_n && iorq_n &&
+                        rd_n && wr_n;
 
     always @(*) begin
         case (cmd_dqm)
@@ -123,11 +133,6 @@ module sdram_command_adapter
                     refresh_pending <= 1'b0;
                     refresh_saw_busy <= 1'b0;
                 end
-            end else if (refresh_request && enabled && !busy) begin
-                refresh_reg <= 1'b1;
-                refresh_pending <= 1'b1;
-                refresh_saw_busy <= 1'b0;
-                refresh_request <= 1'b0;
             end else if (request_queued && !busy) begin
                 // The legacy address is a 32-bit word address. The new
                 // controller takes a 16-bit-halfword address; lane[1]
@@ -141,6 +146,14 @@ module sdram_command_adapter
                 rd_reg <= (request_cmd == CMD_READ);
                 wr_reg <= (request_cmd == CMD_WRITE);
                 request_queued <= 1'b0;
+            end else if (refresh_request && enabled && !busy &&
+                         cpu_bus_idle && !cmd_en) begin
+                // CPU reads/writes have priority. In particular, do not start
+                // refresh on the same edge that captures a new command.
+                refresh_reg <= 1'b1;
+                refresh_pending <= 1'b1;
+                refresh_saw_busy <= 1'b0;
+                refresh_request <= 1'b0;
             end
         end
     end

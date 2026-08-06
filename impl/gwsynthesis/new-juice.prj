@@ -102,6 +102,7 @@
         <File path="/Users/felipe/src/fpga/new-juice/src/sdram.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/sdram_command_adapter.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/linear_rom.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/sms_debug_overlay.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/slot_expander.v" type="verilog"/>

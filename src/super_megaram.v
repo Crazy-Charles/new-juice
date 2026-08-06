@@ -18,6 +18,7 @@ module super_megaram
     input wr_n,
     input rfsh_n,
     input m1_n,
+    input bus_snapshot_valid,
     input sltsl_n,
     input [3:0] page0_subslot_en,
     input [3:0] page1_subslot_en,
@@ -28,11 +29,14 @@ module super_megaram
     output data_out_en,
     output wait_n,
     output step_debug_toggle,
+    output [15:0] breakpoint_address,
+    output breakpoint_arm,
     output [7:0] debug_bank0,
     output [7:0] debug_bank1,
     output [7:0] debug_bank2,
     output [7:0] debug_bank3,
     output [7:0] debug_mode,
+    output linear_mode_enabled,
     output signed [10:0] scc_sound,
 
     output sdrc_cmd_en,
@@ -79,11 +83,16 @@ module super_megaram
     reg [2:0] sdrc_cmd_reg = SDRAM_CMD_READ;
     reg sdrc_cmd_en_reg = 1'b0;
     reg cpu_cycle_seen = 1'b0;
+    reg address_snapshot_pending = 1'b0;
     reg read_data_active = 1'b0;
     reg [15:0] ikascc_addr_latched = 16'd0;
     reg [7:0] ikascc_data_latched = 8'd0;
     reg step_debug_toggle_reg = 1'b0;
-    reg step_debug_command_seen = 1'b0;
+    reg port_8f_write_seen = 1'b0;
+    reg [1:0] breakpoint_command_state = 2'd0;
+    reg [7:0] breakpoint_low = 8'h00;
+    reg [15:0] breakpoint_address_reg = 16'h0000;
+    reg breakpoint_arm_reg = 1'b0;
 
     reg bank_write_selected;
     reg [1:0] bank_write_index;
@@ -91,19 +100,18 @@ module super_megaram
     wire port_8e_selected = !iorq_n && m1_n && addr[7:0] == 8'h8e;
     wire port_8f_write = !iorq_n && m1_n && !wr_n &&
                          addr[7:0] == 8'h8f;
-    wire step_debug_command = DEBUGGER_ENABLED && port_8f_write &&
-                              data_in == 8'h57;
+    wire new_port_8f_write = port_8f_write && !port_8f_write_seen;
 
     wire linear_mode = operation_mode == MODE_LINEAR;
     wire page0_smr_selected = !sltsl_n && page0_subslot_en[2];
     wire page1_smr_selected = !sltsl_n && page1_subslot_en[2];
     wire page2_smr_selected = !sltsl_n && page2_subslot_en[2];
     wire page3_smr_selected = !sltsl_n && page3_subslot_en[2];
-    wire smr_slot_selected =
-        (linear_mode && addr[15:14] == 2'b00 && page0_smr_selected) ||
-        (addr[15:14] == 2'b01 && page1_smr_selected) ||
-        (addr[15:14] == 2'b10 && page2_smr_selected) ||
-        (linear_mode && addr[15:14] == 2'b11 && page3_smr_selected);
+    // Mode 02h is owned by the dedicated linear_rom module. The banked
+    // MegaRAM/SCC datapath is completely disconnected from memory cycles.
+    wire smr_slot_selected = !linear_mode &&
+        ((addr[15:14] == 2'b01 && page1_smr_selected) ||
+         (addr[15:14] == 2'b10 && page2_smr_selected));
     // SLTSL plus an active read/write strobe is sufficient to identify a
     // cartridge memory access. Do not gate this critical path with the
     // multiplexed MERQ/IORQ/RFSH snapshot: immediately after an interrupt
@@ -220,7 +228,6 @@ module super_megaram
     wire [6:0] selected_16k_bank =
         (addr[15:14] == 2'b01) ? bank[0][6:0] : bank[2][6:0];
     wire [20:0] selected_smr_offset =
-        linear_mode ? {5'b00000, addr} :
         (operation_mode == MODE_ASCII16) ?
             {selected_16k_bank, addr[13:0]} :
             {selected_8k_bank, addr[12:0]};
@@ -234,8 +241,15 @@ module super_megaram
                               4'b0111;
 
     wire cpu_cycle_active = memory_access_selected && sdrc_init_done;
+    // RD/WR use fast synchronizers so WAIT is asserted promptly, while addr
+    // comes from the slower multiplexed scanner. Do not issue a command until
+    // that scanner has published a coherent memory-cycle snapshot; otherwise
+    // a new M1 can read the preceding instruction address.
+    wire coherent_memory_cycle = address_snapshot_pending &&
+                                 bus_snapshot_valid &&
+                                 !merq_n && iorq_n && rfsh_n;
     wire start_access = state == STATE_IDLE && cpu_cycle_active &&
-                        !cpu_cycle_seen;
+                        coherent_memory_cycle && !cpu_cycle_seen;
     wire [4:0] ikascc_mapper_addr =
         (bank_write_index == 2'd0) ? 5'b01010 :
         (bank_write_index == 2'd1) ? 5'b01110 :
@@ -262,21 +276,25 @@ module super_megaram
             sdrc_cmd_reg <= SDRAM_CMD_READ;
             sdrc_cmd_en_reg <= 1'b0;
             cpu_cycle_seen <= 1'b0;
+            address_snapshot_pending <= 1'b0;
             read_data_active <= 1'b0;
             ikascc_addr_latched <= 16'd0;
             ikascc_data_latched <= 8'd0;
             step_debug_toggle_reg <= 1'b0;
-            step_debug_command_seen <= 1'b0;
+            port_8f_write_seen <= 1'b0;
+            breakpoint_command_state <= 2'd0;
+            breakpoint_low <= 8'h00;
+            breakpoint_address_reg <= 16'h0000;
+            breakpoint_arm_reg <= 1'b0;
         end else begin
             sdrc_cmd_en_reg <= 1'b0;
             step_debug_toggle_reg <= 1'b0;
+            breakpoint_arm_reg <= 1'b0;
 
-            if (!step_debug_command)
-                step_debug_command_seen <= 1'b0;
-            else if (!step_debug_command_seen) begin
-                step_debug_command_seen <= 1'b1;
-                step_debug_toggle_reg <= 1'b1;
-            end
+            if (!port_8f_write)
+                port_8f_write_seen <= 1'b0;
+            else if (!port_8f_write_seen)
+                port_8f_write_seen <= 1'b1;
 
             if (port_8e_selected && !rd_n)
                 rom_mode <= 1'b0;
@@ -285,18 +303,42 @@ module super_megaram
 
             // LINEAR is intentionally latched until reset. Cartridge code
             // cannot turn fixed 0000-FFFF mapping back into a banked mapper.
-            if (port_8f_write && !linear_mode && !step_debug_command) begin
-                case (data_in)
-                    8'd0: operation_mode <= MODE_DDX_SCC;
-                    8'd1: operation_mode <= MODE_DDX;
-                    8'd2: operation_mode <= MODE_LINEAR;
-                    8'd4: operation_mode <= MODE_K4;
-                    8'd5: operation_mode <= MODE_K5;
-                    8'd8: operation_mode <= MODE_ASCII8;
-                    8'h16: operation_mode <= MODE_ASCII16;
-                    // Invalid or transient commands recover to the power-on
-                    // mapper instead of retaining an arbitrary previous mode.
-                    default: operation_mode <= MODE_DDX_SCC;
+            if (new_port_8f_write) begin
+                case (breakpoint_command_state)
+                    2'd1: begin
+                        // First byte after FEh is the low address byte.
+                        breakpoint_low <= data_in;
+                        breakpoint_command_state <= 2'd2;
+                    end
+                    2'd2: begin
+                        // The high byte completes and arms the one-shot M1
+                        // address comparator in the CPU debugger.
+                        breakpoint_address_reg <= {data_in, breakpoint_low};
+                        breakpoint_arm_reg <= DEBUGGER_ENABLED;
+                        breakpoint_command_state <= 2'd0;
+                    end
+                    default: begin
+                        if (DEBUGGER_ENABLED && data_in == 8'hfe) begin
+                            breakpoint_command_state <= 2'd1;
+                        end else if (DEBUGGER_ENABLED && data_in == 8'h57) begin
+                            // Preserve the original immediate software toggle.
+                            step_debug_toggle_reg <= 1'b1;
+                        end else if (!linear_mode) begin
+                            case (data_in)
+                                8'd0: operation_mode <= MODE_DDX_SCC;
+                                8'd1: operation_mode <= MODE_DDX;
+                                8'd2: operation_mode <= MODE_LINEAR;
+                                8'd4: operation_mode <= MODE_K4;
+                                8'd5: operation_mode <= MODE_K5;
+                                8'd8: operation_mode <= MODE_ASCII8;
+                                8'h16: operation_mode <= MODE_ASCII16;
+                                // Invalid commands recover to the power-on
+                                // mapper instead of retaining an arbitrary
+                                // previous mode.
+                                default: operation_mode <= MODE_DDX_SCC;
+                            endcase
+                        end
+                    end
                 endcase
             end
 
@@ -313,8 +355,16 @@ module super_megaram
             if (!memory_read_selected)
                 read_data_active <= 1'b0;
 
-            if (!memory_access_selected)
+            if (!memory_access_selected) begin
                 cpu_cycle_seen <= 1'b0;
+                address_snapshot_pending <= 1'b0;
+            end else if (state == STATE_IDLE && !cpu_cycle_seen &&
+                         !address_snapshot_pending) begin
+                // Discard any scanner-valid pulse coincident with the first
+                // fast RD/WR observation. It can still describe the previous
+                // bus cycle; require a later published snapshot.
+                address_snapshot_pending <= 1'b1;
+            end
 
             case (state)
                 STATE_IDLE: begin
@@ -328,6 +378,7 @@ module super_megaram
                                         SDRAM_CMD_READ : SDRAM_CMD_WRITE;
                         sdrc_cmd_en_reg <= 1'b1;
                         cpu_cycle_seen <= 1'b1;
+                        address_snapshot_pending <= 1'b0;
                         state <= STATE_CMD;
                     end
                 end
@@ -418,12 +469,15 @@ module super_megaram
     assign wait_n = !memory_access_selected ||
                     (sdrc_init_done && state == STATE_DONE);
     assign step_debug_toggle = step_debug_toggle_reg;
+    assign breakpoint_address = breakpoint_address_reg;
+    assign breakpoint_arm = breakpoint_arm_reg;
     assign debug_bank0 = bank[0];
     assign debug_bank1 = bank[1];
     assign debug_bank2 = bank[2];
     assign debug_bank3 = bank[3];
     assign debug_mode = operation_mode == MODE_ASCII16 ?
                         8'h16 : {3'b000, operation_mode};
+    assign linear_mode_enabled = linear_mode;
 
     assign sdrc_cmd_en = sdrc_cmd_en_reg;
     assign sdrc_cmd = sdrc_cmd_reg;
