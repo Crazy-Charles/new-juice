@@ -3,9 +3,8 @@ module debug_trace_terminal
     input cpu_clk,
     input pixel_clk,
     input reset_n,
-    input enabled,
+    input display_enabled,
     input debug_wait_n,
-    input instruction_color,
     input [15:0] bus_address,
     input [7:0] bus_data,
     input m1_n,
@@ -46,7 +45,6 @@ module debug_trace_terminal
     endfunction
 
     reg current_valid = 1'b0;
-    reg current_color = 1'b0;
     reg [15:0] current_address = 16'd0;
     reg [15:0] next_code_address = 16'd0;
     reg [2:0] current_instruction_count = 3'd0;
@@ -60,6 +58,12 @@ module debug_trace_terminal
     reg [7:0] current_data2 = 8'd0;
     reg [7:0] current_data3 = 8'd0;
     reg [1:0] current_direction = 2'd0;
+    reg [1:0] prefix_state = 2'd0;
+
+    localparam [1:0] PREFIX_NONE = 2'd0;
+    localparam [1:0] PREFIX_SIMPLE = 2'd1;
+    localparam [1:0] PREFIX_INDEX = 2'd2;
+    localparam [1:0] PREFIX_INDEX_CB = 2'd3;
 
     reg access_seen = 1'b0;
     reg [15:0] access_address = 16'd0;
@@ -88,8 +92,11 @@ module debug_trace_terminal
 
     wire memory_access = !merq_n && rfsh_n && (!rd_n || !wr_n);
     wire new_opcode_access = memory_access && !access_seen && !rd_n && !m1_n;
+    // Prefix state is updated when each completed M1 byte is captured. Thus,
+    // at the beginning of the following M1 cycle it tells us whether that
+    // fetch continues ED/CB/DD/FD decoding or starts a new instruction.
     wire new_instruction = new_opcode_access &&
-                           (!current_valid || instruction_color != current_color);
+                           (!current_valid || prefix_state == PREFIX_NONE);
 
     reg [5:0] writer_character;
     always @* begin
@@ -192,14 +199,7 @@ module debug_trace_terminal
     always_ff @(posedge cpu_clk or negedge reset_n) begin
         if (!reset_n) begin
             current_valid <= 1'b0;
-            access_seen <= 1'b0;
-            writer_busy <= 1'b0;
-            writer_column <= 5'd0;
-            next_history_slot <= 5'd0;
-            newest_history_slot <= 5'd0;
-            history_count <= 5'd0;
-        end else if (!enabled) begin
-            current_valid <= 1'b0;
+            prefix_state <= PREFIX_NONE;
             access_seen <= 1'b0;
             writer_busy <= 1'b0;
             writer_column <= 5'd0;
@@ -250,7 +250,6 @@ module debug_trace_terminal
                     end
 
                     current_valid <= 1'b1;
-                    current_color <= instruction_color;
                     current_address <= bus_address;
                     next_code_address <= bus_address + 1'b1;
                     current_instruction_count <= 3'd0;
@@ -265,6 +264,30 @@ module debug_trace_terminal
                     end else if (access_is_m1) begin
                         append_instruction_byte(access_data);
                         next_code_address <= access_address + 1'b1;
+                        case (prefix_state)
+                            PREFIX_NONE: begin
+                                if (access_data == 8'hcb ||
+                                    access_data == 8'hed)
+                                    prefix_state <= PREFIX_SIMPLE;
+                                else if (access_data == 8'hdd ||
+                                         access_data == 8'hfd)
+                                    prefix_state <= PREFIX_INDEX;
+                                else
+                                    prefix_state <= PREFIX_NONE;
+                            end
+                            PREFIX_INDEX: begin
+                                if (access_data == 8'hdd ||
+                                    access_data == 8'hfd)
+                                    prefix_state <= PREFIX_INDEX;
+                                else if (access_data == 8'hcb)
+                                    prefix_state <= PREFIX_INDEX_CB;
+                                else if (access_data == 8'hed)
+                                    prefix_state <= PREFIX_SIMPLE;
+                                else
+                                    prefix_state <= PREFIX_NONE;
+                            end
+                            default: prefix_state <= PREFIX_NONE;
+                        endcase
                     end else if (access_address == next_code_address) begin
                         append_instruction_byte(access_data);
                         next_code_address <= access_address + 1'b1;
@@ -381,7 +404,7 @@ module debug_trace_terminal
             glyph_x <= 3'd0;
             glyph_y <= 3'd0;
         end else begin
-            pixel_active <= enabled && terminal_window;
+            pixel_active <= display_enabled && terminal_window;
             pixel_uses_history <= requested_history;
             pixel_dynamic_character <= dynamic_character;
             glyph_x <= requested_row == 5'd23 ? local_x[2:0] : local_x[3:1];
