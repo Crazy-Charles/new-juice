@@ -1,14 +1,26 @@
 # NEW JUICE Firmware for WonderTANG 2.02b
 
-This is a brand new built from scratch firmware for the WonderTANG 2.0b boards only. Older boards requires the older firmware: https://github.com/lfantoniosi/WonderTANG
+This is a brand new built from scratch firmware for the WonderTANG 2.0b boards only.
+
+# Older Boards:
+
+The initial new-juice firmware whas backported to these boards:
+
+- v101c https://github.com/lfantoniosi/new-juice/tree/v101c
+- v102d https://github.com/lfantoniosi/new-juice/tree/v102d
+
+**Note: These older boards won't be actively supported by this firmware anymore**
 
 # What's new
 
 This is a much stable FPGA code with new and improved features:
 - OPM FM chip (SFG-01 module). It can be used in Yamaha Voice Program or VGMPlayer
-- Improved MegaRAM SCC with support for larger K5 models and default mode to K4/K5/DDX
+- Improved MegaRAM SCC with support for larger K5 models and default mode to K4/K5/DDX/Linear
 - new SMRAM.COM program
 - FM bioses are loaded from SPI flash
+- Audio scopre through HDMI output for all audio chips
+- Z80 real-time debugger on-screen (press long S2 button or run a ROM using SMRAM /Wxxxx where xxxx is the breakpoint)
+
 
 # TLDR;
 
