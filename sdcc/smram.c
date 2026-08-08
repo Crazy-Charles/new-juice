@@ -310,12 +310,24 @@ __page1_breakpoint_programmed:
     ld      hl,#HKEYI
     ld      (hl),a
 
+    ld      a,(_sslt)
+    ld      h,a
+    ld      l,#0
+    push    hl
+    pop     iy
+    ld      ix,(_romstart)
+    push    iy
+    push    ix
+
     ld      a,(EXPTBL)
     ld      hl,#0
     call    #ENASLT
-    ld      hl,(0x4002)
-    jp      (hl)
-	__endasm;
+
+    pop     ix
+    pop     iy
+    call    #CALSLT
+    call    #CALSLT
+    __endasm;
 }
 void runROM_page1_end() __naked {}
 
@@ -351,6 +363,7 @@ __page0_breakpoint_programmed:
     pop     iy
     ld      ix,(_romstart)
     call    #CALSLT
+    call    #CALSLT
 	__endasm;
 }
 void runROM_page0_end() __naked {}
@@ -378,11 +391,23 @@ __page2_breakpoint_programmed:
     ld      hl,#HKEYI
     ld      (hl),a
 
+    ld      a,(_sslt)
+    ld      h,a
+    ld      l,#0
+    push    hl
+    pop     iy
+    ld      ix,(_romstart)
+    push    iy
+    push    ix
+
     ld      a,(EXPTBL)
     ld      hl,#0
     call    #ENASLT
-    ld      hl,(0x8002)
-    jp      (hl)
+
+    pop     ix
+    pop     iy
+    call    #CALSLT
+    call    #CALSLT
 	__endasm;
 }
 void runROM_page2_end() __naked {}
@@ -407,16 +432,22 @@ void runROM_page3() __naked
 __page3_breakpoint_programmed:
 
     ld      a,(_sslt)
-    push    af
+    ld      h,a
+    ld      l,#0
+    push    hl
+    pop     iy
+    ld      ix,(_romstart)
+    push    iy
+    push    ix
+
     ld      a,(EXPTBL)
     ld      hl,#0
     call    #ENASLT
 
-    pop     af
-    ld      hl,#0xC000
-    call    #ENASLT
-    ld      hl,(0xC002)
-    jp      (hl)
+    pop     ix
+    pop     iy
+    call    #CALSLT
+    call    #CALSLT
 	__endasm;
 }
 void runROM_page3_end() __naked {}
@@ -447,7 +478,7 @@ __reset_breakpoint_programmed:
     ld      iy,(EXPTBL-1)
     ld      ix,#0
     call    #CALSLT
-
+    call    #CALSLT
     __endasm;
 }
 

@@ -1514,7 +1514,9 @@ module top
     assign bios_module_enabled = cpu_modules_ready_n;
     assign psg_module_reset_n = cpu_modules_ready_n;
     assign opll_module_reset_n = cpu_modules_ready_n;
-    assign megaram_module_reset_n = cpu_modules_ready_n;
+    // Reset MegaRAM immediately from the MSX /RESET input. Its release remains
+    // gated by the startup sequence so SDRAM and the sampled bus are ready.
+    assign megaram_module_reset_n = cpu_modules_ready_n && reset_in_n;
     assign module_sequence_done = cpu_modules_ready_n;
     assign active_module_reset_n = cpu_modules_ready_n;
 
