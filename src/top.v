@@ -515,8 +515,10 @@ module top
     wire mapper_port_read;
     wire [7:0] cd_in;
     wire memory_wait_n = module_sequence_done &&
-                         startup_test_wait_n && flash_rom_wait_n &&
-                         smr_wait_n && linear_wait_n && mapper_wait_n;
+                         startup_test_wait_n && flash_rom_wait_n;
+    //wire memory_wait_n = module_sequence_done &&
+    //                     startup_test_wait_n && flash_rom_wait_n &&
+    //                     smr_wait_n && linear_wait_n && mapper_wait_n;
 
     wire sdrc_cmd_en;
     wire [2:0] sdrc_cmd;
