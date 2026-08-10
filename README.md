@@ -46,6 +46,18 @@ into SDRAM above the 2 MiB Super-MegaRAM region. The MSX `/WAIT` line remains
 asserted until SDRAM initialization, its startup test, and the ROM copy have
 completed.
 
+# Nextor 3.0.0 Beta 1
+
+The roms for the Nextor 3.0.0 beta 1 have been included. If you want to try this version just use:
+
+```
+make beta_roms
+```
+
+Don't forget to copy the new Nextor loaders and binaries to your CF card. They have been placed into folder kernel/nextor.3.0.0.beta1
+
+and use the SMRAMB.COM instead (Nextor changed the signature used for detecting the WonderTang)
+
 ## Hardware
 
 - Gowin GW2AR-18C FPGA (`GW2AR-LV18QN88C8/I7`)
