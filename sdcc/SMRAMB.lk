@@ -1,0 +1,11 @@
+-mjwx
+-i SMRAMB.ihx
+-b _CODE = 0x0200
+-b _DATA = 0x0000
+-k /opt/homebrew/bin/../share/sdcc/lib/z80
+-k /opt/homebrew/Cellar/sdcc/4.6.0/share/sdcc/lib/z80
+-l z80
+crt0.rel
+smramb.rel
+
+-e

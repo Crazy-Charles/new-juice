@@ -565,7 +565,11 @@ int main(void)
             b = *(uchar*)(0x6000); // it might be RAM
             *((uchar*)0x6000) = 7;
             s = "WonderTANG! uSD Driver";
+            #ifdef BETA_ROM
+            t = (uchar*)0x4180;
+            #else
             t = (uchar*)0x4110;
+            #endif
             for(int j=0; j<22; j++)
             {
                 if (*s++ != *t++) break;
@@ -590,8 +594,11 @@ int main(void)
     if (found)
     {
         printf("WonderTANG! Super MegaRAM SCC\n\r");
-        printf("v3.01 (new-juice)\n\r");
-
+        #ifdef BETA_ROM
+        printf("v3.01 beta (new-juice)\n\r");
+        #else
+        printf("v2.1.1 (new-juice)\n\r");
+        #endif
         sslt = 0x80 | (2 << 2) | i;
         paramlen = *((char*)0x80);
         for(params = (char*)0x81; *params != 0 || paramlen == 0; ++params, paramlen--)

@@ -10,3 +10,7 @@
 	path = src/jt51
 	url = https://github.com/jotego/jt51
 	update = checkout
+[submodule "kernel/Nextor"]
+	path = kernel/Nextor
+	url = https://github.com/lfantoniosi/Nextor.git
+	branch = v3.0

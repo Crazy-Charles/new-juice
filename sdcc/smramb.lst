@@ -866,8 +866,8 @@
                                     851 ;smram.c:567: s = "WonderTANG! uSD Driver";
     00000399 21rE2r0B         [10]  852 	ld	hl, #___str_8
     0000039C 22r04r00         [16]  853 	ld	(_s), hl
-                                    854 ;smram.c:571: t = (uchar*)0x4110;
-    0000039F 21 10 41         [10]  855 	ld	hl, #0x4110
+                                    854 ;smram.c:569: t = (uchar*)0x4180;
+    0000039F 21 80 41         [10]  855 	ld	hl, #0x4180
     000003A2 22r06r00         [16]  856 	ld	(_t), hl
                                     857 ;smram.c:573: for(int j=0; j<22; j++)
     000003A5 01 00 00         [10]  858 	ld	bc, #0x0000
@@ -948,7 +948,7 @@
     00000419 21rF9r0B         [10]  933 	ld	hl, #___str_9
     0000041C E5               [11]  934 	push	hl
     0000041D CDr00r00         [17]  935 	call	_printf
-                                    936 ;smram.c:600: printf("v2.1.1 (new-juice)\n\r");
+                                    936 ;smram.c:598: printf("v3.01 beta (new-juice)\n\r");
     00000420 21r19r0C         [10]  937 	ld	hl, #___str_10
     00000423 E3               [19]  938 	ex	(sp),hl
     00000424 CDr00r00         [17]  939 	call	_printf
@@ -1408,7 +1408,7 @@
     000006C0 B7               [ 4] 1393 	or	a, a
     000006C1 20 0C            [12] 1394 	jr	nz, 00214$
                                    1395 ;smram.c:752: printf("ERROR: WonderTANG! not found...\n\r");
-    000006C3 21r2Er0C         [10] 1396 	ld	hl, #___str_11
+    000006C3 21r32r0C         [10] 1396 	ld	hl, #___str_11
     000006C6 E5               [11] 1397 	push	hl
     000006C7 CDr00r00         [17] 1398 	call	_printf
     000006CA F1               [10] 1399 	pop	af
@@ -1427,7 +1427,7 @@
     000006DD 20 0C            [12] 1412 	jr	nz, 00215$
     000006DF                       1413 00210$:
                                    1414 ;smram.c:778: );
-    000006DF 21r50r0C         [10] 1415 	ld	hl, #___str_12
+    000006DF 21r54r0C         [10] 1415 	ld	hl, #___str_12
     000006E2 E5               [11] 1416 	push	hl
     000006E3 CDr00r00         [17] 1417 	call	_printf
     000006E6 F1               [10] 1418 	pop	af
@@ -1488,7 +1488,7 @@
     00000738 B7               [ 4] 1473 	or	a, a
     00000739 CAr81r08         [10] 1474 	jp	z, 00240$
                                    1475 ;smram.c:797: printf("Loading ROM file: %s - ", filename);
-    0000073C 01r80r0E         [10] 1476 	ld	bc, #___str_13+0
+    0000073C 01r84r0E         [10] 1476 	ld	bc, #___str_13+0
     0000073F 2Ar01r00         [16] 1477 	ld	hl, (_filename)
     00000742 E5               [11] 1478 	push	hl
     00000743 C5               [11] 1479 	push	bc
@@ -1513,7 +1513,7 @@
                                    1498 ;smram.c:803: printf("%04dKB", 0);
     00000766 21 00 00         [10] 1499 	ld	hl, #0x0000
     00000769 E5               [11] 1500 	push	hl
-    0000076A 21r98r0E         [10] 1501 	ld	hl, #___str_14
+    0000076A 21r9Cr0E         [10] 1501 	ld	hl, #___str_14
     0000076D E5               [11] 1502 	push	hl
     0000076E CDr00r00         [17] 1503 	call	_printf
     00000771 F1               [10] 1504 	pop	af
@@ -1662,7 +1662,7 @@
     0000085C CB 1D            [ 8] 1647 	rr	l
     0000085E 10 F8            [13] 1648 	djnz	01293$
     00000860 E5               [11] 1649 	push	hl
-    00000861 21r9Fr0E         [10] 1650 	ld	hl, #___str_15
+    00000861 21rA3r0E         [10] 1650 	ld	hl, #___str_15
     00000864 E5               [11] 1651 	push	hl
     00000865 CDr00r00         [17] 1652 	call	_printf
     00000868 F1               [10] 1653 	pop	af
@@ -1691,7 +1691,7 @@
                                    1676 ;smram.c:856: printf("ERROR: Failed loading %s\n\r", filename);
     00000893 2Ar01r00         [16] 1677 	ld	hl, (_filename)
     00000896 E5               [11] 1678 	push	hl
-    00000897 21rACr0E         [10] 1679 	ld	hl, #___str_16
+    00000897 21rB0r0E         [10] 1679 	ld	hl, #___str_16
     0000089A E5               [11] 1680 	push	hl
     0000089B CDr00r00         [17] 1681 	call	_printf
     0000089E F1               [10] 1682 	pop	af
@@ -1747,7 +1747,7 @@
     000008F8 11 00 80         [10] 1732 	ld	de, #0x8000
     000008FB CDr48r00         [17] 1733 	call	_enaslt
                                    1734 ;smram.c:875: printf("ERROR: LINEAR ROM has no AB header\n\r");
-    000008FE 21rC7r0E         [10] 1735 	ld	hl, #___str_17
+    000008FE 21rCBr0E         [10] 1735 	ld	hl, #___str_17
     00000901 E5               [11] 1736 	push	hl
     00000902 CDr00r00         [17] 1737 	call	_printf
     00000905 F1               [10] 1738 	pop	af
@@ -1806,7 +1806,7 @@
     0000095D 57               [ 4] 1791 	ld	d, a
     0000095E 1E 00            [ 7] 1792 	ld	e, #0x00
                                    1793 ;smram.c:889: printf("ERROR: LINEAR ROM does not fit at 0x%04x\n\r",
-    00000960 01rECr0E         [10] 1794 	ld	bc, #___str_18+0
+    00000960 01rF0r0E         [10] 1794 	ld	bc, #___str_18+0
     00000963 D5               [11] 1795 	push	de
     00000964 C5               [11] 1796 	push	bc
     00000965 CDr00r00         [17] 1797 	call	_printf
@@ -1906,7 +1906,7 @@
     000009FF 11 00 80         [10] 1891 	ld	de, #0x8000
     00000A02 CDr48r00         [17] 1892 	call	_enaslt
                                    1893 ;smram.c:929: printf("\n\rROM loaded; returning to DOS.\n\r");
-    00000A05 21r17r0F         [10] 1894 	ld	hl, #___str_19
+    00000A05 21r1Br0F         [10] 1894 	ld	hl, #___str_19
     00000A08 E5               [11] 1895 	push	hl
     00000A09 CDr00r00         [17] 1896 	call	_printf
     00000A0C F1               [10] 1897 	pop	af
@@ -1980,7 +1980,7 @@
     00000A82 C5               [11] 1965 	push	bc
     00000A83 2Ar17r01         [16] 1966 	ld	hl, (_romstart)
     00000A86 E5               [11] 1967 	push	hl
-    00000A87 21r39r0F         [10] 1968 	ld	hl, #___str_20
+    00000A87 21r3Dr0F         [10] 1968 	ld	hl, #___str_20
     00000A8A E5               [11] 1969 	push	hl
     00000A8B CDr00r00         [17] 1970 	call	_printf
     00000A8E F1               [10] 1971 	pop	af
@@ -2221,226 +2221,227 @@
     00000C17 0D                    2199 	.db 0x0d
     00000C18 00                    2200 	.db 0x00
     00000C19                       2201 ___str_10:
-    00000C19 76 32 2E 31 2E 31 20  2202 	.ascii "v2.1.1 (new-juice)"
-             28 6E 65 77 2D 6A 75
-             69 63 65 29
-    00000C2B 0A                    2203 	.db 0x0a
-    00000C2C 0D                    2204 	.db 0x0d
-    00000C2D 00                    2205 	.db 0x00
-    00000C2E                       2206 ___str_11:
-    00000C2E 45 52 52 4F 52 3A 20  2207 	.ascii "ERROR: WonderTANG! not found..."
+    00000C19 76 33 2E 30 31 20 62  2202 	.ascii "v3.01 beta (new-juice)"
+             65 74 61 20 28 6E 65
+             77 2D 6A 75 69 63 65
+             29
+    00000C2F 0A                    2203 	.db 0x0a
+    00000C30 0D                    2204 	.db 0x0d
+    00000C31 00                    2205 	.db 0x00
+    00000C32                       2206 ___str_11:
+    00000C32 45 52 52 4F 52 3A 20  2207 	.ascii "ERROR: WonderTANG! not found..."
              57 6F 6E 64 65 72 54
              41 4E 47 21 20 6E 6F
              74 20 66 6F 75 6E 64
              2E 2E 2E
-    00000C4D 0A                    2208 	.db 0x0a
-    00000C4E 0D                    2209 	.db 0x0d
-    00000C4F 00                    2210 	.db 0x00
-    00000C50                       2211 ___str_12:
-    00000C50 0A                    2212 	.db 0x0a
-    00000C51 0D                    2213 	.db 0x0d
-    00000C52 55 53 41 47 45 3A 20  2214 	.ascii "USAGE: SMRAM [/Rx /L /W /X /Zx /Y] [romfile]"
+    00000C51 0A                    2208 	.db 0x0a
+    00000C52 0D                    2209 	.db 0x0d
+    00000C53 00                    2210 	.db 0x00
+    00000C54                       2211 ___str_12:
+    00000C54 0A                    2212 	.db 0x0a
+    00000C55 0D                    2213 	.db 0x0d
+    00000C56 55 53 41 47 45 3A 20  2214 	.ascii "USAGE: SMRAM [/Rx /L /W /X /Zx /Y] [romfile]"
              53 4D 52 41 4D 20 5B
              2F 52 78 20 2F 4C 20
              2F 57 20 2F 58 20 2F
              5A 78 20 2F 59 5D 20
              5B 72 6F 6D 66 69 6C
              65 5D
-    00000C7E 0A                    2215 	.db 0x0a
-    00000C7F 0D                    2216 	.db 0x0d
-    00000C80 0A                    2217 	.db 0x0a
-    00000C81 0D                    2218 	.db 0x0d
-    00000C82 20 2F 52 78 3A 20 53  2219 	.ascii " /Rx: Set MegaROM type"
+    00000C82 0A                    2215 	.db 0x0a
+    00000C83 0D                    2216 	.db 0x0d
+    00000C84 0A                    2217 	.db 0x0a
+    00000C85 0D                    2218 	.db 0x0d
+    00000C86 20 2F 52 78 3A 20 53  2219 	.ascii " /Rx: Set MegaROM type"
              65 74 20 4D 65 67 61
              52 4F 4D 20 74 79 70
              65
-    00000C98 0A                    2220 	.db 0x0a
-    00000C99 0D                    2221 	.db 0x0d
-    00000C9A 20 20 20 30 3A 20 4D  2222 	.ascii "   0: Megaram SCC (default)"
+    00000C9C 0A                    2220 	.db 0x0a
+    00000C9D 0D                    2221 	.db 0x0d
+    00000C9E 20 20 20 30 3A 20 4D  2222 	.ascii "   0: Megaram SCC (default)"
              65 67 61 72 61 6D 20
              53 43 43 20 28 64 65
              66 61 75 6C 74 29
-    00000CB5 0A                    2223 	.db 0x0a
-    00000CB6 0D                    2224 	.db 0x0d
-    00000CB7 20 20 20 31 3A 20 41  2225 	.ascii "   1: ASCII16     (/A16)"
+    00000CB9 0A                    2223 	.db 0x0a
+    00000CBA 0D                    2224 	.db 0x0d
+    00000CBB 20 20 20 31 3A 20 41  2225 	.ascii "   1: ASCII16     (/A16)"
              53 43 49 49 31 36 20
              20 20 20 20 28 2F 41
              31 36 29
-    00000CCF 0A                    2226 	.db 0x0a
-    00000CD0 0D                    2227 	.db 0x0d
-    00000CD1 20 20 20 32 3A 20 4C  2228 	.ascii "   2: LINEAR      (/L)"
+    00000CD3 0A                    2226 	.db 0x0a
+    00000CD4 0D                    2227 	.db 0x0d
+    00000CD5 20 20 20 32 3A 20 4C  2228 	.ascii "   2: LINEAR      (/L)"
              49 4E 45 41 52 20 20
              20 20 20 20 28 2F 4C
              29
-    00000CE7 0A                    2229 	.db 0x0a
-    00000CE8 0D                    2230 	.db 0x0d
-    00000CE9 20 20 20 33 3A 20 41  2231 	.ascii "   3: ASCII8      (/A8)"
+    00000CEB 0A                    2229 	.db 0x0a
+    00000CEC 0D                    2230 	.db 0x0d
+    00000CED 20 20 20 33 3A 20 41  2231 	.ascii "   3: ASCII8      (/A8)"
              53 43 49 49 38 20 20
              20 20 20 20 28 2F 41
              38 29
-    00000D00 0A                    2232 	.db 0x0a
-    00000D01 0D                    2233 	.db 0x0d
-    00000D02 20 20 20 35 3A 20 4B  2234 	.ascii "   5: Konami SCC  (/K5)"
+    00000D04 0A                    2232 	.db 0x0a
+    00000D05 0D                    2233 	.db 0x0d
+    00000D06 20 20 20 35 3A 20 4B  2234 	.ascii "   5: Konami SCC  (/K5)"
              6F 6E 61 6D 69 20 53
              43 43 20 20 28 2F 4B
              35 29
-    00000D19 0A                    2235 	.db 0x0a
-    00000D1A 0D                    2236 	.db 0x0d
-    00000D1B 20 20 20 36 3A 20 4B  2237 	.ascii "   6: Konami      (/K4)"
+    00000D1D 0A                    2235 	.db 0x0a
+    00000D1E 0D                    2236 	.db 0x0d
+    00000D1F 20 20 20 36 3A 20 4B  2237 	.ascii "   6: Konami      (/K4)"
              6F 6E 61 6D 69 20 20
              20 20 20 20 28 2F 4B
              34 29
-    00000D32 0A                    2238 	.db 0x0a
-    00000D33 0D                    2239 	.db 0x0d
-    00000D34 0A                    2240 	.db 0x0a
-    00000D35 0D                    2241 	.db 0x0d
-    00000D36 20 2F 44 3A 20 53 65  2242 	.ascii " /D: Set MegaRAM DDX type"
+    00000D36 0A                    2238 	.db 0x0a
+    00000D37 0D                    2239 	.db 0x0d
+    00000D38 0A                    2240 	.db 0x0a
+    00000D39 0D                    2241 	.db 0x0d
+    00000D3A 20 2F 44 3A 20 53 65  2242 	.ascii " /D: Set MegaRAM DDX type"
              74 20 4D 65 67 61 52
              41 4D 20 44 44 58 20
              74 79 70 65
-    00000D4F 0A                    2243 	.db 0x0a
-    00000D50 0D                    2244 	.db 0x0d
-    00000D51 20 2F 4C 3A 20 53 65  2245 	.ascii " /L: Set LINEAR type (automatic for ROMs <=64KB)"
+    00000D53 0A                    2243 	.db 0x0a
+    00000D54 0D                    2244 	.db 0x0d
+    00000D55 20 2F 4C 3A 20 53 65  2245 	.ascii " /L: Set LINEAR type (automatic for ROMs <=64KB)"
              74 20 4C 49 4E 45 41
              52 20 74 79 70 65 20
              28 61 75 74 6F 6D 61
              74 69 63 20 66 6F 72
              20 52 4F 4D 73 20 3C
              3D 36 34 4B 42 29
-    00000D81 0A                    2246 	.db 0x0a
-    00000D82 0D                    2247 	.db 0x0d
-    00000D83 20 2F 53 3A 20 53 6F  2248 	.ascii " /S: Soft reset"
+    00000D85 0A                    2246 	.db 0x0a
+    00000D86 0D                    2247 	.db 0x0d
+    00000D87 20 2F 53 3A 20 53 6F  2248 	.ascii " /S: Soft reset"
              66 74 20 72 65 73 65
              74
-    00000D92 0A                    2249 	.db 0x0a
-    00000D93 0D                    2250 	.db 0x0d
-    00000D94 20 2F 57 78 78 78 78  2251 	.ascii " /Wxxxx: Break on M1 at hex address xxxx"
+    00000D96 0A                    2249 	.db 0x0a
+    00000D97 0D                    2250 	.db 0x0d
+    00000D98 20 2F 57 78 78 78 78  2251 	.ascii " /Wxxxx: Break on M1 at hex address xxxx"
              3A 20 42 72 65 61 6B
              20 6F 6E 20 4D 31 20
              61 74 20 68 65 78 20
              61 64 64 72 65 73 73
              20 78 78 78 78
-    00000DBC 0A                    2252 	.db 0x0a
-    00000DBD 0D                    2253 	.db 0x0d
-    00000DBE 20 20 20 20 20 20 20  2254 	.ascii "          (/W defaults to ROM start)"
+    00000DC0 0A                    2252 	.db 0x0a
+    00000DC1 0D                    2253 	.db 0x0d
+    00000DC2 20 20 20 20 20 20 20  2254 	.ascii "          (/W defaults to ROM start)"
              20 20 20 28 2F 57 20
              64 65 66 61 75 6C 74
              73 20 74 6F 20 52 4F
              4D 20 73 74 61 72 74
              29
-    00000DE2 0A                    2255 	.db 0x0a
-    00000DE3 0D                    2256 	.db 0x0d
-    00000DE4 20 2F 58 3A 20 4C 6F  2257 	.ascii " /X: Load ROM, set mapper, and return to DOS"
+    00000DE6 0A                    2255 	.db 0x0a
+    00000DE7 0D                    2256 	.db 0x0d
+    00000DE8 20 2F 58 3A 20 4C 6F  2257 	.ascii " /X: Load ROM, set mapper, and return to DOS"
              61 64 20 52 4F 4D 2C
              20 73 65 74 20 6D 61
              70 70 65 72 2C 20 61
              6E 64 20 72 65 74 75
              72 6E 20 74 6F 20 44
              4F 53
-    00000E10 0A                    2258 	.db 0x0a
-    00000E11 0D                    2259 	.db 0x0d
-    00000E12 20 2F 5A 78 3A 20 53  2260 	.ascii " /Zx: Set cpu mode"
+    00000E14 0A                    2258 	.db 0x0a
+    00000E15 0D                    2259 	.db 0x0d
+    00000E16 20 2F 5A 78 3A 20 53  2260 	.ascii " /Zx: Set cpu mode"
              65 74 20 63 70 75 20
              6D 6F 64 65
-    00000E24 0A                    2261 	.db 0x0a
-    00000E25 0D                    2262 	.db 0x0d
-    00000E26 20 20 20 30 3A 20 63  2263 	.ascii "   0: current"
+    00000E28 0A                    2261 	.db 0x0a
+    00000E29 0D                    2262 	.db 0x0d
+    00000E2A 20 20 20 30 3A 20 63  2263 	.ascii "   0: current"
              75 72 72 65 6E 74
-    00000E33 0A                    2264 	.db 0x0a
-    00000E34 0D                    2265 	.db 0x0d
-    00000E35 20 20 20 31 3A 20 5A  2266 	.ascii "   1: Z80"
+    00000E37 0A                    2264 	.db 0x0a
+    00000E38 0D                    2265 	.db 0x0d
+    00000E39 20 20 20 31 3A 20 5A  2266 	.ascii "   1: Z80"
              38 30
-    00000E3E 0A                    2267 	.db 0x0a
-    00000E3F 0D                    2268 	.db 0x0d
-    00000E40 20 20 20 32 3A 20 52  2269 	.ascii "   2: R800 ROM"
+    00000E42 0A                    2267 	.db 0x0a
+    00000E43 0D                    2268 	.db 0x0d
+    00000E44 20 20 20 32 3A 20 52  2269 	.ascii "   2: R800 ROM"
              38 30 30 20 52 4F 4D
-    00000E4E 0A                    2270 	.db 0x0a
-    00000E4F 0D                    2271 	.db 0x0d
-    00000E50 20 20 20 33 3A 20 52  2272 	.ascii "   3: R800 DRAM"
+    00000E52 0A                    2270 	.db 0x0a
+    00000E53 0D                    2271 	.db 0x0d
+    00000E54 20 20 20 33 3A 20 52  2272 	.ascii "   3: R800 DRAM"
              38 30 30 20 44 52 41
              4D
-    00000E5F 0A                    2273 	.db 0x0a
-    00000E60 0D                    2274 	.db 0x0d
-    00000E61 0A                    2275 	.db 0x0a
-    00000E62 0D                    2276 	.db 0x0d
-    00000E63 20 2F 59 3A 20 20 50  2277 	.ascii " /Y:  Preserve AB header"
+    00000E63 0A                    2273 	.db 0x0a
+    00000E64 0D                    2274 	.db 0x0d
+    00000E65 0A                    2275 	.db 0x0a
+    00000E66 0D                    2276 	.db 0x0d
+    00000E67 20 2F 59 3A 20 20 50  2277 	.ascii " /Y:  Preserve AB header"
              72 65 73 65 72 76 65
              20 41 42 20 68 65 61
              64 65 72
-    00000E7B 0A                    2278 	.db 0x0a
-    00000E7C 0D                    2279 	.db 0x0d
-    00000E7D 0A                    2280 	.db 0x0a
-    00000E7E 0D                    2281 	.db 0x0d
-    00000E7F 00                    2282 	.db 0x00
-    00000E80                       2283 ___str_13:
-    00000E80 4C 6F 61 64 69 6E 67  2284 	.ascii "Loading ROM file: %s - "
+    00000E7F 0A                    2278 	.db 0x0a
+    00000E80 0D                    2279 	.db 0x0d
+    00000E81 0A                    2280 	.db 0x0a
+    00000E82 0D                    2281 	.db 0x0d
+    00000E83 00                    2282 	.db 0x00
+    00000E84                       2283 ___str_13:
+    00000E84 4C 6F 61 64 69 6E 67  2284 	.ascii "Loading ROM file: %s - "
              20 52 4F 4D 20 66 69
              6C 65 3A 20 25 73 20
              2D 20
-    00000E97 00                    2285 	.db 0x00
-    00000E98                       2286 ___str_14:
-    00000E98 25 30 34 64 4B 42     2287 	.ascii "%04dKB"
-    00000E9E 00                    2288 	.db 0x00
-    00000E9F                       2289 ___str_15:
-    00000E9F 08                    2290 	.db 0x08
-    00000EA0 08                    2291 	.db 0x08
-    00000EA1 08                    2292 	.db 0x08
-    00000EA2 08                    2293 	.db 0x08
-    00000EA3 08                    2294 	.db 0x08
-    00000EA4 08                    2295 	.db 0x08
-    00000EA5 25 30 34 64 4B 42     2296 	.ascii "%04dKB"
-    00000EAB 00                    2297 	.db 0x00
-    00000EAC                       2298 ___str_16:
-    00000EAC 45 52 52 4F 52 3A 20  2299 	.ascii "ERROR: Failed loading %s"
+    00000E9B 00                    2285 	.db 0x00
+    00000E9C                       2286 ___str_14:
+    00000E9C 25 30 34 64 4B 42     2287 	.ascii "%04dKB"
+    00000EA2 00                    2288 	.db 0x00
+    00000EA3                       2289 ___str_15:
+    00000EA3 08                    2290 	.db 0x08
+    00000EA4 08                    2291 	.db 0x08
+    00000EA5 08                    2292 	.db 0x08
+    00000EA6 08                    2293 	.db 0x08
+    00000EA7 08                    2294 	.db 0x08
+    00000EA8 08                    2295 	.db 0x08
+    00000EA9 25 30 34 64 4B 42     2296 	.ascii "%04dKB"
+    00000EAF 00                    2297 	.db 0x00
+    00000EB0                       2298 ___str_16:
+    00000EB0 45 52 52 4F 52 3A 20  2299 	.ascii "ERROR: Failed loading %s"
              46 61 69 6C 65 64 20
              6C 6F 61 64 69 6E 67
              20 25 73
-    00000EC4 0A                    2300 	.db 0x0a
-    00000EC5 0D                    2301 	.db 0x0d
-    00000EC6 00                    2302 	.db 0x00
-    00000EC7                       2303 ___str_17:
-    00000EC7 45 52 52 4F 52 3A 20  2304 	.ascii "ERROR: LINEAR ROM has no AB header"
+    00000EC8 0A                    2300 	.db 0x0a
+    00000EC9 0D                    2301 	.db 0x0d
+    00000ECA 00                    2302 	.db 0x00
+    00000ECB                       2303 ___str_17:
+    00000ECB 45 52 52 4F 52 3A 20  2304 	.ascii "ERROR: LINEAR ROM has no AB header"
              4C 49 4E 45 41 52 20
              52 4F 4D 20 68 61 73
              20 6E 6F 20 41 42 20
              68 65 61 64 65 72
-    00000EE9 0A                    2305 	.db 0x0a
-    00000EEA 0D                    2306 	.db 0x0d
-    00000EEB 00                    2307 	.db 0x00
-    00000EEC                       2308 ___str_18:
-    00000EEC 45 52 52 4F 52 3A 20  2309 	.ascii "ERROR: LINEAR ROM does not fit at 0x%04x"
+    00000EED 0A                    2305 	.db 0x0a
+    00000EEE 0D                    2306 	.db 0x0d
+    00000EEF 00                    2307 	.db 0x00
+    00000EF0                       2308 ___str_18:
+    00000EF0 45 52 52 4F 52 3A 20  2309 	.ascii "ERROR: LINEAR ROM does not fit at 0x%04x"
              4C 49 4E 45 41 52 20
              52 4F 4D 20 64 6F 65
              73 20 6E 6F 74 20 66
              69 74 20 61 74 20 30
              78 25 30 34 78
-    00000F14 0A                    2310 	.db 0x0a
-    00000F15 0D                    2311 	.db 0x0d
-    00000F16 00                    2312 	.db 0x00
-    00000F17                       2313 ___str_19:
-    00000F17 0A                    2314 	.db 0x0a
-    00000F18 0D                    2315 	.db 0x0d
-    00000F19 52 4F 4D 20 6C 6F 61  2316 	.ascii "ROM loaded; returning to DOS."
+    00000F18 0A                    2310 	.db 0x0a
+    00000F19 0D                    2311 	.db 0x0d
+    00000F1A 00                    2312 	.db 0x00
+    00000F1B                       2313 ___str_19:
+    00000F1B 0A                    2314 	.db 0x0a
+    00000F1C 0D                    2315 	.db 0x0d
+    00000F1D 52 4F 4D 20 6C 6F 61  2316 	.ascii "ROM loaded; returning to DOS."
              64 65 64 3B 20 72 65
              74 75 72 6E 69 6E 67
              20 74 6F 20 44 4F 53
              2E
-    00000F36 0A                    2317 	.db 0x0a
-    00000F37 0D                    2318 	.db 0x0d
-    00000F38 00                    2319 	.db 0x00
-    00000F39                       2320 ___str_20:
-    00000F39 0A                    2321 	.db 0x0a
-    00000F3A 0D                    2322 	.db 0x0d
-    00000F3B 0A                    2323 	.db 0x0a
-    00000F3C 0D                    2324 	.db 0x0d
-    00000F3D 53 74 61 72 74 20 61  2325 	.ascii "Start address: 0x%04x (page %d)"
+    00000F3A 0A                    2317 	.db 0x0a
+    00000F3B 0D                    2318 	.db 0x0d
+    00000F3C 00                    2319 	.db 0x00
+    00000F3D                       2320 ___str_20:
+    00000F3D 0A                    2321 	.db 0x0a
+    00000F3E 0D                    2322 	.db 0x0d
+    00000F3F 0A                    2323 	.db 0x0a
+    00000F40 0D                    2324 	.db 0x0d
+    00000F41 53 74 61 72 74 20 61  2325 	.ascii "Start address: 0x%04x (page %d)"
              64 64 72 65 73 73 3A
              20 30 78 25 30 34 78
              20 28 70 61 67 65 20
              25 64 29
-    00000F5C 0A                    2326 	.db 0x0a
-    00000F5D 0D                    2327 	.db 0x0d
-    00000F5E 00                    2328 	.db 0x00
+    00000F60 0A                    2326 	.db 0x0a
+    00000F61 0D                    2327 	.db 0x0d
+    00000F62 00                    2328 	.db 0x00
                                    2329 	.area _CODE
                                    2330 	.area _INITIALIZER
     00000000                       2331 __xinit__found:

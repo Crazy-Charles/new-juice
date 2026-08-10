@@ -23,6 +23,7 @@ PROGRAMMER_FLAGS ?= -f
 ROM_PROGRAMMER_FLAGS ?= -f --external-flash
 
 DOS2_ROM := $(ROOT)/roms/Nextor-2.1.1.WonderTANG.ROM.bin
+DOS2_ROM_BETA := $(ROOT)/roms/Nextor-3.0.0-beta1.WonderTANG.NO_UNDOC.ROM
 DOS2_ROM_OFFSET ?= 1048576
 FM_ROM := $(ROOT)/roms/16k_fm_opl.bin
 FM_ROM_OFFSET ?= 1179648
@@ -74,6 +75,19 @@ reprogram: check-programmer
 	@echo "Reprogramming $(OUTPUT) with $(OPENFPGALOADER)"
 	@"$(OPENFPGALOADER)" -b "$(PROGRAMMER_BOARD)" \
 		$(PROGRAMMER_FLAGS) "$(OUTPUT)"
+
+beta_roms: check-programmer $(DOS2_ROM) $(FM_ROM) $(SFG_ROM)
+	@echo "Programming DOS2 ROM at offset $(DOS2_ROM_OFFSET)"
+	@"$(OPENFPGALOADER)" -b "$(PROGRAMMER_BOARD)" \
+		$(ROM_PROGRAMMER_FLAGS) -o "$(DOS2_ROM_OFFSET)" "$(DOS2_ROM_BETA)"
+	@combined_rom="$$(mktemp -t new-juice-fm-sfg.XXX)"; \
+		trap 'rm -f "$$combined_rom"' EXIT; \
+		cp "$(FM_ROM)" "$$combined_rom"; \
+		dd if="$(SFG_ROM)" of="$$combined_rom" bs=16384 seek=1 \
+			conv=notrunc status=none; \
+		echo "Programming FM and SFG-01 ROMs at offset $(FM_ROM_OFFSET)"; \
+		"$(OPENFPGALOADER)" -b "$(PROGRAMMER_BOARD)" \
+			$(ROM_PROGRAMMER_FLAGS) -o "$(FM_ROM_OFFSET)" "$$combined_rom"
 
 roms: check-programmer $(DOS2_ROM) $(FM_ROM) $(SFG_ROM)
 	@echo "Programming DOS2 ROM at offset $(DOS2_ROM_OFFSET)"

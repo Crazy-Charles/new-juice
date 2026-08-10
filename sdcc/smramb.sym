@@ -13,17 +13,17 @@ Symbol Table
   0 ___str_0                                                        0000029E R
   0 ___str_1                                                        000002AE R
   0 ___str_10                                                       00000C19 R
-  0 ___str_11                                                       00000C2E R
-  0 ___str_12                                                       00000C50 R
-  0 ___str_13                                                       00000E80 R
-  0 ___str_14                                                       00000E98 R
-  0 ___str_15                                                       00000E9F R
-  0 ___str_16                                                       00000EAC R
-  0 ___str_17                                                       00000EC7 R
-  0 ___str_18                                                       00000EEC R
-  0 ___str_19                                                       00000F17 R
+  0 ___str_11                                                       00000C32 R
+  0 ___str_12                                                       00000C54 R
+  0 ___str_13                                                       00000E84 R
+  0 ___str_14                                                       00000E9C R
+  0 ___str_15                                                       00000EA3 R
+  0 ___str_16                                                       00000EB0 R
+  0 ___str_17                                                       00000ECB R
+  0 ___str_18                                                       00000EF0 R
+  0 ___str_19                                                       00000F1B R
   0 ___str_2                                                        000002C6 R
-  0 ___str_20                                                       00000F39 R
+  0 ___str_20                                                       00000F3D R
   0 ___str_3                                                        000002D4 R
   0 ___str_4                                                        000002EA R
   0 ___str_5                                                        00000304 R
@@ -141,7 +141,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      F5F   flags    0
+   0 _CODE                                      size      F63   flags    0
    1 _DATA                                      size      11E   flags    0
    2 _INITIALIZED                               size       15   flags    0
    3 _DABS                                      size        0   flags    8

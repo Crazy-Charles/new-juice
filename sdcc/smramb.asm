@@ -851,8 +851,8 @@ _main::
 ;smram.c:567: s = "WonderTANG! uSD Driver";
 	ld	hl, #___str_8
 	ld	(_s), hl
-;smram.c:571: t = (uchar*)0x4110;
-	ld	hl, #0x4110
+;smram.c:569: t = (uchar*)0x4180;
+	ld	hl, #0x4180
 	ld	(_t), hl
 ;smram.c:573: for(int j=0; j<22; j++)
 	ld	bc, #0x0000
@@ -933,7 +933,7 @@ _main::
 	ld	hl, #___str_9
 	push	hl
 	call	_printf
-;smram.c:600: printf("v2.1.1 (new-juice)\n\r");
+;smram.c:598: printf("v3.01 beta (new-juice)\n\r");
 	ld	hl, #___str_10
 	ex	(sp),hl
 	call	_printf
@@ -2199,7 +2199,7 @@ ___str_9:
 	.db 0x0d
 	.db 0x00
 ___str_10:
-	.ascii "v2.1.1 (new-juice)"
+	.ascii "v3.01 beta (new-juice)"
 	.db 0x0a
 	.db 0x0d
 	.db 0x00
