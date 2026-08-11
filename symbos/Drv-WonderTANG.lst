@@ -1,0 +1,507 @@
+# file opened: Drv-WonderTANG.asm
+  1   0000              ; SPDX-License-Identifier: GPL-3.0-only
+  2   0000              ; WonderTANG SymbOS MSX mass-storage driver
+  3   0000              ;
+  4   0000              ; SymbOS driver ABI and slot/page switching are based on Drv-SDMega.asm
+  5   0000              ; and Drv-FDCNational.asm from Prodatron/symdrv-msx-massstorage.
+  6   0000              ; WonderTANG SD register handling is based on the Nextor Tang driver.
+  7   0000
+  8   0000              ; -----------------------------------------------------------------------------
+  9   0000              ; SymbOS 4 MSX mass-storage ABI entry points
+ 10   0000
+ 11   0000              stobnkx        EQU 0815Ah      ; caller buffer banking configuration
+ 12   0000              bnkmonx        EQU 08112h      ; map caller buffer into page 0
+ 13   0000              bnkmofx        EQU 08115h      ; restore the SymbOS page-0 mapping
+ 14   0000              bnkdofx        EQU 08136h      ; restore page 1 and enable interrupts
+ 15   0000              stoadrx        EQU 08157h      ; HL = current device data record
+ 16   0000              stobufx        EQU 0815Bh      ; address of the shared 512-byte buffer
+ 17   0000
+ 18   0000              ; SymbOS storage errors and device record offsets used here
+ 19   0000              stoerrpno      EQU 4           ; partition does not exist
+ 20   0000              stoerrptp      EQU 5           ; unsupported partition type
+ 21   0000              stoerrsec      EQU 6           ; sector read/write error
+ 22   0000              stoerrrdy      EQU 26          ; device not ready
+ 23   0000              stoerrxch      EQU 32          ; channel not available
+ 24   0000
+ 25   0000              stotypoky      EQU 1
+ 26   0000              stomedsdc      EQU 17
+ 27   0000              stodatsta      EQU 0
+ 28   0000              stodattyp      EQU 1
+ 29   0000              stodatbeg      EQU 12
+ 30   0000              stodatsub      EQU 26
+ 31   0000
+ 32   0000              ; MBR partition table fields
+ 33   0000              ideparadr      EQU 01BEh
+ 34   0000              idepartyp      EQU 4
+ 35   0000              ideparbeg      EQU 8
+ 36   0000
+ 37   0000              ; WonderTANG SD controller in expanded subslot 0, page 1
+ 38   0000              SDC_SDATA      EQU 07C00h      ; 512-byte sector transfer RAM
+ 39   0000              SDC_ENABLE     EQU 07E00h      ; write 1 to expose transfer RAM/registers
+ 40   0000              SDC_CMD        EQU 07E01h
+ 41   0000              SDC_STATUS     EQU 07E02h
+ 42   0000              SDC_SADDR      EQU 07E03h      ; four-byte LBA, least significant byte first
+ 43   0000              SDC_CTYPE      EQU 07E0Ch
+ 44   0000
+ 45   0000              SDC_BUSY       EQU 080h
+ 46   0000              SDC_CRC        EQU 001h
+ 47   0000              SDC_TIMEOUT    EQU 002h
+ 48   0000              SDC_READ       EQU 001h
+ 49   0000              SDC_WRITE      EQU 002h
+ 50   0000
+ 51   0000              ; -----------------------------------------------------------------------------
+ 52   0000              ; Driver header
+ 53   0000
+ 54   0000              ORG 01000h-32
+ 55   0FE0              RELOCATE_START
+ 56   0FE0
+ 57   0FE0 53 4D 44 33  DB "SMD3"
+ 58   0FE4 2F 02        DW drvend-drvjmp
+ 59   0FE6 39 00        DW relocate_count
+ 60   0FE8 00 00 00...  DS 8
+ 61   0FF0 00 01 02     DB 0,1,2                       ; version 1.0, SD storage
+ 62   0FF3 57 6F 6E 64  DB "WonderTANG   "
+ 62   0FF7 65 72 54 41
+ 62   0FFB 4E 47 20 20
+ 62   0FFF 20
+ 63   1000
+ 64   1000              drvjmp:
+ 65   1000 25 10 39 10          DW drvinp,drvout,drvact,drvmof
+ 65   1004 4D 10 08 10
+ 66   1008              drvmof:
+ 67   1008 C9                   RET
+ 68   1009 00 00                DW 0
+ 69   100B 4C                   DB 32*2+12             ; SD storage, WonderTANG driver ID 12
+ 70   100C 00 00 00 00          DS 4
+ 71   1010              drvslt:
+ 72   1010 00 00 00             DS 3                   ; filled by SymbOS: slot state for page 1
+ 73   1013
+ 74   1013              idepartok:
+ 75   1013 01 11 04 06          DB 01h,11h,04h,06h,0Eh,14h,16h,1Eh,0Bh,0Ch,1Bh,1Ch
+ 75   1017 0E 14 16 1E
+ 75   101B 0B 0C 1B 1C
+ 76   101F              idepartan      EQU 12
+ 77   101F
+ 78   101F              buffer_bank:
+ 79   101F 00                   DB 0
+ 80   1020              sector_count:
+ 81   1020 00                   DB 0
+ 82   1021              current_sector:
+ 83   1021 00 00 00 00          DS 4
+ 84   1025
+ 85   1025              ; -----------------------------------------------------------------------------
+ 86   1025              ; Public driver operations
+ 87   1025
+ 88   1025              ; Read sectors.
+ 89   1025              ; In: A=device, IY:IX=logical sector, B=count, DE=destination.
+ 90   1025              drvinp:
+ 91   1025 F5                   PUSH AF                 ; preserve device number for stoadrx in drvsec
+ 92   1026 78                   LD A,B
+ 93   1027 32 20 10             LD (sector_count),A
+ 94   102A F1                   POP AF
+ 95   102B D5                   PUSH DE
+ 96   102C CD E6 10             CALL drvsec
+ 97   102F CD 8E 11             CALL store_sector
+ 98   1032 E1                   POP HL
+ 99   1033 CD C8 11             CALL prepare_buffer
+100   1036 C3 02 11             JP drvred
+101   1039
+102   1039              ; Write sectors.
+103   1039              ; In: A=device, IY:IX=logical sector, B=count, DE=source.
+104   1039              drvout:
+105   1039 F5                   PUSH AF                 ; preserve device number for stoadrx in drvsec
+106   103A 78                   LD A,B
+107   103B 32 20 10             LD (sector_count),A
+108   103E F1                   POP AF
+109   103F D5                   PUSH DE
+110   1040 CD E6 10             CALL drvsec
+111   1043 CD 8E 11             CALL store_sector
+112   1046 E1                   POP HL
+113   1047 CD C8 11             CALL prepare_buffer
+114   104A C3 41 11             JP drvwrt
+115   104D
+116   104D              ; Read and initialize the medium and selected MBR partition.
+117   104D              ; In: A=device.  The high nibble of stodatsub is the channel (only 0 exists),
+118   104D              ; and the low nibble is the partition number (0=unpartitioned/superfloppy,
+119   104D              ; 1-4=MBR primary partition).
+120   104D              drvact:
+121   104D F5                   PUSH AF
+122   104E CD 57 81             CALL stoadrx
+123   1051 C1                   POP BC                  ; B=device number
+124   1052 EB                   EX DE,HL                ; DE=device record
+125   1053 21 1A 00             LD HL,stodatsub
+126   1056 19                   ADD HL,DE
+127   1057 7E                   LD A,(HL)
+128   1058 E6 F0                AND 0F0h
+129   105A C2 E2 10             JP NZ,drvact_bad_channel
+130   105D
+131   105D E5                   PUSH HL                 ; selected partition byte
+132   105E D5                   PUSH DE                 ; device record
+133   105F CD D6 11             CALL drvini
+134   1062 38 7B                JR C,drvact_init_error
+135   1064
+136   1064 AF                   XOR A
+137   1065 32 21 10             LD (current_sector+0),A
+138   1068 32 22 10             LD (current_sector+1),A
+139   106B 32 23 10             LD (current_sector+2),A
+140   106E 32 24 10             LD (current_sector+3),A
+141   1071 3C                   INC A
+142   1072 32 20 10             LD (sector_count),A
+143   1075 2A 5B 81             LD HL,(stobufx)
+144   1078 CD C8 11             CALL prepare_buffer
+145   107B CD 02 11             CALL drvred             ; read physical sector zero
+146   107E D1                   POP DE                  ; device record
+147   107F E1                   POP HL                  ; selected partition byte
+148   1080 D8                   RET C
+149   1081
+150   1081 7E                   LD A,(HL)
+151   1082 E6 0F                AND 0Fh
+152   1084 4F                   LD C,A
+153   1085 47                   LD B,A
+154   1086 FD 21 00 00          LD IY,0                 ; default partition offset is zero
+155   108A 28 3D                JR Z,drvact_ready
+156   108C
+157   108C DD 2A 5B 81          LD IX,(stobufx)
+158   1090 01 BE 01             LD BC,ideparadr
+159   1093 DD 09                ADD IX,BC
+160   1095 01 10 00             LD BC,16
+161   1098 3D                   DEC A
+162   1099 28 05                JR Z,drvact_partition
+163   109B              drvact_partition_loop:
+164   109B DD 09                ADD IX,BC
+165   109D 3D                   DEC A
+166   109E 20 FB                JR NZ,drvact_partition_loop
+167   10A0
+168   10A0              drvact_partition:
+169   10A0 DD 7E 04             LD A,(IX+idepartyp)
+170   10A3 B7                   OR A
+171   10A4 3E 04                LD A,stoerrpno
+172   10A6 37                   SCF
+173   10A7 C8                   RET Z
+174   10A8
+175   10A8 DD 7E 04             LD A,(IX+idepartyp)
+176   10AB 21 13 10             LD HL,idepartok
+177   10AE 06 0C                LD B,idepartan
+178   10B0              drvact_type_loop:
+179   10B0 BE                   CP (HL)
+180   10B1 28 07                JR Z,drvact_type_ok
+181   10B3 23                   INC HL
+182   10B4 10 FA                DJNZ drvact_type_loop
+183   10B6 3E 05                LD A,stoerrptp
+184   10B8 37                   SCF
+185   10B9 C9                   RET
+186   10BA
+187   10BA              drvact_type_ok:
+188   10BA DD 4E 0A             LD C,(IX+ideparbeg+2)
+189   10BD DD 46 0B             LD B,(IX+ideparbeg+3)
+190   10C0 C5                   PUSH BC
+191   10C1 FD E1                POP IY
+192   10C3 DD 4E 08             LD C,(IX+ideparbeg+0)
+193   10C6 DD 46 09             LD B,(IX+ideparbeg+1)
+194   10C9
+195   10C9              drvact_ready:
+196   10C9 EB                   EX DE,HL                ; HL=device record
+197   10CA 36 01                LD (HL),stotypoky
+198   10CC 23                   INC HL
+199   10CD 36 11                LD (HL),stomedsdc
+200   10CF 11 0B 00             LD DE,stodatbeg-stodattyp
+201   10D2 19                   ADD HL,DE
+202   10D3 71                   LD (HL),C
+203   10D4 23                   INC HL
+204   10D5 70                   LD (HL),B
+205   10D6 23                   INC HL
+206   10D7 FD E5                PUSH IY
+207   10D9 C1                   POP BC
+208   10DA 71                   LD (HL),C
+209   10DB 23                   INC HL
+210   10DC 70                   LD (HL),B
+211   10DD AF                   XOR A
+212   10DE C9                   RET
+213   10DF
+214   10DF              drvact_init_error:
+215   10DF D1                   POP DE
+216   10E0 E1                   POP HL
+217   10E1 C9                   RET
+218   10E2
+219   10E2              drvact_bad_channel:
+220   10E2 3E 20                LD A,stoerrxch
+221   10E4 37                   SCF
+222   10E5 C9                   RET
+223   10E6
+224   10E6              ; Add the selected partition start to IY:IX and return the physical LBA in
+225   10E6              ; BC:DE. WonderTANG always uses 512-byte sector addressing, including SDSC.
+226   10E6              drvsec:
+227   10E6 CD 57 81             CALL stoadrx
+228   10E9 01 0C 00             LD BC,stodatbeg
+229   10EC 09                   ADD HL,BC
+230   10ED 4E                   LD C,(HL)
+231   10EE 23                   INC HL
+232   10EF 46                   LD B,(HL)
+233   10F0 23                   INC HL
+234   10F1 DD 09                ADD IX,BC
+235   10F3 4E                   LD C,(HL)
+236   10F4 23                   INC HL
+237   10F5 46                   LD B,(HL)
+238   10F6 30 01                JR NC,drvsec_no_carry
+239   10F8 03                   INC BC
+240   10F9              drvsec_no_carry:
+241   10F9 FD 09                ADD IY,BC
+242   10FB DD E5                PUSH IX
+243   10FD D1                   POP DE
+244   10FE FD E5                PUSH IY
+245   1100 C1                   POP BC
+246   1101 C9                   RET
+247   1102
+248   1102              ; -----------------------------------------------------------------------------
+249   1102              ; WonderTANG sector I/O
+250   1102
+251   1102              drvred:
+252   1102 CD EF 11             CALL drvshw
+253   1105              drvred_loop:
+254   1105 CD 9F 11             CALL program_sector
+255   1108 3E 01                LD A,SDC_READ
+256   110A 32 01 7E             LD (SDC_CMD),A
+257   110D CD 0D 12             CALL wait_command
+258   1110 38 24                JR C,drvred_error
+259   1112
+260   1112 3A 1F 10             LD A,(buffer_bank)
+261   1115 D3 FC                OUT (0FCh),A            ; caller's buffer in page 0
+262   1117 E5                   PUSH HL
+263   1118 21 00 7C             LD HL,SDC_SDATA
+264   111B D1                   POP DE
+265   111C 01 00 02             LD BC,512
+266   111F ED B0                LDIR
+267   1121 EB                   EX DE,HL                ; HL=next destination
+268   1122 CD 15 81             CALL bnkmofx
+269   1125
+270   1125 3A 20 10             LD A,(sector_count)
+271   1128 3D                   DEC A
+272   1129 32 20 10             LD (sector_count),A
+273   112C 28 4F                JR Z,drvio_success
+274   112E
+275   112E CD 06 12             CALL drvhide            ; allow normal page state between sectors
+276   1131 CD EF 11             CALL drvshw
+277   1134 18 CF                JR drvred_loop
+278   1136
+279   1136              drvred_error:
+280   1136 F5                   PUSH AF
+281   1137 CD 15 81             CALL bnkmofx
+282   113A CD 06 12             CALL drvhide
+283   113D F1                   POP AF
+284   113E C3 82 11             JP status_error
+285   1141
+286   1141              drvwrt:
+287   1141 CD EF 11             CALL drvshw
+288   1144              drvwrt_loop:
+289   1144 CD 9F 11             CALL program_sector
+290   1147
+291   1147 3A 1F 10             LD A,(buffer_bank)
+292   114A D3 FC                OUT (0FCh),A            ; caller's buffer in page 0
+293   114C 11 00 7C             LD DE,SDC_SDATA
+294   114F 01 00 02             LD BC,512
+295   1152 ED B0                LDIR
+296   1154 CD 15 81             CALL bnkmofx
+297   1157
+298   1157 3E 02                LD A,SDC_WRITE
+299   1159 32 01 7E             LD (SDC_CMD),A
+300   115C CD 0D 12             CALL wait_command
+301   115F 38 11                JR C,drvwrt_error
+302   1161
+303   1161 3A 20 10             LD A,(sector_count)
+304   1164 3D                   DEC A
+305   1165 32 20 10             LD (sector_count),A
+306   1168 28 13                JR Z,drvio_success
+307   116A
+308   116A CD 06 12             CALL drvhide
+309   116D CD EF 11             CALL drvshw
+310   1170 18 D2                JR drvwrt_loop
+311   1172
+312   1172              drvwrt_error:
+313   1172 F5                   PUSH AF
+314   1173 CD 15 81             CALL bnkmofx
+315   1176 CD 06 12             CALL drvhide
+316   1179 F1                   POP AF
+317   117A C3 82 11             JP status_error
+318   117D
+319   117D              drvio_success:
+320   117D CD 06 12             CALL drvhide
+321   1180 AF                   XOR A
+322   1181 C9                   RET
+323   1182
+324   1182              ; Convert controller status to a SymbOS storage error.
+325   1182              status_error:
+326   1182 CB 4F                BIT 1,A
+327   1184 20 04                JR NZ,status_not_ready
+328   1186 3E 06                LD A,stoerrsec
+329   1188 37                   SCF
+330   1189 C9                   RET
+331   118A              status_not_ready:
+332   118A 3E 1A                LD A,stoerrrdy
+333   118C 37                   SCF
+334   118D C9                   RET
+335   118E
+336   118E              ; Store BC:DE as a little-endian 32-bit sector number.
+337   118E              store_sector:
+338   118E 7B                   LD A,E
+339   118F 32 21 10             LD (current_sector+0),A
+340   1192 7A                   LD A,D
+341   1193 32 22 10             LD (current_sector+1),A
+342   1196 79                   LD A,C
+343   1197 32 23 10             LD (current_sector+2),A
+344   119A 78                   LD A,B
+345   119B 32 24 10             LD (current_sector+3),A
+346   119E C9                   RET
+347   119F
+348   119F              ; Program the current LBA and advance the saved value for the next sector.
+349   119F              ; HL (the caller buffer pointer) is preserved.
+350   119F              program_sector:
+351   119F E5                   PUSH HL
+352   11A0 21 21 10             LD HL,current_sector
+353   11A3 7E                   LD A,(HL)
+354   11A4 32 03 7E             LD (SDC_SADDR+0),A
+355   11A7 23                   INC HL
+356   11A8 7E                   LD A,(HL)
+357   11A9 32 04 7E             LD (SDC_SADDR+1),A
+358   11AC 23                   INC HL
+359   11AD 7E                   LD A,(HL)
+360   11AE 32 05 7E             LD (SDC_SADDR+2),A
+361   11B1 23                   INC HL
+362   11B2 7E                   LD A,(HL)
+363   11B3 32 06 7E             LD (SDC_SADDR+3),A
+364   11B6
+365   11B6 21 21 10             LD HL,current_sector
+366   11B9 34                   INC (HL)
+367   11BA 20 0A                JR NZ,program_sector_done
+368   11BC 23                   INC HL
+369   11BD 34                   INC (HL)
+370   11BE 20 06                JR NZ,program_sector_done
+371   11C0 23                   INC HL
+372   11C1 34                   INC (HL)
+373   11C2 20 02                JR NZ,program_sector_done
+374   11C4 23                   INC HL
+375   11C5 34                   INC (HL)
+376   11C6              program_sector_done:
+377   11C6 E1                   POP HL
+378   11C7 C9                   RET
+379   11C8
+380   11C8              ; Ask SymbOS to translate/map the transfer address into page 0, remember its
+381   11C8              ; mapper segment, then restore page 0 until the actual 512-byte copy.
+382   11C8              prepare_buffer:
+383   11C8 3A 5A 81             LD A,(stobnkx)
+384   11CB F3                   DI
+385   11CC CD 12 81             CALL bnkmonx
+386   11CF 32 1F 10             LD (buffer_bank),A
+387   11D2 CD 15 81             CALL bnkmofx
+388   11D5 C9                   RET
+389   11D6
+390   11D6              ; -----------------------------------------------------------------------------
+391   11D6              ; Controller initialization and slot/page switching
+392   11D6
+393   11D6              drvini:
+394   11D6 CD EF 11             CALL drvshw
+395   11D9                      ; SymbOS is launched by MSX-DOS/Nextor, so the FPGA controller and
+396   11D9                      ; card are already initialized. The current FPGA SD state machine
+397   11D9                      ; accepts init only from STANDBY and cannot be retriggered after the
+398   11D9                      ; original init edge; do not disturb or pretend to reinitialize it.
+399   11D9 3A 0C 7E             LD A,(SDC_CTYPE)
+400   11DC B7                   OR A
+401   11DD 20 05                JR NZ,drvini_ok
+402   11DF 3E 02                LD A,SDC_TIMEOUT
+403   11E1 37                   SCF
+404   11E2 18 01                JR drvini_finish
+405   11E4              drvini_ok:
+406   11E4 AF                   XOR A
+407   11E5              drvini_finish:
+408   11E5 F5                   PUSH AF
+409   11E6 CD 06 12             CALL drvhide
+410   11E9 F1                   POP AF
+411   11EA D0                   RET NC
+412   11EB 3E 1A                LD A,stoerrrdy
+413   11ED 37                   SCF
+414   11EE C9                   RET
+415   11EF
+416   11EF              ; Map the WonderTANG expanded slot into page 1, select subslot 0 (the slot
+417   11EF              ; configuration supplied by SymbOS already identifies it), and enable the SD
+418   11EF              ; register/transfer-RAM overlay.
+419   11EF              drvshw:
+420   11EF 3A 10 10             LD A,(drvslt+0)
+421   11F2 F3                   DI
+422   11F3 D3 A8                OUT (0A8h),A
+423   11F5 3A 11 10             LD A,(drvslt+1)
+424   11F8 32 FF FF             LD (0FFFFh),A
+425   11FB 3A 12 10             LD A,(drvslt+2)
+426   11FE D3 A8                OUT (0A8h),A
+427   1200 3E 01                LD A,1
+428   1202 32 00 7E             LD (SDC_ENABLE),A
+429   1205 C9                   RET
+430   1206
+431   1206              ; Disable the overlay before restoring SymbOS page 1. bnkdofx also restores
+432   1206              ; the interrupt state expected by the mass-storage subsystem.
+433   1206              drvhide:
+434   1206 AF                   XOR A
+435   1207 32 00 7E             LD (SDC_ENABLE),A
+436   120A C3 36 81             JP bnkdofx
+437   120D
+438   120D              ; Wait for BUSY to clear. Hardware timeout/CRC bits and the software timeout
+439   120D              ; all return with carry set and the controller-style status in A.
+440   120D              wait_command:
+441   120D C5                   PUSH BC
+442   120E D5                   PUSH DE
+443   120F 11 FF 07             LD DE,2047
+444   1212              wait_command_outer:
+445   1212 06 FF                LD B,255
+446   1214              wait_command_inner:
+447   1214 3A 02 7E             LD A,(SDC_STATUS)
+448   1217 CB 7F                BIT 7,A
+449   1219 28 0C                JR Z,wait_command_done
+450   121B 10 F7                DJNZ wait_command_inner
+451   121D 1B                   DEC DE
+452   121E 7A                   LD A,D
+453   121F B3                   OR E
+454   1220 20 F0                JR NZ,wait_command_outer
+455   1222 3E 02                LD A,SDC_TIMEOUT
+456   1224 37                   SCF
+457   1225 18 05                JR wait_command_return
+458   1227              wait_command_done:
+459   1227 E6 03                AND SDC_TIMEOUT+SDC_CRC
+460   1229 28 01                JR Z,wait_command_return
+461   122B 37                   SCF
+462   122C              wait_command_return:
+463   122C D1                   POP DE
+464   122D C1                   POP BC
+465   122E C9                   RET
+466   122F
+467   122F              drvend:
+468   122F
+469   122F 00 10 02 10  RELOCATE_TABLE
+469   1233 04 10 06 10
+469   1237 28 10 2D 10
+469   123B 30 10 34 10
+469   123F 37 10 3C 10
+469   1243 41 10 44 10
+469   1247 48 10 4B 10
+469   124B 5B 10 60 10
+469   124F 66 10 69 10
+469   1253 6C 10 6F 10
+469   1257 73 10 79 10
+469   125B 7C 10 AC 10
+469   125F 03 11 06 11
+469   1263 0E 11 13 11
+469   1267 26 11 2A 11
+469   126B 2F 11 32 11
+469   126F 3B 11 3F 11
+469   1273 42 11 45 11
+469   1277 48 11 5D 11
+469   127B 62 11 66 11
+469   127F 6B 11 6E 11
+469   1283 77 11 7B 11
+469   1287 7E 11 90 11
+469   128B 94 11 98 11
+469   128F 9C 11 A1 11
+469   1293 B7 11 D0 11
+469   1297 D7 11 E7 11
+469   129B F0 11 F6 11
+469   129F FC 11
+470   12A1              RELOCATE_END
+471   12A1
+# file closed: Drv-WonderTANG.asm
