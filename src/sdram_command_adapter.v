@@ -1,7 +1,12 @@
 module sdram_command_adapter
+#(
+    parameter integer CLK_HZ = 108_000_000,
+    parameter integer DEBUG_REFRESH_INTERVAL_US = 10
+)
 (
     input clk,
     input reset_n,
+    input debug_wait_n,
     input rfsh_n,
     input m1_n,
     input merq_n,
@@ -32,6 +37,10 @@ module sdram_command_adapter
 
     localparam [2:0] CMD_READ = 3'b101;
     localparam [2:0] CMD_WRITE = 3'b100;
+    localparam integer DEBUG_REFRESH_CYCLES =
+        (CLK_HZ / 1_000_000) * DEBUG_REFRESH_INTERVAL_US;
+    localparam integer DEBUG_REFRESH_COUNT_WIDTH =
+        (DEBUG_REFRESH_CYCLES <= 1) ? 1 : $clog2(DEBUG_REFRESH_CYCLES);
     reg rd_reg = 1'b0;
     reg wr_reg = 1'b0;
     reg refresh_reg = 1'b0;
@@ -47,6 +56,8 @@ module sdram_command_adapter
     reg refresh_saw_busy = 1'b0;
     reg refresh_request = 1'b0;
     reg refresh_seen = 1'b0;
+    reg [DEBUG_REFRESH_COUNT_WIDTH-1:0] debug_refresh_count =
+        {DEBUG_REFRESH_COUNT_WIDTH{1'b0}};
     reg request_queued = 1'b0;
     reg [2:0] request_cmd = CMD_READ;
     reg [20:0] request_addr = 21'd0;
@@ -87,6 +98,7 @@ module sdram_command_adapter
             refresh_saw_busy <= 1'b0;
             refresh_request <= 1'b0;
             refresh_seen <= 1'b0;
+            debug_refresh_count <= {DEBUG_REFRESH_COUNT_WIDTH{1'b0}};
             request_queued <= 1'b0;
             request_cmd <= CMD_READ;
             request_addr <= 21'd0;
@@ -111,6 +123,20 @@ module sdram_command_adapter
             end else if (!refresh_seen) begin
                 refresh_request <= 1'b1;
                 refresh_seen <= 1'b1;
+            end
+
+            // A debugger halt keeps the Z80 in an active M1 read, so neither
+            // further RFSH pulses nor a bus-idle window can occur. Generate
+            // periodic retention refresh requests while that specific WAIT
+            // source is active (every 10 us by default). A request is
+            // remembered until the current SDRAM command completes.
+            if (debug_wait_n) begin
+                debug_refresh_count <= {DEBUG_REFRESH_COUNT_WIDTH{1'b0}};
+            end else if (debug_refresh_count == DEBUG_REFRESH_CYCLES - 1) begin
+                debug_refresh_count <= {DEBUG_REFRESH_COUNT_WIDTH{1'b0}};
+                refresh_request <= 1'b1;
+            end else begin
+                debug_refresh_count <= debug_refresh_count + 1'b1;
             end
 
             if (command_pending) begin
@@ -147,9 +173,11 @@ module sdram_command_adapter
                 wr_reg <= (request_cmd == CMD_WRITE);
                 request_queued <= 1'b0;
             end else if (refresh_request && enabled && !busy &&
-                         cpu_bus_idle && !cmd_en) begin
+                         (cpu_bus_idle || !debug_wait_n) && !cmd_en) begin
                 // CPU reads/writes have priority. In particular, do not start
-                // refresh on the same edge that captures a new command.
+                // refresh on the same edge that captures a new command. A
+                // debugger-held fetch is safe once its SDRAM command has
+                // completed, even though the external bus remains active.
                 refresh_reg <= 1'b1;
                 refresh_pending <= 1'b1;
                 refresh_saw_busy <= 1'b0;

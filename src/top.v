@@ -1823,6 +1823,7 @@ module top
     sdram_command_adapter sdram_command_adapter_inst(
         .clk(main_clk),
         .reset_n(board_enabled),
+        .debug_wait_n(step_debug_wait_n),
         .rfsh_n(rfsh_n),
         .m1_n(m1_n),
         .merq_n(merq_n),
