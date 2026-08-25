@@ -191,8 +191,13 @@ your user without `sudo`.
 
 For windows you can just program directly using Gowin Programmer:
 
+FPGA bitstream:
 <p><img src="images/win-program-fs.png" alt="Programming FPGA bitstream" width="600"></p>
+
+Nextor ROM:
 <p><img src="images/win-program-nextor.png" alt="Programming Nextor ROM (choose between 2.11 or 3.0 beta)" width="600"></p>
+
+FM-PAC and SFG-01 ROMs:
 <p><img src="images/win-program-fm-roms.png" alt="Program FM PAC and SFG-01 roms" width="600"></p>
 
 ## Build and program
