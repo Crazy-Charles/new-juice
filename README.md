@@ -189,7 +189,11 @@ your user without `sudo`.
 
 ## Windows Users
 
-Well, at this point in time and you still using this bloatware-AI-minion-copiloted piece of something? Time to look at the mirror and reflect about your life. I don't have a working Windows machine and I cannot help you. (And I remember it sucked hard with all usb conflicts and ports stopping accessing the unit)
+For windows you can just program directly using Gowin Programmer:
+
+<p><img src="images/win-program-fs.png" alt="Programming FPGA bitstream" width="600"></p>
+<p><img src="images/win-program-nextor.png" alt="Programming Nextor ROM (choose between 2.11 or 3.0 beta)" width="600"></p>
+<p><img src="images/win-program-fm-roms.png" alt="Program FM PAC and SFG-01 roms" width="600"></p>
 
 ## Build and program
 
