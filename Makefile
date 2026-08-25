@@ -1,8 +1,7 @@
 ROOT := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 PROJECT := $(ROOT)/new-juice.gprj
 BUILD_TCL := $(ROOT)/scripts/build.tcl
-PNR_BITSTREAM := $(ROOT)/impl/pnr/new-juice.fs
-OUTPUT := $(ROOT)/impl/prn/new-juice.fs
+OUTPUT := $(ROOT)/impl/pnr/new-juice.fs
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
@@ -152,8 +151,6 @@ define run-gowin
 	@echo "Building new-juice with $(GW_SH)"
 	@cd "$(ROOT)" && env $(GOWIN_ENV) NEW_JUICE_ROOT="$(ROOT)" \
 		"$(GW_SH)" "$(BUILD_TCL)"
-	@mkdir -p "$(dir $(OUTPUT))"
-	@cp "$(PNR_BITSTREAM)" "$(OUTPUT)"
 	@echo "Generated $(OUTPUT)"
 endef
 

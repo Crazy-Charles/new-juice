@@ -144,7 +144,7 @@ repository root:
 make
 ```
 
-The resulting bitstream is written to `impl/prn/new-juice.fs`. Use
+The resulting bitstream is written to `impl/pnr/new-juice.fs`. Use
 `make rebuild` to force a complete rebuild.
 
 On macOS the Makefile defaults to the Gowin installation at
@@ -205,7 +205,7 @@ make
 # Remove the previous implementation outputs and build from scratch
 make rebuild
 
-# Program the generated bitstream (impl/prn/new-juice.fs)
+# Program the generated bitstream (impl/pnr/new-juice.fs)
 make program
 
 # Flash the existing bitstream only (does not rebuild)
@@ -233,7 +233,7 @@ make GOWIN_IDE="$HOME/Gowin/IDE" \
 ```
 
 Use `make reprogram` when the Tang Nano 20K should only be flashed with the
-already-built `impl/prn/new-juice.fs`. Unlike `make program`, it does not add
+already-built `impl/pnr/new-juice.fs`. Unlike `make program`, it does not add
 the bitstream as a build dependency or invoke synthesis; run `make` or
 `make rebuild` first when the bitstream needs to be regenerated.
 

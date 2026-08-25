@@ -10,6 +10,10 @@
    "Type" : "verilog"
   },
   {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/cpu_step_debugger.v",
+   "Type" : "verilog"
+  },
+  {
    "Path" : "/Users/felipe/src/fpga/new-juice/src/audio_drive.v",
    "Type" : "verilog"
   },
@@ -58,15 +62,251 @@
    "Type" : "verilog"
   },
   {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_bus.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_div.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_cen.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_eg.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_exp.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_noise.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_acc.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_eg.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_exp2lin.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_exprom.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_kon.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_lfo.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_lin2exp.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_mmr.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_mod.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_noise_lfsr.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_noise.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_op.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_pg.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_phinc_rom.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_phrom.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_pm.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_reg.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_timers.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_reg_ch.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_csr_op.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_acc.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_csr.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_div.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_cnt.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_comb.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_ctrl.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_final.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_pure.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_step.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_exprom.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_lfo.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_logsin.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_noise.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_op.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_comb.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_inc.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_rhy.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_sum.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pm.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_reg_ch.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_single_acc.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_slot_cnt.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_timers.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopll_mmr.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopll_reg.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopll_reg_ch.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jt2413.v",
+   "Type" : "verilog"
+  },
+  {
    "Path" : "/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v",
    "Type" : "verilog"
   },
   {
    "Path" : "/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v",
-   "Type" : "verilog"
-  },
-  {
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/sms_bus_bridge.v",
    "Type" : "verilog"
   },
   {
@@ -154,11 +394,23 @@
    "Type" : "verilog"
   },
   {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/linear_rom.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/debug_trace_terminal.v",
+   "Type" : "verilog"
+  },
+  {
    "Path" : "/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v",
    "Type" : "verilog"
   },
   {
    "Path" : "/Users/felipe/src/fpga/new-juice/src/slot_expander.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "/Users/felipe/src/fpga/new-juice/src/sound_scope.v",
    "Type" : "verilog"
   },
   {
@@ -172,106 +424,6 @@
   {
    "Path" : "/Users/felipe/src/fpga/new-juice/src/top.v",
    "Type" : "verilog"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/vm2413.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/controller.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/envelopegenerator.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/envelopememory.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/feedbackmemory.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/operator.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/outputgenerator.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/outputmemory.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/phasegenerator.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/phasememory.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/registermemory.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/temporalmixer.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/voicememory.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/voicerom.vhd",
-   "Type" : "vhdl"
-  },
-  {
-   "Library" : "work",
-   "Path" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
-   "Type" : "vhdl"
   },
   {
    "Library" : "work",

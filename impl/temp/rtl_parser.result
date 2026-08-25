@@ -1,11 +1,63 @@
 [
  {
-  "InstFile" : "/Users/felipe/src/fpga/new-juice/src/sms_bus_bridge.v",
-  "InstLine" : 1,
-  "InstName" : "sms_bus_bridge",
-  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sms_bus_bridge.v",
-  "ModuleLine" : 1,
-  "ModuleName" : "sms_bus_bridge"
+  "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_noise_lfsr.v",
+  "InstLine" : 24,
+  "InstName" : "jt51_noise_lfsr",
+  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_noise_lfsr.v",
+  "ModuleLine" : 24,
+  "ModuleName" : "jt51_noise_lfsr"
+ },
+ {
+  "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_csr.v",
+  "InstLine" : 23,
+  "InstName" : "jtopl_csr",
+  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_csr.v",
+  "ModuleLine" : 23,
+  "ModuleName" : "jtopl_csr",
+  "SubInsts" : [
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_csr.v",
+    "InstLine" : 45,
+    "InstName" : "u_regch",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v",
+    "ModuleLine" : 22,
+    "ModuleName" : "jtopl_sh_rst"
+   }
+  ]
+ },
+ {
+  "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_reg_ch.v",
+  "InstLine" : 22,
+  "InstName" : "jtopl_reg_ch",
+  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_reg_ch.v",
+  "ModuleLine" : 22,
+  "ModuleName" : "jtopl_reg_ch"
+ },
+ {
+  "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_timers.v",
+  "InstLine" : 22,
+  "InstName" : "jtopl_timers",
+  "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_timers.v",
+  "ModuleLine" : 22,
+  "ModuleName" : "jtopl_timers",
+  "SubInsts" : [
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_timers.v",
+    "InstLine" : 49,
+    "InstName" : "timer_A",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_timers.v",
+    "ModuleLine" : 76,
+    "ModuleName" : "jtopl_timer"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_timers.v",
+    "InstLine" : 62,
+    "InstName" : "timer_B",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_timers.v",
+    "ModuleLine" : 76,
+    "ModuleName" : "jtopl_timer"
+   }
+  ]
  },
  {
   "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
@@ -17,7 +69,7 @@
   "SubInsts" : [
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 213,
+    "InstLine" : 318,
     "InstName" : "audio_logic_enabled.audio_clock_divider",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/clockdiv.v",
     "ModuleLine" : 33,
@@ -25,7 +77,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 220,
+    "InstLine" : 325,
     "InstName" : "audio_logic_enabled.audio_drive_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/audio_drive.v",
     "ModuleLine" : 1,
@@ -33,7 +85,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 269,
+    "InstLine" : 373,
     "InstName" : "rpll_main",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/rpll/rpll_main.v",
     "ModuleLine" : 10,
@@ -41,7 +93,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 304,
+    "InstLine" : 408,
     "InstName" : "rpll_video_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/rpll/rpll_video.v",
     "ModuleLine" : 10,
@@ -49,7 +101,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 319,
+    "InstLine" : 421,
     "InstName" : "sms_clock_divider",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/clockdiv.v",
     "ModuleLine" : 1,
@@ -57,227 +109,803 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 507,
+    "InstLine" : 741,
     "InstName" : "psg_inst",
-    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/YM2149/ym2149_audio.vhd",
-    "ModuleLine" : 155,
-    "ModuleName" : "ym2149_audio"
-   },
-   {
-    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 534,
-    "InstName" : "opll_enabled_impl.opll_inst",
-    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
-    "ModuleLine" : 41,
-    "ModuleName" : "opll",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_bus.v",
+    "ModuleLine" : 26,
+    "ModuleName" : "jt49_bus",
     "SubInsts" : [
      {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
-      "InstLine" : 275,
-      "InstName" : "s0",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd",
-      "ModuleLine" : 40,
-      "ModuleName" : "SlotCounter"
-     },
-     {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
-      "InstLine" : 287,
-      "InstName" : "s2",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd",
-      "ModuleLine" : 40,
-      "ModuleName" : "SlotCounter"
-     },
-     {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
-      "InstLine" : 299,
-      "InstName" : "s5",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd",
-      "ModuleLine" : 40,
-      "ModuleName" : "SlotCounter"
-     },
-     {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
-      "InstLine" : 311,
-      "InstName" : "s8",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/slotcounter.vhd",
-      "ModuleLine" : 40,
-      "ModuleName" : "SlotCounter"
-     },
-     {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
-      "InstLine" : 324,
-      "InstName" : "ct",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/controller.vhd",
-      "ModuleLine" : 70,
-      "ModuleName" : "controller",
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_bus.v",
+      "InstLine" : 86,
+      "InstName" : "u_jt49",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49.v",
+      "ModuleLine" : 24,
+      "ModuleName" : "jt49",
       "SubInsts" : [
        {
-        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/controller.vhd",
-        "InstLine" : 165,
-        "InstName" : "u_register_memory",
-        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/registermemory.vhd",
-        "ModuleLine" : 40,
-        "ModuleName" : "RegisterMemory"
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49.v",
+        "InstLine" : 78,
+        "InstName" : "u_cen",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_cen.v",
+        "ModuleLine" : 24,
+        "ModuleName" : "jt49_cen"
        },
        {
-        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/controller.vhd",
-        "InstLine" : 175,
-        "InstName" : "vmem",
-        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/voicememory.vhd",
-        "ModuleLine" : 36,
-        "ModuleName" : "VoiceMemory",
-        "SubInsts" : [
-         {
-          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/voicememory.vhd",
-          "InstLine" : 70,
-          "InstName" : "ROM2413",
-          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/voicerom.vhd",
-          "ModuleLine" : 38,
-          "ModuleName" : "VoiceRom"
-         }
-        ]
-       }
-      ]
-     },
-     {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
-      "InstLine" : 329,
-      "InstName" : "eg",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/envelopegenerator.vhd",
-      "ModuleLine" : 42,
-      "ModuleName" : "envelopegenerator",
-      "SubInsts" : [
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49.v",
+        "InstLine" : 91,
+        "InstName" : "u_chA",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_div.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt49_div"
+       },
        {
-        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/envelopegenerator.vhd",
-        "InstLine" : 99,
-        "InstName" : "u_attack_table",
-        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd",
-        "ModuleLine" : 64,
-        "ModuleName" : "AttackTable",
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49.v",
+        "InstLine" : 102,
+        "InstName" : "u_chB",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_div.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt49_div"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49.v",
+        "InstLine" : 113,
+        "InstName" : "u_chC",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_div.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt49_div"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49.v",
+        "InstLine" : 123,
+        "InstName" : "u_ng",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_noise.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt49_noise",
         "SubInsts" : [
          {
-          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd",
-          "InstLine" : 141,
-          "InstName" : "u_attack_table_mul",
-          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/attacktable.vhd",
-          "ModuleLine" : 42,
-          "ModuleName" : "attack_table_mul"
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_noise.v",
+          "InstLine" : 59,
+          "InstName" : "u_div",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_div.v",
+          "ModuleLine" : 25,
+          "ModuleName" : "jt49_div"
          }
         ]
        },
        {
-        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/envelopegenerator.vhd",
-        "InstLine" : 107,
-        "InstName" : "u_envelope_memory",
-        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/envelopememory.vhd",
-        "ModuleLine" : 36,
-        "ModuleName" : "EnvelopeMemory"
-       }
-      ]
-     },
-     {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
-      "InstLine" : 336,
-      "InstName" : "pg",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/phasegenerator.vhd",
-      "ModuleLine" : 41,
-      "ModuleName" : "PhaseGenerator",
-      "SubInsts" : [
-       {
-        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/phasegenerator.vhd",
-        "InstLine" : 174,
-        "InstName" : "MEM",
-        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/phasememory.vhd",
-        "ModuleLine" : 36,
-        "ModuleName" : "PhaseMemory"
-       }
-      ]
-     },
-     {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
-      "InstLine" : 344,
-      "InstName" : "op",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/operator.vhd",
-      "ModuleLine" : 41,
-      "ModuleName" : "Operator",
-      "SubInsts" : [
-       {
-        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/operator.vhd",
-        "InstLine" : 94,
-        "InstName" : "u_sine_table",
-        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd",
-        "ModuleLine" : 63,
-        "ModuleName" : "SineTable",
-        "SubInsts" : [
-         {
-          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd",
-          "InstLine" : 168,
-          "InstName" : "u_interpolate_mul",
-          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/sinetable.vhd",
-          "ModuleLine" : 41,
-          "ModuleName" : "interpolate_mul"
-         }
-        ]
-       }
-      ]
-     },
-     {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
-      "InstLine" : 351,
-      "InstName" : "og",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/outputgenerator.vhd",
-      "ModuleLine" : 36,
-      "ModuleName" : "OutputGenerator",
-      "SubInsts" : [
-       {
-        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/outputgenerator.vhd",
-        "InstLine" : 125,
-        "InstName" : "Fmem",
-        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/feedbackmemory.vhd",
-        "ModuleLine" : 41,
-        "ModuleName" : "FeedbackMemory"
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49.v",
+        "InstLine" : 136,
+        "InstName" : "u_envdiv",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_div.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt49_div"
        },
        {
-        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/outputgenerator.vhd",
-        "InstLine" : 135,
-        "InstName" : "Mmem",
-        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/outputmemory.vhd",
-        "ModuleLine" : 36,
-        "ModuleName" : "OutputMemory"
-       },
-       {
-        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/outputgenerator.vhd",
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49.v",
         "InstLine" : 146,
-        "InstName" : "Ltbl",
-        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd",
-        "ModuleLine" : 63,
-        "ModuleName" : "LinearTable",
-        "SubInsts" : [
-         {
-          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd",
-          "InstLine" : 153,
-          "InstName" : "u_linear_table_mul",
-          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/lineartable.vhd",
-          "ModuleLine" : 41,
-          "ModuleName" : "linear_table_mul"
-         }
-        ]
+        "InstName" : "u_env",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_eg.v",
+        "ModuleLine" : 24,
+        "ModuleName" : "jt49_eg"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49.v",
+        "InstLine" : 160,
+        "InstName" : "u_exp",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt49/hdl/jt49_exp.v",
+        "ModuleLine" : 30,
+        "ModuleName" : "jt49_exp"
        }
       ]
-     },
-     {
-      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/opll.vhd",
-      "InstLine" : 357,
-      "InstName" : "tm",
-      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/VM2413/temporalmixer.vhd",
-      "ModuleLine" : 37,
-      "ModuleName" : "TemporalMixer"
      }
     ]
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 730,
+    "InstLine" : 813,
+    "InstName" : "opll_enabled_impl.jt2413_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jt2413.v",
+    "ModuleLine" : 22,
+    "ModuleName" : "jt2413",
+    "SubInsts" : [
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jt2413.v",
+      "InstLine" : 79,
+      "InstName" : "u_mmr",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopll_mmr.v",
+      "ModuleLine" : 21,
+      "ModuleName" : "jtopll_mmr",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopll_mmr.v",
+        "InstLine" : 63,
+        "InstName" : "u_div",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_div.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jtopl_div"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopll_mmr.v",
+        "InstLine" : 164,
+        "InstName" : "u_reg",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopll_reg.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jtopll_reg",
+        "SubInsts" : [
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopll_reg.v",
+          "InstLine" : 95,
+          "InstName" : "u_slot_cnt",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_slot_cnt.v",
+          "ModuleLine" : 22,
+          "ModuleName" : "jtopl_slot_cnt"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopll_reg.v",
+          "InstLine" : 158,
+          "InstName" : "u_iv",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v",
+          "ModuleLine" : 22,
+          "ModuleName" : "jtopl_sh_rst"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopll_reg.v",
+          "InstLine" : 173,
+          "InstName" : "u_reg_ch",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopll_reg_ch.v",
+          "ModuleLine" : 22,
+          "ModuleName" : "jtopll_reg_ch"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jt2413.v",
+      "InstLine" : 119,
+      "InstName" : "u_lfo",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_lfo.v",
+      "ModuleLine" : 27,
+      "ModuleName" : "jtopl_lfo"
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jt2413.v",
+      "InstLine" : 128,
+      "InstName" : "u_pg",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg.v",
+      "ModuleLine" : 22,
+      "ModuleName" : "jtopl_pg",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg.v",
+        "InstLine" : 77,
+        "InstName" : "u_noise",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_noise.v",
+        "ModuleLine" : 27,
+        "ModuleName" : "jtopl_noise"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg.v",
+        "InstLine" : 84,
+        "InstName" : "u_comb",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_comb.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jtopl_pg_comb",
+        "SubInsts" : [
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_comb.v",
+          "InstLine" : 57,
+          "InstName" : "u_pm",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pm.v",
+          "ModuleLine" : 23,
+          "ModuleName" : "jtopl_pm"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_comb.v",
+          "InstLine" : 65,
+          "InstName" : "u_inc",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_inc.v",
+          "ModuleLine" : 22,
+          "ModuleName" : "jtopl_pg_inc"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_comb.v",
+          "InstLine" : 74,
+          "InstName" : "u_sum",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_sum.v",
+          "ModuleLine" : 26,
+          "ModuleName" : "jtopl_pg_sum"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_comb.v",
+          "InstLine" : 83,
+          "InstName" : "u_rhy",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg_rhy.v",
+          "ModuleLine" : 22,
+          "ModuleName" : "jtopl_pg_rhy"
+         }
+        ]
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg.v",
+        "InstLine" : 112,
+        "InstName" : "u_phsh",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jtopl_sh_rst"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_pg.v",
+        "InstLine" : 120,
+        "InstName" : "u_pad",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jtopl_sh_rst"
+       }
+      ]
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jt2413.v",
+      "InstLine" : 150,
+      "InstName" : "u_eg",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg.v",
+      "ModuleLine" : 22,
+      "ModuleName" : "jtopl_eg",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg.v",
+        "InstLine" : 55,
+        "InstName" : "u_egcnt",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_cnt.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jtopl_eg_cnt"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg.v",
+        "InstLine" : 87,
+        "InstName" : "u_comb",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_comb.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jtopl_eg_comb",
+        "SubInsts" : [
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_comb.v",
+          "InstLine" : 72,
+          "InstName" : "u_ctrl",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_ctrl.v",
+          "ModuleLine" : 22,
+          "ModuleName" : "jtopl_eg_ctrl"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_comb.v",
+          "InstLine" : 91,
+          "InstName" : "u_step",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_step.v",
+          "ModuleLine" : 22,
+          "ModuleName" : "jtopl_eg_step"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_comb.v",
+          "InstLine" : 107,
+          "InstName" : "u_pure",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_pure.v",
+          "ModuleLine" : 22,
+          "ModuleName" : "jtopl_eg_pure"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_comb.v",
+          "InstLine" : 118,
+          "InstName" : "u_final",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg_final.v",
+          "ModuleLine" : 22,
+          "ModuleName" : "jtopl_eg_final"
+         }
+        ]
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg.v",
+        "InstLine" : 157,
+        "InstName" : "u_cntsh",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jtopl_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg.v",
+        "InstLine" : 164,
+        "InstName" : "u_fnumsh",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jtopl_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg.v",
+        "InstLine" : 171,
+        "InstName" : "u_blocksh",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jtopl_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg.v",
+        "InstLine" : 178,
+        "InstName" : "u_egsh",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jtopl_sh_rst"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg.v",
+        "InstLine" : 186,
+        "InstName" : "u_egstate",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jtopl_sh_rst"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_eg.v",
+        "InstLine" : 194,
+        "InstName" : "u_konsh",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh_rst.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jtopl_sh_rst"
+       }
+      ]
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jt2413.v",
+      "InstLine" : 178,
+      "InstName" : "u_op",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_op.v",
+      "ModuleLine" : 26,
+      "ModuleName" : "jtopl_op",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_op.v",
+        "InstLine" : 70,
+        "InstName" : "u_delay",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jtopl_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_op.v",
+        "InstLine" : 77,
+        "InstName" : "u_condly",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jtopl_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_op.v",
+        "InstLine" : 95,
+        "InstName" : "u_csr0",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jtopl_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_op.v",
+        "InstLine" : 102,
+        "InstName" : "u_csr1",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jtopl_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_op.v",
+        "InstLine" : 109,
+        "InstName" : "u_csr2",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_sh.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jtopl_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_op.v",
+        "InstLine" : 168,
+        "InstName" : "u_logsin",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_logsin.v",
+        "ModuleLine" : 26,
+        "ModuleName" : "jtopl_logsin"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_op.v",
+        "InstLine" : 190,
+        "InstName" : "u_exprom",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_exprom.v",
+        "ModuleLine" : 33,
+        "ModuleName" : "jtopl_exprom"
+       }
+      ]
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jt2413.v",
+      "InstLine" : 199,
+      "InstName" : "u_acc",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_acc.v",
+      "ModuleLine" : 23,
+      "ModuleName" : "jtopl_acc",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_acc.v",
+        "InstLine" : 67,
+        "InstName" : "u_acc",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jtopl/hdl/jtopl_single_acc.v",
+        "ModuleLine" : 26,
+        "ModuleName" : "jtopl_single_acc"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 841,
+    "InstName" : "jt51_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51.v",
+    "ModuleLine" : 24,
+    "ModuleName" : "jt51",
+    "SubInsts" : [
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51.v",
+      "InstLine" : 57,
+      "InstName" : "u_timers",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_timers.v",
+      "ModuleLine" : 21,
+      "ModuleName" : "jt51_timers",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_timers.v",
+        "InstLine" : 42,
+        "InstName" : "timer_A",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_timers.v",
+        "ModuleLine" : 68,
+        "ModuleName" : "jt51_timer"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_timers.v",
+        "InstLine" : 54,
+        "InstName" : "timer_B",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_timers.v",
+        "ModuleLine" : 68,
+        "ModuleName" : "jt51_timer"
+       }
+      ]
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51.v",
+      "InstLine" : 120,
+      "InstName" : "u_lfo",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_lfo.v",
+      "ModuleLine" : 21,
+      "ModuleName" : "jt51_lfo"
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51.v",
+      "InstLine" : 146,
+      "InstName" : "u_pg",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_pg.v",
+      "ModuleLine" : 22,
+      "ModuleName" : "jt51_pg",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_pg.v",
+        "InstLine" : 73,
+        "InstName" : "u_phinctable",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_phinc_rom.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jt51_phinc_rom"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_pg.v",
+        "InstLine" : 135,
+        "InstName" : "u_pm",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_pm.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jt51_pm"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_pg.v",
+        "InstLine" : 261,
+        "InstName" : "u_phsh",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt51_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_pg.v",
+        "InstLine" : 269,
+        "InstName" : "u_pgrstsh",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt51_sh"
+       }
+      ]
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51.v",
+      "InstLine" : 173,
+      "InstName" : "u_eg",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_eg.v",
+      "ModuleLine" : 22,
+      "ModuleName" : "jt51_eg",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_eg.v",
+        "InstLine" : 329,
+        "InstName" : "u_egpadding",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt51_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_eg.v",
+        "InstLine" : 340,
+        "InstName" : "u_eg1sh",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt51_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_eg.v",
+        "InstLine" : 348,
+        "InstName" : "u_eg2sh",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt51_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_eg.v",
+        "InstLine" : 356,
+        "InstName" : "u_aroffsh",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt51_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_eg.v",
+        "InstLine" : 364,
+        "InstName" : "u_konsh",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt51_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_eg.v",
+        "InstLine" : 372,
+        "InstName" : "u_cntsh",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt51_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_eg.v",
+        "InstLine" : 380,
+        "InstName" : "u_statesh",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt51_sh"
+       }
+      ]
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51.v",
+      "InstLine" : 202,
+      "InstName" : "u_op",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_op.v",
+      "ModuleLine" : 24,
+      "ModuleName" : "jt51_op",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_op.v",
+        "InstLine" : 63,
+        "InstName" : "prev1_buffer",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt51_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_op.v",
+        "InstLine" : 71,
+        "InstName" : "prevprev1_buffer",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt51_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_op.v",
+        "InstLine" : 79,
+        "InstName" : "prev2_buffer",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt51_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_op.v",
+        "InstLine" : 137,
+        "InstName" : "phasemod_sh",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt51_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_op.v",
+        "InstLine" : 168,
+        "InstName" : "u_phrom",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_phrom.v",
+        "ModuleLine" : 27,
+        "ModuleName" : "jt51_phrom"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_op.v",
+        "InstLine" : 234,
+        "InstName" : "u_exprom",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_exprom.v",
+        "ModuleLine" : 28,
+        "ModuleName" : "jt51_exprom"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_op.v",
+        "InstLine" : 309,
+        "InstName" : "out_padding",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt51_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_op.v",
+        "InstLine" : 317,
+        "InstName" : "shsignbit",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt51_sh"
+       }
+      ]
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51.v",
+      "InstLine" : 232,
+      "InstName" : "u_noise",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_noise.v",
+      "ModuleLine" : 40,
+      "ModuleName" : "jt51_noise"
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51.v",
+      "InstLine" : 244,
+      "InstName" : "u_acc",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_acc.v",
+      "ModuleLine" : 22,
+      "ModuleName" : "jt51_acc",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_acc.v",
+        "InstLine" : 125,
+        "InstName" : "u_acc",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+        "ModuleLine" : 25,
+        "ModuleName" : "jt51_sh"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_acc.v",
+        "InstLine" : 137,
+        "InstName" : "left_reconstruct",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_exp2lin.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jt51_exp2lin"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_acc.v",
+        "InstLine" : 143,
+        "InstName" : "right_reconstruct",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_exp2lin.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jt51_exp2lin"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_acc.v",
+        "InstLine" : 149,
+        "InstName" : "left2exp",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_lin2exp.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jt51_lin2exp"
+       },
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_acc.v",
+        "InstLine" : 155,
+        "InstName" : "right2exp",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_lin2exp.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jt51_lin2exp"
+       }
+      ]
+     },
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51.v",
+      "InstLine" : 275,
+      "InstName" : "u_mmr",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_mmr.v",
+      "ModuleLine" : 22,
+      "ModuleName" : "jt51_mmr",
+      "SubInsts" : [
+       {
+        "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_mmr.v",
+        "InstLine" : 270,
+        "InstName" : "u_reg",
+        "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_reg.v",
+        "ModuleLine" : 22,
+        "ModuleName" : "jt51_reg",
+        "SubInsts" : [
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_reg.v",
+          "InstLine" : 169,
+          "InstName" : "u_kon",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_kon.v",
+          "ModuleLine" : 25,
+          "ModuleName" : "jt51_kon",
+          "SubInsts" : [
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_kon.v",
+            "InstLine" : 60,
+            "InstName" : "u_konch",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+            "ModuleLine" : 25,
+            "ModuleName" : "jt51_sh"
+           }
+          ]
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_reg.v",
+          "InstLine" : 184,
+          "InstName" : "u_mod",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_mod.v",
+          "ModuleLine" : 25,
+          "ModuleName" : "jt51_mod"
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_reg.v",
+          "InstLine" : 198,
+          "InstName" : "u_csr_op",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_csr_op.v",
+          "ModuleLine" : 21,
+          "ModuleName" : "jt51_csr_op",
+          "SubInsts" : [
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_csr_op.v",
+            "InstLine" : 86,
+            "InstName" : "u_reg0op",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+            "ModuleLine" : 25,
+            "ModuleName" : "jt51_sh"
+           },
+           {
+            "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_csr_op.v",
+            "InstLine" : 95,
+            "InstName" : "u_reg1op",
+            "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_sh.v",
+            "ModuleLine" : 25,
+            "ModuleName" : "jt51_sh"
+           }
+          ]
+         },
+         {
+          "InstFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_reg.v",
+          "InstLine" : 229,
+          "InstName" : "u_csr_ch",
+          "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/jt51/hdl/jt51_reg_ch.v",
+          "ModuleLine" : 27,
+          "ModuleName" : "jt51_reg_ch"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 1069,
     "InstName" : "sms_psg_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/jt89/jt89.v",
     "ModuleLine" : 33,
@@ -367,7 +995,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 754,
+    "InstLine" : 1093,
     "InstName" : "sms_vdp_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/vdp.vhd",
     "ModuleLine" : 6,
@@ -485,7 +1113,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 784,
+    "InstLine" : 1123,
     "InstName" : "sms_video_timing_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/SMS/video.vhd",
     "ModuleLine" : 6,
@@ -493,7 +1121,15 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 845,
+    "InstLine" : 1160,
+    "InstName" : "sound_scope_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sound_scope.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "sound_scope"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 1213,
     "InstName" : "sms_framebuffer_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/dpram.v",
     "ModuleLine" : 1,
@@ -501,7 +1137,25 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 874,
+    "InstLine" : 1232,
+    "InstName" : "sms_debugger_enabled_impl.debug_trace_terminal_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/debug_trace_terminal.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "debug_trace_terminal",
+    "SubInsts" : [
+     {
+      "InstFile" : "/Users/felipe/src/fpga/new-juice/src/debug_trace_terminal.v",
+      "InstLine" : 154,
+      "InstName" : "trace_character_ram",
+      "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/dpram.v",
+      "ModuleLine" : 1,
+      "ModuleName" : "dpram"
+     }
+    ]
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 1284,
     "InstName" : "hdmi_audio_clock_divider",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/clockdiv.v",
     "ModuleLine" : 33,
@@ -509,7 +1163,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 919,
+    "InstLine" : 1336,
     "InstName" : "hdmi_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/hdmi.sv",
     "ModuleLine" : 4,
@@ -601,7 +1255,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 940,
+    "InstLine" : 1357,
     "InstName" : "hdmi_serializer_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/hdmi/serializer.sv",
     "ModuleLine" : 3,
@@ -609,7 +1263,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 959,
+    "InstLine" : 1376,
     "InstName" : "bus_data_debouncer",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/input_debouncer.v",
     "ModuleLine" : 1,
@@ -617,7 +1271,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 970,
+    "InstLine" : 1387,
     "InstName" : "bus_control_debouncer",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/input_debouncer.v",
     "ModuleLine" : 1,
@@ -625,7 +1279,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 977,
+    "InstLine" : 1394,
     "InstName" : "mp_debouncer_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/mp_debouncer.v",
     "ModuleLine" : 1,
@@ -633,7 +1287,15 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 1066,
+    "InstLine" : 1415,
+    "InstName" : "cpu_step_debugger_enabled_impl.cpu_step_debugger_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/cpu_step_debugger.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "cpu_step_debugger"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 1525,
     "InstName" : "slot_expander_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/slot_expander.v",
     "ModuleLine" : 1,
@@ -641,7 +1303,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 1089,
+    "InstLine" : 1549,
     "InstName" : "sdram_startup_test_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sdram_startup_test.v",
     "ModuleLine" : 1,
@@ -649,7 +1311,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 1110,
+    "InstLine" : 1570,
     "InstName" : "sdram_mapper_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sdram_mapper.v",
     "ModuleLine" : 1,
@@ -657,7 +1319,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 1146,
+    "InstLine" : 1611,
     "InstName" : "super_megaram_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/super_megaram.v",
     "ModuleLine" : 1,
@@ -665,7 +1327,7 @@
     "SubInsts" : [
      {
       "InstFile" : "/Users/felipe/src/fpga/new-juice/src/super_megaram.v",
-      "InstLine" : 322,
+      "InstLine" : 430,
       "InstName" : "scc_enabled_impl.ikascc_inst",
       "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/IKASCC/IKASCC.v",
       "ModuleLine" : 1,
@@ -977,7 +1639,15 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 1175,
+    "InstLine" : 1652,
+    "InstName" : "linear_rom_inst",
+    "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/linear_rom.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "linear_rom"
+   },
+   {
+    "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
+    "InstLine" : 1681,
     "InstName" : "sd_registers_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sd_registers.v",
     "ModuleLine" : 1,
@@ -985,7 +1655,7 @@
     "SubInsts" : [
      {
       "InstFile" : "/Users/felipe/src/fpga/new-juice/src/sd_registers.v",
-      "InstLine" : 204,
+      "InstLine" : 208,
       "InstName" : "sector_ram",
       "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/dpram.v",
       "ModuleLine" : 1,
@@ -993,7 +1663,7 @@
      },
      {
       "InstFile" : "/Users/felipe/src/fpga/new-juice/src/sd_registers.v",
-      "InstLine" : 222,
+      "InstLine" : 226,
       "InstName" : "sd_card_controller",
       "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sd_reader.sv",
       "ModuleLine" : 11,
@@ -1021,7 +1691,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 1203,
+    "InstLine" : 1709,
     "InstName" : "flash_roms_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/flash_roms.v",
     "ModuleLine" : 1,
@@ -1029,7 +1699,7 @@
     "SubInsts" : [
      {
       "InstFile" : "/Users/felipe/src/fpga/new-juice/src/flash_roms.v",
-      "InstLine" : 113,
+      "InstLine" : 124,
       "InstName" : "flash_reader_inst",
       "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/spi_flash_reader.v",
       "ModuleLine" : 1,
@@ -1039,7 +1709,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 1292,
+    "InstLine" : 1810,
     "InstName" : "cd_demux_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/cd_demux.v",
     "ModuleLine" : 1,
@@ -1047,7 +1717,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 1307,
+    "InstLine" : 1823,
     "InstName" : "sdram_command_adapter_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sdram_command_adapter.v",
     "ModuleLine" : 1,
@@ -1055,7 +1725,7 @@
    },
    {
     "InstFile" : "/Users/felipe/src/fpga/new-juice/src/top.v",
-    "InstLine" : 1341,
+    "InstLine" : 1863,
     "InstName" : "sdram_inst",
     "ModuleFile" : "/Users/felipe/src/fpga/new-juice/src/sdram.v",
     "ModuleLine" : 27,
